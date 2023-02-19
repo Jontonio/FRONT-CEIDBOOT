@@ -1,5 +1,8 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "cli": {
+    "analytics": "96c03a05-6d15-4013-98e9-0174d3e0406d"
+  },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
@@ -31,7 +34,20 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/primeicons/primeicons.css",
+              "node_modules/primeflex/primeflex.css",
+              "node_modules/primeng/resources/primeng.min.css",
+              {
+                "input": "src/theme-mdc-dark-indigo.scss",
+                "bundleName": "mdc-dark-indigo",
+                "inject": false
+              },
+              {
+                "input": "src/theme-mdc-light-indigo.scss",
+                "bundleName": "mdc-light-indigo",
+                "inject": false
+              }
             ],
             "scripts": []
           },

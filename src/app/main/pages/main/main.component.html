@@ -1,0 +1,31 @@
+
+<app-menu></app-menu>
+
+<p-breadcrumb class="surface-800" [model]="ruta" ngClass="new"></p-breadcrumb>
+
+<router-outlet></router-outlet>
+
+<p-dialog header="Cierre de sesión"
+          [(visible)]="displayModal"
+          [modal]="true"
+          styleClass="cls-sesion"
+          [closable]="true"
+          [dismissableMask]="true"
+          closeIcon="pi pi-times"
+          [draggable]="true">
+    <div class="m-0">
+      <h2 class="text-center m-2">
+        <p class="pi pi-clock pi-spin" style="font-size: 2rem;"></p>
+      </h2>
+      <p>Se cerrará sesión automáticamente dentro de {{countdown}} segundos</p>
+    </div>
+    <ng-template pTemplate="footer">
+    <p-button (click)="keepSession()"
+              label="Cancelar" styleClass="p-button-text"></p-button>
+    <p-button (click)="closeSesion()"
+              label="Cerrar sesión" styleClass="p-button-text"></p-button>
+    </ng-template>
+</p-dialog>
+
+
+

@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Component, Inject } from '@angular/core';
+import { GlobalService } from './services/global.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +9,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'front-CEIDBOT';
+
+  constructor(){
+
+  }
+
+
+
 }

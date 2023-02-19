@@ -1,0 +1,14 @@
+
+<p-menubar [model]="items">
+  <ng-template pTemplate="start">
+      <img src="assets/icon/logo.png" height="40" class="mr-2 img-logo">
+  </ng-template>
+  <ng-template pTemplate="end">
+      <button pButton
+              pRipple
+              type="button"
+              label="LOGIN"
+              routerLink="/main/auth/login"
+              class="p-button-rounded p-button-sm"></button>
+  </ng-template>
+</p-menubar>

@@ -3,7 +3,11 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  // theme
+  BASE_URL:'http://localhost:3000',
+  // "node_modules/primeng/resources/themes/mdc-light-deeppurple/theme.css",
+  URL_SOCKET:'http://localhost:3000'
 };
 
 /*

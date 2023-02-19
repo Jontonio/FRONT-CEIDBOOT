@@ -1,1 +1,192 @@
 /* You can add global styles to this file, and also import other style files */
+*{
+  margin: 0;
+  padding: 0;
+}
+/**
+styles for buttons
+*/
+.p-button-sm{
+  width: 50px !important;
+}
+
+/**
+* Styles for card
+*
+*/
+
+.main-container{
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.grid{
+  width: 90%;
+}
+
+/**
+* Styles for titles and fonts
+*
+*/
+.title-main{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.title-main h1{
+  font-family: 'Roboto', sans-serif;
+  font-size: 65px;
+}
+.title-main p{
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
+}
+.font{
+  font-family: 'Roboto', sans-serif;
+}
+/**
+* Styles for images
+*
+*/
+.img-page-main{
+  width: 600px;
+  max-width: 100%;
+  height: auto;
+}
+/**
+* Styles for buttons
+*
+*/
+.btn{
+  // background: #0B0D17 !important;
+  // width: 100px !important;
+}
+/**
+* Styles for social media
+*
+*/
+.p-panelmenu-panel{
+  box-shadow: none !important;
+}
+.btn-custom:hover{
+  background: none !important;
+}
+.p-element .p-button-rounded .p-button-text{
+  padding: 0px !important;
+  margin: 0px !important;
+}
+.active{
+  background: var(--surface-ground);
+}
+.item{
+  padding: 15px !important;
+  cursor: pointer;
+}
+.item:hover{
+  background: var(--surface-ground);
+}
+footer{
+  background: #0B0D17;
+  color: #FFF;
+  // bottom: 0;
+  margin: 0;
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Roboto', sans-serif;
+  padding: 10px;
+}
+.grid-footer{
+  margin-top: 10px !important;
+  width: 75%;
+}
+.list-social-media{
+  display: flex;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.list-social-media li{
+  margin-left: 15px;
+  list-style: none;
+}
+/**
+* Media querys
+*
+*/
+/**
+* Inputs
+*
+*/
+.full-width{
+  width: 100%;
+}
+
+.card-login{
+  width: 360px;
+}
+.btn-login{
+  // background: #0B0D17 !important;
+  // border-radius: 8px;
+}
+.img-login{
+  height: 100px;
+}
+.cls-sesion{
+  width: 30vw;
+  background: red !important;
+}
+
+@media only screen and (max-width: 767px) {
+  /* Estilos para teléfonos móviles aquí */
+  .image-login{
+    display: none;
+  }
+  .title-main{
+    margin-top: -70px;
+  }
+  .img-logo{
+    display: none;
+  }
+  .img-page-main{
+    margin-top: 15px;
+    margin-bottom: 70px;
+  }
+  .title-main h1{
+    font-size: 40px;
+  }
+  .title-main p{
+    font-size: 17px;
+  }
+  .rights-reserved{
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+  }
+  .btn{
+    background: none !important;
+    border: 1px solid #0B0D17 !important;
+    color: #0B0D17 !important;
+  }
+  .cls-sesion{
+    background: red !important;
+    width: 80vw;
+  }
+
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  /* Estilos para tabletas en modo retrato aquí */
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+  /* Estilos para escritorio pequeño aquí */
+}
+
+@media only screen and (min-width: 1200px) {
+  /* Estilos para escritorio grande aquí */
+}

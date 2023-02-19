@@ -1,0 +1,59 @@
+<div class="flex">
+  <div class="m-2 flex justify-content-end flex align-items-center">
+    <button pButton
+            pRipple
+            (click)="display = true"
+            icon="pi pi-align-justify"
+            type="button"
+            label="Menú"
+            class="p-button-text p-button-plain"></button>
+  </div>
+  <div class="col flex justify-content-end flex align-items-center">
+
+    <p-chip label="José Antonio" icon="pi pi-user"></p-chip>
+
+    <button pButton
+            pRipple
+            type="button"
+            icon="pi pi-cog"
+            class="p-button-rounded p-button-text btn-custom p-0"></button>
+    <button pButton
+            pRipple
+            type="button"
+            icon="pi pi-bell"
+            class="p-button-rounded p-button-text btn-custom"></button>
+    <button pButton
+            pRipple
+            type="button"
+            (click)="theme()"
+            [icon]="(changeTheme==true)?'pi pi-moon':'pi pi-sun'"
+            class="p-button-rounded p-button-text btn-custom"></button>
+
+  </div>
+</div>
+
+<p-sidebar [(visible)]="display">
+  <div class="flex justify-content-center flex align-items-center">
+    <img src="assets/icon/CEIDBOT.svg" alt="" srcset="">
+    <h3 class="m-2 font">SISTEMA CEIDBOT</h3>
+  </div>
+  <p-divider layout="horizontal"></p-divider>
+  <div class="menu">
+    <div *ngFor="let menu of items"
+          [routerLink]="menu.routerLink"
+          routerLinkActive="active"
+          class="col flex
+          justify-content-start
+          align-items-center
+          item font">
+      <i [class]="menu.icon"></i><p class="ml-3">{{menu.label}}</p>
+    </div>
+    <div routerLinkActive="active"
+         (click)="this.logout()"
+         class="col flex
+         justify-content-start
+         align-items-center item font">
+      <i class="pi pi-sign-out"></i><p class="ml-3">Cerrar sesión</p>
+    </div>
+  </div>
+</p-sidebar>
