@@ -7,6 +7,7 @@ import { PrimengModule } from '../primeng/primeng.module';
 import { FormLoginComponent } from './components/form-login/form-login.component';
 import { SharedModule } from '../shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     PrimengModule,
     SharedModule,
     ReactiveFormsModule,
+    HttpClientModule
   ],
   exports:[
     LoginComponent

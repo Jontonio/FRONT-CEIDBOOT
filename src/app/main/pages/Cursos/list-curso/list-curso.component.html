@@ -1,0 +1,75 @@
+<div class="main">
+  <div class="mb-2">
+    <p-toolbar>
+      <div class="p-toolbar-group-start">
+        <button pButton
+            pRipple
+            type="button"
+            icon="pi pi-plus"
+            routerLink="/system/cursos/add-curso"
+            label="Nuevo curso"
+            class="p-button-raised p-button-c"></button>
+      </div>
+      <div class="p-toolbar-group-right">
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input type="text" pInputText placeholder="Buscar curso"/>
+      </span>
+      </div>
+    </p-toolbar>
+  </div>
+  <p-card>
+    <div class="grid content">
+      <div class="col table-responsive">
+        <p-table [value]="listCursos" responsiveLayout="scroll">
+          <ng-template pTemplate="header">
+              <tr>
+                <th>ID</th>
+                <th>Bandera</th>
+                <th pSortableColumn="NombreCurso">Curso <p-sortIcon field="NombreCurso"></p-sortIcon></th>
+                <th pSortableColumn="NivelCurso">Nivel <p-sortIcon field="NivelCurso"></p-sortIcon></th>
+                <th>Cant. Módulos</th>
+                <th>Descripción del curso</th>
+                <th>Operación</th>
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-curso let-rowIndex="rowIndex">
+              <tr>
+                <td>{{startPage  + (rowIndex+1)}}</td>
+                <td><img class="img-flag" [src]="curso.UrlBandera" alt="" srcset=""></td>
+                <td>{{curso.NombreCurso | titlecase}}</td>
+                <td>{{curso.NivelCurso | titlecase}}</td>
+                <td>{{curso.NumModulos}}</td>
+                <td>
+                  <p>{{curso.DescripcionCurso | slice:0:30 }}...</p>
+                </td>
+                <td>
+                  <button pButton
+                          pRipple
+                          type="button"
+                          class="p-button-danger p-button-text">
+                          <i class="pi pi-delete-left"></i> Eliminar</button>
+                  <button pButton
+                          pRipple
+                          type="button"
+                          class="p-button-text p-button-plain">
+                          <i class="pi pi-pencil mr-2"></i> Editar</button>
+                </td>
+              </tr>
+          </ng-template>
+        </p-table>
+        <div class="mt-4 flex" *ngIf="resGetCursos">
+          <div class="col">
+            <p-paginator [rows]="5"
+                        [totalRecords]="resGetCursos.count"
+                        [rowsPerPageOptions]="[5,10,15,20]"
+                        (onPageChange)="paginate($event)"></p-paginator>
+          </div>
+        </div>
+        <app-loadding *ngIf="loadding && !changePage && listCursos.length==0" msg="Lista de cursos"></app-loadding>
+        <app-lista-vacia *ngIf="listCursos.length==0 && !loadding" msg="No se encontraron cursos registrados">
+        </app-lista-vacia>
+      </div>
+    </div>
+  </p-card>
+</div>

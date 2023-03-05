@@ -10,13 +10,11 @@
   </div>
   <div class="col flex justify-content-end flex align-items-center">
 
-    <p-chip label="José Antonio" icon="pi pi-user"></p-chip>
+    <div *ngIf="_auth.userAuth" class="content-user">
+      <div class="active-user" [ngClass]="{'online': _socket.statusServer,'offline':!_socket.statusServer}"></div>
+      <p-chip [label]="_auth.userAuth.Nombres | titlecase" icon="pi pi-user"></p-chip>
+    </div>
 
-    <button pButton
-            pRipple
-            type="button"
-            icon="pi pi-cog"
-            class="p-button-rounded p-button-text btn-custom p-0"></button>
     <button pButton
             pRipple
             type="button"
@@ -53,7 +51,7 @@
          class="col flex
          justify-content-start
          align-items-center item font">
-      <i class="pi pi-sign-out"></i><p class="ml-3">Cerrar sesión</p>
+      <i class="fa-solid fa-right-from-bracket"></i><p class="ml-3">Cerrar sesión</p>
     </div>
   </div>
 </p-sidebar>

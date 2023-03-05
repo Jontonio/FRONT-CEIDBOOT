@@ -1,0 +1,147 @@
+<form [formGroup]="FormUsuario">
+  <div class="mb-1">
+    <h2 class="ml-3"><i class="fa-solid fa-user-shield"></i> Registro usuario</h2>
+  </div>
+  <div class="grid content">
+    <div class="col-12 md:col-6">
+      <div class="col">
+        <label for="DNI" class="block mb-2">DNI</label>
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon"><i [class]="loadGetData?'pi pi-spin pi-spinner':'pi pi-id-card'"></i></span>
+          <input id="DNI"
+                class="full-width input-form"
+                type="text"
+                autocomplete="off"
+                maxlength="8"
+                (ngModelChange)="Reniec($event)"
+                formControlName="DNI"
+                pInputText/>
+          </div>
+          <small *ngIf="DNI.hasError('pattern') && !DNI.hasError('required')"
+                  class="p-error">Digite un DNI <strong>válido</strong></small>
+          <small *ngIf="DNI.hasError('required') && DNI.dirty"
+                  class="p-error">El campo DNI es <strong>requerido</strong></small>
+      </div>
+      <div class="col">
+        <label for="Nombres" class="block mb-2">Nombres</label>
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon"><i class="fa-regular fa-user"></i></span>
+          <input id="Nombres"
+                class="full-width input-form"
+                type="text"
+                autocomplete="off"
+                formControlName="Nombres"
+                pInputText/>
+        </div>
+        <small *ngIf="Nombres.hasError('pattern') && !Nombres.hasError('required')"
+              class="p-error">Digite un Nombre <strong>válido</strong></small>
+        <small *ngIf="Nombres.hasError('required') && Nombres.dirty"
+              class="p-error">El campo Nombre es <strong>requerido</strong></small>
+      </div>
+      <div class="grid content">
+        <div class="col-12 md:col-6">
+          <label for="ApellidoPaterno" class="block mb-2">Apellido paterno</label>
+          <input id="ApellidoPaterno"
+                class="full-width input-form"
+                type="text"
+                autocomplete="off"
+                formControlName="ApellidoPaterno"
+                pInputText/>
+          <small *ngIf="ApellidoPaterno.hasError('pattern') && !ApellidoPaterno.hasError('required')"
+                class="p-error">Digite un Apellido paterno <strong>válido</strong></small>
+          <small *ngIf="ApellidoPaterno.hasError('required') && ApellidoPaterno.dirty"
+                class="p-error">El campo Apellido paterno es <strong>requerido</strong></small>
+        </div>
+        <div class="col-12 md:col-6">
+          <label for="ApellidoMaterno" class="block mb-2">Apellido materno</label>
+          <input id="ApellidoMaterno"
+                class="full-width input-form"
+                type="text"
+                autocomplete="off"
+                formControlName="ApellidoMaterno"
+                pInputText/>
+          <small *ngIf="ApellidoMaterno.hasError('pattern') && !ApellidoMaterno.hasError('required')"
+                class="p-error">Digite un Apellido materno <strong>válido</strong></small>
+          <small *ngIf="ApellidoMaterno.hasError('required') && ApellidoMaterno.dirty"
+                class="p-error">El campo Apellido materno es <strong>requerido</strong></small>
+        </div>
+      </div>
+      <div class="col">
+        <label for="usuario" class="block mb-2"><i class="fa-solid fa-gears"></i> Rol del usuario</label>
+        <p-dropdown styleClass="full-width"
+                    formControlName="IdRol"
+                    [options]="listRoles"
+                    placeholder="Rol del usuario"
+                    optionValue="Id"
+                    optionLabel="TipoRol"></p-dropdown>
+        <small *ngIf="IdRol.hasError('required') && IdRol.dirty"
+                class="p-error">El rol del usuario es <strong>requerido</strong></small>
+      </div>
+    </div>
+    <div class="col-12 md:col-6">
+      <div class="col mtop-inputs">
+        <label for="Direccion" class="block mb-2">Dirección</label>
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon"><i class="fa-solid fa-location-dot"></i></span>
+          <input id="Direccion"
+                class="full-width input-form"
+                type="text"
+                autocomplete="off"
+                maxlength="99"
+                formControlName="Direccion"
+                pInputText/>
+        </div>
+        <small *ngIf="Direccion.hasError('pattern') && !Direccion.hasError('required')"
+              class="p-error">Digite un Dirección <strong>válido</strong></small>
+        <small *ngIf="Direccion.hasError('required') && Direccion.dirty"
+              class="p-error">El campo Dirección es <strong>requerido</strong></small>
+      </div>
+      <div class="col-12">
+        <label for="Email" class="block mb-2">Email</label>
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon"><i class="fa-regular fa-envelope"></i></span>
+          <input id="Email"
+                class="full-width"
+                type="text"
+                autocomplete="off"
+                formControlName="Email"
+                pInputText/>
+        </div>
+        <small *ngIf="Email.hasError('pattern') && !Email.hasError('required')"
+              class="p-error">Digite un Email <strong>válido</strong></small>
+        <small *ngIf="Email.hasError('required') && Email.dirty"
+              class="p-error">El campo Email es <strong>requerido</strong></small>
+      </div>
+      <div class="grid content">
+        <div class="col-5 md:col-3">
+          <app-input-code [country]="country" (selectedCountry)="selectedCountry($event)"></app-input-code>
+        </div>
+        <div class="col-7 md:col-9">
+          <label for="Celular" class="block mb-2">Celular</label>
+          <div class="p-inputgroup">
+            <span class="p-inputgroup-addon"><i class="fa-solid fa-phone"></i></span>
+            <input id="Celular"
+                  class="full-width input-form"
+                  type="text"
+                  autocomplete="off"
+                  formControlName="Celular"
+                  pInputText/>
+          </div>
+          <small *ngIf="Celular.hasError('pattern') && !Celular.hasError('required')"
+                class="p-error">Digite un Celular <strong>válido</strong></small>
+          <small *ngIf="Celular.hasError('required') && Celular.dirty"
+                class="p-error">El campo Celular es <strong>requerido</strong></small>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="flex justify-content-end mt-2">
+    <p-button [label]="!isUpdate?'Registrar':'Guardar'"
+              [icon]="loadding?'pi pi-spin pi-spinner':'pi pi-save'"
+              (click)="ready()"
+              styleClass="p-button mr-2 p-button-c"></p-button>
+    <p-button label="Cancelar"
+              (click)="reset()"
+              styleClass="p-button p-button-c"></p-button>
+  </div>
+</form>

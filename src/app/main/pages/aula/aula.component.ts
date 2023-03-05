@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { GlobalService } from 'src/app/services/global.service';
 
 @Component({
   selector: 'app-aula',
@@ -7,7 +9,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AulaComponent implements OnInit {
 
-  constructor() { }
+  constructor(private _global:GlobalService, private route:Router) {
+
+    this._global.parseURL(route);
+
+  }
 
   ngOnInit(): void {
   }

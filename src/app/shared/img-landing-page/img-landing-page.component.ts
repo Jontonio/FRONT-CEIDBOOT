@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-img-landing-page',
@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./img-landing-page.component.scss']
 })
 export class ImgLandingPageComponent implements OnInit {
+
+  @Input() url:string = '';
 
   constructor() { }
 

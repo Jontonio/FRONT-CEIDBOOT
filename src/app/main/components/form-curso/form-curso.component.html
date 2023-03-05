@@ -1,0 +1,105 @@
+<form [formGroup]="formCurso">
+  <div class="mb-1">
+    <h2 class="ml-3"><i class="fa-solid fa-bookmark"></i> Registro curso</h2>
+  </div>
+  <div class="grid content">
+    <div class="col-12 md:col-6">
+      <div class="col">
+        <label for="Nombres" class="block mb-2">País del idioma</label>
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon">
+            <span *ngIf="selectPais else flag">
+              <img class="img-flag-recoment" [src]="selectPais.flags.svg" alt="">
+            </span>
+            <ng-template #flag>
+              <span class="pi pi-flag-fill"></span>
+            </ng-template>
+          </span>
+          <input type="text"
+                 pInputText
+                 formControlName="NombrePais"
+                 maxlength="40"
+                 (input)="teclaPresionada()"
+                 class="full-width input-form">
+        </div>
+        <small *ngIf="NombrePais.hasError('pattern') && !NombrePais.hasError('required')"
+              class="p-error">Digite un país <strong>válido</strong></small>
+        <small *ngIf="NombrePais.hasError('required') && NombrePais.dirty"
+              class="p-error">El campo país es <strong>requerido</strong></small>
+      </div>
+      <div class="col">
+        <div class="content-recomment">
+          <p *ngIf="paisesSugeridos.length!=0" class="mb-2 title-select-p"><i class="pi pi-list"></i> Selecione el país</p>
+          <div *ngFor="let pais of paisesSugeridos">
+            <div class="flex recoment-box" (click)="SelectedPais(pais)">
+              <img class="img-flag-recoment" [src]="pais.flags.svg" alt=""><p class="ml-2">{{pais.name.common}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col above-col">
+        <label for="Nombres" class="block mb-2">Nombre del Curso</label>
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon"><i class="fa-solid fa-book"></i></span>
+          <input id="Nombres"
+                class="full-width input-form"
+                type="text"
+                autocomplete="off"
+                maxlength="40"
+                formControlName="NombreCurso"
+                pInputText/>
+        </div>
+        <small *ngIf="NombreCurso.hasError('pattern') && !NombreCurso.hasError('required')"
+              class="p-error">Digite un nombre del curso <strong>válido</strong></small>
+        <small *ngIf="NombreCurso.hasError('required') && NombreCurso.dirty"
+              class="p-error">El campo nombre del curso es <strong>requerido</strong></small>
+      </div>
+      <div class="grid content">
+        <div class="col-12 md:col-6">
+          <label for="usuario" class="block mb-2">Nivel</label>
+          <p-dropdown styleClass="full-width"
+                      [options]="nivel"
+                      placeholder="Nivel del curso"
+                      dataKey="code"  optionValue="code"
+                      formControlName="NivelCurso"
+                      optionLabel="name"></p-dropdown>
+          <small *ngIf="NivelCurso.hasError('required') && NivelCurso.dirty"
+                 class="p-error">El nivel del curso es <strong>requerido</strong></small>
+        </div>
+        <div class="col-12 md:col-6">
+          <label for="usuario" class="block mb-2">Módulos del curso</label>
+          <p-dropdown styleClass="full-width"
+                      [options]="modulo"
+                      placeholder="Módulos del curso"
+                      dataKey="cantidad"  optionValue="cantidad"
+                      formControlName="NumModulos"
+                      optionLabel="name"></p-dropdown>
+          <small *ngIf="NumModulos.hasError('required') && NumModulos.dirty"
+                 class="p-error">El campo módulos del curso es <strong>requerido</strong></small>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 md:col-6">
+      <div class="col">
+        <label for="Nombres" class="block mb-2">Descripción del curso</label>
+        <textarea rows="10"
+                  cols="30"
+                  pInputTextarea
+                  formControlName="DescripcionCurso"
+                  maxlength="350"
+                  class="full-width"></textarea>
+        <small *ngIf="DescripcionCurso.hasError('required') && DescripcionCurso.dirty"
+              class="p-error">El campo descripción  del curso es <strong>requerido</strong></small>
+      </div>
+    </div>
+  </div>
+  <div class="flex justify-content-end">
+    <p-button label="Registrar"
+              [icon]="loadding?'pi pi-spin pi-spinner':'pi pi-save'"
+              (click)="ready()"
+              styleClass="p-button mr-2 p-button-c"></p-button>
+    <p-button label="Cancelar"
+              (click)="reset()"
+              styleClass="p-button p-button-c"></p-button>
+  </div>
+</form>

@@ -3,6 +3,14 @@
   margin: 0;
   padding: 0;
 }
+html, body {
+  margin: 0px;
+  background: var(--surface-b);
+  font-family: var(--font-family);
+}
+.text-layout{
+  color: var(--text-color);
+}
 /**
 styles for buttons
 */
@@ -14,7 +22,9 @@ styles for buttons
 * Styles for card
 *
 */
-
+.main{
+  padding: 10px;
+}
 .main-container{
   height: 100vh;
   display: flex;
@@ -63,6 +73,10 @@ styles for buttons
   // background: #0B0D17 !important;
   // width: 100px !important;
 }
+.content{
+  width: 100%;
+  margin: 0 auto !important;
+}
 /**
 * Styles for social media
 *
@@ -78,14 +92,15 @@ styles for buttons
   margin: 0px !important;
 }
 .active{
-  background: var(--surface-ground);
+  background: var(--surface-300);
+  color: var(--text-color) !important;
 }
 .item{
   padding: 15px !important;
   cursor: pointer;
 }
 .item:hover{
-  background: var(--surface-ground);
+  background: var(--surface-300);
 }
 footer{
   background: #0B0D17;
@@ -140,6 +155,89 @@ footer{
   width: 30vw;
   background: red !important;
 }
+.input-form{
+  text-transform: uppercase;
+}
+.img-flag-recoment{
+  width: 25px;
+}
+.img-flag{
+  width: 40px;
+}
+.recoment-box{
+  padding: 13px;
+  cursor: pointer;
+  margin-bottom: 8px;
+  border-radius: 5px;
+  border: 1px solid gray;
+}
+.recoment-box:hover{
+  background: var(--surface-b);
+}
+.content-recomment{
+  background: var(--surface-e);
+  border-radius: 3px;
+  z-index: 10000;
+  width: 100%;
+  border-radius: 3px;
+}
+.above-col{
+  margin-top: -15px;
+}
+.content-user{
+  position: relative;
+  width: auto !important;
+}
+.content-avatar{
+  position: relative;
+  width: 25px;
+}
+.active-user{
+  height: 10px;
+  width: 10px;
+  border-radius: 5px;
+  margin-left: 95%;
+  position: absolute;
+}
+.online{
+  background: green;
+}
+.offline{
+  background: rgb(190, 5, 5);
+}
+.content-navbar{
+  position: absolute;
+  width: 100%;
+  padding: 2px !important;
+  z-index: 20000;
+}
+.content-svg{
+  z-index: 100;
+  height: 10px;
+}
+.p-menubar{
+  border: none !important;
+}
+.p-menuitem-text{
+  color: #0B0D17 !important;
+}
+.p-button-c{
+  background: none;
+  background: #1f2448 !important;
+  color: #FFF;
+}
+.p-button-c:hover{
+  background: none !important;
+  background: #1f2448 !important;
+  color: #FFF !important;
+}
+.p-button-c:focus{
+  color: #FFF !important;
+  background: #1f2448 !important;
+}
+.p-inputtext{
+  width: 100% !important;
+}
 
 @media only screen and (max-width: 767px) {
   /* Estilos para teléfonos móviles aquí */
@@ -154,7 +252,9 @@ footer{
   }
   .img-page-main{
     margin-top: 15px;
-    margin-bottom: 70px;
+  }
+  .content-svg{
+    display: none;
   }
   .title-main h1{
     font-size: 40px;
@@ -175,6 +275,12 @@ footer{
   .cls-sesion{
     background: red !important;
     width: 80vw;
+  }
+  .table-responsive{
+    overflow-y: scroll;
+  }
+  .card-login{
+    margin-top: 100px;
   }
 
 }

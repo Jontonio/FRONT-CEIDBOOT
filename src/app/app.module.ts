@@ -10,7 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 
 
-const config: SocketIoConfig = { url: environment.URL_SOCKET, options: {} };
+const config: SocketIoConfig = { url: environment.BASE_URL, options: {} };
 
 @NgModule({
   declarations: [

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService } from 'src/app/auth/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -9,7 +9,9 @@ import { AuthService } from 'src/app/services/auth.service';
 export class LoginComponent implements OnInit {
 
   constructor(private _auth:AuthService) {
+
     this._auth.existsToken();
+
   }
 
   ngOnInit(): void {

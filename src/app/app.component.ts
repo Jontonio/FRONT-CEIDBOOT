@@ -1,6 +1,4 @@
-import { DOCUMENT } from '@angular/common';
-import { Component, Inject } from '@angular/core';
-import { GlobalService } from './services/global.service';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -8,12 +6,7 @@ import { GlobalService } from './services/global.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+
   title = 'front-CEIDBOT';
-
-  constructor(){
-
-  }
-
-
 
 }

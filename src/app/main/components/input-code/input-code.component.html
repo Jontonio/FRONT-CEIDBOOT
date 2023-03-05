@@ -1,0 +1,21 @@
+<label for="Celular" class="block mb-2">Código</label>
+<p-dropdown styleClass="full-width"
+            virtualScrollItemSize="43"
+            name="country"
+            [options]="_main.listCodePhone"
+            [(ngModel)]="country"
+            (ngModelChange)="selected($event)"
+            optionLabel="name">
+  <ng-template pTemplate="selectedItem">
+    <div class="country-item country-item-value" *ngIf="country">
+      <img class="flag-code-country" [src]="country.flag" [alt]="country.name"/>
+      <span class="ml-1">{{country.codePhone}}</span>
+    </div>
+  </ng-template>
+  <ng-template let-country pTemplate="item">
+    <div>
+      <img class="flag-code-country" [src]="country.flag" alt="{{country.name}}"/>
+      <span class="ml-1">{{country.name}} {{country.codePhone}}</span>
+    </div>
+  </ng-template>
+</p-dropdown>

@@ -1,0 +1,9 @@
+<div class="main">
+  <p-card>
+    <app-form-usuario (tipoOp)="stateOp($event)" [loadding]="loadding"  (formData)="save($event)"></app-form-usuario>
+  </p-card>
+</div>
+<!-- A component that is used to show messages to the user. -->
+<p-toast position="top-right" [breakpoints]="{'920px': {width: '100%', right: '0', left: '0', padding:'10px'}}"></p-toast>
+
+

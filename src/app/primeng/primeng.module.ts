@@ -3,7 +3,9 @@ import { CommonModule } from '@angular/common';
 
 /**
  * List of modules of primeng
- */
+*/
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { TagModule } from 'primeng/tag';
 import { MenubarModule } from 'primeng/menubar';
 import { ButtonModule } from 'primeng/button';
 import { TabViewModule } from "primeng/tabview";
@@ -21,6 +23,16 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { AvatarModule } from 'primeng/avatar';
 import { DividerModule } from 'primeng/divider';
 import { ChipModule } from 'primeng/chip';
+import { MegaMenuModule } from 'primeng/megamenu';
+import { ToolbarModule } from 'primeng/toolbar';
+import { TableModule } from 'primeng/table';
+import { DropdownModule } from 'primeng/dropdown';
+import { PaginatorModule } from 'primeng/paginator';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { AvatarGroupModule } from 'primeng/avatargroup';
+import { BadgeModule } from 'primeng/badge';
+import { SkeletonModule } from 'primeng/skeleton';
+import { CalendarModule } from 'primeng/calendar';
 
 /**
  * array of modules
@@ -42,7 +54,19 @@ const listModules:any[] = [
   BreadcrumbModule,
   AvatarModule,
   DividerModule,
-  ChipModule
+  ChipModule,
+  MegaMenuModule,
+  ToolbarModule,
+  TableModule,
+  DropdownModule,
+  PaginatorModule,
+  InputTextareaModule,
+  AvatarGroupModule,
+  BadgeModule,
+  TagModule,
+  SkeletonModule,
+  ConfirmDialogModule,
+  CalendarModule
 ]
 
 @NgModule({
