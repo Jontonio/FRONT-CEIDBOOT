@@ -6,13 +6,16 @@ import { DocenteComponent } from './pages/Docente/docente/docente.component';
 import { MainComponent } from './pages/main/main.component';
 import { AddDocenteComponent } from './pages/Docente/add-docente/add-docente.component';
 import { ListDocenteComponent } from './pages/Docente/list-docente/list-docente.component';
-import { AddCursoComponent } from './pages/Cursos/add-curso/add-curso.component';
-import { CursoComponent } from './pages/Cursos/curso/curso.component';
-import { ListCursoComponent } from './pages/Cursos/list-curso/list-curso.component';
-import { UsuarioComponent } from './pages/usuarios/usuario/usuario.component';
-import { AddUsuarioComponent } from './pages/usuarios/add-usuario/add-usuario.component';
-import { ListUsuarioComponent } from './pages/usuarios/list-usuario/list-usuario.component';
-import { GrupoComponent } from './pages/grupos/grupo/grupo.component';
+import { AddCursoComponent } from './pages/Curso/add-curso/add-curso.component';
+import { CursoComponent } from './pages/Curso/curso/curso.component';
+import { ListCursoComponent } from './pages/Curso/list-curso/list-curso.component';
+import { UsuarioComponent } from './pages/Usuario/usuario/usuario.component';
+import { AddUsuarioComponent } from './pages/Usuario/add-usuario/add-usuario.component';
+import { ListUsuarioComponent } from './pages/Usuario/list-usuario/list-usuario.component';
+import { GrupoComponent } from './pages/Grupo/grupo/grupo.component';
+import { AddGrupoComponent } from './pages/Grupo/add-grupo/add-grupo.component';
+import { ListGrupoComponent } from './pages/Grupo/list-grupo/list-grupo.component';
+import { VerGrupoComponent } from './pages/Grupo/ver-grupo/ver-grupo.component';
 
 const routes: Routes = [
   {
@@ -35,8 +38,9 @@ const routes: Routes = [
       },
       { path:'grupos', component:GrupoComponent,
         children:[
-          { path:'add-curso', component:AddCursoComponent },
-          { path:'lista-cursos', component:ListCursoComponent },
+          { path:'add-grupo', component:AddGrupoComponent },
+          { path:'lista-grupos', component:ListGrupoComponent },
+          { path:'ver-grupo/:id', component:VerGrupoComponent},
         ]
       },
       { path:'usuarios', component:UsuarioComponent,

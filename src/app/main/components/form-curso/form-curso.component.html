@@ -1,6 +1,6 @@
 <form [formGroup]="formCurso">
   <div class="mb-1">
-    <h2 class="ml-3"><i class="fa-solid fa-bookmark"></i> Registro curso</h2>
+    <h2 class="ml-3"><i class="fa-solid fa-book-open"></i> Registro curso</h2>
   </div>
   <div class="grid content">
     <div class="col-12 md:col-6">
@@ -20,7 +20,7 @@
                  formControlName="NombrePais"
                  maxlength="40"
                  (input)="teclaPresionada()"
-                 class="full-width input-form">
+                 class="p-fluid p-grid p-formgrid input-form">
         </div>
         <small *ngIf="NombrePais.hasError('pattern') && !NombrePais.hasError('required')"
               class="p-error">Digite un país <strong>válido</strong></small>
@@ -42,7 +42,7 @@
         <div class="p-inputgroup">
           <span class="p-inputgroup-addon"><i class="fa-solid fa-book"></i></span>
           <input id="Nombres"
-                class="full-width input-form"
+                class="p-fluid p-grid p-formgrid input-form"
                 type="text"
                 autocomplete="off"
                 maxlength="40"
@@ -57,7 +57,7 @@
       <div class="grid content">
         <div class="col-12 md:col-6">
           <label for="usuario" class="block mb-2">Nivel</label>
-          <p-dropdown styleClass="full-width"
+          <p-dropdown class="p-fluid p-grid p-formgrid"
                       [options]="nivel"
                       placeholder="Nivel del curso"
                       dataKey="code"  optionValue="code"
@@ -68,7 +68,7 @@
         </div>
         <div class="col-12 md:col-6">
           <label for="usuario" class="block mb-2">Módulos del curso</label>
-          <p-dropdown styleClass="full-width"
+          <p-dropdown class="p-fluid p-grid p-formgrid"
                       [options]="modulo"
                       placeholder="Módulos del curso"
                       dataKey="cantidad"  optionValue="cantidad"
@@ -87,7 +87,7 @@
                   pInputTextarea
                   formControlName="DescripcionCurso"
                   maxlength="350"
-                  class="full-width"></textarea>
+                  class="p-fluid p-grid p-formgrid"></textarea>
         <small *ngIf="DescripcionCurso.hasError('required') && DescripcionCurso.dirty"
               class="p-error">El campo descripción  del curso es <strong>requerido</strong></small>
       </div>

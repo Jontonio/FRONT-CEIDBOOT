@@ -43,6 +43,10 @@ export class DocenteService{
     return this.http.get<ResGetDocente>(`${environment.BASE_URL}/docente/get-docentes?limit=${limit}&offset=${offset}`,{ headers:this.headers });
   }
 
+  getAllListDocentes():Observable<ResGetDocente>{
+    return this.http.get<ResGetDocente>(`${environment.BASE_URL}/docente/get-docentes`,{ headers:this.headers });
+  }
+
   /**
    *
    * Eventos sockets docente

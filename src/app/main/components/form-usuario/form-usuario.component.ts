@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Person } from 'src/app/class/Person';
 import { Rol } from 'src/app/class/Rol';
@@ -28,7 +28,8 @@ export class FormUsuarioComponent implements OnInit {
   Id?:number;
   country:Code;
 
-  constructor(private fb:FormBuilder,
+  constructor(private route:Router,
+              private fb:FormBuilder,
               private activeRouter:ActivatedRoute,
               private _global:GlobalService,
               private _main:MainService,
@@ -165,6 +166,7 @@ export class FormUsuarioComponent implements OnInit {
   }
 
   reset(){
+    this.route.navigate(['/system/usuarios/lista-usuarios'])
     this.FormUsuario.reset();
   }
 
@@ -193,8 +195,11 @@ export class FormUsuarioComponent implements OnInit {
   }
 
   completeDataUpdate(usuario:Usuario){
-    console.log(usuario);
     this.DNI.disable();
+    this.Nombres.disable();
+    this.ApellidoMaterno.disable()
+    this.ApellidoPaterno.disable();
+
     this.DNI.setValue(usuario.DNI);
     this.Nombres.setValue(usuario.Nombres);
     this.ApellidoPaterno.setValue(usuario.ApellidoPaterno);
@@ -203,9 +208,7 @@ export class FormUsuarioComponent implements OnInit {
     this.Direccion.setValue(usuario.Direccion);
     this.Email.setValue(usuario.Email);
     this.IdRol.setValue(usuario.rol.Id);
-
     this.getOneCountryCode(usuario.Code);
-
   }
 
   getOneCountryCode(code:string){

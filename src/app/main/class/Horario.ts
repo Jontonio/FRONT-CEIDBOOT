@@ -1,12 +1,23 @@
 
-export interface ResHorario {
+interface ResHorario {
   msg: string;
   ok: boolean;
   data: Horario;
 }
 
-export class Horario {
+interface ResGetHorario {
+  msg: string;
+  ok: boolean;
+  data: Horario[];
+}
+
+class Horario {
   DescHorario: string;
   HoraFinal: string;
   HoraInicio: string;
+}
+
+
+export {
+  ResHorario, Horario, ResGetHorario
 }

@@ -5,6 +5,8 @@ import { environment } from 'src/environments/environment';
 import { Pais } from "../class/Pais";
 import { map } from 'rxjs/operators'
 import { Code } from "../class/Code";
+import { Observable } from "rxjs";
+import { Departamento, Distrito, Provincia } from "../class/Ubigeo";
 
 @Injectable({
   providedIn:"root"
@@ -15,7 +17,6 @@ export class MainService{
 
   constructor(private http:HttpClient, private _auth:AuthService){
 
-    this.spliceName("holis")
     this.getCountryCode().then( res => {
       this.listCodePhone = res;
     })
@@ -99,6 +100,18 @@ export class MainService{
     return name.split(',')[0];
   }
 
+  getDepartamentos():Observable<Departamento[]>{
+      const url = `${environment.BASE_URL}/ubigeo/departamento`;
+      return this.http.get<Departamento[]>(url);
+  }
 
+  getProvincias(IdPadreUbigeo:number):Observable<Provincia[]>{
+      const url = `${environment.BASE_URL}/ubigeo/provincia/${IdPadreUbigeo}`;
+      return this.http.get<Provincia[]>(url);
+  }
+  getDistritos(IdPadreUbigeo:number):Observable<Distrito[]>{
+      const url = `${environment.BASE_URL}/ubigeo/distrito/${IdPadreUbigeo}`;
+      return this.http.get<Distrito[]>(url);
+  }
 
 }

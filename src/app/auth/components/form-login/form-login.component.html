@@ -9,7 +9,7 @@
   <div class="field">
     <label for="usuario" class="block">usuario</label>
     <input id="usuario"
-           class="full-width"
+           class="p-fluid p-grid p-formgrid"
            type="email"
            autocomplete="off"
            placeholder="usuario"
@@ -26,7 +26,7 @@
            placeholder="Contraseña"
            autocomplete="false"
            [feedback]="false"
-           class="full-width"
+           class="p-fluid p-grid p-formgrid"
            formControlName="Password"
            pPassword/>
     <small *ngIf="Password.hasError('required') && Password.dirty"
@@ -45,6 +45,6 @@
             [label]="loading?'INGRESANDO':'INGRESAR'"
             (click)="login()"
             [disabled]="loading"
-            class="p-button-raised full-width btn-login mt-3 p-button-c"></button>
+            class="p-button-raised full-width mt-3 p-button-c"></button>
   </div>
 </form>

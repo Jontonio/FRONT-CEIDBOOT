@@ -74,11 +74,14 @@ export class GlobalService {
       let label:string = '';
       label = item.replace('-',' ');
 
-      if(i==0) icon = 'pi pi-home'
+      if(isNaN(parseInt(label))){
 
-      const data = { label, icon }
+        if(i==0) icon = 'pi pi-home'
 
-      nuevo.push(data);
+        const data = { label, icon }
+
+        nuevo.push(data);
+      }
 
     })
 

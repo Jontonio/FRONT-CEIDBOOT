@@ -1,0 +1,21 @@
+<div class="main">
+  <div class="mb-2">
+    <p-toolbar>
+      <div class="p-toolbar-group-start">
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input type="text" pInputText placeholder="Search"/>
+        </span>
+      </div>
+      <div class="p-toolbar-group-right">
+        <button pButton
+                pRipple
+                label="Nuevo usuario"
+                class="p-button-c"
+                routerLink="/system/usuarios/add-usuario"
+                icon="fa-solid fa-user-plus"></button>
+      </div>
+    </p-toolbar>
+  </div>
+</div>
+<router-outlet></router-outlet>

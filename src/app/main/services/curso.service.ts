@@ -15,25 +15,26 @@ export class CursoService{
               private _auth:AuthService,
               private _socket:SocketService){}
 
-  createCurso(curso:Curso):Observable<ResCurso>{
+  get headers(){
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${this._auth.getToken()}`
     });
 
-    return this.http.post<ResCurso>(`${environment.BASE_URL}/curso/add-curso`,curso, {headers})
+    return headers;
+  }
+
+  createCurso(curso:Curso):Observable<ResCurso>{
+    return this.http.post<ResCurso>(`${environment.BASE_URL}/curso/add-curso`,curso, {headers:this.headers})
   }
 
   getAllCursos(limit:number = 5, offset:number = 0):Observable<ResGetCurso>{
+    return this.http.get<ResGetCurso>(`${environment.BASE_URL}/curso/get-cursos?limit=${limit}&offset=${offset}`,{ headers:this.headers });
+  }
 
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${this._auth.getToken()}`
-    });
-
-    return this.http.get<ResGetCurso>(`${environment.BASE_URL}/curso/get-cursos?limit=${limit}&offset=${offset}`,{ headers });
-
+  getAllListCursos():Observable<ResGetCurso>{
+    return this.http.get<ResGetCurso>(`${environment.BASE_URL}/curso/get-cursos`,{ headers:this.headers });
   }
 
   /**

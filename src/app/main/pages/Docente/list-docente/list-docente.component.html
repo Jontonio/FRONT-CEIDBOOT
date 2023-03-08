@@ -25,24 +25,12 @@
         <p-table [value]="listDocentes" responsiveLayout="scroll">
           <ng-template pTemplate="header">
               <tr>
-                  <th>
-                    ID
-                  </th>
-                  <th pSortableColumn="Nombres">
-                    Nombres <p-sortIcon field="Nombres"></p-sortIcon>
-                  </th>
-                  <th pSortableColumn="Celular">
-                    Celular <p-sortIcon field="Celular"></p-sortIcon>
-                  </th>
-                  <th pSortableColumn="Email">
-                    Email <p-sortIcon field="Email"></p-sortIcon>
-                  </th>
-                  <th>
-                    Estado
-                  </th>
-                  <th>
-                    Operación
-                  </th>
+                  <th>ID</th>
+                  <th pSortableColumn="Nombres">Nombres <p-sortIcon field="Nombres"></p-sortIcon></th>
+                  <th pSortableColumn="Celular">Celular <p-sortIcon field="Celular"></p-sortIcon></th>
+                  <th pSortableColumn="Email">Email <p-sortIcon field="Email"></p-sortIcon></th>
+                  <th>Estado</th>
+                  <th>Operación</th>
               </tr>
           </ng-template>
           <ng-template pTemplate="body" let-listDocentes let-rowIndex="rowIndex">
@@ -52,7 +40,7 @@
                   <td>{{listDocentes.Celular}}</td>
                   <td>{{listDocentes.Email | titlecase}}</td>
                   <td>
-                    <p-button styleClass="p-button-sm p-button-c">Activo</p-button>
+                    <p-button class="p-button-sm p-button-c">Activo</p-button>
                   </td>
                   <td>
                     <button pButton

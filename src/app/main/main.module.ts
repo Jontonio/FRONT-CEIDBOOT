@@ -12,12 +12,12 @@ import { AddDocenteComponent } from './pages/Docente/add-docente/add-docente.com
 import { ListDocenteComponent } from './pages/Docente/list-docente/list-docente.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { AddCursoComponent } from './pages/Cursos/add-curso/add-curso.component';
-import { CursoComponent } from './pages/Cursos/curso/curso.component';
-import { ListCursoComponent } from './pages/Cursos/list-curso/list-curso.component';
-import { UsuarioComponent } from './pages/usuarios/usuario/usuario.component';
-import { AddUsuarioComponent } from './pages/usuarios/add-usuario/add-usuario.component';
-import { ListUsuarioComponent } from './pages/usuarios/list-usuario/list-usuario.component';
+import { AddCursoComponent } from './pages/Curso/add-curso/add-curso.component';
+import { CursoComponent } from './pages/Curso/curso/curso.component';
+import { ListCursoComponent } from './pages/Curso/list-curso/list-curso.component';
+import { UsuarioComponent } from './pages/Usuario/usuario/usuario.component';
+import { AddUsuarioComponent } from './pages/Usuario/add-usuario/add-usuario.component';
+import { ListUsuarioComponent } from './pages/Usuario/list-usuario/list-usuario.component';
 import { ListaVaciaComponent } from './components/lista-vacia/lista-vacia.component';
 import { AvatarNamePipe } from './pipes/avatar-name.pipe';
 import { LoaddingComponent } from './components/loadding/loadding.component';
@@ -26,8 +26,12 @@ import { SkeletonTableComponent } from './skeleton/skeleton-table/skeleton-table
 import { FormCursoComponent } from './components/form-curso/form-curso.component';
 import { FormDocenteComponent } from './components/form-docente/form-docente.component';
 import { FormUsuarioComponent } from './components/form-usuario/form-usuario.component';
-import { GrupoComponent } from './pages/grupos/grupo/grupo.component';
+import { GrupoComponent } from './pages/Grupo/grupo/grupo.component';
 import { InputCodeComponent } from './components/input-code/input-code.component';
+import { DescripcionPipe } from './pipes/descripcion.pipe';
+import { ListGrupoComponent } from './pages/Grupo/list-grupo/list-grupo.component';
+import { AddGrupoComponent } from './pages/Grupo/add-grupo/add-grupo.component';
+import { VerGrupoComponent } from './pages/Grupo/ver-grupo/ver-grupo.component';
 
 
 @NgModule({
@@ -54,7 +58,11 @@ import { InputCodeComponent } from './components/input-code/input-code.component
     FormDocenteComponent,
     FormUsuarioComponent,
     GrupoComponent,
-    InputCodeComponent
+    InputCodeComponent,
+    DescripcionPipe,
+    ListGrupoComponent,
+    AddGrupoComponent,
+    VerGrupoComponent
   ],
   imports: [
     CommonModule,

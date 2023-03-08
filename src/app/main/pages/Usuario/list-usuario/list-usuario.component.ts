@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { LoginUser } from 'src/app/auth/interfaces/ResLogin';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { ResUsuarios, Usuario } from 'src/app/main/class/Usuario';
@@ -15,13 +15,13 @@ import { SocketService } from 'src/app/services/socket.service';
 })
 export class ListUsuarioComponent implements OnInit {
 
-  startPage:number = 0;
-  resUsuarios:ResUsuarios;
-  loadding:boolean = false;
+  startPage   :number = 0;
+  resUsuarios :ResUsuarios;
+  loadding    :boolean = false;
   listUsuarios:Usuario[] = [];
   changePage  :boolean = false;
   position    :string;
-  imAuth:LoginUser | undefined;
+  imAuth      :LoginUser | undefined;
 
   constructor(public _usuario:UsuarioService,
               private _global:GlobalService,
@@ -33,7 +33,8 @@ export class ListUsuarioComponent implements OnInit {
 
                 this.getAllUsuarios();
                 this._global.parseURL(this.route);
-                this.imAuth = _auth.userAuth;
+                this.imAuth = this._auth.userAuth;
+
               }
 
   ngOnInit(): void {
@@ -42,28 +43,38 @@ export class ListUsuarioComponent implements OnInit {
 
   }
 
+  /* A method that is responsible for obtaining all the users of the system. */
   getAllUsuarios(){
 
     this.loadding = true;
-
     this._usuario.getAllUsuarios().subscribe({
       next: (value) => {
-        this.loadding = false;
-        this.resUsuarios = value;
-        this.listUsuarios = value.data;
+        setTimeout(() => {
+          this.loadding = false;
+          this.resUsuarios = value;
+          this.listUsuarios = value.data;
+        }, 200);
       },
       error: (err) => {
         this.loadding = false;
         console.log(err);
-      },
+      }
     })
 
   }
 
+  /**
+   * The function paginate() is called when the user clicks on the pagination buttons. The function
+   * paginate() calls the function getAllUsuarios() which is defined in the service usuario.service.ts.
+   * The function getAllUsuarios() returns an observable which is subscribed to in the function
+   * paginate(). The function paginate() then assigns the value of the observable to the variable
+   * resUsuarios. The variable resUsuarios is then assigned to the variable listUsuarios. The variable
+   * listUsuarios is then used to populate the table
+   * @param {any} event - any
+   */
   paginate(event:any) {
 
     this.changePage = true;
-
     this.startPage = event.first;
     this._usuario.getAllUsuarios(event.rows, event.first).subscribe({
       next: (value) => {
@@ -72,11 +83,12 @@ export class ListUsuarioComponent implements OnInit {
       },
       error: (err) => {
         console.log(err);
-      },
+      }
     });
 
   }
 
+  /* A function that is called when the user clicks on the button "Usuarios" */
   OnUsuarios(){
 
     this._usuario.OnListaCursos().subscribe({
@@ -85,11 +97,17 @@ export class ListUsuarioComponent implements OnInit {
       },
       error: (err) => {
         console.log(err);
-      },
+      }
     })
 
   }
 
+  /**
+   * The function receives two parameters, the first is the user object and the second is a boolean
+   * that indicates whether the user is enabled or not
+   * @param {Usuario} usuario - Usuario, tipoEnable: boolean
+   * @param {boolean} tipoEnable - boolean
+   */
   Inhabilitar(usuario:Usuario, tipoEnable:boolean){
 
     this.position = 'top';
@@ -107,6 +125,7 @@ export class ListUsuarioComponent implements OnInit {
 
             this._usuario.enableUsuario(usuario.Id!,!usuario.Habilitado).subscribe({
               next: (value) => {
+
                 if(value.ok){
                   this.toast('success', msgConfirm, value.msg);
                   this._socket.EmitEvent('usuario_eliminado');
@@ -117,7 +136,7 @@ export class ListUsuarioComponent implements OnInit {
               },
               error: (err) => {
                 console.log(err);
-              },
+              }
             })
 
           }else{
@@ -134,6 +153,10 @@ export class ListUsuarioComponent implements OnInit {
   }
 
 
+  /**
+   * It's a function that receives a user object and displays a confirmation dialog to the user
+   * @param {Usuario} usuario - Usuario
+   */
   confirmDelete(usuario:Usuario) {
 
     this.position = 'top';
@@ -159,7 +182,7 @@ export class ListUsuarioComponent implements OnInit {
               },
               error: (err) => {
                 console.log(err);
-              },
+              }
             })
 
           }else{
@@ -175,10 +198,17 @@ export class ListUsuarioComponent implements OnInit {
 
   }
 
-  sendEdit(id:number){
+  /* A function that receives an id and redirects the user to the edit-user page. */
+  sendEditUserio(id:number){
     this.route.navigate(['/system/usuarios/editar-usuario',id])
   }
 
+  //TODO: need implement search method and generate reports
+
+  /* A function that receives three parameters, the first is the type of message, the second is the
+  message and the third is the detail of the message. The function toast() calls the function add()
+  of the class MessageService. The function add() is responsible for displaying the message to the
+  user. */
   toast(type:string, msg:string, detail:string=''){
     this._msg.add({severity:type, summary:msg, detail});
   }

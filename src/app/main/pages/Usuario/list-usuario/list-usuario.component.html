@@ -1,19 +1,4 @@
 <div class="main">
-  <div class="mb-2">
-    <p-toolbar>
-      <div class="p-toolbar-group-start">
-        <span class="p-input-icon-left">
-          <i class="pi pi-search"></i>
-          <input type="text" pInputText placeholder="Search"/>
-        </span>
-      </div>
-      <div class="p-toolbar-group-right">
-        <p-button routerLink="/system/usuarios/add-usuario"
-                  class="mr-1"
-                  label="Nuevo usuario"><i class="fa-solid fa-user-plus mr-1"></i></p-button>
-      </div>
-    </p-toolbar>
-  </div>
   <p-card>
     <div class="grid content">
       <div class="col table-responsive">
@@ -33,7 +18,7 @@
           </ng-template>
           <ng-template pTemplate="body" let-usuario let-rowIndex="rowIndex">
               <tr>
-                  <td>{{startPage  + (rowIndex+1)}}</td>
+                  <td>{{startPage + (rowIndex+1)}}</td>
                   <td>
                     <div class="content-avatar">
                       <p-avatar [label]="usuario.Nombres | avatarName"
@@ -43,7 +28,7 @@
                   </td>
                   <td>{{ usuario.Nombres | titlecase }} {{ usuario.ApellidoPaterno | titlecase }}</td>
                   <td>{{ usuario.Email | titlecase }}</td>
-                  <td>{{ usuario.Celular}}</td>
+                  <td>{{usuario.CodePhone}} {{ usuario.Celular}}</td>
                   <td>
                     <div *ngIf="usuario.FechaAcceso else Acess">
                       <p-tag styleClass="mr-2" severity="success" [value]="usuario.FechaAcceso | date:'MMM d, h:mm a' | fechAcceso" [rounded]="true"></p-tag>
@@ -85,7 +70,7 @@
                     <button pButton
                             pRipple
                             type="button"
-                            (click)="sendEdit(usuario.Id)"
+                            (click)="sendEditUserio(usuario.Id)"
                             class="p-button-text p-button-plain">
                             <i class="fa-regular fa-pen-to-square mr-1"></i> Editar</button>
                   </td>
@@ -99,13 +84,13 @@
                        (onPageChange)="paginate($event)"></p-paginator>
         </div>
         <app-loadding *ngIf="loadding && !changePage && _usuario.listUsuarios.length==0" msg="Lista de usuarios"></app-loadding>
-        <app-lista-vacia *ngIf="listUsuarios.length==0 && !loadding" msg="No se encontraron usuarios registrados">
-        </app-lista-vacia>
+        <app-lista-vacia *ngIf="listUsuarios.length==0 && !loadding" msg="No se encontraron usuarios registrados"></app-lista-vacia>
       </div>
     </div>
   </p-card>
 </div>
 
+<!-- Delete message dialog -->
 <p-confirmDialog [style]="{width: '50vw'}"
                  key="deleteDialog"
                  [position]="position"
@@ -114,6 +99,7 @@
                  [breakpoints]="{'960px': '75vw', '640px': '100vw'}"
                  rejectButtonStyleClass="p-button-outlined"></p-confirmDialog>
 
+<!-- Disable and enable dialog  -->
 <p-confirmDialog [style]="{width: '50vw'}"
                  key="enableDialog"
                  [position]="position"

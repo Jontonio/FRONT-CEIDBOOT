@@ -1,6 +1,11 @@
 <form [formGroup]="FormUsuario">
   <div class="mb-1">
-    <h2 class="ml-3"><i class="fa-solid fa-user-shield"></i> Registro usuario</h2>
+    <div *ngIf="isUpdate else notUpdate">
+      <h2 class="ml-3"><i class="fa-solid fa-user-pen"></i> Editar usuario</h2>
+    </div>
+    <ng-template #notUpdate>
+      <h2 class="ml-3"><i class="fa-solid fa-user-plus"></i> Registro usuario</h2>
+    </ng-template>
   </div>
   <div class="grid content">
     <div class="col-12 md:col-6">
@@ -9,7 +14,7 @@
         <div class="p-inputgroup">
           <span class="p-inputgroup-addon"><i [class]="loadGetData?'pi pi-spin pi-spinner':'pi pi-id-card'"></i></span>
           <input id="DNI"
-                class="full-width input-form"
+                class="p-fluid p-grid p-formgrid input-form"
                 type="text"
                 autocomplete="off"
                 maxlength="8"
@@ -27,7 +32,7 @@
         <div class="p-inputgroup">
           <span class="p-inputgroup-addon"><i class="fa-regular fa-user"></i></span>
           <input id="Nombres"
-                class="full-width input-form"
+                class="p-fluid p-grid p-formgrid input-form"
                 type="text"
                 autocomplete="off"
                 formControlName="Nombres"
@@ -42,7 +47,7 @@
         <div class="col-12 md:col-6">
           <label for="ApellidoPaterno" class="block mb-2">Apellido paterno</label>
           <input id="ApellidoPaterno"
-                class="full-width input-form"
+                class="p-fluid p-grid p-formgrid input-form"
                 type="text"
                 autocomplete="off"
                 formControlName="ApellidoPaterno"
@@ -55,7 +60,7 @@
         <div class="col-12 md:col-6">
           <label for="ApellidoMaterno" class="block mb-2">Apellido materno</label>
           <input id="ApellidoMaterno"
-                class="full-width input-form"
+                class="p-fluid p-grid p-formgrid input-form"
                 type="text"
                 autocomplete="off"
                 formControlName="ApellidoMaterno"
@@ -68,7 +73,7 @@
       </div>
       <div class="col">
         <label for="usuario" class="block mb-2"><i class="fa-solid fa-gears"></i> Rol del usuario</label>
-        <p-dropdown styleClass="full-width"
+        <p-dropdown class="p-fluid p-grid p-formgrid"
                     formControlName="IdRol"
                     [options]="listRoles"
                     placeholder="Rol del usuario"
@@ -84,7 +89,7 @@
         <div class="p-inputgroup">
           <span class="p-inputgroup-addon"><i class="fa-solid fa-location-dot"></i></span>
           <input id="Direccion"
-                class="full-width input-form"
+                class="p-fluid p-grid p-formgrid input-form"
                 type="text"
                 autocomplete="off"
                 maxlength="99"
@@ -101,7 +106,7 @@
         <div class="p-inputgroup">
           <span class="p-inputgroup-addon"><i class="fa-regular fa-envelope"></i></span>
           <input id="Email"
-                class="full-width"
+                class="p-fluid p-grid p-formgrid"
                 type="text"
                 autocomplete="off"
                 formControlName="Email"
@@ -121,7 +126,7 @@
           <div class="p-inputgroup">
             <span class="p-inputgroup-addon"><i class="fa-solid fa-phone"></i></span>
             <input id="Celular"
-                  class="full-width input-form"
+                  class="p-fluid p-grid p-formgrid input-form"
                   type="text"
                   autocomplete="off"
                   formControlName="Celular"

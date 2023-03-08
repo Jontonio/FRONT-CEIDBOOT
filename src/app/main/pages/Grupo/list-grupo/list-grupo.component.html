@@ -1,0 +1,58 @@
+<div class="main">
+  <p-card>
+    <div class="grid content">
+      <div class="col table-responsive">
+        <p-table [value]="listGrupos" responsiveLayout="scroll">
+          <ng-template pTemplate="header">
+              <tr>
+                <th>Código Grupo</th>
+                <th pSortableColumn="NombreGrupo">Nombre grupo <p-sortIcon field="NombreGrupo"></p-sortIcon></th>
+                <th>Curso</th>
+                <th>País</th>
+                <th>Horario</th>
+                <th>Modalidad</th>
+                <th>Fecha Inicio - Finalizaión</th>
+                <th>Max. Estudiantes</th>
+                <th>Num. Estudiantes</th>
+                <th>Docente asignado</th>
+                <th>Operación</th>
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-grupo let-rowIndex="rowIndex">
+              <tr>
+                  <td>G-00000{{grupo.Id}}</td>
+                  <td>{{grupo.tipoGrupo.NombreGrupo | titlecase}}</td>
+                  <td>{{grupo.curso.NombreCurso | titlecase}}</td>
+                  <td><img class="img-flag" [src]="grupo.curso.UrlBandera" alt="" srcset=""></td>
+                  <td>{{grupo.horario.HoraInicio | date:'h:mm a'}} - {{grupo.horario.HoraFinal | date:'h:mm a'}}</td>
+                  <td>{{grupo.Modalidad}}</td>
+                  <td>
+                    <p-tag icon="pi pi-calendar"
+                           severity="success">
+                           <span class="m-1">{{grupo.FechaInicioGrupo | date}} - {{grupo.FechaFinalGrupo | date}}</span></p-tag>
+                  </td>
+                  <td>{{grupo.MaximoEstudiantes}}</td>
+                  <td>{{grupo.NumeroEstudiantes}}</td>
+                  <td>{{grupo.docente.Nombres | titlecase}} {{grupo.docente.ApellidoPaterno | titlecase}}</td>
+                  <td><button pButton
+                              pRipple
+                              label="más"
+                              class="p-button-c p-button-sm"
+                              [routerLink]="['/system/grupos/ver-grupo', grupo.Id]"></button>
+                  </td>
+              </tr>
+          </ng-template>
+        </p-table>
+        <app-loadding *ngIf="loadding && !changePage && listGrupos.length==0" msg="Lista de docentes"></app-loadding>
+        <app-lista-vacia *ngIf="listGrupos.length==0 && !loadding" msg="No se encontraron grupos registrados">
+        </app-lista-vacia>
+        <div class="mt-4" *ngIf="resGetGrupo && listGrupos.length!=0">
+          <p-paginator [rows]="5"
+                       [totalRecords]="resGetGrupo.count"
+                       [rowsPerPageOptions]="[5,10,15]"
+                       (onPageChange)="paginate($event)"></p-paginator>
+        </div>
+      </div>
+    </div>
+  </p-card>
+</div>

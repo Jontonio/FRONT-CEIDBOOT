@@ -41,7 +41,7 @@ export class ListDocenteComponent implements OnInit {
           this.loadding = false;
           this.resGetDocente = value;
           this.listDocentes = value.data;
-        }, 300);
+        }, 200);
 
       },
       error: (err) => {

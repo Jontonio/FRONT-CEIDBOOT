@@ -39,9 +39,14 @@ export class MenuComponent implements OnInit {
         routerLink:'/system/aulas',
       },
       {
-        label: 'Grupos',
+        label: 'Grupos y horarios',
         icon: 'fa-solid fa-users-rectangle',
-        routerLink:'/system/grupos',
+        routerLink:'/system/grupos/lista-grupos',
+      },
+      {
+        label: 'Matrículas y pensiones',
+        icon: 'fa-solid fa-landmark',
+        routerLink:'/system',
       },
       {
         label: 'Cursos',
