@@ -1,10 +1,13 @@
 import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Person } from 'src/app/class/Person';
 import { GlobalService } from 'src/app/services/global.service';
 import { Code } from '../../class/Code';
 import { Docente } from '../../class/Docente';
+import { optionOperation } from '../../class/global';
+import { DocenteService } from '../../services/docente.service';
 import { MainService } from '../../services/main.service';
 
 interface Card {
@@ -19,7 +22,7 @@ interface Card {
 })
 export class FormDocenteComponent implements OnInit {
 
-  @Output() dataForm = new EventEmitter<Docente>();
+  @Output() dataForm = new EventEmitter<optionOperation>();
   @Input() loadding:boolean;
 
   formDocente     :FormGroup;
@@ -27,31 +30,35 @@ export class FormDocenteComponent implements OnInit {
   TipoDocumentoSelected:string = 'DNI';
   loadGetData:boolean = false;
   country:Code;
+  isUpdate:boolean = false;
+  Id?:number;
+
+  urlLista:string = '/system/docentes/lista-docentes';
 
   constructor(private fb:FormBuilder,
               public _main:MainService,
               private _global:GlobalService,
-              private _msg:MessageService) {
-
+              private _msg:MessageService,
+              private _docente:DocenteService,
+              private activeRouter:ActivatedRoute,
+              private router:Router) {
                 this.createdForm();
-
               }
 
   ngOnInit(): void {
 
-    this.country = { name:'Peru', codePhone:'+51', flag:'https://flagcdn.com/pe.svg', code:'PE'};
+    this.inicializateCodes();
 
     this.card = [
       {name: 'DNI', code: 'DNI'},
       {name: 'Carnet de extranjería', code: 'CDE' }
     ];
 
+    this.getIdByUdate(this.activeRouter);
   }
 
   createdForm(){
-
     this.formDocente = this.fb.group({
-      // IdDocente:[null, [Validators.pattern(/^([0-9])*$/)]],
       TipoDocumento:['DNI', Validators.required],
       Documento:[null, [Validators.required,Validators.pattern(/^([0-9])*$/)]],
       Nombres:[null, [Validators.required,Validators.pattern(/^([a-z ñáéíóú]{2,60})$/i)]],
@@ -61,9 +68,9 @@ export class FormDocenteComponent implements OnInit {
       Celular:[null, [Validators.pattern(/^([0-9])*$/), Validators.required]],
       Email:[null, [Validators.required,Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
     });
-
   }
 
+  /** Getters */
   get Documento(){
     return this.formDocente.controls['Documento'];
   }
@@ -98,9 +105,6 @@ export class FormDocenteComponent implements OnInit {
       return;
     }
 
-    console.log(this.formDocente.value);
-    console.log(this.country)
-
     const docente = new Docente(this.TipoDocumento.value,
                                 this.Documento.value,
                                 this.Nombres.value,
@@ -111,12 +115,22 @@ export class FormDocenteComponent implements OnInit {
                                 this.Direccion.value,
                                 this.country.code,
                                 this.country.codePhone);
-    this.dataForm.emit(docente);
+
+    this.dataForm.emit({data:docente, option: this.isUpdate, Id:this.Id });
   }
 
-  reset(){
-    this.formDocente.reset();
+  returnLista(){
+    this.router.navigate([this.urlLista]);
+  }
+
+  resetForm(){
+    this.router.navigate([this.urlLista]);
     this.TipoDocumentoSelected = 'DNI';
+    this.inicializateCodes();
+  }
+
+  inicializateCodes(){
+    this.country = { name:'Peru', codePhone:'+51', flag:'https://flagcdn.com/pe.svg', code:'PE'};
   }
 
   changeCard(event:string){
@@ -133,7 +147,6 @@ export class FormDocenteComponent implements OnInit {
       this._global.apiReniec(documento).subscribe({
         next: (value) => {
           if(value.ok){
-            console.log(value);
             this.completeData(value.data);
             this.toast('success',value.msg,'Datos consultados a RENIEC')
           }else{
@@ -162,6 +175,58 @@ export class FormDocenteComponent implements OnInit {
 
   toast(type:string, msg:string, detail:string=''){
     this._msg.add({severity:type, summary:msg, detail});
+  }
+
+  /** Get id for edit */
+  getIdByUdate(actiRouter:ActivatedRoute){
+    const { id } = actiRouter.snapshot.params;
+    if(!id) return;
+    this.Id = id;
+    this.isUpdate = true;
+    this._docente.getOneDocenteById(id).subscribe({
+      next: (resp) => {
+        console.log(resp);
+        this.completeDataUpdate(resp.data as Docente);
+      },
+      error: (e) => {
+        console.log(e);
+        this.router.navigate([this.urlLista]);
+        this.messageError(e);
+      }
+    })
+  }
+
+  completeDataUpdate(docente:Docente){
+    this.Documento.setValue(docente.Documento);
+    this.TipoDocumento.setValue(docente.TipoDocumento);
+    this.Nombres.setValue(docente.Nombres);
+    this.ApellidoPaterno.setValue(docente.ApellidoPaterno);
+    this.ApellidoMaterno.setValue(docente.ApellidoMaterno);
+    this.Direccion.setValue(docente.Direccion);
+    this.Email.setValue(docente.Email);
+    this.Celular.setValue(docente.Celular);
+    this.getOneCountryCode(docente.Code);
+  }
+
+  getOneCountryCode(code:string){
+    this._main.getOneCountryByCode(code).subscribe({
+      next: (resp) => {
+        if(resp.length!=0){
+          this.country = resp[0];
+        }
+      },
+      error:(e) => console.log(e)
+    })
+  }
+
+  messageError(e:any){
+    if(Array.isArray(e.error.message)){
+      e.error.message.forEach( (e:string) => {
+        this.toast('error',e,'Error de validación de datos')
+      })
+    }else{
+      this.toast('error',e.error.message,`${e.error.error}:${e.error.statusCode}`)
+    }
   }
 
 }

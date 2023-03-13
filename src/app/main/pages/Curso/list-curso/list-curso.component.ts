@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Curso, ResGetCurso } from 'src/app/main/class/Curso';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { Subscription } from 'rxjs';
+import { Curso, ResCurso } from 'src/app/main/class/Curso';
 import { CursoService } from 'src/app/main/services/curso.service';
 import { GlobalService } from 'src/app/services/global.service';
+import { SocketService } from 'src/app/services/socket.service';
 
 
 @Component({
@@ -10,48 +13,20 @@ import { GlobalService } from 'src/app/services/global.service';
   templateUrl: './list-curso.component.html',
   styleUrls: ['./list-curso.component.scss']
 })
-export class ListCursoComponent implements OnInit {
+export class ListCursoComponent {
 
-  resGetCursos:ResGetCurso;
+  private deleteCurso$  :Subscription;
   startPage   :number = 0;
-  listCursos  :Curso[] = [];
-  loadding    :boolean = false;
-  changePage  :boolean = false;
+  position    :string;
 
-  constructor(public _cursos:CursoService,
+  constructor(public _curso:CursoService,
               private route:Router,
-              private _global:GlobalService) {
+              private _confirService:ConfirmationService,
+              private _socket:SocketService,
+              private _msg:MessageService) {}
 
-    this.getAllCursos();
-    this._global.parseURL(this.route);
-
-  }
-
-  ngOnInit(): void {
-
-    this.OnCursos();
-
-  }
-
-  getAllCursos(){
-
-    this.loadding = true;
-
-    this._cursos.getAllCursos().subscribe({
-      next: (value) => {
-
-        setTimeout(() => {
-          this.loadding = false;
-          this.resGetCursos = value;
-          this.listCursos = value.data
-        }, 300);
-
-      },
-      error: (err) => {
-        this.loadding = false;
-        console.log(err);
-      },
-    })
+  ngOnDestroy(): void {
+    this._curso.listCursos$.unsubscribe();
   }
 
   paginate(event:any) {
@@ -59,35 +34,51 @@ export class ListCursoComponent implements OnInit {
     //event.rows = Number of rows to display in new page
     //event.page = Index of the new page
     //event.pageCount = Total number of pages
-    this.changePage = true;
     this.startPage = event.first;
-    this._cursos.getAllCursos(event.rows, event.first).subscribe({
+    this._curso.getListaCursos(event.rows, event.first);
+  }
 
-      next: (value) => {
-        this.resGetCursos = value;
-        this.listCursos = value.data;
-      },
-      error: (err) => {
-        console.log(err);
-      },
+  sendEditCurso({ Id }:Curso){
+    this.route.navigate(['/system/cursos/editar-curso', Id])
+  }
 
+  dialogDelete({ NombreCurso, Id}:Curso) {
+    this.position = 'top';
+    this._confirService.confirm({
+        message: `¿Está seguro de eliminar el curso <b>${NombreCurso.toUpperCase()}</b>?`,
+        header: 'Confirmación de eliminar',
+        icon: 'pi pi-info-circle',
+        accept: () => {
+          this.deleteCurso$ = this._curso.deleteCurso(Id!).subscribe({
+            next: (value) => {
+              if(value.ok){
+                this.toast('success', 'Eliminación', value.msg);
+                this._socket.EmitEvent('updated_list_curso');
+              }else{
+                this.toast('warn', value.msg);
+              }
+              this.deleteCurso$.unsubscribe();
+            },
+            error: (e) => this.messageError(e)
+          })
+        },
+        reject: (type:any) => {},
+        key: "deleteCursoDialog"
     });
-
   }
 
-  OnCursos(){
-
-    this._cursos.OnListaCursos().subscribe({
-      next: (value) => {
-        this.listCursos = value.data;
-      },
-      error: (err) => {
-        console.log(err);
-      },
-    })
-
+  messageError(e:any){
+    if(Array.isArray(e.error.message)){
+      e.error.message.forEach( (e:string) => {
+        this.toast('error',e,'Error de validación de datos')
+      })
+    }else{
+      this.toast('error',e.error.message,`${e.error.error}:${e.error.statusCode}`)
+    }
   }
 
-
+  toast(type:string, msg:string, detail:string=''){
+    this._msg.add({severity:type, summary:msg, detail});
+  }
 
 }

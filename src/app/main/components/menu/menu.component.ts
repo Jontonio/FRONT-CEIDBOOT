@@ -14,7 +14,7 @@ import { SocketService } from 'src/app/services/socket.service';
 })
 export class MenuComponent implements OnInit {
 
-  display    :boolean;
+  display    :boolean = true;
   items      :MenuItem[];
   changeTheme:boolean = false;
 
@@ -34,19 +34,19 @@ export class MenuComponent implements OnInit {
         icon: 'fa-solid fa-house'
       },
       {
-        label: 'Aulas',
+        label: 'None',
         icon: 'fa-solid fa-people-roof',
         routerLink:'/system/aulas',
       },
       {
-        label: 'Grupos y horarios',
+        label: 'Grupos',
         icon: 'fa-solid fa-users-rectangle',
         routerLink:'/system/grupos/lista-grupos',
       },
       {
         label: 'Matrículas y pensiones',
         icon: 'fa-solid fa-landmark',
-        routerLink:'/system',
+        routerLink:'/system/matricula'
       },
       {
         label: 'Cursos',
@@ -61,6 +61,7 @@ export class MenuComponent implements OnInit {
       {
         label: 'ChatBot',
         icon: 'pi pi-qrcode',
+        routerLink:'/system/chat-bot'
       },
       {
         label: 'Usuarios',
@@ -70,6 +71,7 @@ export class MenuComponent implements OnInit {
       {
         label: 'Perfil',
         icon: 'fa-solid fa-user',
+        routerLink:'/system/perfil'
       }
     ];
     //theme

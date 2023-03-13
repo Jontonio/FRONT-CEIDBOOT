@@ -8,6 +8,26 @@ html, body {
   background: var(--surface-b);
   font-family: var(--font-family);
 }
+body::-webkit-scrollbar {
+  width: 8px;     /* Tamaño del scroll en vertical */
+  height: 8px;    /* Tamaño del scroll en horizontal */
+}
+/* Ponemos un color de fondo y redondeamos las esquinas del thumb */
+body::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+/* Cambiamos el fondo y agregamos una sombra cuando esté en hover */
+body::-webkit-scrollbar-thumb:hover {
+  background: #b3b3b3;
+  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+/* Cambiamos el fondo cuando esté en active */
+body::-webkit-scrollbar-thumb:active {
+  background-color: #999999;
+}
 .text-layout{
   color: var(--text-color);
 }
@@ -144,10 +164,6 @@ footer{
 .card-login{
   width: 360px;
 }
-.btn-login{
-  // background: #0B0D17 !important;
-  // border-radius: 8px;
-}
 .img-login{
   height: 100px;
 }
@@ -238,7 +254,15 @@ footer{
 .p-inputtext{
   width: 100% !important;
 }
-
+.p-tabmenu-ink-bar{
+  visibility: hidden;
+}
+.p-menuitem-link-active{
+  background: var(--surface-300) !important;
+}
+.p-menuitem-text{
+  color: var(--text-color) !important;
+}
 @media only screen and (max-width: 767px) {
   /* Estilos para teléfonos móviles aquí */
   .image-login{
@@ -277,12 +301,14 @@ footer{
     width: 80vw;
   }
   .table-responsive{
-    overflow-y: scroll;
+    overflow-y: scroll !important;
   }
   .card-login{
     margin-top: 100px;
   }
-
+  .items-menu{
+    width: 3000px !important;
+  }
 }
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   /* Estilos para tabletas en modo retrato aquí */

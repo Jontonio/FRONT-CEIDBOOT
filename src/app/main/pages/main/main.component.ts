@@ -1,4 +1,7 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef,
+         Component,
+         OnInit,
+         NgZone } from '@angular/core';
 import { AuthService } from 'src/app/auth/services/auth.service';
 
 import { Idle, DEFAULT_INTERRUPTSOURCES } from '@ng-idle/core';
@@ -28,53 +31,39 @@ export class MainComponent implements OnInit {
   tiempo:number = 600;
   countdown?: number;
   lastPing?: Date;
-  displayModal:boolean = false;
 
   constructor(private route:Router,
               private _auth:AuthService,
               public _global:GlobalService,
-              private _main:MainService,
               private idle: Idle,
+              private ngZone: NgZone,
               private cd: ChangeDetectorRef,
               private _socket:SocketService) {
-
                 this.InitIdle();
                 this.welcomeMessage();
-
               }
 
   welcomeMessage(){
-
     this._socket.OnEvent('welcome-ceidbot').subscribe({
-
       next: (value) => {
         console.log(value);
       },
-      error: (err) => {
-        console.log(err);
-      }
-
+      error: (err) => console.log(err)
     })
-
   }
 
   reset() {
-
     //TODO: por defecto inicia en NOT_IDLE
     this.idle.watch();
     this.countdown = undefined;
     this.lastPing = undefined;
-
   }
 
   ngOnInit(): void {
-
     this.reset();
-
   }
 
   InitIdle(){
-
     // set idle parameters
     this.idle.setIdle(this.tiempo);
     this.idle.setTimeout(this.contador);
@@ -94,64 +83,32 @@ export class MainComponent implements OnInit {
     this.idle.onTimeout.subscribe(() =>{
       //TODO: termina el observer
       console.log("Cerrando sesión por seguridad");
-      this.logout();
+      this.ngZone.run(() => {
+        this.logout();
+      })
 
     });
-
     this.idle.onTimeoutWarning.subscribe(seconds => this.countdown = seconds);
-
-  }
-
-  showModalDialog() {
-
-    this.displayModal = true;
-
-  }
-
-  keepSession(){
-
-    this.displayModal = false;
-    this.contador = 0;
-    this.reset();
-
-  }
-
-  closeSesion(){
-
-    this.displayModal = false;
-    this.contador = 0
-    this.logout();
-
   }
 
   toggleMenu(value:boolean){
-
     this.display = value;
     console.log(this.display);
-
   }
 
   logout(){
-
     const data = new Logout(this._auth.userAuth?.Id, this._auth.userAuth?.Email);
-
     this._auth.logout(data).subscribe({
       next:(value) => {
-
         if(value.ok){
-
           if(this._auth.readToken()){
             this._auth.deleteToken();
           }
-
           this.route.navigate(['/main/auth/login']);
         }
-
       },
       error:(err) => {
-
         console.log("cerrar sesión",err);
-
       },
     })
 

@@ -1,23 +1,7 @@
 import { Rol } from "src/app/class/Rol";
 
-
-interface ResUsuario{
-  msg: string;
-  ok: boolean;
-  data: Usuario;
-}
-
-interface optionOperation{
-  data: Usuario,
-  option: boolean // true = update, false = register
-  Id?: number // this is required if is update
-}
-
-interface ResUsuarios{
-  msg: string;
-  ok: boolean;
-  count:number;
-  data: Usuario[];
+class ResUsuario{
+  constructor(public msg:string, public  ok:boolean, public data: Usuario | Usuario[], public count?:number){}
 }
 
 class Usuario{
@@ -62,12 +46,10 @@ class Usuario{
     this.rol = rol;
     this.Code = Code;
     this.CodePhone = CodePhone;
+    this.Id = Id;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 }
 
-export {
-  ResUsuario,
-  optionOperation,
-  Usuario,
-  ResUsuarios
-};
+export { ResUsuario, Usuario };

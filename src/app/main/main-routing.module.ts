@@ -16,6 +16,10 @@ import { GrupoComponent } from './pages/Grupo/grupo/grupo.component';
 import { AddGrupoComponent } from './pages/Grupo/add-grupo/add-grupo.component';
 import { ListGrupoComponent } from './pages/Grupo/list-grupo/list-grupo.component';
 import { VerGrupoComponent } from './pages/Grupo/ver-grupo/ver-grupo.component';
+import { MoreGrupoComponent } from './pages/Grupo/more-grupo/more-grupo.component';
+import { PerfilComponent } from './pages/Perfil/perfil/perfil.component';
+import { ChatBotComponent } from './pages/Chatbot/chat-bot/chat-bot.component';
+import { MatriculaComponent } from './pages/Matricula/matricula/matricula.component';
 
 const routes: Routes = [
   {
@@ -27,12 +31,14 @@ const routes: Routes = [
       { path:'docentes', component:DocenteComponent,
         children:[
           { path:'add-docente', component:AddDocenteComponent },
+          { path:'editar-docente/:id', component:AddDocenteComponent },
           { path:'lista-docentes', component:ListDocenteComponent },
         ]
       },
       { path:'cursos', component:CursoComponent,
         children:[
           { path:'add-curso', component:AddCursoComponent },
+          { path:'editar-curso/:id', component:AddCursoComponent },
           { path:'lista-cursos', component:ListCursoComponent },
         ]
       },
@@ -40,8 +46,15 @@ const routes: Routes = [
         children:[
           { path:'add-grupo', component:AddGrupoComponent },
           { path:'lista-grupos', component:ListGrupoComponent },
+          { path:'mas-opciones', component:MoreGrupoComponent },
           { path:'ver-grupo/:id', component:VerGrupoComponent},
         ]
+      },
+      { path:'matricula', component:MatriculaComponent,
+        children:[]
+      },
+      { path:'chat-bot', component:ChatBotComponent,
+        children:[]
       },
       { path:'usuarios', component:UsuarioComponent,
         children:[
@@ -50,6 +63,13 @@ const routes: Routes = [
           { path:'lista-usuarios', component: ListUsuarioComponent }
         ]
       },
+      { path:'perfil', component:PerfilComponent,
+        children:[]
+      },
+      {
+        path:'usuario-test',
+        loadChildren: () => import('./Usuario/usuario.module').then( mod => mod.UsuarioModule )
+      }
     ]
   }
 ];

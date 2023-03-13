@@ -6,7 +6,8 @@ import { AppComponent } from './app.component';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { environment } from 'src/environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokeInterceptorsService } from './interceptors/token-interceptors.service';
 
 
 
@@ -23,7 +24,9 @@ const config: SocketIoConfig = { url: environment.BASE_URL, options: {} };
     BrowserAnimationsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: TokeInterceptorsService, multi:true },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

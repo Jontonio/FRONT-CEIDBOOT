@@ -1,90 +1,80 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Docente, ResGetDocente } from 'src/app/main/class/Docente';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { Subscription } from 'rxjs';
+import { Docente } from 'src/app/main/class/Docente';
 import { DocenteService } from 'src/app/main/services/docente.service';
-import { GlobalService } from 'src/app/services/global.service';
-
-export enum Color{
-  rojo, negro, azul, verde
-}
+import { SocketService } from 'src/app/services/socket.service';
 
 @Component({
   selector: 'app-list-docente',
   templateUrl: './list-docente.component.html',
   styleUrls: ['./list-docente.component.scss']
 })
-export class ListDocenteComponent implements OnInit {
+export class ListDocenteComponent {
 
-  resGetDocente:ResGetDocente;
-  startPage   :number = 0;
-  changePage  :boolean = false;
-  listDocentes:Docente[] = [];
-  loadding    :boolean = false;
+  private deleteDocente$:Subscription;
+  position :string;
+  startPage:number = 0;
 
   constructor(public _docente:DocenteService,
-              private _global:GlobalService,
-              private route:Router) {
-
-    this.getLitsDocentes();
-    this._global.parseURL(route);
-
-  }
-
-  getLitsDocentes(){
-
-    this.loadding = true;
-
-    this._docente.getAllDocentes().subscribe({
-      next: (value) => {
-
-        setTimeout(() => {
-          this.loadding = false;
-          this.resGetDocente = value;
-          this.listDocentes = value.data;
-        }, 200);
-
-      },
-      error: (err) => {
-        this.loadding = false;
-        console.log(err);
-      },
-    })
-
-  }
+              private _msg:MessageService,
+              private _socket:SocketService,
+              private _confirService:ConfirmationService,
+              private route:Router) {}
 
   paginate(event:any) {
-    this.changePage = true;
-
     this.startPage = event.first;
-    this._docente.getAllDocentes(event.rows, event.first).subscribe({
-      next: (value) => {
-        this.resGetDocente = value;
-        this.listDocentes = value.data;
-      },
-      error: (err) => {
-        console.log(err);
-      },
+    this._docente.getListaDocentes(event.rows, event.first);
+  }
+
+  ngOnDestroy(): void {
+    this._docente.listDocentes$.unsubscribe();
+  }
+
+  sendEditDocente({Id}:Docente){
+    this.route.navigate(['/system/docentes/editar-docente', Id])
+  }
+
+  dialogDelete({ Nombres, Id}:Docente) {
+    this.position = 'top';
+    this._confirService.confirm({
+        message: `¿Está seguro de eliminar al docente <b>${Nombres}</b>?`,
+        header: 'Confirmación de eliminar',
+        icon: 'pi pi-info-circle',
+        accept: () => {
+          this.deleteDocente$ = this._docente.deleteDocente(Id!).subscribe({
+            next: (value) => {
+              if(value.ok){
+                this.toast('success', 'Eliminación', value.msg);
+                this._socket.EmitEvent('updated_list_docente');
+              }else{
+                this.toast('warn', value.msg);
+              }
+              this.deleteDocente$.unsubscribe();
+            },
+            error: (e) => this.messageError(e)
+          })
+        },
+        reject: (type:any) => {
+          console.log("No eliminar");
+        },
+        key: "deleteDocenteDialog"
     });
-
   }
 
-  ngOnInit(): void {
-
-    this.OnDocentes();
-
+  messageError(e:any){
+    if(Array.isArray(e.error.message)){
+      e.error.message.forEach( (e:string) => {
+        this.toast('error',e,'Error de validación de datos')
+      })
+    }else{
+      this.toast('error',e.error.message,`${e.error.error}:${e.error.statusCode}`)
+    }
   }
 
-  OnDocentes(){
-
-    this._docente.OnListDocente().subscribe({
-      next: (value) => {
-        this.listDocentes = value.data;
-      },
-      error: (err) => {
-        console.log(err);
-      },
-    })
-
+  toast(type:string, msg:string, detail:string=''){
+    this._msg.add({severity:type, summary:msg, detail});
   }
 
 }

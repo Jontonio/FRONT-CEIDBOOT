@@ -6,6 +6,8 @@ import { Curso } from 'src/app/main/class/Curso';
 import { FormCursoComponent } from 'src/app/main/components/form-curso/form-curso.component';
 import { GlobalService } from 'src/app/services/global.service';
 import { Router } from '@angular/router';
+import { optionOperation } from 'src/app/main/class/global';
+import { Subscriber, Subscription } from 'rxjs';
 
 
 @Component({
@@ -16,7 +18,12 @@ import { Router } from '@angular/router';
 export class AddCursoComponent implements OnInit {
 
   @ViewChild(FormCursoComponent) hijo: FormCursoComponent;
+
+  private updateCurso$:Subscription;
+  private createCurso$:Subscription;
+
   loadding:boolean = false;
+  urlLista:string = '/system/cursos/lista-cursos';
 
   constructor(private _msg:MessageService,
               private _global:GlobalService,
@@ -30,43 +37,57 @@ export class AddCursoComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  save(curso:Curso){
-
+  save(opt:optionOperation){
     this.loadding = true;
-
-    this._curso.createCurso(curso).subscribe({
-      next: (resCurso) => {
-
-        setTimeout(() => {
-
+    if(opt.option){
+      this.updateCurso$ = this._curso.updateCurso(opt.Id!, opt.data as Curso).subscribe({
+        next: (resCurso) => {
           this.loadding = false;
-
           if(resCurso.ok){
-
-            this.toast('success',resCurso.msg,'');
-            this.hijo.formCurso.reset();
-            this._socket.EmitEvent('Nuevo_curso');
-
+            this._socket.EmitEvent('updated_list_curso');
+            this.toast('success',resCurso.msg);
+            this.route.navigate([this.urlLista])
           }else{
-
             this.toast('warn',resCurso.msg,'');
-
           }
+          this.updateCurso$.unsubscribe();
+        },
+        error: (e) => {
+          this.loadding = false;
+          this.messageError(e);
+        }
+      })
+    }else{
+      this.createCurso$ = this._curso.createCurso(opt.data as Curso).subscribe({
+        next: (resCurso) => {
+          setTimeout(() => {
+            this.loadding = false;
+            if(resCurso.ok){
+              this._socket.EmitEvent('updated_list_curso');
+              this.toast('success',resCurso.msg,'');
+              this.hijo.resetForm();
+            }else{
+              this.toast('warn',resCurso.msg,'');
+            }
+            this.createCurso$.unsubscribe();
+          }, 200);
+        },
+        error: (e) => {
+          this.loadding = false;
+          this.messageError(e);
+        }
+      })
+    }
+  }
 
-        }, 200);
-
-      },
-      error: (err) => {
-
-        this.loadding = false;
-
-        err.error.message.forEach( (msg:string) => {
-          this.toast('warn',msg,'Error al registrar un nuevo curso');
-        });
-
-      },
-    })
-
+  messageError(e:any){
+    if(Array.isArray(e.error.message)){
+      e.error.message.forEach( (e:string) => {
+        this.toast('error',e,'Error de validación de datos')
+      })
+    }else{
+      this.toast('error',e.error.message,`${e.error.error}:${e.error.statusCode}`)
+    }
   }
 
   toast(type:string, msg:string, detail:string=''){

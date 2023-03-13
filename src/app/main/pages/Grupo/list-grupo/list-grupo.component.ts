@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Grupo, ResGetGrupo } from 'src/app/main/class/Grupo';
+import { MessageService } from 'primeng/api';
 import { GrupoService } from 'src/app/main/services/grupo.service';
 import { GlobalService } from 'src/app/services/global.service';
 
@@ -9,65 +9,34 @@ import { GlobalService } from 'src/app/services/global.service';
   templateUrl: './list-grupo.component.html',
   styleUrls: ['./list-grupo.component.scss']
 })
-export class ListGrupoComponent implements OnInit {
+export class ListGrupoComponent {
 
-  listGrupos:Grupo[] = [];
   startPage:number = 0;
-  changePage:boolean = false;
-  loadding:boolean = false;
-  resGetGrupo:ResGetGrupo;
 
-  constructor(private route:Router,
-              private _global:GlobalService,
-              private _grupo:GrupoService) {
+  constructor(private _msg:MessageService,
+              public _grupo:GrupoService) {}
 
-    this._global.parseURL(this.route);
-    this.getAllGrupos();
-
-  }
-
-  ngOnInit(): void {
-  }
-
-  getAllGrupos(){
-
-    this.loadding = true;
-
-    this._grupo.getAllGrupos().subscribe({
-      next:(value) => {
-        setTimeout(() => {
-          this.loadding = false;
-          if(value.ok){
-            console.log(value)
-            this.listGrupos = value.data;
-            this.resGetGrupo = value;
-          }
-        }, 200);
-      },
-      error:(err) => {
-        this.loadding = false;
-        console.log(err);
-      },
-    })
+  ngOnDestroy(): void {
+    this._grupo.listGrupos$.unsubscribe();
   }
 
   paginate(event:any) {
-    this.changePage = true;
-
     this.startPage = event.first;
+    this._grupo.getListaGrupos(event.rows, event.first);
+  }
 
-    this._grupo.getAllGrupos(event.rows, event.first).subscribe({
-      next:(value) => {
-        if(value.ok){
-          this.listGrupos = value.data;
-          this.resGetGrupo = value;
-        }
-      },
-      error:(err) => {
-        console.log(err);
-      },
-    })
+  messageError(e:any){
+    if(Array.isArray(e.error.message)){
+      e.error.message.forEach( (e:string) => {
+        this.toast('error',e,'Error de validación de datos')
+      })
+    }else{
+      this.toast('error',e.error.message,`${e.error.error}:${e.error.statusCode}`)
+    }
+  }
 
+  toast(type:string, msg:string, detail:string=''){
+    this._msg.add({severity:type, summary:msg, detail});
   }
 
 }

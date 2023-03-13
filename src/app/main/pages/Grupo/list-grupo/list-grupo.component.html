@@ -1,13 +1,35 @@
-<div class="main">
-  <p-card>
+<div class="main p-4">
+  <p-card header="Lista de grupos">
+    <div class="flex justify-content-center justify-content-between">
+      <div class="col-6">
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input type="text"
+                 pInputText
+                 placeholder="Buscar grupo" />
+      </span>
+      </div>
+      <div class="col-6 flex justify-content-end">
+        <div>
+          <button pButton
+                  pRipple
+                  type="button"
+                  icon="fa-solid fa-plus"
+                  label="Nuevo grupo"
+                  routerLink="/system/grupos/add-grupo"
+                  class="p-button-rounded"></button>
+        </div>
+      </div>
+    </div>
     <div class="grid content">
       <div class="col table-responsive">
-        <p-table [value]="listGrupos" responsiveLayout="scroll">
+        <p-table [value]="_grupo.listGrupos" responsiveLayout="scroll">
           <ng-template pTemplate="header">
               <tr>
                 <th>Código Grupo</th>
                 <th pSortableColumn="NombreGrupo">Nombre grupo <p-sortIcon field="NombreGrupo"></p-sortIcon></th>
                 <th>Curso</th>
+                <th>Nivel</th>
                 <th>País</th>
                 <th>Horario</th>
                 <th>Modalidad</th>
@@ -20,9 +42,10 @@
           </ng-template>
           <ng-template pTemplate="body" let-grupo let-rowIndex="rowIndex">
               <tr>
-                  <td>G-00000{{grupo.Id}}</td>
+                  <td>G-{{grupo.Id}}</td>
                   <td>{{grupo.tipoGrupo.NombreGrupo | titlecase}}</td>
                   <td>{{grupo.curso.NombreCurso | titlecase}}</td>
+                  <td>{{grupo.curso.NivelCurso | titlecase}}</td>
                   <td><img class="img-flag" [src]="grupo.curso.UrlBandera" alt="" srcset=""></td>
                   <td>{{grupo.horario.HoraInicio | date:'h:mm a'}} - {{grupo.horario.HoraFinal | date:'h:mm a'}}</td>
                   <td>{{grupo.Modalidad}}</td>
@@ -43,16 +66,28 @@
               </tr>
           </ng-template>
         </p-table>
-        <app-loadding *ngIf="loadding && !changePage && listGrupos.length==0" msg="Lista de docentes"></app-loadding>
-        <app-lista-vacia *ngIf="listGrupos.length==0 && !loadding" msg="No se encontraron grupos registrados">
-        </app-lista-vacia>
-        <div class="mt-4" *ngIf="resGetGrupo && listGrupos.length!=0">
-          <p-paginator [rows]="5"
-                       [totalRecords]="resGetGrupo.count"
-                       [rowsPerPageOptions]="[5,10,15]"
-                       (onPageChange)="paginate($event)"></p-paginator>
+        <div>
+          <div class="mt-4" *ngIf="_grupo.respGrupo">
+            <div class="grid content">
+              <div class="col-12 md:col-3">
+                  <p class="text-muted">Total de grupos: {{_grupo.respGrupo.count}}</p>
+              </div>
+              <div class="col-12 md:col-6">
+                <p-paginator [rows]="5"
+                             [totalRecords]="_grupo.respGrupo.count!"
+                             [rowsPerPageOptions]="[5,10,15,20]"
+                             (onPageChange)="paginate($event)"></p-paginator>
+              </div>
+              <div class="col-12 md:col-3"></div>
+            </div>
+          </div>
+          <app-loadding *ngIf="_grupo.loadingLista && _grupo.listGrupos.length==0" msg="Lista de grupos"></app-loadding>
+          <app-lista-vacia *ngIf="_grupo.listGrupos.length==0 && !_grupo.loadingLista" msg="No se encontraron grupos registrados"></app-lista-vacia>
         </div>
       </div>
     </div>
   </p-card>
 </div>
+
+<!-- A component that is used to show messages to the user. -->
+<p-toast position="top-right" [breakpoints]="{'920px': {width: '100%', right: '0', left: '0', padding:'10px'}}"></p-toast>

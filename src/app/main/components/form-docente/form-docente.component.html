@@ -1,6 +1,11 @@
 <form [formGroup]="formDocente">
   <div class="mb-1">
-    <h2 class="ml-3"><i class="fa-solid fa-chalkboard-user"></i> Registro docente</h2>
+    <div *ngIf="isUpdate else notUpdate">
+      <h2 class="ml-1"><i class="fa-solid fa-user-pen"></i> Editar docente</h2>
+    </div>
+    <ng-template #notUpdate>
+      <h2 class="ml-1"><i class="fa-solid fa-chalkboard-user"></i> Registro docente</h2>
+    </ng-template>
   </div>
   <div class="grid content">
     <div class="col-12 md:col-6">
@@ -11,7 +16,7 @@
                       [options]="card"
                       formControlName="TipoDocumento"
                       (ngModelChange)="changeCard($event)"
-                      dataKey="code"  optionValue="code"
+                      optionValue="code"
                       optionLabel="name">
                   </p-dropdown>
           <small *ngIf="TipoDocumento.hasError('required') && TipoDocumento.dirty"
@@ -138,12 +143,12 @@
     </div>
   </div>
   <div class="flex justify-content-end">
-    <p-button label="Registrar"
+    <p-button [label]="isUpdate?'Guardar':'Registrar'"
               [icon]="loadding?'pi pi-spin pi-spinner':'pi pi-save'"
               (click)="ready()"
               styleClass="p-button mr-2 p-button-c"></p-button>
     <p-button label="Cancelar"
-              (click)="reset()"
+              (click)="returnLista()"
               styleClass="p-button p-button-c"></p-button>
   </div>
 </form>

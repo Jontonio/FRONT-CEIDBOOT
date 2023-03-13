@@ -1,10 +1,10 @@
 <form [formGroup]="FormUsuario">
   <div class="mb-1">
     <div *ngIf="isUpdate else notUpdate">
-      <h2 class="ml-3"><i class="fa-solid fa-user-pen"></i> Editar usuario</h2>
+      <h2 class="ml-1"><i class="fa-solid fa-user-pen"></i> Editar usuario</h2>
     </div>
     <ng-template #notUpdate>
-      <h2 class="ml-3"><i class="fa-solid fa-user-plus"></i> Registro usuario</h2>
+      <h2 class="ml-1"><i class="fa-solid fa-user-plus"></i> Registro usuario</h2>
     </ng-template>
   </div>
   <div class="grid content">
@@ -146,7 +146,7 @@
               (click)="ready()"
               styleClass="p-button mr-2 p-button-c"></p-button>
     <p-button label="Cancelar"
-              (click)="reset()"
+              (click)="returnList()"
               styleClass="p-button p-button-c"></p-button>
   </div>
 </form>

@@ -34,6 +34,7 @@ import { BadgeModule } from 'primeng/badge';
 import { SkeletonModule } from 'primeng/skeleton';
 import { CalendarModule } from 'primeng/calendar';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { TabMenuModule } from 'primeng/tabmenu';
 
 /**
  * array of modules
@@ -68,7 +69,8 @@ const listModules:any[] = [
   SkeletonModule,
   ConfirmDialogModule,
   CalendarModule,
-  InputNumberModule
+  InputNumberModule,
+  TabMenuModule
 ]
 
 @NgModule({

@@ -1,0 +1,54 @@
+<p-dialog header="Nuevo Horario"
+          [(visible)]="openModalHorario"
+          [modal]="true"
+          [style]="{width: '45vw'}"
+          [breakpoints]="{'960px': '75vw', '640px': '90vw'}"
+          [draggable]="false"
+          [closable]="false"
+          [resizable]="false">
+          <form [formGroup]="FormHorario">
+            <div class="grid content">
+              <div class="col-12 md:col-6">
+                <label for="HoraInicio" class="block mb-2">
+                  <i class="fa-regular fa-clock"></i> Hora de inicio
+                </label>
+                <p-calendar [timeOnly]="true"
+                            hourFormat="12"
+                            inputId="timeonly"
+                            ngClass="p-fluid p-grid p-formgrid"
+                            formControlName="HoraInicio"></p-calendar>
+                <small *ngIf="HoraInicio.hasError('pattern') && !HoraInicio.hasError('required')"
+                      class="p-error">Digite una hora <strong>válida</strong></small>
+                <small *ngIf="HoraInicio.hasError('required') && HoraInicio.dirty"
+                      class="p-error">El de hora inicio es <strong>requerido</strong></small>
+              </div>
+              <div class="col-12 md:col-6">
+                <label for="HoraFinal" class="block mb-2">
+                  <i class="fa-regular fa-clock"></i> Hora final
+                </label>
+                <p-calendar [timeOnly]="true"
+                            hourFormat="12"
+                            ngClass="p-fluid p-grid p-formgrid"
+                            inputId="timeonly"
+                            formControlName="HoraFinal"></p-calendar>
+                <small *ngIf="HoraFinal.hasError('pattern') && !HoraFinal.hasError('required')"
+                      class="p-error">Digite una hora <strong>válida</strong></small>
+                <small *ngIf="HoraFinal.hasError('required') && HoraFinal.dirty"
+                      class="p-error">El campo hora final es <strong>requerido</strong></small>
+              </div>
+            </div>
+            <div class="col">
+              <label for="Nombres" class="block mb-2">Descripción del horario (opcional)</label>
+              <textarea rows="5"
+                        cols="10"
+                        pInputTextarea
+                        maxlength="350"
+                        class="p-fluid p-grid p-formgrid"
+                        formControlName="DescHorario"></textarea>
+            </div>
+          </form>
+        <ng-template pTemplate="footer">
+        <p-button [icon]="loadHorario?'pi pi-spin pi-spinner':'pi pi-save'" (click)="saveHorario()" label="Registrar" styleClass="p-button-text"></p-button>
+        <p-button (click)="closeModal()" label="Cancelar" styleClass="p-button-text"></p-button>
+        </ng-template>
+</p-dialog>

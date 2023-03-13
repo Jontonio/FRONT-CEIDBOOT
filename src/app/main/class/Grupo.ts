@@ -2,24 +2,12 @@ import { Curso } from "./Curso";
 import { Docente } from "./Docente";
 import { Horario } from "./Horario";
 
-interface ResGrupo {
-  msg: string;
-  ok: boolean;
-  data: Grupo;
+class ResGrupo {
+  constructor(public msg: string, public ok: boolean, public data: Grupo | Grupo[], public count?:number){}
 }
 
-interface ResGetGrupo {
-  msg: string;
-  ok: boolean;
-  count:number;
-  data: Grupo[];
-}
-
-interface ResGetTipoGrupo {
-  msg: string;
-  ok: boolean;
-  count:number;
-  data: TipoGrupo[];
+class ResTipoGrupo {
+  constructor(public msg: string, public ok: boolean, public data: TipoGrupo | TipoGrupo[], public count?:number){}
 }
 
 class Grupo {
@@ -51,7 +39,6 @@ class TipoGrupo {
 export {
   Grupo,
   ResGrupo,
-  ResGetGrupo,
   TipoGrupo,
-  ResGetTipoGrupo
+  ResTipoGrupo
 }

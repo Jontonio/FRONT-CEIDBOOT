@@ -1,10 +1,28 @@
-<div class="main">
-  <p-card>
+<div class="main p-4 animate__animated animate__fadeIn">
+  <p-card header="Registro de nuevo grupo">
     <form [formGroup]="FormGrupo">
-      <div class="mb-2">
-        <h2 class="ml-2">Registro de nuevo grupo</h2>
+      <div class="flex justify-content-between content-options">
+        <div></div>
+        <div class="col-6 flex justify-content-end">
+          <div>
+            <button pButton
+                    pRipple
+                    type="button"
+                    icon="fa-solid fa-plus"
+                    label="Nombre Grupo"
+                    (click)="openModalTGrupo()"
+                    class="p-button-rounded"></button>
+            <button pButton
+                    pRipple
+                    type="button"
+                    icon="fa-solid fa-plus"
+                    label="Horario"
+                    (click)="openModalHorario()"
+                    class="p-button-rounded ml-2"></button>
+          </div>
+        </div>
       </div>
-      <div class="grid content">
+      <div class="grid content content-form">
         <div class="col-12 md:col-6">
           <div class="col">
             <label for="tipoGrupo" class="block mb-2">Nombre del grupo</label>
@@ -96,6 +114,31 @@
               <small *ngIf="Modalidad.hasError('required') && Modalidad.dirty"
                     class="p-error">La modalidad es <strong>requerida</strong></small>
           </div>
+          <div class="grid content">
+            <div class="col-12 md:col-6 p-fluid p-grid p-formgrid">
+              <label for="FechaInicioGrupo" class="block mb-2">Fecha de inicio del grupo</label>
+              <div class="p-inputgroup">
+                <span class="p-inputgroup-addon"><i class="pi pi-calendar"></i></span>
+                <p-calendar inputId="FechaInicioGrupo"
+                            class="p-fluid p-grid p-formgrid"
+                            formControlName="FechaInicioGrupo"></p-calendar>
+              </div>
+              <small *ngIf="FechaInicioGrupo.hasError('required') && FechaInicioGrupo.dirty"
+                    class="p-error">La fecha de inicio del grupo es <strong>requerido</strong></small>
+            </div>
+            <div class="col-12 md:col-6 p-fluid p-grid p-formgrid">
+              <label for="FechaFinalGrupo" class="block mb-2">Fecha de final del grupo</label>
+              <div class="p-inputgroup">
+                <span class="p-inputgroup-addon"><i class="pi pi-calendar"></i></span>
+                <p-calendar inputId="FechaFinalGrupo"
+                            formControlName="FechaFinalGrupo"></p-calendar>
+              </div>
+              <small *ngIf="FechaFinalGrupo.hasError('required') && FechaFinalGrupo.dirty"
+                  class="p-error">La fecha de finalización del grupo es <strong>requerido</strong></small>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 md:col-6">
           <div class="col">
             <label for="horario" class="block mb-2">Horario</label>
               <p-dropdown class="p-fluid p-grid p-formgrid"
@@ -119,31 +162,6 @@
               </p-dropdown>
               <small *ngIf="horario.hasError('required') && horario.dirty"
                     class="p-error">El horario es <strong>requerido</strong></small>
-          </div>
-        </div>
-        <div class="col-12 md:col-6">
-          <div class="grid content">
-            <div class="col-12 md:col-6 p-fluid p-grid p-formgrid">
-              <label for="FechaInicioGrupo" class="block mb-2">Fecha de inicio del grupo</label>
-              <div class="p-inputgroup">
-                <span class="p-inputgroup-addon"><i class="pi pi-calendar"></i></span>
-                <p-calendar inputId="FechaInicioGrupo"
-                            class="p-fluid p-grid p-formgrid"
-                            formControlName="FechaInicioGrupo"></p-calendar>
-              </div>
-              <small *ngIf="FechaInicioGrupo.hasError('required') && FechaInicioGrupo.dirty"
-                    class="p-error">La fecha de inicio del grupo es <strong>requerido</strong></small>
-            </div>
-            <div class="col-12 md:col-6 p-fluid p-grid p-formgrid">
-              <label for="FechaFinalGrupo" class="block mb-2">Fecha de final del grupo</label>
-              <div class="p-inputgroup">
-                <span class="p-inputgroup-addon"><i class="pi pi-calendar"></i></span>
-                <p-calendar inputId="FechaFinalGrupo"
-                            formControlName="FechaFinalGrupo"></p-calendar>
-              </div>
-              <small *ngIf="FechaFinalGrupo.hasError('required') && FechaFinalGrupo.dirty"
-                  class="p-error">La fecha de finalización del grupo es <strong>requerido</strong></small>
-            </div>
           </div>
           <div class="col">
             <label for="NombreGrupo" class="block mb-2">Cant. Máxima de estudiantes</label>
@@ -187,52 +205,8 @@
       </div>
     </form>
   </p-card>
-
-  <!-- <p-card>
-    <form [formGroup]="FormTipoGrupo">
-      <div class="mb-2">
-        <h2 class="ml-2">Tipo grupo</h2>
-      </div>
-      <div class="col">
-        <label for="NombreGrupo" class="block mb-2">Nombre del grupo</label>
-        <div class="p-inputgroup">
-          <span class="p-inputgroup-addon"><i class="fa-solid fa-people-group"></i></span>
-          <input id="NombreGrupo"
-                class="p-fluid p-grid p-formgrid input-form"
-                type="text"
-                autocomplete="off"
-                formControlName="NombreGrupo"
-                maxlength="40"
-                pInputText/>
-        </div>
-        <small *ngIf="NombreGrupo.hasError('pattern') && !NombreGrupo.hasError('required')"
-              class="p-error">Digite un nombre del grupo <strong>válido</strong></small>
-        <small *ngIf="NombreGrupo.hasError('required') && NombreGrupo.dirty"
-              class="p-error">El campo nombre del grupo es <strong>requerido</strong></small>
-      </div>
-      <div class="col">
-        <label for="DescGrupo" class="block mb-2">Descripción del grupo (opcional)</label>
-        <textarea rows="5"
-                  cols="30"
-                  pInputTextarea
-                  formControlName="DescGrupo"
-                  maxlength="350"
-                  class="p-fluid p-grid p-formgrid"></textarea>
-        <small *ngIf="DescGrupo.hasError('required') && DescGrupo.dirty"
-              class="p-error">El campo descripción del grupo es <strong>requerido</strong></small>
-      </div>
-      <div class="flex justify-content-end mt-2">
-        <p-button label="Registrar"
-                  (click)="saveTipoGrupo()"
-                  styleClass="p-button mr-2 p-button-c"></p-button>
-        <p-button label="Cancelar"
-                  (click)="resetTipoGrupo()"
-                  styleClass="p-button p-button-c"></p-button>
-      </div>
-    </form>
-  </p-card> -->
-
 </div>
 
-
-
+<!-- these are modals groups -->
+<app-modal-horario></app-modal-horario>
+<app-modal-tipo-grupo></app-modal-tipo-grupo>

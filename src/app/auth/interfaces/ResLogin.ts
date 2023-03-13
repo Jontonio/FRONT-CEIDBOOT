@@ -1,11 +1,11 @@
-export interface ResLogin {
+interface ResLogin {
   msg:string,
   ok:boolean,
   token:string,
   user:LoginUser
 }
 
-export interface LoginUser{
+interface LoginUser{
   Id:number,
   Email:string,
   DNI:string,
@@ -14,3 +14,5 @@ export interface LoginUser{
   ApellidoMaterno:string,
   TipoRol:string
 }
+
+export { ResLogin, LoginUser }

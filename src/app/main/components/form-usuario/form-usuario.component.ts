@@ -6,9 +6,10 @@ import { Person } from 'src/app/class/Person';
 import { Rol } from 'src/app/class/Rol';
 import { GlobalService } from 'src/app/services/global.service';
 import { UsuarioService } from '../../services/usuario.service';
-import { Usuario, optionOperation} from '../../class/Usuario';
+import { Usuario } from '../../class/Usuario';
 import { Code } from '../../class/Code';
 import { MainService } from '../../services/main.service';
+import { optionOperation } from '../../class/global';
 
 @Component({
   selector: 'app-form-usuario',
@@ -19,7 +20,6 @@ export class FormUsuarioComponent implements OnInit {
 
   @Output() formData = new EventEmitter<optionOperation>();
   @Input() loadding:boolean;
-  @Output() tipoOp = new EventEmitter<boolean>();
 
   FormUsuario:FormGroup;
   loadGetData:boolean = false;
@@ -27,6 +27,7 @@ export class FormUsuarioComponent implements OnInit {
   isUpdate:boolean = false;
   Id?:number;
   country:Code;
+  urlLista:string = '/system/usuarios/lista-usuarios';
 
   constructor(private route:Router,
               private fb:FormBuilder,
@@ -41,12 +42,9 @@ export class FormUsuarioComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    this.country = { name:'Peru', codePhone:'+51', flag:'https://flagcdn.com/pe.svg', code:'PE'};
-
+    this.inicializateCodes();
     this.getRoles();
     this.getIdUpdate(this.activeRouter);
-
   }
 
   createFormUsuario(){
@@ -56,7 +54,7 @@ export class FormUsuarioComponent implements OnInit {
       Nombres:[null, [Validators.required,Validators.pattern(/^([a-z ñáéíóú]{2,60})$/i)]],
       ApellidoPaterno:[null, [Validators.required,Validators.pattern(/^([a-z ñáéíóú]{2,60})$/i)]],
       ApellidoMaterno:[null, [Validators.required,Validators.pattern(/^([a-z ñáéíóú]{2,60})$/i)]],
-      Email:[null, [Validators.required,Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
+      Email:[null, [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
       Celular:[null, [Validators.required,Validators.pattern(/^([0-9])*$/)]],
       Direccion:[null, [Validators.required]],
       IdRol:[null, [Validators.required, Validators.pattern(/^([0-9])*$/)]]
@@ -93,18 +91,14 @@ export class FormUsuarioComponent implements OnInit {
   }
 
   getRoles(){
-
     this._usuario.getRoles().subscribe({
-
       next: (resp) => {
         this.listRoles = resp.data;
       },
       error: (err) => {
         console.log(err);
       },
-
     })
-
   }
 
   Reniec(documento:string=''){
@@ -165,33 +159,37 @@ export class FormUsuarioComponent implements OnInit {
     this.formData.emit({data:usuario, option: this.isUpdate, Id:this.Id });
   }
 
-  reset(){
-    this.route.navigate(['/system/usuarios/lista-usuarios'])
+  returnList(){
+    this.route.navigate([this.urlLista])
     this.FormUsuario.reset();
   }
 
+  resetForm(){
+    this.FormUsuario.reset();
+    this.inicializateCodes();
+  }
+
+  inicializateCodes(){
+    this.country = { name:'Peru', codePhone:'+51', flag:'https://flagcdn.com/pe.svg', code:'PE'};
+  }
+
   getIdUpdate(activeRouter:ActivatedRoute){
-
     const { id } = activeRouter.snapshot.params;
-
     if(!id) return;
-
     this.Id = id;
     this.isUpdate = true;
-
     this._usuario.getUsuario(id).subscribe({
       next: (resp) => {
-
         if(resp.ok){
-          console.log(resp)
-          this.completeDataUpdate(resp.data);
+          this.completeDataUpdate(resp.data as Usuario);
         }
       },
-      error: (err) => {
-        console.log(err);
+      error: (e) => {
+        console.log(e);
+        this.route.navigate([this.urlLista]);
+        this.messageError(e);
       },
     })
-
   }
 
   completeDataUpdate(usuario:Usuario){
@@ -212,20 +210,28 @@ export class FormUsuarioComponent implements OnInit {
   }
 
   getOneCountryCode(code:string){
-
-    this._main.getOneCountryByCode(code).then( resp => {
-
-      if(resp.length!=0){
-        this.country = resp[0];
-      }
-
-    }).catch( err => {
-      console.log(err);
+    this._main.getOneCountryByCode(code).subscribe({
+      next: (resp) => {
+        if(resp.length!=0){
+          this.country = resp[0];
+        }
+      },
+      error:(err) => console.log(err)
     })
   }
 
   selectedCountry(country:Code){
     this.country = country;
+  }
+
+  messageError(e:any){
+    if(Array.isArray(e.error.message)){
+      e.error.message.forEach( (e:string) => {
+        this.toast('error',e,'Error de validación de datos')
+      })
+    }else{
+      this.toast('error',e.error.message,`${e.error.error}:${e.error.statusCode}`)
+    }
   }
 
   toast(type:string, msg:string, detail:string=''){

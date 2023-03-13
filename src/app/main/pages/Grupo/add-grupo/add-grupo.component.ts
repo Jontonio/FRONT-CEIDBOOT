@@ -1,13 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Curso } from 'src/app/main/class/Curso';
 import { Docente } from 'src/app/main/class/Docente';
 import { TipoGrupo } from 'src/app/main/class/Grupo';
 import { Horario } from 'src/app/main/class/Horario';
+import { ModalHorarioComponent } from 'src/app/main/components/modal-horario/modal-horario.component';
+import { ModalTipoGrupoComponent } from 'src/app/main/components/modal-tipo-grupo/modal-tipo-grupo.component';
 import { CursoService } from 'src/app/main/services/curso.service';
 import { DocenteService } from 'src/app/main/services/docente.service';
 import { GrupoService } from 'src/app/main/services/grupo.service';
+import { SocketService } from 'src/app/services/socket.service';
+import { Subscription } from 'rxjs';
+
 
 export interface Modalidad {
   name:string,
@@ -21,9 +27,16 @@ export interface Modalidad {
 })
 export class AddGrupoComponent implements OnInit {
 
+  @ViewChild(ModalHorarioComponent) modalHorario:ModalHorarioComponent;
+  @ViewChild(ModalTipoGrupoComponent) modalTGHorario:ModalTipoGrupoComponent;
+
+  getListDocentes$:Subscription;
+  getListCursos$:Subscription;
+  getListTiposGrupos$:Subscription;
+  getListHorarios$:Subscription;
+
   modalidad:Modalidad [] = [];
   FormGrupo:FormGroup;
-  FormTipoGrupo:FormGroup;
   loaddSaveGrupo:boolean = false;
 
   ListDocentes:Docente[] = [];
@@ -35,15 +48,17 @@ export class AddGrupoComponent implements OnInit {
   selecCurso:Curso;
   selecTipoNombres:TipoGrupo;
   selecHorario:Horario;
+  opModalHorario:boolean = false;
 
   constructor(private _msg:MessageService,
+              private _socket:SocketService,
               private fb: FormBuilder,
+              private route:Router,
               private _grupo:GrupoService,
               private _docente:DocenteService,
               private _curso:CursoService) {
 
-                this.createFormGrupo();
-                this.createFormTipoGrupo();
+              this.createFormGrupo();
   }
 
   ngOnInit(): void {
@@ -59,13 +74,23 @@ export class AddGrupoComponent implements OnInit {
     this.getListTiposGrupos();
     this.getListHorarios();
 
+    this.OnListTNombreGrupos();
+    this.OnListHorarios();
+
+  }
+
+  ngOnDestroy(): void {
+    this.getListDocentes$.unsubscribe();
+    this.getListCursos$.unsubscribe();
+    this.getListTiposGrupos$.unsubscribe();
+    this.getListHorarios$.unsubscribe();
   }
 
   getListDocentes(){
-    this._docente.getAllListDocentes().subscribe({
+    this.getListDocentes$ = this._docente.getAllListDocentes().subscribe({
       next: (value) => {
         if(value.ok){
-          this.ListDocentes = value.data;
+          this.ListDocentes = value.data as Array<Docente>;
         }
       },
       error: (err) => {
@@ -75,10 +100,10 @@ export class AddGrupoComponent implements OnInit {
   }
 
   getListCursos(){
-    this._curso.getAllListCursos().subscribe({
+    this.getListCursos$ = this._curso.getAllListCursos().subscribe({
       next: (value) => {
         if(value.ok){
-          this.ListCursos = value.data;
+          this.ListCursos = value.data as Array<Curso>;
         }
       },
       error: (err) => {
@@ -88,10 +113,10 @@ export class AddGrupoComponent implements OnInit {
   }
 
   getListTiposGrupos(){
-    this._grupo.getAllTipoGrupos().subscribe({
+    this.getListTiposGrupos$ = this._grupo.getAllTipoGrupos().subscribe({
       next: (value) => {
         if(value.ok){
-          this.ListTipoNombres = value.data;
+          this.ListTipoNombres = value.data as Array<TipoGrupo>;
         }
       },
       error: (err) => {
@@ -101,7 +126,7 @@ export class AddGrupoComponent implements OnInit {
   }
 
   getListHorarios(){
-    this._grupo.getAllHorarios().subscribe({
+    this.getListHorarios$ = this._grupo.getAllHorarios().subscribe({
       next: (value) => {
         if(value.ok){
           this.ListHorarios = value.data;
@@ -111,16 +136,6 @@ export class AddGrupoComponent implements OnInit {
         console.log(err);
       }
     })
-  }
-
-  //TODO: Tipo Grupo
-  createFormTipoGrupo(){
-
-    this.FormTipoGrupo = this.fb.group({
-      NombreGrupo:[null, [Validators.required ]],
-      DescGrupo:[null],
-    })
-
   }
 
   createFormGrupo(){
@@ -137,14 +152,6 @@ export class AddGrupoComponent implements OnInit {
       horario:[null, Validators.required]
     })
 
-  }
-
-  /** Getters Form Tipo Grupo */
-  get NombreGrupo(){
-    return this.FormTipoGrupo.controls['NombreGrupo'];
-  }
-  get DescTipGrupo(){
-    return this.FormTipoGrupo.controls['DescGrupo'];
   }
 
   /** Getter from fron Grupo */
@@ -176,7 +183,6 @@ export class AddGrupoComponent implements OnInit {
     return this.FormGrupo.controls['MaximoEstudiantes'];
   }
 
-
   saveGrupo(){
 
     if(this.FormGrupo.invalid){
@@ -188,66 +194,34 @@ export class AddGrupoComponent implements OnInit {
       return;
     }
 
-  this.loaddSaveGrupo = true;
+    this.loaddSaveGrupo = true;
 
-  this._grupo.createGrupo(this.FormGrupo.value).subscribe({
-    next: (resp) => {
-     setTimeout(() => {
-      this.loaddSaveGrupo = false;
-      if(resp.ok){
-        this.resetGrupo();
-        this.toast('success',resp.msg);
-      }else{
-        this.toast('warn',resp.msg,'Registre un nuevo grupo con un nombre diferente');
-      }
-     },200);
-    },
-    error: (err) => {
-        this.loaddSaveGrupo = false;
-        err.error.message.forEach( (msg:string) => {
-          this.toast('warn', msg,'Error al registrar un nuevo grupo');
-        });
-      },
-    })
-
-  }
-
-  saveTipoGrupo(){
-
-    if(this.FormTipoGrupo.invalid){
-
-      Object.keys( this.FormTipoGrupo.controls ).forEach( input => {
-        this.FormTipoGrupo.controls[input].markAsDirty();
-      });
-
-      return;
-    }
-
-
-    this._grupo.createTipoGrupo(this.FormTipoGrupo.value).subscribe({
+    this._grupo.createGrupo(this.FormGrupo.value).subscribe({
       next: (resp) => {
+      setTimeout(() => {
+        this.loaddSaveGrupo = false;
         if(resp.ok){
-          this.resetTipoGrupo();
+          this.resetGrupo();
           this.toast('success',resp.msg);
+          this._socket.EmitEvent('updated_list_grupo');
         }else{
-          this.toast('warn',resp.msg,'Registre un tipo de grupo diferente');
+          this.toast('warn',resp.msg,'Registre un nuevo grupo con un nombre diferente');
         }
+      },200);
       },
       error: (err) => {
-        err.error.message.forEach( (msg:string) => {
-          this.toast('warn', msg,'Error al registrar un nuevo tipo grupo');
-        });
-      },
+          this.loaddSaveGrupo = false;
+          err.error.message.forEach( (msg:string) => {
+            this.toast('warn', msg,'Error al registrar un nuevo grupo');
+          });
+        },
     })
 
   }
 
   resetGrupo(){
     this.FormGrupo.reset();
-  }
-
-  resetTipoGrupo(){
-    this.FormTipoGrupo.reset();
+    this.route.navigate(['/system/grupos/lista-grupos'])
   }
 
   selectedDocente(docente:Docente){
@@ -268,6 +242,39 @@ export class AddGrupoComponent implements OnInit {
 
   toast(type:string, msg:string, detail:string=''){
     this._msg.add({severity:type, summary:msg, detail});
+  }
+
+  openModalHorario(){
+    this.modalHorario.openModal();
+  }
+
+  openModalTGrupo(){
+    this.modalTGHorario.openModal();
+  }
+
+  /**
+   * listen socket
+   */
+  OnListTNombreGrupos(){
+    this._socket.OnEvent('list_tNombre_grupos').subscribe({
+      next: (value) => {
+        if(value.ok){
+          this.ListTipoNombres = value.data as Array<TipoGrupo>;
+        }
+      },
+      error: (e) => console.log(e)
+    })
+  }
+
+  OnListHorarios(){
+    this._socket.OnEvent('list_horarios').subscribe({
+      next: (value) => {
+        if(value.ok){
+          this.ListHorarios = value.data as Array<Horario>;
+        }
+      },
+      error: (e) => console.log(e)
+    })
   }
 
 }

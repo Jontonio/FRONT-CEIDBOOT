@@ -1,16 +1,8 @@
-export interface ResCurso {
-  msg: string;
-  ok: boolean;
-  data: Curso;
-}
-export interface ResGetCurso{
-  msg: string;
-  ok: boolean;
-  count:number;
-  data: Curso[];
+class ResCurso {
+  constructor(public msg:string, public ok:boolean, public data: Curso | Curso[], public count?:number){}
 }
 
-export class Curso {
+class Curso {
   Id?: number;
   NombrePais: string;
   UrlBandera: string;
@@ -46,3 +38,5 @@ export class Curso {
       this.updatedAt = updatedAt;
   }
 }
+
+export { Curso, ResCurso}

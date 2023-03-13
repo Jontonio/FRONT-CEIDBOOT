@@ -20,7 +20,6 @@
     "@angular/platform-browser-dynamic": "~13.0.0-next.0",
     "@angular/router": "~13.0.0-next.0",
     "@ng-idle/core": "^11.1.0",
-    "@ng-idle/keepalive": "^11.0.3",
     "ngx-socket-io": "^4.2.0",
     "primeflex": "^3.3.0",
     "primeicons": "^5.0.0",

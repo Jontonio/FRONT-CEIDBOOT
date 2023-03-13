@@ -32,6 +32,12 @@ import { DescripcionPipe } from './pipes/descripcion.pipe';
 import { ListGrupoComponent } from './pages/Grupo/list-grupo/list-grupo.component';
 import { AddGrupoComponent } from './pages/Grupo/add-grupo/add-grupo.component';
 import { VerGrupoComponent } from './pages/Grupo/ver-grupo/ver-grupo.component';
+import { MoreGrupoComponent } from './pages/Grupo/more-grupo/more-grupo.component';
+import { PerfilComponent } from './pages/Perfil/perfil/perfil.component';
+import { ChatBotComponent } from './pages/Chatbot/chat-bot/chat-bot.component';
+import { ModalHorarioComponent } from './components/modal-horario/modal-horario.component';
+import { ModalTipoGrupoComponent } from './components/modal-tipo-grupo/modal-tipo-grupo.component';
+import { MatriculaComponent } from './pages/Matricula/matricula/matricula.component';
 
 
 @NgModule({
@@ -62,7 +68,13 @@ import { VerGrupoComponent } from './pages/Grupo/ver-grupo/ver-grupo.component';
     DescripcionPipe,
     ListGrupoComponent,
     AddGrupoComponent,
-    VerGrupoComponent
+    VerGrupoComponent,
+    MoreGrupoComponent,
+    PerfilComponent,
+    ChatBotComponent,
+    ModalHorarioComponent,
+    ModalTipoGrupoComponent,
+    MatriculaComponent
   ],
   imports: [
     CommonModule,

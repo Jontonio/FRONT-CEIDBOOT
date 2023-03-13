@@ -18,9 +18,7 @@ export class GlobalService {
     {label:'Countries'},
   ];
 
-  constructor(private http:HttpClient,
-              private _auth:AuthService) {}
-
+  constructor(private http:HttpClient) {}
   /**
    * Saving the theme in the local storage.
    */
@@ -53,13 +51,7 @@ export class GlobalService {
    * @returns The response of the request is being returned.
    */
   apiReniec(DNI:string):Observable<ResPerson>{
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${this._auth.getToken()}`
-    });
-
-    return this.http.post<ResPerson>(`${environment.BASE_URL}/usuario/usuario-reniec`,{DNI},{ headers });
+    return this.http.post<ResPerson>(`${environment.BASE_URL}/usuario/usuario-reniec`, { DNI } );
   }
 
   parseURL(route:Router){

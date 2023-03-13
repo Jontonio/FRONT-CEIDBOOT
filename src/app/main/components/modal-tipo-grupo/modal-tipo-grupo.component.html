@@ -1,0 +1,46 @@
+<p-dialog header="Nuevo nombre de grupo"
+          [(visible)]="openModalTGrupo"
+          [modal]="true"
+          [style]="{width: '45vw'}"
+          [breakpoints]="{'960px': '75vw', '640px': '90vw'}"
+          [draggable]="false"
+          [closable]="false"
+          [resizable]="false">
+          <form [formGroup]="FormTipoGrupo">
+            <div class="mb-2">
+              <h2 class="ml-2">Tipo grupo</h2>
+            </div>
+            <div class="col">
+              <label for="NombreGrupo" class="block mb-2">Nombre del grupo</label>
+              <div class="p-inputgroup">
+                <span class="p-inputgroup-addon"><i class="fa-solid fa-people-group"></i></span>
+                <input id="NombreGrupo"
+                      class="p-fluid p-grid p-formgrid input-form"
+                      type="text"
+                      autocomplete="off"
+                      formControlName="NombreGrupo"
+                      maxlength="40"
+                      pInputText/>
+              </div>
+              <small *ngIf="NombreGrupo.hasError('pattern') && !NombreGrupo.hasError('required')"
+                    class="p-error">Digite un nombre del grupo <strong>válido</strong></small>
+              <small *ngIf="NombreGrupo.hasError('required') && NombreGrupo.dirty"
+                    class="p-error">El campo nombre del grupo es <strong>requerido</strong></small>
+            </div>
+            <div class="col">
+              <label for="DescGrupo" class="block mb-2">Descripción del grupo (opcional)</label>
+              <textarea rows="5"
+                        cols="30"
+                        pInputTextarea
+                        formControlName="DescGrupo"
+                        maxlength="350"
+                        class="p-fluid p-grid p-formgrid"></textarea>
+              <small *ngIf="DescTipGrupo.hasError('required') && DescTipGrupo.dirty"
+                    class="p-error">El campo descripción del grupo es <strong>requerido</strong></small>
+            </div>
+          </form>
+        <ng-template pTemplate="footer">
+        <p-button [icon]="loadHorario?'pi pi-spin pi-spinner':'pi pi-save'" (click)="saveTipoGrupo()" label="Registrar" styleClass="p-button-text"></p-button>
+        <p-button (click)="closeModal()" label="Cancelar" styleClass="p-button-text"></p-button>
+        </ng-template>
+</p-dialog>

@@ -3,64 +3,40 @@ import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { LoginUser } from 'src/app/auth/interfaces/ResLogin';
 import { AuthService } from 'src/app/auth/services/auth.service';
-import { ResUsuarios, Usuario } from 'src/app/main/class/Usuario';
+import { Usuario } from 'src/app/main/class/Usuario';
 import { UsuarioService } from 'src/app/main/services/usuario.service';
-import { GlobalService } from 'src/app/services/global.service';
 import { SocketService } from 'src/app/services/socket.service';
+import { Subscription } from "rxjs";
 
 @Component({
   selector: 'app-list-usuario',
   templateUrl: './list-usuario.component.html',
   styleUrls: ['./list-usuario.component.scss']
 })
-export class ListUsuarioComponent implements OnInit {
+export class ListUsuarioComponent {
+
+  // private listUsuarios$  :Subscription;
+  private enableUser$    :Subscription;
+  private deleteUser$    :Subscription;
 
   startPage   :number = 0;
-  resUsuarios :ResUsuarios;
-  loadding    :boolean = false;
-  listUsuarios:Usuario[] = [];
-  changePage  :boolean = false;
   position    :string;
   imAuth      :LoginUser | undefined;
 
+
   constructor(public _usuario:UsuarioService,
-              private _global:GlobalService,
               private _socket:SocketService,
-              private confirmationService: ConfirmationService,
-              private _auth:AuthService,
+              private confirService: ConfirmationService,
               private _msg:MessageService,
+              private _auth:AuthService,
               private route:Router){
 
-                this.getAllUsuarios();
-                this._global.parseURL(this.route);
                 this.imAuth = this._auth.userAuth;
-
               }
 
-  ngOnInit(): void {
 
-    this.OnUsuarios();
-
-  }
-
-  /* A method that is responsible for obtaining all the users of the system. */
-  getAllUsuarios(){
-
-    this.loadding = true;
-    this._usuario.getAllUsuarios().subscribe({
-      next: (value) => {
-        setTimeout(() => {
-          this.loadding = false;
-          this.resUsuarios = value;
-          this.listUsuarios = value.data;
-        }, 200);
-      },
-      error: (err) => {
-        this.loadding = false;
-        console.log(err);
-      }
-    })
-
+  ngOnDestroy(): void {
+    this._usuario.listUsuarios$.unsubscribe();
   }
 
   /**
@@ -73,33 +49,8 @@ export class ListUsuarioComponent implements OnInit {
    * @param {any} event - any
    */
   paginate(event:any) {
-
-    this.changePage = true;
     this.startPage = event.first;
-    this._usuario.getAllUsuarios(event.rows, event.first).subscribe({
-      next: (value) => {
-        this.resUsuarios = value;
-        this.listUsuarios = value.data;
-      },
-      error: (err) => {
-        console.log(err);
-      }
-    });
-
-  }
-
-  /* A function that is called when the user clicks on the button "Usuarios" */
-  OnUsuarios(){
-
-    this._usuario.OnListaCursos().subscribe({
-      next: (value) => {
-        this.listUsuarios = value.data;
-      },
-      error: (err) => {
-        console.log(err);
-      }
-    })
-
+    this._usuario.getListaUsuarios(event.rows, event.first);
   }
 
   /**
@@ -114,88 +65,71 @@ export class ListUsuarioComponent implements OnInit {
     let msgConfirm = (!tipoEnable)?'habilitación':'inhabilitación';
     let msgoptions = (!tipoEnable)?'si':'no';
 
-    this.confirmationService.confirm({
+    this.confirService.confirm({
         message: `¿Está seguro de la ${msgConfirm} al usuario <b>${usuario.Nombres}</b>?<br>
                   una vez confirmado el usuario ${msgoptions} podrá realizar operaciones en el sistema`,
         header: `Confirmación de la ${msgConfirm}`,
         icon: 'pi pi-info-circle',
         accept: () => {
-
           if(this.imAuth?.Id != usuario.Id){
-
-            this._usuario.enableUsuario(usuario.Id!,!usuario.Habilitado).subscribe({
+            this.enableUser$ = this._usuario.enableUsuario(usuario.Id!,!usuario.Habilitado).subscribe({
               next: (value) => {
-
                 if(value.ok){
-                  this.toast('success', msgConfirm, value.msg);
-                  this._socket.EmitEvent('usuario_eliminado');
-                }else{
-                  this.toast('warn', value.msg);
+                  this.toast('success',value.msg);
+                  this._socket.EmitEvent('updated_list_usuario');
                 }
-
+                this.enableUser$.unsubscribe();
               },
-              error: (err) => {
-                console.log(err);
+              error: (e) => {
+                console.log(e);
+                this.messageError(e);
               }
             })
-
           }else{
             this.toast('error','Inhabilitación','No se puede realizar la autoinhabilitación');
           }
-
         },
         reject: (type:any) => {
           console.log("No eliminar");
         },
         key: "enableDialog"
     });
-
   }
-
 
   /**
    * It's a function that receives a user object and displays a confirmation dialog to the user
    * @param {Usuario} usuario - Usuario
    */
-  confirmDelete(usuario:Usuario) {
-
+  dialogDelete({Nombres, Id}:Usuario) {
     this.position = 'top';
-
-    this.confirmationService.confirm({
-        message: `¿Está seguro de eliminar al usuario <b>${usuario.Nombres}</b>?`,
+    this.confirService.confirm({
+        message: `¿Está seguro de eliminar al usuario <b>${Nombres}</b>?`,
         header: 'Confirmación de eliminar',
         icon: 'pi pi-info-circle',
         accept: () => {
-
-          if(this.imAuth?.Id!=usuario.Id){
-
-            this._usuario.deleteUsuario(usuario.Id!).subscribe({
+          if(this.imAuth?.Id!=Id){
+            this.deleteUser$ = this._usuario.deleteUsuario(Id!).subscribe({
               next: (value) => {
-
                 if(value.ok){
                   this.toast('success','Eliminación',value.msg);
-                  this._socket.EmitEvent('usuario_eliminado');
-                }else{
-                  this.toast('warn', value.msg);
+                  this._socket.EmitEvent('updated_list_usuario');
                 }
-
+                this.deleteUser$.unsubscribe();
               },
-              error: (err) => {
-                console.log(err);
+              error: (e) => {
+                console.log(e);
+                this.messageError(e);
               }
             })
-
           }else{
             this.toast('error','Eliminación','No se puede realizar la autoeliminación');
           }
-
         },
         reject: (type:any) => {
           console.log("No eliminar");
         },
-        key: "deleteDialog"
+        key: "deleteUsuarioDialog"
     });
-
   }
 
   /* A function that receives an id and redirects the user to the edit-user page. */
@@ -203,7 +137,15 @@ export class ListUsuarioComponent implements OnInit {
     this.route.navigate(['/system/usuarios/editar-usuario',id])
   }
 
-  //TODO: need implement search method and generate reports
+  messageError(e:any){
+    if(Array.isArray(e.error.message)){
+      e.error.message.forEach( (e:string) => {
+        this.toast('error',e,'Error de validación de datos')
+      })
+    }else{
+      this.toast('error',e.error.message,`${e.error.error}:${e.error.statusCode}`)
+    }
+  }
 
   /* A function that receives three parameters, the first is the type of message, the second is the
   message and the third is the detail of the message. The function toast() calls the function add()

@@ -1,50 +1,52 @@
 import { environment } from 'src/environments/environment';
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
-import { AuthService } from "src/app/auth/services/auth.service";
-import { Docente, ResDocente, ResGetDocente } from "../class/Docente";
+import { Docente, ResDocente } from "../class/Docente";
 import { SocketService } from 'src/app/services/socket.service';
+
 
 @Injectable({
   providedIn:'root'
 })
 export class DocenteService{
 
+  public listDocentes$:Subscription;
+  public onListDocentes$:Subscription;
+
+  public respDocente :ResDocente | undefined;
+  public listDocentes:Docente[] = [];
+  public loadingLista:boolean = false;
+
   constructor(private http:HttpClient,
-              private _auth:AuthService,
               private _socket:SocketService){
-
-                this.OnListDocente();
-
+                this.getListaDocentes();
+                this.OnDocentes();
               }
 
-  /**
-   * It returns an HttpHeaders object with the content type set to application/json and the
-   * authorization header set to the token retrieved from the local storage.
-   * @returns The headers object.
-   */
-  get headers():HttpHeaders{
-
-    const header = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${this._auth.getToken()}`
-    });
-
-    return header;
-  }
-
   createDocente(data:Docente):Observable<ResDocente>{
-    return this.http.post<ResDocente>(`${environment.BASE_URL}/docente/add-docente`, data, { headers:this.headers });
+    return this.http.post<ResDocente>(`${environment.BASE_URL}/docente/add-docente`, data);
   }
 
-  getAllDocentes(limit:number = 5, offset:number = 0):Observable<ResGetDocente>{
-    return this.http.get<ResGetDocente>(`${environment.BASE_URL}/docente/get-docentes?limit=${limit}&offset=${offset}`,{ headers:this.headers });
+  getAllDocentes(limit:number = 5, offset:number = 0):Observable<ResDocente>{
+    return this.http.get<ResDocente>(`${environment.BASE_URL}/docente/get-docentes?limit=${limit}&offset=${offset}`);
   }
 
-  getAllListDocentes():Observable<ResGetDocente>{
-    return this.http.get<ResGetDocente>(`${environment.BASE_URL}/docente/get-docentes`,{ headers:this.headers });
+  getAllListDocentes():Observable<ResDocente>{
+    return this.http.get<ResDocente>(`${environment.BASE_URL}/docente/get-docentes`);
+  }
+
+  getOneDocenteById(Id:number){
+    return this.http.get<ResDocente>(`${environment.BASE_URL}/docente/get-one-docente/${Id}`);
+  }
+
+  updateDocente(id:number, data:Docente){
+    return this.http.patch<ResDocente>(`${environment.BASE_URL}/docente/update-docente/${id}`, data);
+  }
+
+  deleteDocente(Id:number){
+    return this.http.delete<ResDocente>(`${environment.BASE_URL}/docente/delete-docente/${Id}`);
   }
 
   /**
@@ -55,8 +57,37 @@ export class DocenteService{
 
   OnListDocente(){
 
-    return this._socket.OnEvent('list_actualizada_docentes');
+    return this._socket.OnEvent('list_docentes');
 
+  }
+
+  getListaDocentes(limit:number = 5, offset:number = 0){
+    this.loadingLista = true;
+    this.listDocentes$ = this.getAllDocentes(limit, offset).subscribe({
+      next: (value) => {
+        this.loadingLista = false;
+        if(value.ok){
+          this.respDocente = value;
+          this.listDocentes = value.data as Array<Docente>;
+        }
+      },
+      error: (err) => {
+        console.log("Error lista docentes")
+        this.loadingLista = false;
+      }
+    })
+  }
+
+  OnDocentes(){
+    this.onListDocentes$ = this.OnListDocente().subscribe({
+      next: (value) => {
+        if(value.ok){
+          this.respDocente = value;
+          this.listDocentes = value.data as Array<Docente>;
+        }
+      },
+      error: (e) => console.log(e)
+    })
   }
 
 }
