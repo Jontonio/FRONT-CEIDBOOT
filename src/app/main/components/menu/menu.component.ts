@@ -14,7 +14,7 @@ import { SocketService } from 'src/app/services/socket.service';
 })
 export class MenuComponent implements OnInit {
 
-  display    :boolean = true;
+  display    :boolean = false;
   items      :MenuItem[];
   changeTheme:boolean = false;
 
@@ -28,6 +28,40 @@ export class MenuComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.initializeMenu();
+    //theme
+    this.changeTheme = this._global.existsTheme();
+    this.modeTheme(this.changeTheme);
+  }
+
+  theme(){
+    this.changeTheme = this.changeTheme?false:true;
+    this.modeTheme(this.changeTheme);
+  }
+
+  modeTheme(value:boolean, system:boolean = true){
+    const themeLink = this.document.getElementById('app-theme') as HTMLLinkElement;
+    themeLink.href = value?'mdc-dark-indigo.css':'mdc-light-indigo.css'
+    if(system) this._global.saveTheme(value);
+  }
+
+  logout(){
+    const data = new Logout(this._auth.userAuth?.Id, this._auth.userAuth?.Email);
+    this._auth.logout(data).subscribe({
+      next: (value) => {
+        if(value.ok){
+          if(this._auth.readToken()){
+            this._auth.deleteToken();
+          }
+          this.modeTheme(false, false);
+          this.route.navigate(['/main/auth/login']);
+        }
+      },
+      error: (e) => console.log(e)
+    })
+  }
+
+  initializeMenu(){
     this.items = [
       {
         label: 'Panel principal',
@@ -46,7 +80,7 @@ export class MenuComponent implements OnInit {
       {
         label: 'Matrículas y pensiones',
         icon: 'fa-solid fa-landmark',
-        routerLink:'/system/matricula'
+        routerLink:'/system/matricula/matriculados'
       },
       {
         label: 'Cursos',
@@ -74,45 +108,6 @@ export class MenuComponent implements OnInit {
         routerLink:'/system/perfil'
       }
     ];
-    //theme
-    this.changeTheme = this._global.existsTheme();
-    this.modeTheme(this.changeTheme);
-  }
-
-  theme(){
-    this.changeTheme = this.changeTheme?false:true;
-    this.modeTheme(this.changeTheme);
-  }
-
-  modeTheme(value:boolean){
-    let themeLink = this.document.getElementById('app-theme') as HTMLLinkElement;
-    themeLink.href = value?'mdc-dark-indigo.css':'mdc-light-indigo.css'
-    this._global.saveTheme(value);
-  }
-
-  logout(){
-
-    const data = new Logout(this._auth.userAuth?.Id, this._auth.userAuth?.Email);
-
-    this._auth.logout(data).subscribe({
-      next: (value) => {
-
-        if(value.ok){
-
-          if(this._auth.readToken()){
-            this._auth.deleteToken();
-          }
-
-          this.route.navigate(['/main/auth/login']);
-        }
-
-      },
-      error: (err) => {
-
-      },
-    })
-
-
   }
 
 }

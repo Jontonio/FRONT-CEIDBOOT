@@ -17,29 +17,18 @@ export class NavbarComponent implements OnInit {
     this.items = [
       {
           label:'Inicio',
-          icon:'pi pi-building',
+          icon:'fa-solid fa-house',
           routerLink:'/main/home',
       },
       {
           label:'Nosotros',
-          icon:'pi pi-users',
+          icon:'fa-solid fa-building-columns',
           routerLink:'/main/nosotros'
       },
       {
-          label:'Mas',
-          icon:'pi pi-fw pi-user',
-          items:[
-              {
-                  label:'New',
-                  icon:'pi pi-fw pi-user-plus',
-
-              },
-              {
-                  label:'Delete',
-                  icon:'pi pi-fw pi-user-minus',
-
-              }
-          ]
+          label:'Matriculas',
+          icon:'fa-solid fa-graduation-cap',
+          routerLink:'/main/matricula'
       }
     ];
   }

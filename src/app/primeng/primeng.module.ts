@@ -35,6 +35,9 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { CalendarModule } from 'primeng/calendar';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TabMenuModule } from 'primeng/tabmenu';
+import { KnobModule } from 'primeng/knob';
+import { TooltipModule } from 'primeng/tooltip';
+import { StepsModule } from 'primeng/steps';
 
 /**
  * array of modules
@@ -70,7 +73,10 @@ const listModules:any[] = [
   ConfirmDialogModule,
   CalendarModule,
   InputNumberModule,
-  TabMenuModule
+  TabMenuModule,
+  KnobModule,
+  TooltipModule,
+  StepsModule
 ]
 
 @NgModule({

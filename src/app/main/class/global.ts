@@ -1,6 +1,6 @@
-import { Curso } from "./Curso"
-import { Docente } from "./Docente"
-import { Usuario } from "./Usuario"
+import { Curso } from "../curso/class/Curso"
+import { Docente } from "../docente/class/Docente"
+import { Usuario } from "../usuario/class/Usuario"
 
 export interface optionOperation{
   data: Docente | Usuario | Curso,

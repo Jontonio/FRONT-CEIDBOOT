@@ -10,7 +10,7 @@ import { AuthService } from 'src/app/auth/services/auth.service';
   styleUrls: ['./form-login.component.scss'],
   providers:[MessageService]
 })
-export class FormLoginComponent implements OnInit {
+export class FormLoginComponent {
 
   formLogin:FormGroup;
   loading:boolean = false;
@@ -22,13 +22,10 @@ export class FormLoginComponent implements OnInit {
     this.createForm();
   }
 
-  ngOnInit(): void {
-  }
-
   createForm(){
     this.formLogin = this.fb.group({
-      Email:['jose@gmail.com', [Validators.required, Validators.email ]],
-      Password:[null, Validators.required]
+      Email:['joseantoniorojas999@gmail.com', [Validators.required, Validators.email ]],
+      Password:['71690691', Validators.required]
     })
   }
 
@@ -38,29 +35,23 @@ export class FormLoginComponent implements OnInit {
       Object.keys(this.formLogin.controls).forEach( input =>{
         this.formLogin.controls[input].markAsDirty()
       })
-
       return
     };
 
     this.loading = true;
     this._auth.login(this.formLogin.value).subscribe({
       next: (res) => {
-
         setTimeout(()=>{
           this.loading = false;
-        },500)
-
-        if(!res.ok){
-          this.message('error','',res.msg);
-          return;
-        }
-
-        this._auth.saveToken(res.token);
-        this.route.navigate(['/system']);
+          if(!res.ok){
+            this.message('error','',res.msg);
+            return;
+          }
+          this._auth.saveToken(res.token);
+          this.route.navigate(['/system']);
+        },300)
       },
-      error(err) {
-        console.log(err);
-      },
+      error: (err) => console.log(err)
     })
 
   }

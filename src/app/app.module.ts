@@ -9,8 +9,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokeInterceptorsService } from './interceptors/token-interceptors.service';
 
-
-
 const config: SocketIoConfig = { url: environment.BASE_URL, options: {} };
 
 @NgModule({
@@ -25,7 +23,7 @@ const config: SocketIoConfig = { url: environment.BASE_URL, options: {} };
     HttpClientModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: TokeInterceptorsService, multi:true },
+    { provide: HTTP_INTERCEPTORS, useClass: TokeInterceptorsService, multi:true }
   ],
   bootstrap: [AppComponent]
 })

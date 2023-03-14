@@ -1,0 +1,36 @@
+.img-superior{
+  width: 100%;
+}
+.view-grupo{
+  margin-top: -220px !important;
+  padding: 40px;
+}
+.img-view-grupo{
+  margin-top: -20px;
+  width: 70px;
+}
+.c-skeleton{
+  background-color: #FBAB7E;
+  background-image: linear-gradient(180deg, #FBAB7E 0%, #F7CE68 100%);
+  width: 100%;
+  height: 250px;
+}
+.conten-sub-buttons{
+  background: var(--surface-a);
+  padding: 2px;
+  border-radius: 4px;
+  margin-bottom: 9px;
+}
+.custom-btn{
+  color: var(--text-color);
+}
+
+@media only screen and (max-width: 767px) {
+  .view-grupo{
+    padding: 0;
+  }
+  .img-view-grupo{
+    width: 40px;
+    margin-top: -10px;
+  }
+}

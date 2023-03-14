@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { environment } from 'src/environments/environment';
 import { Pais } from "../class/Pais";
 import { map } from 'rxjs/operators'
-import { Code } from "../class/Code";
+import { Code } from "../grupo/class/Code";
 import { Observable } from "rxjs";
 import { Departamento, Distrito, Provincia } from "../class/Ubigeo";
 

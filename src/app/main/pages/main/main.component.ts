@@ -11,7 +11,8 @@ import { Logout } from 'src/app/auth/interfaces/Logout';
 import { GlobalService } from 'src/app/services/global.service';
 import { Router } from '@angular/router';
 import { MainService } from '../../services/main.service';
-
+import * as moment from 'moment';
+moment.locale("es");
 
 @Component({
   selector: 'app-main',

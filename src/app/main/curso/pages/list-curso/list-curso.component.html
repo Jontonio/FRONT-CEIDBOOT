@@ -1,0 +1,101 @@
+<div class="main p-4">
+  <p-card>
+    <div class="mb-2">
+      <h2 class="ml-1">Lista cursos</h2>
+    </div>
+    <div class="flex justify-content-center justify-content-between">
+      <div class="col-6">
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input type="text"
+                 pInputText
+                 placeholder="Buscar curso" />
+      </span>
+      </div>
+      <div class="col-6 flex justify-content-end">
+        <div>
+          <button pButton
+                  pRipple
+                  type="button"
+                  icon="fa-solid fa-plus"
+                  label="Nuevo curso"
+                  routerLink="/system/cursos/add-curso"
+                  class="p-button-rounded"></button>
+        </div>
+      </div>
+    </div>
+    <div class="grid content">
+      <div class="col table-responsive">
+        <p-table [value]="_curso.listCursos" responsiveLayout="scroll" [rowHover]="true">
+          <ng-template pTemplate="header">
+              <tr>
+                <th>ID</th>
+                <th>Bandera</th>
+                <th pSortableColumn="NombreCurso">Curso <p-sortIcon field="NombreCurso"></p-sortIcon></th>
+                <th pSortableColumn="NivelCurso">Nivel <p-sortIcon field="NivelCurso"></p-sortIcon></th>
+                <th>Cant. Módulos</th>
+                <th>Descripción del curso</th>
+                <th>Operación</th>
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-curso let-rowIndex="rowIndex">
+              <tr>
+                <td>{{startPage  + (rowIndex+1)}}</td>
+                <td><img class="img-flag" [src]="curso.UrlBandera" alt="" srcset=""></td>
+                <td>{{curso.NombreCurso | titlecase}}</td>
+                <td>{{curso.NivelCurso | titlecase}}</td>
+                <td>{{curso.NumModulos}}</td>
+                <td>
+                  <p>{{curso.DescripcionCurso | slice:0:30 }}...</p>
+                </td>
+                <td>
+                  <button pButton
+                          pRipple
+                          type="button"
+                          (click)="dialogDelete(curso)"
+                          class="p-button-danger p-button-text">
+                          <i class="pi pi-delete-left"></i> Eliminar</button>
+                  <button pButton
+                          pRipple
+                          type="button"
+                          (click)="sendEditCurso(curso)"
+                          class="p-button-text p-button-plain">
+                          <i class="pi pi-pencil mr-2"></i> Editar</button>
+                </td>
+              </tr>
+          </ng-template>
+        </p-table>
+        <div>
+          <div class="mt-4" *ngIf="_curso.respCurso && _curso.respCurso.count">
+            <div class="grid content">
+              <div class="col-12 md:col-3">
+                  <p class="text-muted">Total de cursos: {{_curso.respCurso.count}}</p>
+              </div>
+              <div class="col-12 md:col-6">
+                <p-paginator [rows]="5"
+                             [totalRecords]="_curso.respCurso.count!"
+                             [rowsPerPageOptions]="[5,10,15,20]"
+                             (onPageChange)="paginate($event)"></p-paginator>
+              </div>
+              <div class="col-12 md:col-3"></div>
+            </div>
+          </div>
+          <app-loadding *ngIf="_curso.loadingLista && _curso.listCursos.length==0" msg="Lista de cursos"></app-loadding>
+          <app-lista-vacia *ngIf="_curso.listCursos.length==0 && !_curso.loadingLista" msg="No se encontraron cursos registrados"></app-lista-vacia>
+        </div>
+      </div>
+    </div>
+  </p-card>
+</div>
+
+<!-- Disable and enable dialog  -->
+<p-confirmDialog [style]="{width: '50vw'}"
+                 key="deleteCursoDialog"
+                 [position]="position"
+                 [baseZIndex]="10000"
+                 acceptLabel="Confirmar"
+                 [breakpoints]="{'960px': '75vw', '640px': '100vw'}"
+                 rejectButtonStyleClass="p-button-outlined"></p-confirmDialog>
+
+<!-- A component that is used to show messages to the user. -->
+<p-toast position="top-right" [breakpoints]="{'920px': {width: '100%', right: '0', left: '0', padding:'10px'}}"></p-toast>

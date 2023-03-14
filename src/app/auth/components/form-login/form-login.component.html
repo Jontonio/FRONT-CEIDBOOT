@@ -3,7 +3,10 @@
     <p>Bienvenido a </p>
     <h2>CEID</h2>
     <div class="text-center mt-2">
-      <img src="assets/images/img-login.svg" class="img-login" alt="" srcset="">
+      <img src="assets/images/img-login.svg"
+           class="img-login"
+           alt="logo login ceid"
+           title="logo-login-ceid">
     </div>
   </div>
   <div class="field">
@@ -33,7 +36,7 @@
     class="p-error">La contraseña es <strong>requerida</strong></small>
   </div>
   <div class="mb-3">
-    <p-inputSwitch></p-inputSwitch> <span class="m-2">Recordar usuario</span>
+    <p-inputSwitch aria-checked="false" title="recordad usuario"></p-inputSwitch> <span class="m-2">Recordar usuario</span>
   </div>
   <p-messages [(value)]="msg"></p-messages>
   <p-toast [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'"></p-toast>
