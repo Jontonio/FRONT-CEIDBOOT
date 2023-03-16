@@ -27,10 +27,7 @@ export class AddDocenteComponent {
   constructor(private route:Router,
               private _msg:MessageService,
               private _docente:DocenteService,
-              private _global:GlobalService,
-              private _socket: SocketService) {
-              this._global.parseURL(this.route);
-              }
+              private _socket: SocketService) {}
 
   save(opt:optionOperation){
     this.loadding = true;

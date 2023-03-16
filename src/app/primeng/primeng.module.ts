@@ -37,7 +37,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { KnobModule } from 'primeng/knob';
 import { TooltipModule } from 'primeng/tooltip';
-import { StepsModule } from 'primeng/steps';
+import { CheckboxModule } from 'primeng/checkbox';
 
 /**
  * array of modules
@@ -76,7 +76,7 @@ const listModules:any[] = [
   TabMenuModule,
   KnobModule,
   TooltipModule,
-  StepsModule
+  CheckboxModule
 ]
 
 @NgModule({

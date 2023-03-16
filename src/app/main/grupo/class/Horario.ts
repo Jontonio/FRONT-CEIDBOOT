@@ -1,14 +1,6 @@
 
-interface ResHorario {
-  msg: string;
-  ok: boolean;
-  data: Horario;
-}
-
-interface ResGetHorario {
-  msg: string;
-  ok: boolean;
-  data: Horario[];
+class ResHorario {
+  constructor(public msg:string,public  ok:boolean, public data:Horario | Horario[], public count?:number){}
 }
 
 class Horario {
@@ -18,6 +10,4 @@ class Horario {
 }
 
 
-export {
-  ResHorario, Horario, ResGetHorario
-}
+export { ResHorario, Horario }

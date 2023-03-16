@@ -1,6 +1,6 @@
 import { environment } from 'src/environments/environment';
 import { Injectable } from "@angular/core";
-import { Horario, ResGetHorario, ResHorario } from "../class/Horario";
+import { Horario, ResHorario } from "../class/Horario";
 import { Observable, Subscription } from 'rxjs';
 import { HttpClient } from "@angular/common/http";
 import { Grupo, ResGrupo, ResTipoGrupo } from '../class/Grupo';
@@ -48,8 +48,8 @@ export class GrupoService{
     return this.http.get<ResTipoGrupo>(`${environment.BASE_URL}/grupo/get-tipo-grupos`);
   }
 
-  getAllHorarios():Observable<ResGetHorario>{
-    return this.http.get<ResGetHorario>(`${environment.BASE_URL}/horario/get-horarios`);
+  getAllHorarios():Observable<ResHorario>{
+    return this.http.get<ResHorario>(`${environment.BASE_URL}/horario/get-horarios`);
   }
 
   /**

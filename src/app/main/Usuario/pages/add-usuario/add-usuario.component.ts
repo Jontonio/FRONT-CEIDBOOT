@@ -26,12 +26,8 @@ export class AddUsuarioComponent {
 
   constructor(private route:Router,
               public _usuario:UsuarioService,
-              private _global:GlobalService,
               private _socket:SocketService,
-              private _msg:MessageService) {
-
-              this._global.parseURL(this.route);
-  }
+              private _msg:MessageService) {}
 
   save(data:optionOperation){
     this.loadding = true;

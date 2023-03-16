@@ -4,7 +4,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ResPerson } from '../class/Person';
-import { Router } from '@angular/router';
+import { ResCurso } from '../main/curso/class/Curso';
+import { ResHorario } from '../main/grupo/class/Horario';
 
 @Injectable({
   providedIn: 'root'
@@ -54,31 +55,12 @@ export class GlobalService {
     return this.http.post<ResPerson>(`${environment.BASE_URL}/usuario/usuario-reniec`, { DNI } );
   }
 
-  parseURL(route:Router){
+  getCursosMatricula():Observable<ResCurso>{
+    return this.http.get<ResCurso>(`${environment.BASE_URL}/curso/get-cursos-matriculas`);
+  }
 
-    let urls = route.url.split('/');
-
-    const nuevo:any[] = [];
-
-    urls.forEach( (item, i) => {
-
-      let icon:string = '';
-      let label:string = '';
-      label = item.replace('-',' ');
-
-      if(isNaN(parseInt(label))){
-
-        if(i==0) icon = 'pi pi-home'
-
-        const data = { label, icon }
-
-        nuevo.push(data);
-      }
-
-    })
-
-    this.urls = nuevo;
-
+  getHorariosMatricula():Observable<ResHorario>{
+    return this.http.get<ResHorario>(`${environment.BASE_URL}/horario/get-horarios-matricula`);
   }
 
 }

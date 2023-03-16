@@ -7,6 +7,9 @@ import { GlobalService } from 'src/app/services/global.service';
 import { Departamento, Distrito, Provincia } from 'src/app/main/class/Ubigeo';
 import { Subscription } from 'rxjs';
 import { Edad, Escuela, Institucion, Modalidad, Sexo } from '../../main/matricula/interfaces/global';
+import * as moment from 'moment';
+import { Curso } from 'src/app/main/curso/class/Curso';
+import { Horario } from 'src/app/main/grupo/class/Horario';
 
 @Component({
   selector: 'app-form-matricula',
@@ -14,6 +17,12 @@ import { Edad, Escuela, Institucion, Modalidad, Sexo } from '../../main/matricul
   styleUrls: ['./form-matricula.component.scss']
 })
 export class FormMatriculaComponent implements OnInit {
+  firstFormGroup = this.fb.group({
+    firstCtrl: ['', Validators.required],
+  });
+  secondFormGroup = this.fb.group({
+    secondCtrl: ['', Validators.required],
+  });
 
   isUpdate:boolean       = false;
   loadGetData:boolean    = false;
@@ -21,6 +30,10 @@ export class FormMatriculaComponent implements OnInit {
   estudiaUnajma:boolean = false;
 
   formEstudiante:FormGroup;
+  formMayorEdad:FormGroup;
+  formCurso:FormGroup;
+  formAcademica:FormGroup;
+
   optionSexo:Sexo[];
   optionEdad:Edad[];
   optionInstitucion:Institucion[];
@@ -30,6 +43,13 @@ export class FormMatriculaComponent implements OnInit {
   listDepartamentos$:Subscription;
   listProvincias$:Subscription;
   listDistritos$:Subscription;
+  listCursos$:Subscription;
+  listHorarios$:Subscription;
+
+  listCursos:Curso[];
+  listHorarios:Horario[];
+  selecCurso:Curso;
+  selecHorario:Horario;
 
   listDepartamentos:Departamento[] = [];
   listProvincias:Provincia[] = [];
@@ -44,7 +64,10 @@ export class FormMatriculaComponent implements OnInit {
               private readonly _msg:MessageService,
               private readonly _main:MainService) {
                 this.createFormEstudiante();
+                this.createFormMayorEdad();
+                this.createFormCurso();
                 this.getDepartamentos();
+                this.createFormAcademica();
               }
 
   ngOnInit(): void {
@@ -84,8 +107,13 @@ export class FormMatriculaComponent implements OnInit {
     this.msgTooltipEmail = 'Es de suma importancia que verifique que esté correctamente escrito, para el envío de información académica';
     this.msgTooltipCel = 'Es de suma importancia que el número tenga una cuenta de WhatsApp'
 
+    this.getListCursos();
+    this.getListHorarios();
+
   }
   ngOnDestroy(): void {
+    if(this.listCursos$) this.listCursos$.unsubscribe();
+    if(this.listHorarios$) this.listHorarios$.unsubscribe();
     // this.listDepartamentos$.unsubscribe();
     // this.listProvincias$.unsubscribe();
     // this.listDistritos$.unsubscribe();
@@ -105,19 +133,34 @@ export class FormMatriculaComponent implements OnInit {
       IdDepartamento:[null, [Validators.required]],
       IdProvincia:[null, [Validators.required]],
       IdDistrito:[null, [Validators.required]],
-      EsMenor:[null, [Validators.required]],
-      DNIApoderado:[null, [Validators.required,Validators.pattern(/^([0-9])*$/)]],
-      NomApoderado:[null, [Validators.required,Validators.pattern(/^([a-z ñáéíóú]{2,60})$/i)]],
-      ApellidoPApoderado:[null, [Validators.required,Validators.pattern(/^([a-z ñáéíóú]{1,60})$/i)]],
-      ApellidoMApoderado:[null, [Validators.required,Validators.pattern(/^([a-z ñáéíóú]{1,60})$/i)]],
-      CelApoderado:[null, [Validators.pattern(/^([0-9])*$/), Validators.required]],
+    })
+  }
+
+  createFormMayorEdad(){
+    this.formMayorEdad = this.fb.group({
+      EsMayor:[null, [Validators.required]],
+      DNIApoderado:[null],
+      NomApoderado:[null],
+      ApellidoPApoderado:[null],
+      ApellidoMApoderado:[null],
+      CelApoderado:[null],
+    })
+  }
+
+  createFormCurso(){
+    this.formCurso = this.fb.group({
       Curso:[null, Validators.required],
       Modalidad:[null, Validators.required],
       Horario:[null, Validators.required],
-      Poblacion:[null, Validators.required],
-      Institucion:[null, Validators.required],
-      EscuelaProfesional:[null, Validators.required],
-      OtraInstitucion:[null, Validators.required],
+    })
+  }
+
+  createFormAcademica(){
+    this.formAcademica = this.fb.group({
+        Poblacion:[null, Validators.required],
+        Institucion:[null, Validators.required],
+        EscuelaProfesional:[null],
+        OtraInstitucion:[null],
     })
   }
 
@@ -158,46 +201,76 @@ export class FormMatriculaComponent implements OnInit {
   get IdDistrito(){
     return this.formEstudiante.controls['IdDistrito'];
   }
-  get EsMenor(){
-    return this.formEstudiante.controls['EsMenor'];
+
+
+  get EsMayor(){
+    return this.formMayorEdad.controls['EsMayor'];
   }
   get DNIApoderado(){
-    return this.formEstudiante.controls['DNIApoderado'];
+    return this.formMayorEdad.controls['DNIApoderado'];
   }
   get NomApoderado(){
-    return this.formEstudiante.controls['NomApoderado'];
+    return this.formMayorEdad.controls['NomApoderado'];
   }
   get ApellidoPApoderado(){
-    return this.formEstudiante.controls['ApellidoPApoderado'];
+    return this.formMayorEdad.controls['ApellidoPApoderado'];
   }
   get ApellidoMApoderado(){
-    return this.formEstudiante.controls['ApellidoMApoderado'];
+    return this.formMayorEdad.controls['ApellidoMApoderado'];
   }
   get CelApoderado(){
-    return this.formEstudiante.controls['CelApoderado'];
+    return this.formMayorEdad.controls['CelApoderado'];
   }
   get Curso(){
-    return this.formEstudiante.controls['Curso'];
+    return this.formCurso.controls['Curso'];
   }
   get Modalidad(){
-    return this.formEstudiante.controls['Modalidad'];
+    return this.formCurso.controls['Modalidad'];
   }
   get Horario(){
-    return this.formEstudiante.controls['Horario'];
+    return this.formCurso.controls['Horario'];
   }
+
+
   get Poblacion(){
-    return this.formEstudiante.controls['Poblacion'];
+    return this.formAcademica.controls['Poblacion'];
   }
   get Institucion(){
-    return this.formEstudiante.controls['Institucion'];
+    return this.formAcademica.controls['Institucion'];
   }
   get EscuelaProfesional(){
-    return this.formEstudiante.controls['EscuelaProfesional'];
+    return this.formAcademica.controls['EscuelaProfesional'];
   }
   get OtraInstitucion(){
-    return this.formEstudiante.controls['OtraInstitucion'];
+    return this.formAcademica.controls['OtraInstitucion'];
 
   }
+
+  getListCursos(){
+    this.listCursos$ = this._global.getCursosMatricula().subscribe({
+      next: (resp) => {
+        console.log(resp)
+        if(resp.ok){
+          this.listCursos = resp.data as Array<Curso>;
+        }
+      },
+      error: (e) => console.log(e)
+    })
+  }
+
+  getListHorarios(){
+    this.listHorarios$ = this._global.getHorariosMatricula().subscribe({
+      next: (resp) => {
+        if(resp.ok){
+          this.listHorarios = resp.data as Array<Horario>;
+        }
+      },
+      error: (err) => {
+
+      }
+    })
+  }
+
   completeData(estudiante:Person){
     this.formEstudiante.controls['Nombres'].setValue(estudiante.nombres);
     this.formEstudiante.controls['ApellidoPaterno'].setValue(estudiante.apellidoPaterno);
@@ -259,32 +332,115 @@ export class FormMatriculaComponent implements OnInit {
     })
   }
 
-  ready(){
-
+  validFormEstudent(){
     if(this.formEstudiante.invalid){
       Object.keys(this.formEstudiante.controls).forEach( inputName => {
         this.formEstudiante.controls[inputName].markAsDirty();
       })
       return;
     }
+  }
 
+  validFormMayoria(){
+    if(this.formMayorEdad.invalid){
+      Object.keys(this.formMayorEdad.controls).forEach( inputName => {
+        this.formMayorEdad.controls[inputName].markAsDirty();
+      })
+      return;
+    }
+  }
+
+  validFormCurso(){
+    if(this.formCurso.invalid){
+      Object.keys(this.formCurso.controls).forEach( inputName => {
+        this.formCurso.controls[inputName].markAsDirty();
+      })
+      return;
+    }
+  }
+
+  validFormAcademica(){
+    if(this.formAcademica.invalid){
+      Object.keys(this.formAcademica.controls).forEach( inputName => {
+        this.formAcademica.controls[inputName].markAsDirty();
+      })
+      return;
+    }
+  }
+
+  validEdad(fechaNaci:Date){
+    if(this.FechaNacimiento.valid){
+      const fechaNacimiento = moment(fechaNaci);
+      console.log(fechaNacimiento.year())
+      const edad = moment().year() - fechaNacimiento.year()
+      if(edad < 18 ){
+        this.EsMayor.setValue(false)
+      }else{
+        this.EsMayor.setValue(true)
+      }
+    }
+  }
+
+  ready(){
     console.log(this.formEstudiante.value);
-
+    console.log(this.formMayorEdad.value);
+    console.log(this.formCurso.value);
+    console.log(this.formAcademica.value);
   }
 
   selecOptionEdad(value:boolean){
     if(!value){
       this.displayMayoria = true;
+      this.DNIApoderado.addValidators([Validators.required,Validators.pattern(/^([0-9])*$/)]);
+      this.NomApoderado.addValidators([Validators.required,Validators.pattern(/^([a-z ñáéíóú]{2,60})$/i)]);
+      this.ApellidoPApoderado.addValidators([Validators.required,Validators.pattern(/^([a-z ñáéíóú]{1,60})$/i)]);
+      this.ApellidoMApoderado.addValidators([Validators.required,Validators.pattern(/^([a-z ñáéíóú]{1,60})$/i)]);
+      this.CelApoderado.addValidators([Validators.pattern(/^([0-9])*$/), Validators.required]);
     }else{
       this.displayMayoria = false;
+      this.DNIApoderado.clearValidators();
+      this.NomApoderado.clearValidators();
+      this.ApellidoPApoderado.clearValidators();
+      this.ApellidoMApoderado.clearValidators();
+      this.CelApoderado.clearValidators();
+
+      this.DNIApoderado.updateValueAndValidity();
+      this.NomApoderado.updateValueAndValidity();
+      this.ApellidoMApoderado.updateValueAndValidity();
+      this.ApellidoPApoderado.updateValueAndValidity();
+      this.CelApoderado.updateValueAndValidity();
+
+      this.DNIApoderado.markAsPristine();
+      this.NomApoderado.markAsPristine();
+      this.ApellidoPApoderado.markAsPristine();
+      this.ApellidoMApoderado.markAsPristine();
+      this.CelApoderado.markAsPristine();
+
     }
   }
 
   selecOptionInstitucion(value:Institucion){
     this.selecInstitucion = value;
-    console.log(value)
+    if(value.code==1){
+      this.EscuelaProfesional.addValidators(Validators.required);
+      this.OtraInstitucion.clearValidators();
+      this.OtraInstitucion.updateValueAndValidity();
+      this.OtraInstitucion.markAsPristine();
+    }else if(value.code==2){
+      this.OtraInstitucion.addValidators(Validators.required);
+      this.EscuelaProfesional.clearValidators();
+      this.EscuelaProfesional.updateValueAndValidity();
+      this.EscuelaProfesional.markAsPristine();
+    }
   }
 
+  selectedCurso(curso:Curso){
+    this.selecCurso = curso;
+  }
+
+  selectedHorario(horario:Horario){
+    this.selecHorario = horario;
+  }
 
   toast(type:string, msg:string, detail:string=''){
     this._msg.add({severity:type, summary:msg, detail});

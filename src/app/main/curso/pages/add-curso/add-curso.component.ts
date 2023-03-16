@@ -26,14 +26,9 @@ export class AddCursoComponent implements OnInit {
   urlLista:string = '/system/cursos/lista-cursos';
 
   constructor(private _msg:MessageService,
-              private _global:GlobalService,
               private route:Router,
               private _curso:CursoService,
-              private _socket:SocketService) {
-
-                this._global.parseURL(this.route);
-
-            }
+              private _socket:SocketService) { }
 
   ngOnInit(): void {}
 

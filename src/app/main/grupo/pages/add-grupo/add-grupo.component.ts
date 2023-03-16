@@ -16,7 +16,6 @@ import { Horario } from '../../class/Horario';
 import * as moment from 'moment';
 moment.locale("es");
 
-
 export interface Modalidad {
   name:string,
   code:string;
@@ -131,7 +130,7 @@ export class AddGrupoComponent implements OnInit {
     this.getListHorarios$ = this._grupo.getAllHorarios().subscribe({
       next: (value) => {
         if(value.ok){
-          this.ListHorarios = value.data;
+          this.ListHorarios = value.data as Array<Horario>;
         }
       },
       error: (err) => {

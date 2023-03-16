@@ -13,6 +13,7 @@ import { SharedModule } from '../shared/shared.module';
 import { AuthModule } from '../auth/auth.module';
 import { MatriculaComponent } from './pages/matricula/matricula.component';
 import { MessageService } from 'primeng/api';
+import { MaterialModule } from '../material/material.module';
 
 
 @NgModule({
@@ -27,6 +28,7 @@ import { MessageService } from 'primeng/api';
     CommonModule,
     RouterModule,
     PrimengModule,
+    MaterialModule,
     LandingPageRoutingModule,
     SharedModule,
     AuthModule

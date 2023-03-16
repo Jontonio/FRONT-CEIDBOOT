@@ -10,6 +10,7 @@ import { LoaddingComponent } from './loadding/loadding.component';
 import { SkeletonTableComponent } from './skeleton-table/skeleton-table.component';
 import { FormMatriculaComponent } from './form-matricula/form-matricula.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MaterialModule } from '../material/material.module';
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     PrimengModule,
+    MaterialModule,
     ReactiveFormsModule
   ],
   exports:[
