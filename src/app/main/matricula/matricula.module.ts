@@ -10,6 +10,7 @@ import { AddMatriculaComponent } from './pages/add-matricula/add-matricula.compo
 import { PersonalInfoComponent } from './pages/steps/personal-info/personal-info.component';
 import { MayoriaEdadComponent } from './pages/steps/mayoria-edad/mayoria-edad.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
     MatriculaRoutingModule,
     ReactiveFormsModule,
     PrimengModule,
-    SharedModule
+    SharedModule,
+    HttpClientModule
   ]
 })
 export class MatriculaModule { }

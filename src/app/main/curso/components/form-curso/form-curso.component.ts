@@ -41,6 +41,7 @@ export class FormCursoComponent implements OnInit {
   urlSelectedFlag:string | undefined;
   Id:number;
   urlLista:string = '/system/cursos/lista-cursos'
+  defaultFlag:string = './assets/images/default-flag.png'
 
   constructor(private fb:FormBuilder,
               private route:Router,
@@ -70,11 +71,11 @@ export class FormCursoComponent implements OnInit {
   createFormCurso(){
     this.formCurso = this.fb.group({
       NombrePais:[null,[Validators.required, Validators.pattern(/^([a-z ñáéíóú]{2,60})$/i)]],
-      UrlBandera:[null, [Validators.required]],
       NombreCurso:[null,[Validators.required, Validators.pattern(/^([a-z ñáéíóú]{2,60})$/i)]],
-      DescripcionCurso:[null,[Validators.required]],
-      NivelCurso:[null, [Validators.required]],
-      NumModulos:[null, [Validators.required]]
+      DescripcionCurso:[null, Validators.required],
+      NivelCurso:[null, Validators.required],
+      NumModulos:[null, Validators.required],
+      UrlBandera:[null],
     })
   }
 
@@ -125,6 +126,7 @@ export class FormCursoComponent implements OnInit {
       this.selectPais = undefined;
       this.urlSelectedFlag = undefined;
       this.UrlBandera.setValue(null);
+      this.hayError = false;
       return;
     }
 
@@ -136,7 +138,7 @@ export class FormCursoComponent implements OnInit {
       },
       error: (e) => {
         this.hayError = true;
-        console.log(e);
+        setTimeout(() => this.hayError = false, 2500);
       }
     })
   }
@@ -178,14 +180,13 @@ export class FormCursoComponent implements OnInit {
   ready(){
 
     if(this.formCurso.invalid){
-
       Object.keys( this.formCurso.controls ).forEach( input => {
         this.formCurso.controls[input].markAsDirty();
       });
-
       return;
     }
 
+    if(!this.selectPais) this.UrlBandera.setValue(this.defaultFlag);
     this.dataCurso.emit({data:this.formCurso.value, option: this.isUpdate, Id:this.Id });
   }
 

@@ -1,7 +1,5 @@
 
-export interface Code {
-  name: string;
-  codePhone: string;
-  flag: string;
-  code: string;
+export class Code {
+
+  constructor(public name:string, public codePhone:string, public flag:string, public code:string){}
 }

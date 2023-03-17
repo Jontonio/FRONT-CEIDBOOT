@@ -1,5 +1,5 @@
 <mat-stepper linear="true" #stepper>
-  <mat-step>
+  <mat-step [stepControl]="formEstudiante">
     <div class="content-step-form">
       <form [formGroup]="formEstudiante">
         <ng-template matStepLabel>Información personal</ng-template>
@@ -143,36 +143,33 @@
               <div class="col-12">
                 <label for="IdDepartamento" class="block mb-2">Departamento</label>
                 <p-dropdown class="p-fluid p-grid p-formgrid"
-                            formControlName="IdDepartamento"
+                            formControlName="Departamento"
                             [options]="listDepartamentos"
                             (ngModelChange)="selectedDepartamento($event)"
                             placeholder="Departamento"
-                            optionValue="IdDepartamento"
                             optionLabel="NombreDepartamento"></p-dropdown>
-                <small *ngIf="IdDepartamento.hasError('required') && IdDepartamento.dirty"
+                <small *ngIf="Departamento.hasError('required') && Departamento.dirty"
                         class="p-error">El departamento es <strong>requerido</strong></small>
               </div>
               <div class="col-12">
                 <label for="IdProvincia" class="block mb-2">Provincia</label>
                 <p-dropdown class="p-fluid p-grid p-formgrid"
-                            formControlName="IdProvincia"
+                            formControlName="Provincia"
                             [options]="listProvincias"
                             placeholder="Provincia"
                             (ngModelChange)="selectedProvincia($event)"
-                            optionValue="IdProvincia"
                             optionLabel="NombreProvincia"></p-dropdown>
-                <small *ngIf="IdProvincia.hasError('required') && IdProvincia.dirty"
+                <small *ngIf="Provincia.hasError('required') && Provincia.dirty"
                         class="p-error">La pronvincia es <strong>requerida</strong></small>
               </div>
               <div class="col-12">
                 <label for="IdDistrito" class="block mb-2">Distrito</label>
                 <p-dropdown class="p-fluid p-grid p-formgrid"
-                            formControlName="IdDistrito"
+                            formControlName="Distrito"
                             [options]="listDistritos"
                             placeholder="Distrito"
-                            optionValue="IdDistrito"
                             optionLabel="NombreDistrito"></p-dropdown>
-                <small *ngIf="IdDistrito.hasError('required') && IdDistrito.dirty"
+                <small *ngIf="Distrito.hasError('required') && Distrito.dirty"
                         class="p-error">El distrito es <strong>requerido</strong></small>
               </div>
             </div>
@@ -186,7 +183,7 @@
       </form>
     </div>
   </mat-step>
-  <mat-step>
+  <mat-step [stepControl]="formMayorEdad">
     <form [formGroup]="formMayorEdad">
       <ng-template matStepLabel>Mayoria de edad</ng-template>
       <div class="grid content">
@@ -288,7 +285,7 @@
       </div>
     </form>
   </mat-step>
-  <mat-step>
+  <mat-step [stepControl]="formCurso">
     <form [formGroup]="formCurso">
       <ng-template matStepLabel>Idioma</ng-template>
       <div class="grid content">
@@ -361,7 +358,7 @@
       </div>
     </form>
   </mat-step>
-  <mat-step>
+  <mat-step [stepControl]="formAcademica">
     <form [formGroup]="formAcademica">
       <ng-template matStepLabel>Formación</ng-template>
       <div class="grid content">
@@ -369,93 +366,65 @@
           <label for="Poblacion" class="block mb-2">Población a la que pertenece</label>
           <p-dropdown class="p-fluid p-grid p-formgrid"
                       formControlName="Poblacion"
-                      [options]="[{name:'Media beca', value:'Media beca'},{name:'Egresado', value:'Egresado'}]"
+                      [options]="listDenominServicio"
                       placeholder="Selececionea la población que pertenece"
-                      optionValue="value"
-                      optionLabel="name"></p-dropdown>
+                      optionLabel="Descripcion"></p-dropdown>
           <small *ngIf="Poblacion.hasError('required') && Poblacion.dirty"
                   class="p-error">El campo de población de edad <strong>requerido</strong></small>
         </div>
         <div class="col-12">
-          <label for="Institucion" class="block mb-2">Intitución</label>
+          <label for="NombreInstitucion" class="block mb-2">Intitución</label>
           <p-dropdown class="p-fluid p-grid p-formgrid"
-                      formControlName="Institucion"
+                      formControlName="NombreInstitucion"
                       [options]="optionInstitucion"
                       (ngModelChange)="selecOptionInstitucion($event)"
                       placeholder="Selececione"
+                      optionValue="value"
                       optionLabel="name">
-            <ng-template pTemplate="selectedItem">
-              <div class="country-item" *ngIf="selecInstitucion">
-                <span>
-                  {{selecInstitucion.name}}</span>
-              </div>
-            </ng-template>
-            <ng-template let-Institucion pTemplate="item">
-              <div>
-                <span class="ml-1">{{Institucion.name}}</span>
-              </div>
-            </ng-template>
           </p-dropdown>
-          <small *ngIf="Institucion.hasError('required') && Institucion.dirty"
+          <small *ngIf="NombreInstitucion.hasError('required') && NombreInstitucion.dirty"
                   class="p-error">El campo institución es <strong>requerido</strong></small>
         </div>
-        <div class="grid content" *ngIf="selecInstitucion">
-          <div class="grid content" [ngSwitch]="selecInstitucion.code">
-            <div class="grid content" *ngSwitchCase="1">
-              <div class="col-12">
-                <label for="EscuelaProfesional" class="block mb-2">Escuela profesional</label>
-                <p-dropdown class="p-fluid p-grid p-formgrid"
-                            formControlName="EscuelaProfesional"
-                            [options]="optionEscuelas"
-                            (ngModelChange)="selecOptionEdad($event)"
-                            placeholder="Selececione"
-                            optionValue="value"
-                            optionLabel="name"></p-dropdown>
-                <small *ngIf="EscuelaProfesional.hasError('required') && EscuelaProfesional.dirty"
-                        class="p-error">El campo escuela profesional <strong>requerido</strong></small>
-              </div>
-            </div>
-            <div class="grid content" *ngSwitchCase="2">
-              <div class="grid content">
-                <div class="col-12">
-                  <label for="OtraInstitucion" class="block mb-2">Nombres de la institución</label>
-                  <input id="OtraInstitucion"
-                        class="p-fluid p-grid p-formgrid input-form"
-                        type="text"
-                        autocomplete="off"
-                        [maxlength]="50"
-                        formControlName="OtraInstitucion"
-                        pInputText/>
-                  <small *ngIf="OtraInstitucion.hasError('required') && OtraInstitucion.dirty"
-                          class="p-error">El campos de su institución es <strong>requerido</strong></small>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div *ngIf="isUNAJMA" class="col-12">
+          <label for="EscuelaProfe" class="block mb-2">Escuela profesional</label>
+          <p-dropdown class="p-fluid p-grid p-formgrid"
+                      formControlName="EscuelaProfe"
+                      [options]="optionEscuelas"
+                      placeholder="Selececione"
+                      optionValue="value"
+                      optionLabel="name"></p-dropdown>
+          <small *ngIf="EscuelaProfe.hasError('required') && EscuelaProfe.dirty"
+                  class="p-error">El campo escuela profesional <strong>requerido</strong></small>
         </div>
         <div class="col-12">
           <label for="DJ" class="block mb-2">Declaración jurada</label>
           <div class="field-checkbox">
-            <p-checkbox [binary]="true" inputId="DJ"></p-checkbox>
+            <p-checkbox [binary]="true" inputId="DJ" formControlName="DeclaraJurada"></p-checkbox>
             <label for="DJ">Tengo pleno conocimiento de los requisitos estipulados en el reglamento del CEID para ser considerado como estudiante.</label>
           </div>
+          <small *ngIf="DeclaraJurada.hasError('required') && DeclaraJurada.dirty"
+                      class="p-error">Este campo es <strong>requerido</strong></small>
         </div>
         <div class="col-12">
           <label for="RT" class="block mb-2">Requisitos tecnológicos</label>
           <div class="field-checkbox">
-            <p-checkbox [binary]="true" inputId="RT"></p-checkbox>
+            <p-checkbox [binary]="true" inputId="RT" formControlName="RequiTecnologico"></p-checkbox>
             <label for="RT">Cuento con una laptop o computadora con acceso a internet, con cámara y micrófino.</label>
           </div>
+          <small *ngIf="RequiTecnologico.hasError('required') && RequiTecnologico.dirty"
+                      class="p-error">Este campo es <strong>requerido</strong></small>
         </div>
         <div class="col-12">
           <label for="CP" class="block mb-2">Carta de compromiso</label>
           <div class="field-checkbox">
-            <p-checkbox [binary]="true" inputId="CP"></p-checkbox>
+            <p-checkbox [binary]="true" inputId="CP" formControlName="CarCompromiso"></p-checkbox>
             <label for="CP">Me comprometo a realizar los pagos correspondientes según cronograma ceid,
                             enviar los recibos de pago al correo institucional, entregar los recibos originales a la oficina del ceid,
                             en caso de estar fuera de la provincia coordinar con la asistente administrativa del ceid y enviar al correo
                             institucional todos los requisitos solicitados por el CEID.</label>
           </div>
+          <small *ngIf="CarCompromiso.hasError('required') && CarCompromiso.dirty"
+                      class="p-error">Este campo es <strong>requerido</strong></small>
         </div>
       </div>
       <br>

@@ -8,10 +8,9 @@ interface Edad{
   value:boolean,
 }
 
-interface Institucion{
+interface opInstitucion{
   name:string,
   value:string,
-  code:number
 }
 
 interface Escuela{
@@ -22,4 +21,4 @@ interface Modalidad{
   name:string,
   value:string
 }
-export { Edad, Sexo, Institucion, Escuela, Modalidad}
+export { Edad, Sexo, opInstitucion, Escuela, Modalidad}

@@ -1,11 +1,12 @@
-import { AuthService } from '../auth/services/auth.service';
 import { environment } from 'src/environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ResPerson } from '../class/Person';
 import { ResCurso } from '../main/curso/class/Curso';
 import { ResHorario } from '../main/grupo/class/Horario';
+import { ResDenominServicio } from '../denomin-servicio/class/Denomin-servicio';
+import { Matricula, ResMatricula } from '../main/matricula/class/Matricula';
 
 @Injectable({
   providedIn: 'root'
@@ -61,6 +62,14 @@ export class GlobalService {
 
   getHorariosMatricula():Observable<ResHorario>{
     return this.http.get<ResHorario>(`${environment.BASE_URL}/horario/get-horarios-matricula`);
+  }
+
+  getDenominacionServicios():Observable<ResDenominServicio>{
+    return this.http.get<ResDenominServicio>(`${environment.BASE_URL}/denomin-servicio/get-lista-denomin-servicios`);
+  }
+
+  registerMatricula(data:Matricula):Observable<ResMatricula>{
+    return this.http.post<ResMatricula>(`${environment.BASE_URL}/matricula/matricular-estudiante`, data);
   }
 
 }

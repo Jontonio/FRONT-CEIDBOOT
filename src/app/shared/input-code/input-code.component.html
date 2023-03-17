@@ -2,7 +2,7 @@
 <p-dropdown class="p-fluid p-grid p-formgrid"
             virtualScrollItemSize="43"
             name="country"
-            [options]="_main.listCodePhone"
+            [options]="listCodePhone"
             [(ngModel)]="country"
             (ngModelChange)="selected($event)"
             optionLabel="name">

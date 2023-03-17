@@ -34,6 +34,7 @@
       </div>
       <div class="col">
         <div class="content-recomment">
+          <p *ngIf="hayError" class="p-error mb-2 animate__animated animate__fadeInDown">No se encontraron coincidencias</p>
           <p *ngIf="paisesSugeridos.length!=0" class="mb-2 title-select-p"><i class="pi pi-list"></i> Selecione el país</p>
           <div *ngFor="let pais of paisesSugeridos">
             <div class="flex recoment-box" (click)="SelectedPais(pais)">

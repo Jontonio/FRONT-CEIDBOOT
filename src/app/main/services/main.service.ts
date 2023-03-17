@@ -12,35 +12,28 @@ import { Departamento, Distrito, Provincia } from "../class/Ubigeo";
 })
 export class MainService{
 
-  listCodePhone:any[];
-
-  constructor( private http:HttpClient ){
-    this.getCountryCode();
-  }
+  constructor(private http:HttpClient){}
 
   buscarPais(termino:string, porTipo:string):Observable<Pais[]>{
     const url = `${environment.URL_COUNTRY}/${porTipo}/${termino}`;
-    return this.http.get<Pais[]>(url)
+    return this.http.get<Pais[]>(url);
   }
 
-  getCountryCode(){
+  getCountryCode():Observable<Code[]>{
     const url = `${environment.URL_COUNTRY}/all`;
-    this.http.get<Pais[]>(url)
+    return this.http.get<Pais[]>(url)
         .pipe(
           map( countries => {
             const list = countries.map( (country:Pais) => {
               let subfix = ''
               if(country.idd.suffixes) subfix = country.idd.suffixes.length!=1?country.idd.suffixes[1]:country.idd.suffixes[0];
               const code = `${country.idd.root}${subfix}`
-              return { name: this.spliceName(country.name.common), codePhone:code, flag:country.flags.svg, code: country.cca2 };
+              return new Code(this.spliceName(country.name.common), code, country.flags.svg, country.cca2)
             })
             const lista = list.sort((a, b) => a.name.localeCompare(b.name));
             return lista.filter( (items) => items.codePhone!='undefined');
           })
-      ).subscribe({
-        next: (resp) => { this.listCodePhone = resp },
-        error: (e) => console.log(e)
-    });
+      );
   }
 
   getOneCountryByCode(code:string):Observable<Code[]>{
@@ -52,7 +45,7 @@ export class MainService{
                   let subfix = ''
                   if(country.idd.suffixes) subfix = country.idd.suffixes.length!=1?country.idd.suffixes[1]:country.idd.suffixes[0];
                   const code = `${country.idd.root}${subfix}`
-                  return { name: this.spliceName(country.name.common), codePhone:code, flag:country.flags.svg, code: country.cca2 };
+                  return new Code(this.spliceName(country.name.common), code, country.flags.svg, country.cca2)
                 })
                 const lista = list.sort((a, b) => a.name.localeCompare(b.name));
                 return lista.filter( (items) => items.codePhone!='undefined');

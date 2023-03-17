@@ -4,8 +4,8 @@ class ResDocente {
 class Docente {
     ApellidoMaterno: string;
     ApellidoPaterno: string;
-    Celular: number;
-    Documento: number;
+    Celular: string;
+    Documento: string;
     TipoDocumento: string;
     Direccion: string;
     Email: string;
@@ -18,11 +18,11 @@ class Docente {
 
     constructor(
       TipoDocumento:string,
-      Documento:number,
+      Documento:string,
       Nombres:string,
       ApellidoPaterno:string,
       ApellidoMaterno:string,
-      Celular:number,
+      Celular:string,
       Email:string,
       Direccion:string,
       Code:string,
@@ -33,8 +33,8 @@ class Docente {
 
       this.ApellidoMaterno = ApellidoMaterno;
       this.ApellidoPaterno = ApellidoPaterno;
-      this.Celular = Number(Celular);
-      this.Documento = Number(Documento);
+      this.Celular = Celular;
+      this.Documento = Documento;
       this.TipoDocumento = TipoDocumento;
       this.Direccion = Direccion;
       this.Email = Email;
