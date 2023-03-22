@@ -3,8 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { ValidateUserGuard } from '../guards/validate-user.guard';
 import { AulaComponent } from './pages/aula/aula.component';
 import { MainComponent } from './pages/main/main.component';
-import { PerfilComponent } from './pages/Perfil/perfil/perfil.component';
-import { ChatBotComponent } from './pages/Chatbot/chat-bot/chat-bot.component';
+import { PerfilComponent } from './perfil/pages/perfil/perfil.component';
+import { ChatBotComponent } from './chat-bot/pages/chat-bot/chat-bot.component';
 
 const routes: Routes = [
   {
@@ -32,7 +32,7 @@ const routes: Routes = [
       },
       {
         path:'chat-bot', component:ChatBotComponent,
-        children:[]
+        loadChildren: () => import('./chat-bot/chat-bot.module').then( mod => mod.ChatBotModule )
       },
       {
 
@@ -40,8 +40,8 @@ const routes: Routes = [
         loadChildren: () => import('./usuario/usuario.module').then( mod => mod.UsuarioModule )
       },
       {
-        path:'perfil', component:PerfilComponent,
-        children:[]
+        path:'perfil',
+        loadChildren: () => import('./perfil/perfil.module').then( mod => mod.PerfilModule )
       },
     ]
   }

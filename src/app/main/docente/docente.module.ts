@@ -9,6 +9,7 @@ import { PrimengModule } from 'src/app/primeng/primeng.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { DocenteComponent } from './pages/docente/docente.component';
+import { MaterialModule } from 'src/app/material/material.module';
 
 
 @NgModule({
@@ -24,6 +25,7 @@ import { DocenteComponent } from './pages/docente/docente.component';
     SharedModule,
     ReactiveFormsModule,
     DocenteRoutingModule,
+    MaterialModule
   ]
 })
 export class DocenteModule { }

@@ -36,7 +36,7 @@ export class InputCodeComponent implements OnInit {
       next: (value) => {
         this.listCodePhone = value;
       },
-      error: (e) => this.toast('warn','Aviso: hubo problemas al obtener códigos de países','El sistema registrará por defecto sólo códigos del país (+51)')
+      error: (e) => this.toast('warn','Hubo problemas al obtener códigos de países','El sistema registrará por defecto sólo códigos del país (+51)')
     })
   }
 

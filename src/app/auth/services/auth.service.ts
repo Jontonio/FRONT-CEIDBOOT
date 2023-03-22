@@ -5,7 +5,7 @@ import { Observable } from "rxjs";
 import { Router } from "@angular/router";
 
 import { Login } from "../interfaces/login.interface";
-import { LoginUser, ResLogin } from "../interfaces/ResLogin";
+import { UserLogin, ResLogin } from "../interfaces/ResLogin";
 import { Logout, ResLogout } from '../interfaces/Logout';
 
 @Injectable({
@@ -13,7 +13,7 @@ import { Logout, ResLogout } from '../interfaces/Logout';
 })
 export class AuthService {
 
-  userAuth:LoginUser | undefined;
+  userAuth:UserLogin | undefined;
 
   constructor( private http:HttpClient, private route:Router ){}
 

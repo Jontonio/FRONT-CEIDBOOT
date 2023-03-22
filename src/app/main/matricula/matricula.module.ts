@@ -7,10 +7,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { PrimengModule } from 'src/app/primeng/primeng.module';
 import { ListMatriculaComponent } from './pages/list-matricula/list-matricula.component';
 import { AddMatriculaComponent } from './pages/add-matricula/add-matricula.component';
-import { PersonalInfoComponent } from './pages/steps/personal-info/personal-info.component';
-import { MayoriaEdadComponent } from './pages/steps/mayoria-edad/mayoria-edad.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
+import { MaterialModule } from 'src/app/material/material.module';
 
 
 @NgModule({
@@ -18,8 +17,6 @@ import { HttpClientModule } from '@angular/common/http';
     MatriculaComponent,
     ListMatriculaComponent,
     AddMatriculaComponent,
-    PersonalInfoComponent,
-    MayoriaEdadComponent
   ],
   imports: [
     CommonModule,
@@ -27,7 +24,8 @@ import { HttpClientModule } from '@angular/common/http';
     ReactiveFormsModule,
     PrimengModule,
     SharedModule,
-    HttpClientModule
+    HttpClientModule,
+    MaterialModule
   ]
 })
 export class MatriculaModule { }

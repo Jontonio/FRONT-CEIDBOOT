@@ -1,0 +1,206 @@
+<div>
+  <div class="c-skeleton"></div>
+</div>
+<div class="main p-4 view-grupo animate__animated animate__fadeIn" *ngIf="usuario">
+  <p-card>
+    <div class="grid content">
+      <div class="col-6">
+        <div class="flex">
+          <p-avatar [label]="usuario.Nombres | slice:0:1" styleClass="mr-2" size="xlarge" [style]="{'background-color': '#4caf4f', 'color': '#ffffff'}"></p-avatar>
+          <div class="mt-2">
+            <h3>{{usuario.Nombres}} {{usuario.ApellidoPaterno}}</h3>
+            <span class="mt-1">{{usuario.Email | titlecase}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="flex justify-content-center align-items-center">
+        </div>
+      </div>
+    </div>
+  </p-card>
+  <br>
+  <p-card header="Datos personales">
+    <form [formGroup]="usuarioForm">
+      <div class="grid content">
+        <div class="col-12 md:col-12">
+          <label for="DNI" class="block mb-2"><i class="fa-regular fa-address-card"></i> DNI</label>
+          <input id="DNI"
+                  class="p-fluid p-grid p-formgrid input-form"
+                  type="text"
+                  autocomplete="off"
+                  formControlName="DNI"
+                  maxlength="8"
+                  pInputText/>
+          <small *ngIf="DNI.hasError('pattern') && !DNI.hasError('required')"
+            class="p-error">Digite un DNI <strong>válido</strong></small>
+            <small *ngIf="DNI.hasError('required') && DNI.dirty"
+            class="p-error">El campo DNI es <strong>requerido</strong></small>
+          </div>
+      </div>
+      <div class="grid content">
+        <div class="col-12 md:col-4">
+          <label for="Nombres" class="block mb-2">Nombres</label>
+            <input id="Nombres"
+                  class="p-fluid p-grid p-formgrid input-form"
+                  type="text"
+                  autocomplete="off"
+                  maxlength="45"
+                  formControlName="Nombres"
+                  pInputText/>
+            <small *ngIf="Nombres.hasError('pattern') && !Nombres.hasError('required')"
+                    class="p-error">Digite un nombre <strong>válido</strong></small>
+            <small *ngIf="Nombres.hasError('required') && Nombres.dirty"
+                    class="p-error">El campo nombres es <strong>requerido</strong></small>
+        </div>
+        <div class="col-12 md:col-4">
+          <label for="ApellidoPaterno" class="block mb-2">Apellido paterno</label>
+            <input id="ApellidoPaterno"
+                  class="p-fluid p-grid p-formgrid input-form"
+                  type="text"
+                  autocomplete="off"
+                  maxlength="45"
+                  formControlName="ApellidoPaterno"
+                  pInputText/>
+            <small *ngIf="ApellidoPaterno.hasError('pattern') && !ApellidoPaterno.hasError('required')"
+                    class="p-error">Digite un apellido paterno <strong>válido</strong></small>
+            <small *ngIf="ApellidoPaterno.hasError('required') && ApellidoPaterno.dirty"
+                    class="p-error">El campo apellido paterno es <strong>requerido</strong></small>
+        </div>
+        <div class="col-12 md:col-4">
+          <label for="ApellidoMaterno" class="block mb-2">Apellido materno</label>
+            <input id="ApellidoMaterno"
+                  class="p-fluid p-grid p-formgrid input-form"
+                  type="text"
+                  autocomplete="off"
+                  maxlength="45"
+                  formControlName="ApellidoMaterno"
+                  pInputText/>
+            <small *ngIf="ApellidoMaterno.hasError('pattern') && !ApellidoMaterno.hasError('required')"
+                    class="p-error">Digite un apellido materno <strong>válido</strong></small>
+            <small *ngIf="ApellidoMaterno.hasError('required') && ApellidoMaterno.dirty"
+                    class="p-error">El campo apellido materno es <strong>requerido</strong></small>
+        </div>
+      </div>
+      <div class="grid content">
+        <div class="col-12 md:col-4">
+          <label for="Email" class="block mb-2"><i class="fa-regular fa-envelope"></i> Email</label>
+            <input id="Email"
+                  class="p-fluid p-grid p-formgrid input-form"
+                  type="Email"
+                  autocomplete="off"
+                  maxlength="50"
+                  formControlName="Email"
+                  pInputText/>
+            <small *ngIf="Email.hasError('pattern') && !Email.hasError('required')"
+                    class="p-error">Digite un email <strong>válido</strong></small>
+            <small *ngIf="Email.hasError('required') && Email.dirty"
+                    class="p-error">El campo email es <strong>requerido</strong></small>
+        </div>
+        <div class="col-12 md:col-4">
+          <label for="Celular" class="block mb-2"><i class="fa-solid fa-phone"></i> Celular</label>
+            <input id="Celular"
+                  class="p-fluid p-grid p-formgrid input-form"
+                  type="text"
+                  maxlength="9"
+                  autocomplete="off"
+                  formControlName="Celular"
+                  pInputText/>
+            <small *ngIf="Celular.hasError('pattern') && !Celular.hasError('required')"
+                    class="p-error">Digite un celular <strong>válido</strong></small>
+            <small *ngIf="Celular.hasError('required') && Celular.dirty"
+                    class="p-error">El campo celular es <strong>requerido</strong></small>
+        </div>
+        <div class="col-12 md:col-4">
+          <label for="Direccion" class="block mb-2"><i class="fa-solid fa-location-dot"></i> Dirección actual</label>
+            <input id="Direccion"
+                  class="p-fluid p-grid p-formgrid input-form"
+                  type="text"
+                  autocomplete="off"
+                  maxlength="100"
+                  formControlName="Direccion"
+                  pInputText/>
+            <small *ngIf="Direccion.hasError('pattern') && !Direccion.hasError('required')"
+                    class="p-error">Digite una dirección <strong>válida</strong></small>
+            <small *ngIf="Direccion.hasError('required') && Direccion.dirty"
+                    class="p-error">El campo dirección es <strong>requerido</strong></small>
+        </div>
+      </div>
+      <div class="flex justify-content-end mt-3">
+        <button mat-raised-button
+                color="primary"
+                class="p-button-c"
+                (click)="save()"
+                [disabled]="usuarioForm.invalid || loadingUsuario">
+                <i [class]="loadingUsuario?'pi pi-spin pi-spinner':'pi pi-save'"></i> Guardar
+        </button>
+      </div>
+    </form>
+  </p-card>
+  <br>
+  <p-card header="Cambiar contraseña">
+    <form [formGroup]="passwordChangeForm">
+      <div class="ml-3 mb-2 content-requisitos">
+          <p class="mb-2">Para realizar el cambio de contraseña considere siguiente:</p>
+          <li>Mínimo 8 carácteres alfanúmericos</li>
+          <li>Al menos una letra mayúscula</li>
+          <li>Al menos una letra minúscula</li>
+          <li>Al menos un número</li>
+          <li>Al menos un carácter especial</li>
+      </div>
+      <div class="grid content">
+        <div class="col-12 md:col-4">
+          <label for="CurrentPassword" class="block mb-2"><i class="fa-solid fa-key"></i> Contraseña actual</label>
+            <input id="CurrentPassword"
+                  class="p-fluid p-grid p-formgrid"
+                  type="password"
+                  autocomplete="off"
+                  maxlength="20"
+                  formControlName="CurrentPassword"
+                  pInputText/>
+            <small *ngIf="CurrentPassword.hasError('pattern') && !CurrentPassword.hasError('required')"
+                    class="p-error">Digite un DNI <strong>válido</strong></small>
+            <small *ngIf="CurrentPassword.hasError('required') && CurrentPassword.dirty"
+                    class="p-error">El campo contraseña actual es <strong>requerido</strong></small>
+        </div>
+        <div class="col-12 md:col-4">
+          <label for="NewPassword" class="block mb-2"><i class="fa-solid fa-lock"></i> Contraseña nueva</label>
+            <input id="NewPassword"
+                  class="p-fluid p-grid p-formgrid"
+                  type="password"
+                  autocomplete="off"
+                  maxlength="20"
+                  formControlName="NewPassword"
+                  pInputText/>
+            <small *ngIf="NewPassword.hasError('pattern') && !NewPassword.hasError('required')"
+                    class="p-error">La contraseña nueva no cumple los requisitos <strong> de contraseña segura</strong></small>
+            <small *ngIf="NewPassword.hasError('required') && NewPassword.dirty"
+                    class="p-error">El campo contraseña nueva es <strong>requerido</strong></small>
+        </div>
+        <div class="col-12 md:col-4">
+          <label for="RepeatPassword" class="block mb-2"><i class="fa-solid fa-lock"></i> Repetir contraseña</label>
+            <input id="RepeatPassword"
+                  class="p-fluid p-grid p-formgrid"
+                  type="password"
+                  autocomplete="off"
+                  formControlName="RepeatPassword"
+                  maxlength="20"
+                  pInputText/>
+            <small *ngIf="RepeatPassword.hasError('pattern') && !RepeatPassword.hasError('required')"
+                    class="p-error">La contraseña nueva no cumple los requisitos <strong> de contraseña segura</strong></small>
+            <small *ngIf="RepeatPassword.hasError('required') && RepeatPassword.dirty"
+                    class="p-error">El campo repetir contraseña es <strong>requerido</strong></small>
+        </div>
+      </div>
+      <div class="flex justify-content-end mt-3">
+        <button mat-raised-button
+                color="primary"
+                class="p-button-c"
+                (click)="savePassword()"
+                [disabled]="loadingPassword">
+                <i [class]="loadingPassword?'pi pi-spin pi-spinner':''"></i> Cambiar contraseña
+        </button>
+      </div>
+    </form>
+  </p-card>
+</div>

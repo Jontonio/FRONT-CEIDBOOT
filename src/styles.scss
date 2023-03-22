@@ -49,16 +49,6 @@ body::-webkit-scrollbar-thumb:active {
 .main{
   padding: 10px;
 }
-/* Estilos para card como contenido principal */
-.container-home{
-  // background: rebeccapurple;
-  width: 100%;
-  // height: 100vh;
-  // display: flex;
-  // justify-content: center;
-  // align-items: center;
-}
-
 /* Estilos para el titulo principal */
 .title-main{
   display: flex;
@@ -91,10 +81,6 @@ body::-webkit-scrollbar-thumb:active {
 * Styles for buttons
 *
 */
-.btn{
-  // background: #0B0D17 !important;
-  // width: 100px !important;
-}
 .content{
   width: 100%;
   margin: 0 auto !important;
@@ -224,11 +210,14 @@ footer{
   background: rgb(190, 5, 5);
 }
 .content-navbar{
-  // position: absolute;
+  position: absolute;
   width: 100%;
   padding: 2px !important;
   z-index: 20000;
   background: #F9A826;
+}
+.p-menubar-root-list{
+  background: #F9A826 !important;
 }
 .content-svg{
   z-index: 100;
@@ -245,21 +234,15 @@ footer{
   background: #1f2448 !important;
   color: #FFF;
 }
-.p-button-c:hover{
-  background: none !important;
-  background: #1f2448 !important;
-  color: #FFF !important;
-}
-.p-button-c:focus{
-  color: #FFF !important;
-  background: #495180 !important;
+.mat-button-disabled{
+  color: rgb(136, 136, 136) !important;
 }
 .p-inputtext{
   width: 100% !important;
 }
 .mat-horizontal-content-container{
-  // overflow: visible !important;
-  // overflow: visible !important;
+  width: 100% !important;
+  padding: 0 !important;
   overflow-y: hidden;
   overflow-x: visible;
 }
@@ -270,6 +253,12 @@ footer{
   background: var(--surface-e);
 }
 .mat-step-text-label{
+  color: var(--text-color);
+}
+.mat-menu-content{
+  background: var(--surface-e);
+}
+.mat-menu-item{
   color: var(--text-color);
 }
 // .mat-vertical-stepper-content{
@@ -300,13 +289,14 @@ footer{
     display: none;
   }
   .title-main{
-    margin-top: -70px;
+    padding: 10px;
   }
   .img-logo{
     display: none;
   }
   .img-page-main{
     margin-top: 15px;
+    padding: 10px;
   }
   .content-svg{
     display: none;
@@ -334,11 +324,11 @@ footer{
   .table-responsive{
     overflow-y: scroll !important;
   }
-  .card-login{
-    margin-top: 100px;
-  }
   .items-menu{
     width: 3000px !important;
+  }
+  .content-navbar{
+    position: fixed;
   }
 }
 @media only screen and (min-width: 768px) and (max-width: 991px) {

@@ -14,24 +14,24 @@ import { SocketService } from 'src/app/services/socket.service';
 })
 export class MenuComponent implements OnInit {
 
-  display    :boolean = false;
   items      :MenuItem[];
+  display    :boolean = false;
   changeTheme:boolean = false;
 
   constructor(@Inject(DOCUMENT)
-              private document:Document,
-              private _global:GlobalService,
-              public _auth:AuthService,
-              public _socket: SocketService,
-              private route:Router) {
+              private readonly document:Document,
+              private readonly  _global:GlobalService,
+              public  readonly _auth:AuthService,
+              public  readonly _socket: SocketService,
+              private readonly route:Router) {
   }
 
   ngOnInit(): void {
 
     this.initializeMenu();
-    //theme
     this.changeTheme = this._global.existsTheme();
     this.modeTheme(this.changeTheme);
+
   }
 
   theme(){
@@ -49,13 +49,10 @@ export class MenuComponent implements OnInit {
     const data = new Logout(this._auth.userAuth?.Id, this._auth.userAuth?.Email);
     this._auth.logout(data).subscribe({
       next: (value) => {
-        if(value.ok){
-          if(this._auth.readToken()){
-            this._auth.deleteToken();
-          }
-          this.modeTheme(false, false);
-          this.route.navigate(['/main/auth/login']);
-        }
+        if(!value.ok) return;
+        if(this._auth.readToken()) this._auth.deleteToken();
+        this.modeTheme(false, false);
+        this.route.navigate(['/main/auth/login']);
       },
       error: (e) => console.log(e)
     })
@@ -78,7 +75,7 @@ export class MenuComponent implements OnInit {
         routerLink:'/system/grupos/lista-grupos',
       },
       {
-        label: 'Matrículas y pensiones',
+        label: 'Matriculas y pensiones',
         icon: 'fa-solid fa-landmark',
         routerLink:'/system/matricula/matriculados'
       },

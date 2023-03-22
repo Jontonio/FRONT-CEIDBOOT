@@ -1,4 +1,4 @@
-<div class="main p-4">
+<div class="main p-4 animate__animated animate__fadeIn">
   <p-card header="Lista de grupos">
     <div class="flex justify-content-center justify-content-between">
       <div class="col-6">
@@ -15,7 +15,7 @@
                   pRipple
                   type="button"
                   icon="fa-solid fa-plus"
-                  label="Nuevo grupo"
+                  label="Grupo"
                   routerLink="/system/grupos/add-grupo"
                   class="p-button-rounded"></button>
         </div>
@@ -26,9 +26,9 @@
         <p-table [value]="_grupo.listGrupos" responsiveLayout="scroll" [rowHover]="true">
           <ng-template pTemplate="header">
               <tr>
-                <th>Código</th>
+                <th>Cód.</th>
                 <th>Bandera</th>
-                <th pSortableColumn="NombreGrupo">Nombre grupo <p-sortIcon field="NombreGrupo"></p-sortIcon></th>
+                <th>Nombre</th>
                 <th>Curso</th>
                 <th>Nivel</th>
                 <th>Horario</th>
@@ -37,10 +37,11 @@
                 <th>Max. alumnos</th>
                 <th>Num. alumnos</th>
                 <th>Docente asignado</th>
+                <th>Operación</th>
               </tr>
           </ng-template>
           <ng-template pTemplate="body" let-grupo let-rowIndex="rowIndex">
-              <tr class="select-tr" [routerLink]="['/system/grupos/ver-grupo', grupo.Id]">
+              <tr class="select-tr">
                   <td>G-{{grupo.Id}}</td>
                   <td><img class="img-flag" [src]="grupo.curso.UrlBandera" alt="" srcset=""></td>
                   <td>{{grupo.tipoGrupo.NombreGrupo | titlecase}}</td>
@@ -50,12 +51,32 @@
                   <td>{{grupo.Modalidad}}</td>
                   <td>
                     <p-tag icon="pi pi-calendar"
-                           severity="success">
+                           [rounded]="true"
+                           severity="info">
                            <span class="m-1">{{grupo.FechaInicioGrupo | date}} a {{grupo.FechaFinalGrupo | date}}</span></p-tag>
                   </td>
                   <td>{{grupo.MaximoEstudiantes}}</td>
                   <td>{{grupo.NumeroEstudiantes}}</td>
                   <td>{{grupo.docente.Nombres | titlecase}} {{grupo.docente.ApellidoPaterno | titlecase}}</td>
+                  <td>
+                    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                      <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                      <button mat-menu-item [routerLink]="['/system/grupos/ver-grupo', grupo.Id]">
+                        <mat-icon><i class="fa-solid fa-circle-info"></i></mat-icon>
+                        <span>ver más</span>
+                      </button>
+                      <button mat-menu-item [routerLink]="['/system/grupos/edit-grupo', grupo.Id]">
+                        <mat-icon><i class="fa-solid fa-pen-to-square"></i></mat-icon>
+                        <span>Editar grupo</span>
+                      </button>
+                      <button mat-menu-item>
+                        <mat-icon><i class="fa-solid fa-trash-can"></i></mat-icon>
+                        <span>Dar de grupo</span>
+                      </button>
+                    </mat-menu>
+                  </td>
               </tr>
           </ng-template>
         </p-table>

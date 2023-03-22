@@ -18,16 +18,21 @@ import { UsuarioService } from '../../services/usuario.service';
 })
 export class FormUsuarioComponent implements OnInit {
 
+  /** Output and Input variables */
   @Output() formData = new EventEmitter<optionOperation>();
-  @Input() loadding:boolean;
+  @Input() loading:boolean;
 
+  /** Variables de clase */
   FormUsuario:FormGroup;
   loadGetData:boolean = false;
-  listRoles:Rol[] = [];
   isUpdate:boolean = false;
+  selecRol:Rol;
+
+  roles:Rol[];
   Id?:number;
   country:Code;
-  urlLista:string = '/system/usuarios/lista-usuarios';
+  urlLista:string;
+  loadingGetUpdate:boolean;
 
   constructor(private route:Router,
               private fb:FormBuilder,
@@ -38,7 +43,8 @@ export class FormUsuarioComponent implements OnInit {
               private _msg:MessageService) {
 
     this.createFormUsuario();
-
+    this.urlLista = '/system/usuarios/lista-usuarios';
+    this.loadingGetUpdate = false;
   }
 
   ngOnInit(): void {
@@ -57,7 +63,7 @@ export class FormUsuarioComponent implements OnInit {
       Email:[null, [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
       Celular:[null, [Validators.required,Validators.pattern(/^([0-9])*$/)]],
       Direccion:[null, [Validators.required]],
-      IdRol:[null, [Validators.required, Validators.pattern(/^([0-9])*$/)]]
+      rol:[null, [Validators.required]]
     })
   }
 
@@ -86,42 +92,37 @@ export class FormUsuarioComponent implements OnInit {
   get Password(){
     return this.FormUsuario.controls['Password'];
   }
-  get IdRol(){
-    return this.FormUsuario.controls['IdRol'];
+  get rol(){
+    return this.FormUsuario.controls['rol'];
   }
 
   getRoles(){
     this._usuario.getRoles().subscribe({
-      next: (resp) => {
-        this.listRoles = resp.data;
-      },
-      error: (err) => {
-        console.log(err);
-      },
+      next: (resp) => this.roles = resp.data,
+      error: (err) => console.log(err)
     })
   }
 
   Reniec(documento:string=''){
 
     if(!documento) return;
-
     if(documento.length==8 && !this.isUpdate){
-
       this.loadGetData = true;
+      this.DNI.disable();
       this._global.apiReniec(documento).subscribe({
         next: (value) => {
-          if(value.ok){
-            console.log(value);
-            this.completeData(value.data);
-            this.toast('success',value.msg,'Datos consultados a RENIEC')
-          }else{
-            console.log(value.msg);
+          if(!value.ok){
             this.toast('warn',value.msg,'Datos consultados a RENIEC')
+            return;
           }
+          this.completeData(value.data);
+          this.toast('success',value.msg,'Datos consultados a RENIEC')
+          this.DNI.enable();
           this.loadGetData = false;
         },
         error: (err) => {
           this.loadGetData = false;
+          this.DNI.enable();
           console.log(err);
         }
       })
@@ -137,14 +138,11 @@ export class FormUsuarioComponent implements OnInit {
   ready(){
 
     if(this.FormUsuario.invalid){
-      Object.keys(this.FormUsuario.controls).forEach( input => {
-        this.FormUsuario.controls[input].markAsDirty();
-      });
+      Object.keys(this.FormUsuario.controls).forEach( input => this.FormUsuario.controls[input].markAsDirty())
       return;
     }
 
-    this.loadding = true;
-
+    this.loading = true;
     const usuario = new Usuario(this.DNI.value,
                                 this.Nombres.value,
                                 this.ApellidoPaterno.value,
@@ -152,16 +150,15 @@ export class FormUsuarioComponent implements OnInit {
                                 this.Celular.value,
                                 this.Email.value,
                                 this.Direccion.value,
-                                { Id: this.IdRol.value },
+                                this.rol.value,
                                 this.country.code,
                                 this.country.codePhone);
-
     this.formData.emit({data:usuario, option: this.isUpdate, Id:this.Id });
   }
 
   returnList(){
-    this.route.navigate([this.urlLista])
     this.FormUsuario.reset();
+    this.route.navigate([this.urlLista])
   }
 
   resetForm(){
@@ -178,14 +175,16 @@ export class FormUsuarioComponent implements OnInit {
     if(!id) return;
     this.Id = id;
     this.isUpdate = true;
+    this.loadingGetUpdate = true;
     this._usuario.getUsuario(id).subscribe({
       next: (resp) => {
-        if(resp.ok){
-          this.completeDataUpdate(resp.data as Usuario);
-        }
+        this.loadingGetUpdate = false;
+        if(!resp.ok) return;
+        this.completeDataUpdate(resp.data as Usuario);
       },
       error: (e) => {
         console.log(e);
+        this.loadingGetUpdate = false;
         this.route.navigate([this.urlLista]);
         this.messageError(e);
       },
@@ -205,19 +204,22 @@ export class FormUsuarioComponent implements OnInit {
     this.Celular.setValue(usuario.Celular);
     this.Direccion.setValue(usuario.Direccion);
     this.Email.setValue(usuario.Email);
-    this.IdRol.setValue(usuario.rol.Id);
+    this.rol.setValue(usuario.rol);
     this.getOneCountryCode(usuario.Code);
+    this.selecRol = usuario.rol;
   }
 
   getOneCountryCode(code:string){
     this._main.getOneCountryByCode(code).subscribe({
       next: (resp) => {
-        if(resp.length!=0){
-          this.country = resp[0];
-        }
+        if(resp.length!=0) this.country = resp[0];
       },
       error:(err) => console.log(err)
     })
+  }
+
+  selectRole(rol:Rol){
+    this.selecRol = rol;
   }
 
   selectedCountry(country:Code){
@@ -225,17 +227,13 @@ export class FormUsuarioComponent implements OnInit {
   }
 
   messageError(e:any){
-    if(Array.isArray(e.error.message)){
-      e.error.message.forEach( (e:string) => {
-        this.toast('error',e,'Error de validación de datos')
-      })
-    }else{
-      this.toast('error',e.error.message,`${e.error.error}:${e.error.statusCode}`)
-    }
+    const msg = e.error.message;
+    Array.isArray(msg)? msg.forEach( (e:string) => this.toast('error',e,'Error de validación de datos')):
+                                                   this.toast('error',msg,`${e.error.error}:${e.error.statusCode}`)
   }
 
-  toast(type:string, msg:string, detail:string=''){
-    this._msg.add({severity:type, summary:msg, detail});
+  toast(severity:string, summary:string, detail:string=''){
+    this._msg.add({severity, summary, detail});
   }
 
 }

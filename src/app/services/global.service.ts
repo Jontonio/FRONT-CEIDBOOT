@@ -13,13 +13,6 @@ import { Matricula, ResMatricula } from '../main/matricula/class/Matricula';
 })
 export class GlobalService {
 
-  urls = [
-    {label:'', icon:'pi pi-home'},
-    {label:'Sports'},
-    {label:'Football'},
-    {label:'Countries'},
-  ];
-
   constructor(private http:HttpClient) {}
   /**
    * Saving the theme in the local storage.

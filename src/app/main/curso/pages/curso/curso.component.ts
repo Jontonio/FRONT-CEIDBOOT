@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-curso',
@@ -7,9 +6,6 @@ import { MenuItem } from 'primeng/api';
   styleUrls: ['./curso.component.scss']
 })
 export class CursoComponent {
-
-  items: MenuItem[];
-  activeItem:MenuItem;
 
   constructor() { }
 

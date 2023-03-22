@@ -47,16 +47,11 @@ export class CursoService{
     return this.http.patch<ResCurso>(`${environment.BASE_URL}/curso/update-curso/${id}`, data);
   }
 
-  /**
-   *
-   * Escuchando eventos sockets
-   *
-   */
+  /** Escuchando eventos sockets */
 
   OnCursos(){
     return this._socket.OnEvent('list_cursos');
   }
-
 
   getListaCursos(limit:number = 5, offset:number = 0){
     this.loadingLista = true;

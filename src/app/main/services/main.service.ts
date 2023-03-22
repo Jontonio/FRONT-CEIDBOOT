@@ -6,13 +6,24 @@ import { map } from 'rxjs/operators'
 import { Code } from "../grupo/class/Code";
 import { Observable } from "rxjs";
 import { Departamento, Distrito, Provincia } from "../class/Ubigeo";
+import { Modalidad } from "../matricula/interfaces/global";
 
 @Injectable({
   providedIn:"root",
 })
 export class MainService{
 
-  constructor(private http:HttpClient){}
+  /** Variables de clase */
+  modalidades:Modalidad[];
+
+  constructor(private http:HttpClient){
+
+    this.modalidades = [
+      { name:'Presencial', value:'presencial'},
+      { name:'Virtual', value:'virtual'},
+    ];
+
+  }
 
   buscarPais(termino:string, porTipo:string):Observable<Pais[]>{
     const url = `${environment.URL_COUNTRY}/${porTipo}/${termino}`;

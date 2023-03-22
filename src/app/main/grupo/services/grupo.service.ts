@@ -12,14 +12,18 @@ import { SocketService } from 'src/app/services/socket.service';
 })
 export class GrupoService{
 
+  /** Subscription Variables */
   public listGrupos$:Subscription;
   public onListGrupos$:Subscription;
 
-  public listGrupos:Grupo[] = [];
-  public loadingLista:boolean = false;
+  /** Variables de clase */
+  public listGrupos:Grupo[];
+  public loadingLista:boolean;
   public respGrupo:ResGrupo;
 
   constructor(private http:HttpClient, private _socket:SocketService){
+    this.listGrupos = [];
+    this.loadingLista = false;
     this.getListaGrupos();
     this.OnListaGrupos();
   }
@@ -34,6 +38,10 @@ export class GrupoService{
 
   createGrupo(data:Grupo):Observable<ResGrupo>{
     return this.http.post<ResGrupo>(`${environment.BASE_URL}/grupo/create-grupo`, data);
+  }
+
+  updateGrupo(id:number, data:Grupo):Observable<ResGrupo>{
+    return this.http.patch<ResGrupo>(`${environment.BASE_URL}/grupo/update-grupo/${id}`, data);
   }
 
   getOneGrupo(id:number):Observable<ResGrupo>{
@@ -52,10 +60,8 @@ export class GrupoService{
     return this.http.get<ResHorario>(`${environment.BASE_URL}/horario/get-horarios`);
   }
 
-  /**
-   * Listen Sockets
-   *
-   */
+  /** Listen Sockets */
+
   OnGrupos(){
     return this._socket.OnEvent('list_grupos');
   }
@@ -73,10 +79,9 @@ export class GrupoService{
     this.listGrupos$ = this.getAllGrupos(limit, offset).subscribe({
       next: (value) => {
         this.loadingLista = false;
-        if(value.ok){
-          this.respGrupo = value;
-          this.listGrupos = value.data as Array<Grupo>;
-        }
+        if(!value.ok) return;
+        this.respGrupo = value;
+        this.listGrupos = value.data as Array<Grupo>;
       },
       error: (err) => {
         console.log("Error lista de usuarios")

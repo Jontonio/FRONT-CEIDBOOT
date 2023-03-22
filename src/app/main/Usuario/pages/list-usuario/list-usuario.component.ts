@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { LoginUser } from 'src/app/auth/interfaces/ResLogin';
+import { UserLogin } from 'src/app/auth/interfaces/ResLogin';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Usuario } from 'src/app/main/usuario/class/Usuario';
 import { SocketService } from 'src/app/services/socket.service';
@@ -21,7 +21,7 @@ export class ListUsuarioComponent {
 
   startPage   :number = 0;
   position    :string;
-  imAuth      :LoginUser | undefined;
+  imAuth      :UserLogin | undefined;
 
 
   constructor(public _usuario:UsuarioService,
@@ -130,11 +130,6 @@ export class ListUsuarioComponent {
         },
         key: "deleteUsuarioDialog"
     });
-  }
-
-  /* A function that receives an id and redirects the user to the edit-user page. */
-  sendEditUserio(id:number){
-    this.route.navigate(['/system/usuarios/editar-usuario',id])
   }
 
   messageError(e:any){

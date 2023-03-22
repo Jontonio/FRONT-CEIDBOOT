@@ -18,7 +18,7 @@
                   pRipple
                   type="button"
                   icon="fa-solid fa-plus"
-                  label="Nuevo usuario"
+                  label="Usuario"
                   routerLink="/system/usuarios/add-usuario"
                   class="p-button-rounded"></button>
         </div>
@@ -54,12 +54,18 @@
                   <td>{{ usuario.Email | titlecase }}</td>
                   <td>{{usuario.CodePhone}} {{ usuario.Celular}}</td>
                   <td>
-                    <div *ngIf="usuario.FechaAcceso else Acess">
-                      <p-tag styleClass="mr-2" severity="success" [value]="usuario.FechaAcceso | date:'MMM d, h:mm a' | fechAcceso" [rounded]="true"></p-tag>
+                    <div *ngIf="imAuth?.Id==usuario.Id else other">
+                      <p-tag styleClass="mr-2" severity="warning" value="Mi cuenta" [rounded]="true"></p-tag>
                     </div>
-                    <ng-template #Acess>
-                      <p-tag styleClass="mr-2" severity="danger" [value]="usuario.FechaAcceso | fechAcceso" [rounded]="true"></p-tag>
+                    <ng-template #other>
+                      <div *ngIf="usuario.FechaAcceso else acess">
+                        <p-tag styleClass="mr-2" severity="success" [value]="usuario.FechaAcceso | date:'MMM d, h:mm a' | fechAcceso" [rounded]="true"></p-tag>
+                      </div>
+                      <ng-template #acess>
+                        <p-tag styleClass="mr-2" severity="danger" [value]="usuario.FechaAcceso | fechAcceso" [rounded]="true"></p-tag>
+                      </ng-template>
                     </ng-template>
+
                   </td>
                   <td>
                     <p-tag styleClass="mr-2"
@@ -83,20 +89,36 @@
                               (click)="Inhabilitar(usuario, usuario.Habilitado)"
                               class="p-button-outlined p-button-rounded p-button-danger"></button>
                     </ng-template>
-                  <td>
-                    <button pButton
+                  <td class="text-center">
+                    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                      <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                      <button mat-menu-item [routerLink]="['/system/usuarios/editar-usuario', usuario.Id]">
+                        <mat-icon><i class="fa-solid fa-pen-to-square"></i></mat-icon>
+                        <span>Editar usuario</span>
+                      </button>
+                      <button mat-menu-item
+                              [disabled]="imAuth?.Id==usuario.Id?true:false"
+                              (click)="dialogDelete(usuario)">
+                        <mat-icon><i class="fa-solid fa-trash-can"></i></mat-icon>
+                        <span>Eliminar usuario</span>
+                      </button>
+                    </mat-menu>
+
+                    <!-- <button pButton
                             pRipple
                             type="button"
-                            (click)="dialogDelete(usuario)"
-                            [disabled]="imAuth?.Id==usuario.Id?true:false"
+
+
                             class="p-button-danger p-button-text">
                             <i class="fa-solid fa-trash-can mr-1"></i> Eliminar</button>
                     <button pButton
                             pRipple
                             type="button"
-                            (click)="sendEditUserio(usuario.Id)"
+                            (click)="sendEditUserio()"
                             class="p-button-text p-button-plain">
-                            <i class="fa-regular fa-pen-to-square mr-1"></i> Editar</button>
+                            <i class="fa-regular fa-pen-to-square mr-1"></i> Editar</button> -->
                   </td>
               </tr>
           </ng-template>

@@ -4,10 +4,9 @@ import { MessageService } from 'primeng/api';
 import { SocketService } from 'src/app/services/socket.service';
 import { Curso } from 'src/app/main/curso/class/Curso';
 import { FormCursoComponent } from 'src/app/main/curso/components/form-curso/form-curso.component';
-import { GlobalService } from 'src/app/services/global.service';
 import { Router } from '@angular/router';
 import { optionOperation } from 'src/app/main/class/global';
-import { Subscriber, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -15,78 +14,87 @@ import { Subscriber, Subscription } from 'rxjs';
   templateUrl: './add-curso.component.html',
   styleUrls: ['./add-curso.component.scss']
 })
-export class AddCursoComponent implements OnInit {
+export class AddCursoComponent {
 
+  /** ViewChild variables */
   @ViewChild(FormCursoComponent) hijo: FormCursoComponent;
 
+  /** Subscription variables */
   private updateCurso$:Subscription;
   private createCurso$:Subscription;
 
-  loadding:boolean = false;
-  urlLista:string = '/system/cursos/lista-cursos';
+  /** variables de clase */
+  loading:boolean
+  urlLista:string;
 
   constructor(private _msg:MessageService,
               private route:Router,
               private _curso:CursoService,
-              private _socket:SocketService) { }
+              private _socket:SocketService) {
 
-  ngOnInit(): void {}
+                this.urlLista = '/system/cursos/lista-cursos';
+                this.loading  = false;
+  }
 
-  save(opt:optionOperation){
-    this.loadding = true;
-    if(opt.option){
-      this.updateCurso$ = this._curso.updateCurso(opt.Id!, opt.data as Curso).subscribe({
-        next: (resCurso) => {
-          this.loadding = false;
-          if(resCurso.ok){
-            this._socket.EmitEvent('updated_list_curso');
-            this.toast('success',resCurso.msg);
-            this.route.navigate([this.urlLista])
-          }else{
+  ngOnDestroy(): void {
+    if(this.createCurso$) this.createCurso$.unsubscribe();
+    if(this.updateCurso$) this.updateCurso$.unsubscribe();
+  }
+
+  createCurso(opt:optionOperation){
+    this.createCurso$ = this._curso.createCurso(opt.data as Curso).subscribe({
+      next: (resCurso) => {
+        setTimeout(() => {
+          this.loading = false;
+          if(!resCurso.ok){
             this.toast('warn',resCurso.msg,'');
+            return;
           }
-          this.updateCurso$.unsubscribe();
-        },
-        error: (e) => {
-          this.loadding = false;
-          this.messageError(e);
-        }
-      })
-    }else{
-      this.createCurso$ = this._curso.createCurso(opt.data as Curso).subscribe({
-        next: (resCurso) => {
-          setTimeout(() => {
-            this.loadding = false;
-            if(resCurso.ok){
-              this._socket.EmitEvent('updated_list_curso');
-              this.toast('success',resCurso.msg,'');
-              this.hijo.resetForm();
-            }else{
-              this.toast('warn',resCurso.msg,'');
-            }
-            this.createCurso$.unsubscribe();
-          }, 200);
-        },
-        error: (e) => {
-          this.loadding = false;
-          this.messageError(e);
-        }
-      })
-    }
+          this._socket.EmitEvent('updated_list_curso');
+          this.toast('success',resCurso.msg,'');
+          this.hijo.resetForm();
+        }, 200);
+      },
+      error: (e) => {
+        this.loading = false;
+        this.messageError(e);
+      }
+    })
   }
 
-  messageError(e:any){
-    if(Array.isArray(e.error.message)){
-      e.error.message.forEach( (e:string) => {
-        this.toast('error',e,'Error de validación de datos')
-      })
-    }else{
-      this.toast('error',e.error.message,`${e.error.error}:${e.error.statusCode}`)
-    }
+  updateCurso(opt:optionOperation){
+    this.updateCurso$ = this._curso.updateCurso(opt.Id!, opt.data as Curso).subscribe({
+      next: (resCurso) => {
+        this.loading = false;
+        if(!resCurso.ok){
+          this.toast('warn',resCurso.msg,'');
+          return;
+        }
+        this._socket.EmitEvent('updated_list_curso');
+        this.toast('success',resCurso.msg);
+        this.route.navigate([this.urlLista])
+      },
+      error: (e) => {
+        this.loading = false;
+        this.messageError(e);
+      }
+    })
   }
+
+  saveData(opt:optionOperation){
+    this.loading = true;
+    opt.option?this.updateCurso(opt):this.createCurso(opt)
+  }
+
 
   toast(type:string, msg:string, detail:string=''){
     this._msg.add({severity:type, summary:msg, detail});
+  }
+
+  messageError(e:any){
+    const msg = e.error.message;
+    Array.isArray(msg)?msg.forEach( (e:string) => this.toast('error', e, 'Error de validación de datos')):
+                                                  this.toast('error', msg,`${e.error.error}:${e.error.statusCode}`)
   }
 
 }

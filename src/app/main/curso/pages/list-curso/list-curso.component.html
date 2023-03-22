@@ -46,7 +46,7 @@
                 <td>{{curso.NivelCurso | titlecase}}</td>
                 <td>{{curso.NumModulos}}</td>
                 <td>
-                  <p>{{curso.DescripcionCurso | slice:0:30 }}...</p>
+                  <p-tag styleClass="mr-2" severity="info">{{curso.DescripcionCurso | slice:0:30 }}...</p-tag>
                 </td>
                 <td>
                   <button pButton
@@ -58,7 +58,7 @@
                   <button pButton
                           pRipple
                           type="button"
-                          (click)="sendEditCurso(curso)"
+                          [routerLink]="['/system/cursos/editar-curso', curso.Id]"
                           class="p-button-text p-button-plain">
                           <i class="pi pi-pencil mr-2"></i> Editar</button>
                 </td>

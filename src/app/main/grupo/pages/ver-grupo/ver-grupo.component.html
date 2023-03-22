@@ -1,8 +1,6 @@
 <div>
   <div class="c-skeleton"></div>
 </div>
-<div>
-</div>
 <div class="main content-grupo animate__animated animate__bounceInDown" *ngIf="grupo">
   <div class="grid content view-grupo">
     <div class="col-12 md:col-4">
@@ -24,13 +22,14 @@
                 pRipple
                 type="button"
                 icon="fa-solid fa-pen-to-square"
+                [routerLink]="['/system/grupos/edit-grupo', grupo.Id]"
                 pTooltip="Editar grupo" tooltipPosition="right"
                 class="p-button-rounded p-button-text p-button-plain custom-btn"></button>
       </div>
       <p-card>
         <div>
           <div class="flex justify-content-center justify-content-between">
-            <h2 class="mb-2"><i class="fa-solid fa-info"></i> Información del grupo</h2>
+            <h2 class="mb-2">Información del grupo</h2>
             <p-tag styleClass="mr-2" severity="success" [rounded]="true"><p>Cód: G-{{grupo.Id}}</p></p-tag>
           </div>
           <div>
@@ -63,9 +62,9 @@
             <p class="mt-2">
               <b>Descripción del grupo</b>
             </p>
-            <p class="mt-1">
+            <div class="mt-1 content-description">
               {{grupo.DescGrupo}}
-            </p>
+            </div>
           </div>
         </div>
       </p-card>

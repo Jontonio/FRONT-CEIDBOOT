@@ -6,7 +6,7 @@ import * as moment from 'moment';
 
 import { Curso } from 'src/app/main/curso/class/Curso';
 import { Departamento, Distrito, Provincia } from 'src/app/main/class/Ubigeo';
-import { Edad, Escuela, Modalidad, opInstitucion, Sexo } from '../../main/matricula/interfaces/global';
+import { Edad, Escuela, opInstitucion, Sexo } from '../../main/matricula/interfaces/global';
 import { GlobalService } from 'src/app/services/global.service';
 import { Horario } from 'src/app/main/grupo/class/Horario';
 import { MainService } from 'src/app/main/services/main.service';
@@ -16,6 +16,14 @@ import { Matricula } from 'src/app/main/matricula/class/Matricula';
 import { Estudiante } from 'src/app/main/matricula/class/Estudiante';
 import { Institucion } from 'src/app/main/matricula/class/Institucion';
 import { MatStepper } from '@angular/material/stepper';
+import { SocketService } from 'src/app/services/socket.service';
+import { Code } from 'src/app/main/grupo/class/Code';
+
+interface Card {
+  name: string,
+  code: string
+}
+
 
 @Component({
   selector: 'app-form-matricula',
@@ -39,9 +47,10 @@ export class FormMatriculaComponent implements OnInit {
 
   optionSexo:Sexo[];
   optionEdad:Edad[];
+  card:Card[] = [];
+
   optionInstitucion:opInstitucion[];
   optionEscuelas:Escuela[];
-  optionModalidad:Modalidad[];
 
   listDepartamentos$:Subscription;
   listProvincias$:Subscription;
@@ -63,12 +72,15 @@ export class FormMatriculaComponent implements OnInit {
   msgTooltipEmail:string;
   msgTooltipCel:string;
 
+  TipoDocumentoSelected:string;
   selecInstitucion:Institucion;
+  country:Code;
 
   constructor(private fb:FormBuilder,
               private readonly _global:GlobalService,
               private readonly _msg:MessageService,
-              private readonly _main:MainService) {
+              private readonly _socket:SocketService,
+              public readonly _main:MainService) {
                 this.createFormEstudiante();
                 this.createFormMayorEdad();
                 this.createFormCurso();
@@ -77,6 +89,8 @@ export class FormMatriculaComponent implements OnInit {
               }
 
   ngOnInit(): void {
+
+    this.TipoDocumentoSelected = 'DNI';
 
     this.optionSexo = [
       { name:'Masculino', code:'masculino' },
@@ -103,11 +117,10 @@ export class FormMatriculaComponent implements OnInit {
       { name: 'Escuela Profesional de Educación Primaria Intercultural', value:'EPEPI'},
     ]
 
-    this.optionModalidad = [
-      { name:'Virtual', value:'virtual'},
-      { name:'Presencial', value:'presencial'},
-      { name:'Semipresencial', value:'Semipresencial'},
-    ]
+    this.card = [
+      {name: 'DNI', code: 'DNI'},
+      {name: 'Carnet de extranjería', code: 'CDE' }
+    ];
 
     this.msgTooltipEmail = 'Es de suma importancia que verifique que esté correctamente escrito, para el envío de información académica';
     this.msgTooltipCel = 'Es de suma importancia que el número tenga una cuenta de WhatsApp'
@@ -115,19 +128,25 @@ export class FormMatriculaComponent implements OnInit {
     this.getListCursos();
     this.getListHorarios();
     this.getListDenominServicio();
-
+    this.inicializateCodes();
   }
+
+  inicializateCodes(){
+    this.country = { name:'Peru', codePhone:'+51', flag:'https://flagcdn.com/pe.svg', code:'PE'};
+  }
+
   ngOnDestroy(): void {
     if(this.listCursos$) this.listCursos$.unsubscribe();
     if(this.listHorarios$) this.listHorarios$.unsubscribe();
-    // this.listDepartamentos$.unsubscribe();
-    // this.listProvincias$.unsubscribe();
-    // this.listDistritos$.unsubscribe();
+    if(this.listDepartamentos$) this.listDepartamentos$.unsubscribe();
+    if(this.listProvincias$) this.listProvincias$.unsubscribe();
+    if(this.listDistritos$) this.listDistritos$.unsubscribe();
   }
 
   createFormEstudiante(){
     this.formEstudiante = this.fb.group({
-      DNI:[null, [Validators.required,Validators.pattern(/^([0-9])*$/)]],
+      TipoDocumento:['DNI', Validators.required],
+      Documento:[null, [Validators.required,Validators.pattern(/^([0-9])*$/)]],
       Nombres:[null, [Validators.required,Validators.pattern(/^([a-z ñáéíóú]{2,60})$/i)]],
       ApellidoPaterno:[null, [Validators.required,Validators.pattern(/^([a-z ñáéíóú]{1,60})$/i)]],
       ApellidoMaterno:[null, [Validators.required,Validators.pattern(/^([a-z ñáéíóú]{1,60})$/i)]],
@@ -173,8 +192,11 @@ export class FormMatriculaComponent implements OnInit {
   }
 
   /** Getters */
-  get DNI(){
-    return this.formEstudiante.controls['DNI'];
+  get TipoDocumento(){
+    return this.formEstudiante.controls['TipoDocumento'];
+  }
+  get Documento(){
+    return this.formEstudiante.controls['Documento'];
   }
   get Nombres(){
     return this.formEstudiante.controls['Nombres'];
@@ -279,8 +301,8 @@ export class FormMatriculaComponent implements OnInit {
           this.listHorarios = resp.data as Array<Horario>;
         }
       },
-      error: (err) => {
-
+      error: (e) => {
+        console.log(e)
       }
     })
   }
@@ -292,9 +314,7 @@ export class FormMatriculaComponent implements OnInit {
           this.listDenominServicio = resp.data as Array<DenominServicio>;
         }
       },
-      error: (err) => {
-
-      }
+      error: (e) => console.log(e)
     })
   }
 
@@ -306,7 +326,7 @@ export class FormMatriculaComponent implements OnInit {
 
   Reniec(documento:string=''){
     if(!documento) return;
-    if(documento.length==8 && this.DNI.valid){
+    if(documento.length==8 && this.TipoDocumento.value=='DNI' && this.Documento.valid){
       this.loadGetData = true;
       this._global.apiReniec(documento).subscribe({
         next: (value) => {
@@ -318,9 +338,9 @@ export class FormMatriculaComponent implements OnInit {
           }
           this.loadGetData = false;
         },
-        error: (err) => {
+        error: (e) => {
           this.loadGetData = false;
-          console.log(err);
+          console.log(e);
         }
       })
     }
@@ -340,14 +360,11 @@ export class FormMatriculaComponent implements OnInit {
   selectedDepartamento(departamento:Departamento){
     this.listDistritos = [];
     if(!departamento) return;
-
     this.listDistritos$ = this.listProvincias$ = this._main.getProvincias(departamento.IdDepartamento).subscribe({
       next: (value) => {
         this.listProvincias = value;
       },
-      error: (err) => {
-        console.log(err);
-      }
+      error: (e) => console.log(e)
     })
   }
 
@@ -406,9 +423,33 @@ export class FormMatriculaComponent implements OnInit {
       console.log(fechaNacimiento.year())
       const edad = moment().year() - fechaNacimiento.year()
       if(edad < 18 ){
-        this.EsMayor.setValue(false)
+        this.displayMayoria = true;
+        this.DNIApoderado.addValidators([Validators.required,Validators.pattern(/^([0-9])*$/)]);
+        this.NomApoderado.addValidators([Validators.required,Validators.pattern(/^([a-z ñáéíóú]{2,60})$/i)]);
+        this.ApellidoPApoderado.addValidators([Validators.required,Validators.pattern(/^([a-z ñáéíóú]{1,60})$/i)]);
+        this.ApellidoMApoderado.addValidators([Validators.required,Validators.pattern(/^([a-z ñáéíóú]{1,60})$/i)]);
+        this.CelApoderado.addValidators([Validators.pattern(/^([0-9])*$/), Validators.required]);
+        this.EsMayor.setValue(false);
       }else{
-        this.EsMayor.setValue(true)
+        this.displayMayoria = false;
+        this.DNIApoderado.clearValidators();
+        this.NomApoderado.clearValidators();
+        this.ApellidoPApoderado.clearValidators();
+        this.ApellidoMApoderado.clearValidators();
+        this.CelApoderado.clearValidators();
+
+        this.DNIApoderado.updateValueAndValidity();
+        this.NomApoderado.updateValueAndValidity();
+        this.ApellidoMApoderado.updateValueAndValidity();
+        this.ApellidoPApoderado.updateValueAndValidity();
+        this.CelApoderado.updateValueAndValidity();
+
+        this.DNIApoderado.markAsPristine();
+        this.NomApoderado.markAsPristine();
+        this.ApellidoPApoderado.markAsPristine();
+        this.ApellidoMApoderado.markAsPristine();
+        this.CelApoderado.markAsPristine();
+        this.EsMayor.setValue(true);
       }
     }
   }
@@ -422,11 +463,14 @@ export class FormMatriculaComponent implements OnInit {
       return;
     }
 
-    const estudiante = new Estudiante(this.DNI.value,
+    const estudiante = new Estudiante(this.TipoDocumento.value,
+                                      this.Documento.value,
                                       this.Nombres.value,
                                       this.ApellidoPaterno.value,
                                       this.ApellidoMaterno.value,
                                       this.Celular.value,
+                                      this.country.code,
+                                      this.country.codePhone,
                                       this.Sexo.value,
                                       this.FechaNacimiento.value,
                                       this.Direccion.value,
@@ -447,12 +491,12 @@ export class FormMatriculaComponent implements OnInit {
                                     this.Poblacion.value,
                                     this.Curso.value,
                                     institucion);
-
     this._global.registerMatricula(matricula).subscribe({
       next:(value) => {
         if(value.ok){
           this.stepper.reset();
           this.toast('success', value.msg);
+          this._socket.EmitEvent('updated_list_matriculados');
         }
         console.log(value)
       },
@@ -512,6 +556,14 @@ export class FormMatriculaComponent implements OnInit {
 
   selectedHorario(horario:Horario){
     this.selecHorario = horario;
+  }
+
+  changeCard(event:string){
+    this.TipoDocumentoSelected = this.TipoDocumento.value;
+  }
+
+  selectedCountry(country:Code){
+    this.country = country;
   }
 
   toast(type:string, msg:string, detail:string=''){

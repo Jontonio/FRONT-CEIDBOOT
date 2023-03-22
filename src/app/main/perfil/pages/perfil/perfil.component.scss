@@ -1,0 +1,19 @@
+.view-grupo{
+  margin-top: -215px !important;
+  padding: 40px;
+}
+.c-skeleton{
+  background-color: #FBAB7E;
+  background-image: linear-gradient(180deg, #FBAB7E 0%, #F7CE68 100%);
+  width: 100%;
+  position: relative;
+  height: 250px;
+}
+.content-requisitos{
+  color: var(--blue-800);
+}
+@media only screen and (max-width: 767px) {
+  .view-grupo{
+    padding: 0;
+  }
+}

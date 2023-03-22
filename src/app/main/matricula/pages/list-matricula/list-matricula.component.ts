@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { MenuItem } from 'primeng/api';
+import { Subscription } from 'rxjs';
+import { Matricula } from '../../class/Matricula';
+import { MatriculaService } from '../../services/matricula.service';
 
 @Component({
   selector: 'app-list-matricula',
@@ -7,9 +11,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ListMatriculaComponent implements OnInit {
 
-  constructor() { }
+  /** Variables de clase */
+  startPage:number = 0;
 
-  ngOnInit(): void {
+  constructor(public readonly _matricula:MatriculaService) {}
+
+  ngOnInit(): void {}
+
+  paginate(event:any) {
+    this.startPage = event.first;
+    this._matricula.getListaMatriculados(event.rows, event.first);
   }
+
 
 }

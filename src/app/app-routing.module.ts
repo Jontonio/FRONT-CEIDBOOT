@@ -9,9 +9,6 @@ const routes: Routes = [
   {
     path:'system',
     loadChildren: () => import('./main/main.module').then( mod => mod.MainModule )
-  },
-  {
-    path:'**', redirectTo:'main'
   }
 ];
 

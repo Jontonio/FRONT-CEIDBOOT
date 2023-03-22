@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { Curso, ResCurso } from 'src/app/main/curso/class/Curso';
+import { Curso } from 'src/app/main/curso/class/Curso';
 import { CursoService } from 'src/app/main/curso/services/curso.service';
-import { GlobalService } from 'src/app/services/global.service';
 import { SocketService } from 'src/app/services/socket.service';
 
 
@@ -15,18 +14,22 @@ import { SocketService } from 'src/app/services/socket.service';
 })
 export class ListCursoComponent {
 
-  private deleteCurso$  :Subscription;
+  /** Subscription variables */
+  deleteCurso$  :Subscription;
+
+  /** Variables de clase */
   startPage   :number = 0;
   position    :string;
 
-  constructor(public _curso:CursoService,
-              private route:Router,
-              private _confirService:ConfirmationService,
-              private _socket:SocketService,
-              private _msg:MessageService) {}
+  constructor(public  readonly _curso:CursoService,
+              private readonly route:Router,
+              private readonly _confService:ConfirmationService,
+              private readonly _socket:SocketService,
+              private readonly _msg:MessageService) {}
 
   ngOnDestroy(): void {
-    this._curso.listCursos$.unsubscribe();
+    if(this._curso.listCursos$) this._curso.listCursos$.unsubscribe();
+    if(this.deleteCurso$) this.deleteCurso$.unsubscribe();
   }
 
   paginate(event:any) {
@@ -38,47 +41,44 @@ export class ListCursoComponent {
     this._curso.getListaCursos(event.rows, event.first);
   }
 
-  sendEditCurso({ Id }:Curso){
-    this.route.navigate(['/system/cursos/editar-curso', Id])
-  }
-
   dialogDelete({ NombreCurso, Id}:Curso) {
     this.position = 'top';
-    this._confirService.confirm({
+    this._confService.confirm({
         message: `¿Está seguro de eliminar el curso <b>${NombreCurso.toUpperCase()}</b>?`,
         header: 'Confirmación de eliminar',
         icon: 'pi pi-info-circle',
         accept: () => {
-          this.deleteCurso$ = this._curso.deleteCurso(Id!).subscribe({
-            next: (value) => {
-              if(value.ok){
-                this.toast('success', 'Eliminación', value.msg);
-                this._socket.EmitEvent('updated_list_curso');
-              }else{
-                this.toast('warn', value.msg);
-              }
-              this.deleteCurso$.unsubscribe();
-            },
-            error: (e) => this.messageError(e)
-          })
+          this.deleteCurso(Id!);
         },
         reject: (type:any) => {},
         key: "deleteCursoDialog"
     });
   }
 
-  messageError(e:any){
-    if(Array.isArray(e.error.message)){
-      e.error.message.forEach( (e:string) => {
-        this.toast('error',e,'Error de validación de datos')
-      })
-    }else{
-      this.toast('error',e.error.message,`${e.error.error}:${e.error.statusCode}`)
-    }
+  deleteCurso(Id:number){
+    this.deleteCurso$ = this._curso.deleteCurso(Id!).subscribe({
+      next: (value) => {
+        if(!value.ok){
+          this.toast('warn', value.msg);
+          return;
+        }
+        this.toast('success', 'Eliminación', value.msg);
+        this._socket.EmitEvent('updated_list_curso');
+      },
+      error: (e) => this.messageError(e)
+    })
   }
 
-  toast(type:string, msg:string, detail:string=''){
-    this._msg.add({severity:type, summary:msg, detail});
+  toast(severity:string, summary:string, detail:string=''){
+    this._msg.add({severity, summary, detail});
   }
+
+  messageError(e:any){
+    const msg = e.error.message;
+    Array.isArray(msg)?msg.forEach(e => this.toast('error',e,'Error de validación de datos')):
+                                        this.toast('error',msg,`${e.error.error}:${e.error.statusCode}`)
+  }
+
+
 
 }

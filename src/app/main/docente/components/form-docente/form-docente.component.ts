@@ -22,17 +22,19 @@ interface Card {
 })
 export class FormDocenteComponent implements OnInit {
 
+  /** Output and Input variables */
   @Output() dataForm = new EventEmitter<optionOperation>();
-  @Input() loadding:boolean;
+  @Input() loading:boolean;
 
+  /** variables de clase */
   formDocente     :FormGroup;
   card            :Card[] = [];
-  TipoDocumentoSelected:string = 'DNI';
-  loadGetData:boolean = false;
   country:Code;
-  isUpdate:boolean = false;
   Id?:number;
+  loadGetData:boolean = false;
+  isUpdate:boolean = false;
 
+  TipoDocumentoSelected:string = 'DNI';
   urlLista:string = '/system/docentes/lista-docentes';
 
   constructor(private fb:FormBuilder,
@@ -99,9 +101,8 @@ export class FormDocenteComponent implements OnInit {
   ready(){
 
     if(this.formDocente.invalid){
-      Object.keys(this.formDocente.controls).forEach( input => {
-        this.formDocente.controls[input].markAsDirty();
-      });
+      Object.keys(this.formDocente.controls)
+            .forEach( input => this.formDocente.controls[input].markAsDirty())
       return;
     }
 
@@ -115,18 +116,18 @@ export class FormDocenteComponent implements OnInit {
                                 this.Direccion.value,
                                 this.country.code,
                                 this.country.codePhone);
-
     this.dataForm.emit({data:docente, option: this.isUpdate, Id:this.Id });
   }
 
   returnLista(){
+    this.formDocente.reset();
     this.router.navigate([this.urlLista]);
   }
 
   resetForm(){
-    this.router.navigate([this.urlLista]);
     this.TipoDocumentoSelected = 'DNI';
     this.inicializateCodes();
+    this.router.navigate([this.urlLista]);
   }
 
   inicializateCodes(){
@@ -140,9 +141,7 @@ export class FormDocenteComponent implements OnInit {
   Reniec(documento:string=''){
 
     if(!documento) return;
-
     if(documento.length==8 && this.TipoDocumento.value=='DNI' && this.Documento.valid ){
-
       this.loadGetData = true;
       this._global.apiReniec(documento).subscribe({
         next: (value) => {
@@ -220,13 +219,9 @@ export class FormDocenteComponent implements OnInit {
   }
 
   messageError(e:any){
-    if(Array.isArray(e.error.message)){
-      e.error.message.forEach( (e:string) => {
-        this.toast('error',e,'Error de validación de datos')
-      })
-    }else{
-      this.toast('error',e.error.message,`${e.error.error}:${e.error.statusCode}`)
-    }
+    const msg = e.error.message;
+    Array.isArray(e.error.messagmsg)?msg.forEach( (e:string) => this.toast('error',e,'Error de validación de datos')):
+                                                                this.toast('error',msg,`${e.error.error}:${e.error.statusCode}`)
   }
 
 }

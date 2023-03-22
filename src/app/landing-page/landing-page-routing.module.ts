@@ -14,12 +14,8 @@ const routes: Routes = [
       { path:'home', component:HomeComponent },
       { path:'nosotros', component:WeComponent },
       { path:'matricula', component:MatriculaComponent },
-      { path:'auth/login', component:LoginComponent },
+      { path:'auth/login', component:LoginComponent }
     ]
-  },
-  {
-    path:'**',
-    redirectTo:'home'
   }
 ];
 

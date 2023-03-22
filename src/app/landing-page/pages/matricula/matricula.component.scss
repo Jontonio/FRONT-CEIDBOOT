@@ -1,0 +1,13 @@
+.content-matricula{
+  width: 100% !important;
+  height: 500px;
+}
+.header-form-matricula{
+  height: 50px;
+}
+@media only screen and (min-width: 1200px) {
+  /* Estilos para escritorio grande aquí */
+  .header-form-matricula{
+    height: 90px;
+  }
+}

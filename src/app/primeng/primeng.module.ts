@@ -8,7 +8,6 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TagModule } from 'primeng/tag';
 import { MenubarModule } from 'primeng/menubar';
 import { ButtonModule } from 'primeng/button';
-import { TabViewModule } from "primeng/tabview";
 import { CardModule } from 'primeng/card';
 import { PasswordModule } from 'primeng/password';
 import { InputTextModule } from 'primeng/inputtext';
@@ -19,7 +18,6 @@ import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
 import { DialogModule } from 'primeng/dialog';
 import { SidebarModule } from 'primeng/sidebar';
-import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { AvatarModule } from 'primeng/avatar';
 import { DividerModule } from 'primeng/divider';
 import { ChipModule } from 'primeng/chip';
@@ -38,6 +36,7 @@ import { TabMenuModule } from 'primeng/tabmenu';
 import { KnobModule } from 'primeng/knob';
 import { TooltipModule } from 'primeng/tooltip';
 import { CheckboxModule } from 'primeng/checkbox';
+import { SplitButtonModule } from 'primeng/splitbutton';
 
 /**
  * array of modules
@@ -45,7 +44,6 @@ import { CheckboxModule } from 'primeng/checkbox';
 const listModules:any[] = [
   MenubarModule,
   ButtonModule,
-  TabViewModule,
   CardModule,
   PasswordModule,
   InputTextModule,
@@ -56,7 +54,6 @@ const listModules:any[] = [
   ToastModule,
   DialogModule,
   SidebarModule,
-  BreadcrumbModule,
   AvatarModule,
   DividerModule,
   ChipModule,
@@ -76,7 +73,8 @@ const listModules:any[] = [
   TabMenuModule,
   KnobModule,
   TooltipModule,
-  CheckboxModule
+  CheckboxModule,
+  SplitButtonModule
 ]
 
 @NgModule({

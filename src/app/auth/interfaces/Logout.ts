@@ -1,7 +1,7 @@
-import { LoginUser } from "./ResLogin";
+import { UserLogin } from "./ResLogin";
 
 class ResLogout{
-  constructor(public msg:string, public ok:boolean, public user:LoginUser){}
+  constructor(public msg:string, public ok:boolean, public user:UserLogin){}
 }
 
 class Logout{

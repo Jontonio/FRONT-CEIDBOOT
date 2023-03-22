@@ -7,11 +7,14 @@ class ResEstudiante{
 
 class Estudiante {
 
-  DNI:string;
+  TipoDocumento:string;
+  Documento:string;
   Nombres:string;
   ApellidoPaterno:string;
   ApellidoMaterno:string;
   Celular:string;
+  Code:string;
+  CodePhone:string;
   Sexo:string;
   FechaNacimiento:string;
   Direccion:string;
@@ -22,11 +25,14 @@ class Estudiante {
   provincia:Provincia;
   distrito:Distrito;
 
-  constructor(DNI:string,
+  constructor(TipoDocumento:string,
+              Documento:string,
               Nombres:string,
               ApellidoPaterno:string,
               ApellidoMaterno:string,
               Celular:string,
+              Code:string,
+              CodePhone:string,
               Sexo:string,
               FechaNacimiento:string,
               Direccion:string,
@@ -37,11 +43,14 @@ class Estudiante {
               provincia:Provincia,
               distrito:Distrito){
 
-                this.DNI = DNI;
+                this.TipoDocumento = TipoDocumento;
+                this.Documento = Documento;
                 this.Nombres = Nombres;
                 this.ApellidoPaterno = ApellidoPaterno;
                 this.ApellidoMaterno = ApellidoMaterno;
                 this.Celular = Celular;
+                this.CodePhone = CodePhone;
+                this.Code = Code;
                 this.Sexo = Sexo;
                 this.FechaNacimiento = FechaNacimiento;
                 this.Direccion = Direccion;

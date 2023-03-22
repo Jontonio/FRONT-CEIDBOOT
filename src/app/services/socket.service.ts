@@ -9,11 +9,7 @@ export class SocketService {
 
   statusServer:boolean = false;
 
-  constructor( private socket:Socket ) {
-
-    this.Onconexion();
-
-  }
+  constructor( private socket:Socket ) {}
 
   OnEvent(event:string):Observable<any>{
 

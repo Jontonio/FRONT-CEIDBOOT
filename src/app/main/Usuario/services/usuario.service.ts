@@ -43,6 +43,10 @@ export class UsuarioService {
     return this.http.patch<ResUsuario>(`${environment.BASE_URL}/usuario/update-usuario/${id}`, data);
   }
 
+  updatePasswordUsuario(id:number, data:any){
+    return this.http.patch<ResUsuario>(`${environment.BASE_URL}/usuario/update-password-usuario/${id}`, data);
+  }
+
   deleteUsuario(Id:number){
     return this.http.delete<ResUsuario>(`${environment.BASE_URL}/usuario/delete-usuario/${Id}`);
   }

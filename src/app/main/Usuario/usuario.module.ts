@@ -11,6 +11,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { AvatarNamePipe } from './pipes/avatar-name.pipe';
 import { FechaAccesoPipe } from './pipes/fecha-acceso.pipe';
+import { MaterialModule } from 'src/app/material/material.module';
+import { SkeletonFormComponent } from './components/skeleton-form/skeleton-form.component';
 
 
 @NgModule({
@@ -20,14 +22,16 @@ import { FechaAccesoPipe } from './pipes/fecha-acceso.pipe';
     AddUsuarioComponent,
     FormUsuarioComponent,
     AvatarNamePipe,
-    FechaAccesoPipe
+    FechaAccesoPipe,
+    SkeletonFormComponent
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     PrimengModule,
     SharedModule,
-    UsuarioRoutingModule
+    UsuarioRoutingModule,
+    MaterialModule
   ]
 })
 export class UsuarioModule { }

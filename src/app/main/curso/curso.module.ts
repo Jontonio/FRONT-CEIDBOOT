@@ -9,6 +9,8 @@ import { FormCursoComponent } from './components/form-curso/form-curso.component
 import { ReactiveFormsModule } from '@angular/forms';
 import { PrimengModule } from 'src/app/primeng/primeng.module';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { materialize } from 'rxjs';
+import { MaterialModule } from 'src/app/material/material.module';
 
 
 @NgModule({
@@ -23,7 +25,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
     CursoRoutingModule,
     ReactiveFormsModule,
     PrimengModule,
-    SharedModule
+    SharedModule,
+    MaterialModule
   ]
 })
 export class CursoModule { }

@@ -16,10 +16,13 @@ import { UsuarioService } from '../../services/usuario.service';
 })
 export class AddUsuarioComponent {
 
+  /** variables ViewChild */
   @ViewChild(FormUsuarioComponent) hijo:FormUsuarioComponent;
-  loadding:boolean = false;
-  tipoOp  :boolean = false;
-  urlLista:string = '/system/usuarios/lista-usuarios';
+
+  /** Variables de clase */
+  loading:boolean;
+  tipoOp  :boolean;
+  urlLista:string;
 
   private createUsuario$:Subscription;
   private updateUsuario$:Subscription;
@@ -27,64 +30,69 @@ export class AddUsuarioComponent {
   constructor(private route:Router,
               public _usuario:UsuarioService,
               private _socket:SocketService,
-              private _msg:MessageService) {}
+              private _msg:MessageService) {
+                this.urlLista = '/system/usuarios/lista-usuarios';
+                this.tipoOp = false;
+                this.loading = false;
+              }
 
-  save(data:optionOperation){
-    this.loadding = true;
-    if(data.option){
-      this.updateUsuario$ = this._usuario.updateUsuario(data.Id!, data.data as Usuario).subscribe({
-        next: (value) => {
-          this.loadding = false;
-          if(value.ok){
-            this.toast('success', value.msg);
-            this._socket.EmitEvent('updated_list_usuario');
-            this.route.navigate([this.urlLista]);
-          }else{
-            this.toast('error','Error al actualizar usuario',value.msg)
-          }
-          this.updateUsuario$.unsubscribe();
-        },
-        error: (e) => {
-          this.loadding = false;
-          this.route.navigate([this.urlLista]);
-          this.messageError(e);
-        },
-      })
-    }else{
-      this.createUsuario$ = this._usuario.createUsuario(data.data as Usuario).subscribe({
-        next: (value) => {
-          this.loadding = false;
-          if(value.ok){
-            this._socket.EmitEvent('updated_list_usuario');
-            this.toast('success', value.msg);
-            this.hijo.resetForm();
-          }else{
-            this.toast('error', value.msg)
-          }
-          this.createUsuario$.unsubscribe();
-        },
-        error: (err) => {
-          this.loadding = false;
-          err.error.message.forEach( (err:string) => {
-            this.toast('error',err,'Error al registrar los datos')
-          })
-        },
-      })
-    }
+  ngOnDestroy(): void {
+    if(this.createUsuario$) this.createUsuario$.unsubscribe()
+    if(this.updateUsuario$) this.updateUsuario$.unsubscribe()
+  }
+
+  toast(severity:string, summary:string, detail:string=''){
+    this._msg.add({severity, summary, detail});
   }
 
   messageError(e:any){
-    if(Array.isArray(e.error.message)){
-      e.error.message.forEach( (e:string) => {
-        this.toast('error',e,'Error de validación de datos')
-      })
-    }else{
-      this.toast('error',e.error.message,`${e.error.error}:${e.error.statusCode}`)
-    }
+    const msg = e.error.message;
+    Array.isArray(msg)?msg.forEach((e:string) => this.toast('error',e,'Error de validación de datos')):
+                                                  this.toast('error',msg,`${e.error.error}:${e.error.statusCode}`)
   }
 
-  toast(type:string, msg:string, detail:string=''){
-    this._msg.add({severity:type, summary:msg, detail});
+  createUsuario(opt:optionOperation){
+    this.createUsuario$ = this._usuario.createUsuario(opt.data as Usuario).subscribe({
+      next: (value) => {
+        this.loading = false;
+        if(!value.ok){
+          this.toast('error', value.msg)
+          return;
+        }
+        this._socket.EmitEvent('updated_list_usuario');
+        this.toast('success', value.msg);
+        this.hijo.resetForm();
+      },
+      error: (e) => {
+        this.loading = false;
+        this.messageError(e);
+      }
+    })
+  }
+
+  updateUsuario(opt:optionOperation){
+    this.updateUsuario$ = this._usuario.updateUsuario(opt.Id!, opt.data as Usuario).subscribe({
+      next: (value) => {
+        this.loading = false;
+        if(!value.ok){
+          this.toast('error', 'Error al actualizar usuario', value.msg)
+          return;
+        }
+        this.toast('success', value.msg);
+        this._socket.EmitEvent('updated_list_usuario');
+        this.route.navigate([this.urlLista]);
+      },
+      error: (e) => {
+        this.loading = false;
+        this.messageError(e);
+        this.route.navigate([this.urlLista]);
+      }
+    })
+  }
+
+  save(opt:optionOperation){
+    this.loading = true;
+    opt.option?this.updateUsuario(opt):this.createUsuario(opt)
   }
 
 }

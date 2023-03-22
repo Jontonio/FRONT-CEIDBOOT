@@ -1,8 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { GrupoService } from 'src/app/main/grupo/services/grupo.service';
-import { GlobalService } from 'src/app/services/global.service';
 
 @Component({
   selector: 'app-list-grupo',
@@ -11,13 +9,13 @@ import { GlobalService } from 'src/app/services/global.service';
 })
 export class ListGrupoComponent {
 
+  /** Variables de clase */
   startPage:number = 0;
 
-  constructor(private _msg:MessageService,
-              public _grupo:GrupoService) {}
+  constructor(private _msg:MessageService, public _grupo:GrupoService) {}
 
   ngOnDestroy(): void {
-    this._grupo.listGrupos$.unsubscribe();
+    if(this._grupo.listGrupos$) this._grupo.listGrupos$.unsubscribe();
   }
 
   paginate(event:any) {
@@ -26,13 +24,9 @@ export class ListGrupoComponent {
   }
 
   messageError(e:any){
-    if(Array.isArray(e.error.message)){
-      e.error.message.forEach( (e:string) => {
-        this.toast('error',e,'Error de validación de datos')
-      })
-    }else{
-      this.toast('error',e.error.message,`${e.error.error}:${e.error.statusCode}`)
-    }
+    const msg = e.error.message;
+    Array.isArray(msg)?msg.forEach((e) => this.toast('error',e,'Error de validación de datos')):
+                                          this.toast('error',msg,`${e.error.error}:${e.error.statusCode}`)
   }
 
   toast(type:string, msg:string, detail:string=''){

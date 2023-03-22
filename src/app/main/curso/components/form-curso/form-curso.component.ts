@@ -27,45 +27,69 @@ export interface Modulo {
 })
 export class FormCursoComponent implements OnInit {
 
+  /** Output and Input variables */
   @Output() dataCurso = new EventEmitter<optionOperation>();
-  @Input() loadding:boolean;
+  @Input() loading:boolean;
 
-  formCurso:FormGroup;
+  /** Variables de clase */
   debouncer = new Subject();
-  nivel          :Nivel [] = [];
-  modulo         :Modulo[] = [];
+  formCurso:FormGroup;
   paisesSugeridos:Pais  [] = [];
+  niveles        :Nivel [] = [];
+  modulo         :Modulo[] = [];
+
+  urlSelectedFlag:string | undefined;
   hayError       :boolean = false;
   isUpdate       :boolean = false;
   selectPais     :Pais | undefined;
-  urlSelectedFlag:string | undefined;
   Id:number;
-  urlLista:string = '/system/cursos/lista-cursos'
-  defaultFlag:string = './assets/images/default-flag.png'
+  urlLista:string;
+  defaultFlag:string;
 
-  constructor(private fb:FormBuilder,
-              private route:Router,
-              private actiRouter:ActivatedRoute,
-              private _msg:MessageService,
-              private _curso:CursoService,
-              private _main:MainService) {
+  constructor(private readonly fb:FormBuilder,
+              private readonly route:Router,
+              private readonly actiRouter:ActivatedRoute,
+              private readonly _msg:MessageService,
+              private readonly _curso:CursoService,
+              private readonly _main:MainService) {
 
     this.createFormCurso();
+    this.createNiveles();
+    this.createModulos();
+    this.urlLista = '/system/cursos/lista-cursos';
+    this.defaultFlag = './assets/images/default-flag.png';
 
-    this.nivel = [
+  }
+
+  ngOnInit(): void {
+
+    this.debouncer
+      .pipe(
+        debounceTime(300)
+      ).subscribe({
+        next:(resp) => {
+          this.getPaises(resp as string);
+        },
+        error:(e) => console.log(e)
+    })
+
+    this.getIdByUdate(this.actiRouter);
+
+  }
+
+  createModulos(){
+    for (let index = 1; index <= 15; index++) {
+      index==1?this.modulo.push({name:`${index} Módulo`, cantidad: index}):
+               this.modulo.push({name:`${index} Módulos`, cantidad: index})
+    }
+  }
+
+  createNiveles(){
+    this.niveles = [
       {name: 'Básico', code: 'Básico'},
       {name: 'Intermedio', code: 'Intermedio'},
       {name: 'Avanzado', code: 'Avanzado'},
     ];
-
-    for (let index = 1; index <= 15; index++) {
-        if(index==1){
-          this.modulo.push({name:`${index} Módulo`, cantidad: index})
-        }else{
-          this.modulo.push({name:`${index} Módulos`, cantidad: index})
-        }
-    }
-
   }
 
   createFormCurso(){
@@ -97,22 +121,6 @@ export class FormCursoComponent implements OnInit {
   }
   get NumModulos(){
     return this.formCurso.controls['NumModulos'];
-  }
-
-  ngOnInit(): void {
-
-    this.debouncer
-      .pipe(
-        debounceTime(300)
-      ).subscribe({
-        next:(resp) => {
-          this.getPaises(resp as string);
-        },
-        error:(e) => console.log(e)
-    })
-
-    this.getIdByUdate(this.actiRouter);
-
   }
 
   teclaPresionada(){
@@ -186,8 +194,9 @@ export class FormCursoComponent implements OnInit {
       return;
     }
 
-    if(!this.selectPais) this.UrlBandera.setValue(this.defaultFlag);
+    if(!this.urlSelectedFlag) this.UrlBandera.setValue(this.defaultFlag);
     this.dataCurso.emit({data:this.formCurso.value, option: this.isUpdate, Id:this.Id });
+
   }
 
   returnLista(){
@@ -201,18 +210,15 @@ export class FormCursoComponent implements OnInit {
     this.urlSelectedFlag = undefined;
   }
 
-  messageError(e:any){
-    if(Array.isArray(e.error.message)){
-      e.error.message.forEach( (e:string) => {
-        this.toast('error',e,'Error de validación de datos')
-      })
-    }else{
-      this.toast('error',e.error.message,`${e.error.error}:${e.error.statusCode}`)
-    }
-  }
-
   toast(type:string, msg:string, detail:string=''){
     this._msg.add({severity:type, summary:msg, detail});
   }
+
+  messageError(e:any){
+    const msg = e.error.message;
+    Array.isArray(msg)?msg.forEach( (e:string) => this.toast('error', e, 'Error de validación de datos')):
+                                                  this.toast('error', msg,`${e.error.error}:${e.error.statusCode}`)
+  }
+
 
 }
