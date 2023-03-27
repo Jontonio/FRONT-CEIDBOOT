@@ -10,6 +10,7 @@ class ResMatricula{
 
 class Matricula {
 
+  Id:number;
   DeclaraJurada:boolean;
   RequiTecnologico:boolean;
   CarCompromiso:boolean;

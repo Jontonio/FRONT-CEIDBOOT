@@ -18,6 +18,7 @@ import { Institucion } from 'src/app/main/matricula/class/Institucion';
 import { MatStepper } from '@angular/material/stepper';
 import { SocketService } from 'src/app/services/socket.service';
 import { Code } from 'src/app/main/grupo/class/Code';
+import { Apoderado } from 'src/app/main/matricula/class/Apoderado';
 
 interface Card {
   name: string,
@@ -39,6 +40,7 @@ export class FormMatriculaComponent implements OnInit {
   displayMayoria:boolean = false;
   estudiaUnajma:boolean = false;
   isUNAJMA:boolean = false;
+  loadGetApoderado:boolean = false;
 
   formEstudiante:FormGroup;
   formMayorEdad:FormGroup;
@@ -89,6 +91,8 @@ export class FormMatriculaComponent implements OnInit {
               }
 
   ngOnInit(): void {
+
+    this._socket.statusServer = true;
 
     this.TipoDocumentoSelected = 'DNI';
 
@@ -548,6 +552,34 @@ export class FormMatriculaComponent implements OnInit {
       this.EscuelaProfe.markAsPristine();
     }
 
+  }
+
+  completeDataApoderado(apoderado:Apoderado){
+    console.log(apoderado)
+    this.NomApoderado.setValue(apoderado.NomApoderado);
+    this.ApellidoPApoderado.setValue(apoderado.ApellidoPApoderado);
+    this.ApellidoMApoderado.setValue(apoderado.ApellidoMApoderado);
+    this.CelApoderado.setValue(apoderado.CelApoderado)
+  }
+
+  searchApoderado(DNI:string){
+    console.log(DNI)
+    if(DNI.length==8 && this.DNIApoderado.valid){
+      this.loadGetApoderado = true;
+      this._global.getApoderado(DNI).subscribe({
+        next: (value) => {
+          this.loadGetApoderado = false;
+          if(value.ok){
+            console.log(value)
+            this.completeDataApoderado(value.data as Apoderado);
+          }
+        },
+        error: (e) => {
+          this.loadGetApoderado = false;
+          console.log(e)
+        }
+      })
+    }
   }
 
   selectedCurso(curso:Curso){

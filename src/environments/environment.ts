@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   // theme
-  BASE_URL:'http://192.168.10.103:3000',
+  BASE_URL:'http://192.168.10.106:3000',
   // "node_modules/primeng/resources/themes/mdc-light-deeppurple/theme.css",
   URL_SOCKET:'http://localhost:3000',
   URL_COUNTRY:'https://restcountries.com/v3.1'

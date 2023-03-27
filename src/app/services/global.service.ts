@@ -7,6 +7,7 @@ import { ResCurso } from '../main/curso/class/Curso';
 import { ResHorario } from '../main/grupo/class/Horario';
 import { ResDenominServicio } from '../denomin-servicio/class/Denomin-servicio';
 import { Matricula, ResMatricula } from '../main/matricula/class/Matricula';
+import { ResApoderado } from '../main/matricula/class/Apoderado';
 
 @Injectable({
   providedIn: 'root'
@@ -59,6 +60,10 @@ export class GlobalService {
 
   getDenominacionServicios():Observable<ResDenominServicio>{
     return this.http.get<ResDenominServicio>(`${environment.BASE_URL}/denomin-servicio/get-lista-denomin-servicios`);
+  }
+
+  getApoderado(DNI:string):Observable<ResApoderado>{
+    return this.http.get<ResApoderado>(`${environment.BASE_URL}/apoderado/get-one-apoderado/${DNI}`);
   }
 
   registerMatricula(data:Matricula):Observable<ResMatricula>{

@@ -13,6 +13,7 @@ import { ModalTipoGrupoComponent } from './components/modal-tipo-grupo/modal-tip
 import { SharedModule } from 'src/app/shared/shared.module';
 import { MaterialModule } from 'src/app/material/material.module';
 import { FormGrupoComponent } from './components/form-grupo/form-grupo.component';
+import { PensionGrupoComponent } from './pages/pension-grupo/pension-grupo.component';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { FormGrupoComponent } from './components/form-grupo/form-grupo.component
     VerGrupoComponent,
     ModalHorarioComponent,
     ModalTipoGrupoComponent,
-    FormGrupoComponent
+    FormGrupoComponent,
+    PensionGrupoComponent
   ],
   imports: [
     CommonModule,

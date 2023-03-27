@@ -65,17 +65,12 @@ export class MenuComponent implements OnInit {
         icon: 'fa-solid fa-house'
       },
       {
-        label: 'None',
-        icon: 'fa-solid fa-people-roof',
-        routerLink:'/system/aulas',
-      },
-      {
-        label: 'Grupos',
+        label: 'Grupos y pensiones',
         icon: 'fa-solid fa-users-rectangle',
         routerLink:'/system/grupos/lista-grupos',
       },
       {
-        label: 'Matriculas y pensiones',
+        label: 'Matriculas',
         icon: 'fa-solid fa-landmark',
         routerLink:'/system/matricula/matriculados'
       },

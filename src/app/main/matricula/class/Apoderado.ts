@@ -4,21 +4,21 @@ class ResApoderado{
 
 class Apoderado {
   Id?:number;
-  DNI:string;
-  Nombres:string;
-  ApellidoPaterno:string;
-  ApellidoMaterno:string;
-  Celular:string;
-  Estado?:boolean;
+  ApellidoMApoderado:string;
+  ApellidoPApoderado:string;
+  CelApoderado:string;
+  DNIApoderado:string;
+  Estado:boolean;
+  NomApoderado:string;
   createdAt:Date;
   updateAt:Date;
 
   constructor(DNI:string, Nombres:string, ApellidoPaterno:string, ApellidoMaterno:string, Celular:string){
-    this.DNI = DNI;
-    this.Nombres = Nombres;
-    this.ApellidoPaterno = ApellidoPaterno;
-    this.ApellidoMaterno = ApellidoMaterno;
-    this.Celular = Celular;
+    this.ApellidoMApoderado = ApellidoMaterno;
+    this.ApellidoPApoderado = ApellidoPaterno;
+    this.CelApoderado = Celular;
+    this.DNIApoderado = DNI
+    this.NomApoderado = Nombres;
   }
 
 }

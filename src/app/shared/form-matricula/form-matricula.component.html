@@ -220,11 +220,12 @@
           <div class="col-12">
             <label for="DNIApoderado" class="block mb-2">DNI Apoderado</label>
             <div class="p-inputgroup">
-            <span class="p-inputgroup-addon"><i [class]="loadGetData?'pi pi-spin pi-spinner':'pi pi-id-card'"></i></span>
+            <span class="p-inputgroup-addon"><i [class]="loadGetApoderado?'pi pi-spin pi-spinner':'pi pi-id-card'"></i></span>
             <input id="DNIApoderado"
                   class="p-fluid p-grid p-formgrid input-form"
                   type="text"
                   autocomplete="off"
+                  (ngModelChange)="searchApoderado($event)"
                   [maxlength]="8"
                   formControlName="DNIApoderado"
                   pInputText/>
@@ -333,17 +334,6 @@
                   class="p-error">El campo de curso <strong>requerido</strong></small>
         </div>
         <div class="col-12">
-          <label for="Modalidad" class="block mb-2">Modalidad</label>
-          <p-dropdown class="p-fluid p-grid p-formgrid"
-                      formControlName="Modalidad"
-                      [options]="_main.modalidades"
-                      placeholder="Selececione"
-                      optionValue="value"
-                      optionLabel="name"></p-dropdown>
-          <small *ngIf="Modalidad.hasError('required') && Modalidad.dirty"
-                  class="p-error">El campo modalidad es <strong>requerido</strong></small>
-        </div>
-        <div class="col">
           <label for="Horario" class="block mb-2">Horario</label>
             <p-dropdown class="p-fluid p-grid p-formgrid"
                         [options]="listHorarios"
@@ -366,6 +356,17 @@
             </p-dropdown>
             <small *ngIf="Horario.hasError('required') && Horario.dirty"
                   class="p-error">El horario es <strong>requerido</strong></small>
+        </div>
+        <div class="col-12">
+          <label for="Modalidad" class="block mb-2">Modalidad</label>
+          <p-dropdown class="p-fluid p-grid p-formgrid"
+                      formControlName="Modalidad"
+                      [options]="_main.modalidades"
+                      placeholder="Selececione"
+                      optionValue="value"
+                      optionLabel="name"></p-dropdown>
+          <small *ngIf="Modalidad.hasError('required') && Modalidad.dirty"
+                  class="p-error">El campo modalidad es <strong>requerido</strong></small>
         </div>
       </div>
       <br>

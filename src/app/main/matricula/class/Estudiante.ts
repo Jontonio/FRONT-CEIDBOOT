@@ -6,7 +6,7 @@ class ResEstudiante{
 }
 
 class Estudiante {
-
+  Id:number;
   TipoDocumento:string;
   Documento:string;
   Nombres:string;

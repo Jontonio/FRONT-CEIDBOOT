@@ -36,7 +36,9 @@ export class ListUsuarioComponent {
 
 
   ngOnDestroy(): void {
-    this._usuario.listUsuarios$.unsubscribe();
+    if(this.deleteUser$) this.deleteUser$.unsubscribe();
+    if(this.enableUser$) this.enableUser$.unsubscribe();
+    if(this._usuario.listUsuarios$) this._usuario.listUsuarios$.unsubscribe();
   }
 
   /**
@@ -72,19 +74,7 @@ export class ListUsuarioComponent {
         icon: 'pi pi-info-circle',
         accept: () => {
           if(this.imAuth?.Id != usuario.Id){
-            this.enableUser$ = this._usuario.enableUsuario(usuario.Id!,!usuario.Habilitado).subscribe({
-              next: (value) => {
-                if(value.ok){
-                  this.toast('success',value.msg);
-                  this._socket.EmitEvent('updated_list_usuario');
-                }
-                this.enableUser$.unsubscribe();
-              },
-              error: (e) => {
-                console.log(e);
-                this.messageError(e);
-              }
-            })
+            this.enableUsuario(usuario);
           }else{
             this.toast('error','Inhabilitación','No se puede realizar la autoinhabilitación');
           }
@@ -96,6 +86,21 @@ export class ListUsuarioComponent {
     });
   }
 
+  enableUsuario(usuario:Usuario){
+    this.enableUser$ = this._usuario.enableUsuario(usuario.Id!,!usuario.Habilitado).subscribe({
+      next: (value) => {
+        if(!value.ok){
+          return;
+        }
+        this.toast('success',value.msg);
+        this._socket.EmitEvent('updated_list_usuario');
+      },
+      error: (e) => {
+        console.log(e);
+        this.messageError(e);
+      }
+    })
+  }
   /**
    * It's a function that receives a user object and displays a confirmation dialog to the user
    * @param {Usuario} usuario - Usuario
@@ -108,19 +113,7 @@ export class ListUsuarioComponent {
         icon: 'pi pi-info-circle',
         accept: () => {
           if(this.imAuth?.Id!=Id){
-            this.deleteUser$ = this._usuario.deleteUsuario(Id!).subscribe({
-              next: (value) => {
-                if(value.ok){
-                  this.toast('success','Eliminación',value.msg);
-                  this._socket.EmitEvent('updated_list_usuario');
-                }
-                this.deleteUser$.unsubscribe();
-              },
-              error: (e) => {
-                console.log(e);
-                this.messageError(e);
-              }
-            })
+            this.deleteUsuario(Id!);
           }else{
             this.toast('error','Eliminación','No se puede realizar la autoeliminación');
           }
@@ -130,6 +123,22 @@ export class ListUsuarioComponent {
         },
         key: "deleteUsuarioDialog"
     });
+  }
+
+  deleteUsuario(Id:number){
+    this.deleteUser$ = this._usuario.deleteUsuario(Id!).subscribe({
+      next: (value) => {
+        if(!value.ok){
+          return;
+        }
+        this.toast('success','Eliminación',value.msg);
+        this._socket.EmitEvent('updated_list_usuario');
+      },
+      error: (e) => {
+        console.log(e);
+        this.messageError(e);
+      }
+    })
   }
 
   messageError(e:any){

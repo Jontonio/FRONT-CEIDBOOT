@@ -4,6 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { Observable, Subscription } from "rxjs";
 import { Matricula, ResMatricula } from "../class/Matricula";
 import { SocketService } from "src/app/services/socket.service";
+import { ResAddEnGrupo } from "../class/AlumnoEnGrupo";
 
 @Injectable({
   providedIn:'root'
@@ -22,6 +23,14 @@ export class MatriculaService{
 
   getAllMatriculados(limit:number = 5, offset:number = 0):Observable<ResMatricula>{
     return this.http.get<ResMatricula>(`${environment.BASE_URL}/matricula/get-matriculas-estudiantes?limit=${limit}&offset=${offset}`);
+  }
+
+  removeMatriculado(Id:number){
+    return this.http.delete<ResMatricula>(`${environment.BASE_URL}/matricula/remove-matriculado/${Id}`);
+  }
+
+  addAlumnoEnGrupo(data:any){
+    return this.http.post<ResAddEnGrupo>(`${environment.BASE_URL}/estudiante-en-grupo/add-estudiante-en-grupo`, data);
   }
 
   /**

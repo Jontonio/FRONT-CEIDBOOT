@@ -35,6 +35,7 @@
                 <th pSortableColumn="NivelCurso">Nivel <p-sortIcon field="NivelCurso"></p-sortIcon></th>
                 <th>Cant. Módulos</th>
                 <th>Descripción del curso</th>
+                <th>Estado curso</th>
                 <th>Operación</th>
               </tr>
           </ng-template>
@@ -46,21 +47,37 @@
                 <td>{{curso.NivelCurso | titlecase}}</td>
                 <td>{{curso.NumModulos}}</td>
                 <td>
-                  <p-tag styleClass="mr-2" severity="info">{{curso.DescripcionCurso | slice:0:30 }}...</p-tag>
+                  <p-tag styleClass="mr-2" severity="info">{{curso.DescripcionCurso}}</p-tag>
                 </td>
                 <td>
-                  <button pButton
-                          pRipple
-                          type="button"
-                          (click)="dialogDelete(curso)"
-                          class="p-button-danger p-button-text">
-                          <i class="pi pi-delete-left"></i> Eliminar</button>
-                  <button pButton
-                          pRipple
-                          type="button"
-                          [routerLink]="['/system/cursos/editar-curso', curso.Id]"
-                          class="p-button-text p-button-plain">
-                          <i class="pi pi-pencil mr-2"></i> Editar</button>
+                  <div *ngIf="curso.EstadoApertura else disable">
+                    <button mat-raised-button
+                            (click)="cursoApertura(curso)">
+                            <i class="fa-solid fa-lock-open"></i> Aperturado
+                    </button>
+                  </div>
+                  <ng-template #disable>
+                    <button mat-raised-button
+                            (click)="cursoApertura(curso)"
+                            color="warn">
+                            <i class="fa-solid fa-lock"></i> Cerrado
+                    </button>
+                  </ng-template>
+                </td>
+                <td>
+                  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item [routerLink]="['/system/cursos/editar-curso', curso.Id]">
+                      <mat-icon><i class="fa-solid fa-pen-to-square"></i></mat-icon>
+                      <span>Editar curso</span>
+                    </button>
+                    <button mat-menu-item (click)="dialogDelete(curso)">
+                      <mat-icon><i class="fa-solid fa-trash-can"></i></mat-icon>
+                      <span>Dar de baja al curso</span>
+                    </button>
+                  </mat-menu>
                 </td>
               </tr>
           </ng-template>
@@ -91,6 +108,14 @@
 <!-- Disable and enable dialog  -->
 <p-confirmDialog [style]="{width: '50vw'}"
                  key="deleteCursoDialog"
+                 [position]="position"
+                 [baseZIndex]="10000"
+                 acceptLabel="Confirmar"
+                 [breakpoints]="{'960px': '75vw', '640px': '100vw'}"
+                 rejectButtonStyleClass="p-button-outlined"></p-confirmDialog>
+<!-- Apertura and enable dialog  -->
+<p-confirmDialog [style]="{width: '50vw'}"
+                 key="cursoAperturaDialog"
                  [position]="position"
                  [baseZIndex]="10000"
                  acceptLabel="Confirmar"

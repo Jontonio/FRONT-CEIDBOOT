@@ -261,28 +261,25 @@ footer{
 .mat-menu-item{
   color: var(--text-color);
 }
-// .mat-vertical-stepper-content{
-//   overflow: visible !important;
-// }
-// .mat-step{
-//   background: var(--surface-e) !important;
-// }
-// .mat-step-header{
-//   background: var(--surface-e);
-// }
-// .mat-step-text-label{
-//   color: var(--text-color);
-// }
-// .mat-step-header:hover{
-//   background: var(--surface-e) !important;
-// }
-// .mat-step-header:focus{
-//   background: var(--surface-b) !important;
-// }
-// .content-step-form{
-//   overflow: hidden !important;
-// }
-
+.mat-primary .mat-option.mat-selected:not(.mat-option-disabled){
+  background: var(--surface-a);
+}
+.mat-selected, .mat-active{
+  background: var(--surface-e);
+  color: var(--text-color);
+}
+.mat-select-value{
+  color: var(--text-color);
+}
+.mat-form-field-infix{
+  margin-top: -10px;
+}
+.mat-form-field-wrapper{
+  height: 50px;
+}
+.mat-select-placeholder{
+  color: var(--text-color);
+}
 @media only screen and (max-width: 767px) {
   /* Estilos para teléfonos móviles aquí */
   .image-login{
@@ -330,6 +327,11 @@ footer{
   .content-navbar{
     position: fixed;
   }
+  mat-form-field{
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
 }
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   /* Estilos para tabletas en modo retrato aquí */

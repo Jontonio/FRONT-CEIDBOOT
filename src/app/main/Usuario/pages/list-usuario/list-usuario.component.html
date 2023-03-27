@@ -73,10 +73,10 @@
                            [value]="usuario.rol.TipoRol" [rounded]="true"></p-tag>
                   </td>
                   <td>
-                    <button pButton
+                    <button *ngIf="usuario.Habilitado else disable"
+                            pButton
                             pRipple
                             type="button"
-                            *ngIf="usuario.Habilitado else disable"
                             [disabled]="imAuth?.Id==usuario.Id?true:false"
                             (click)="Inhabilitar(usuario, usuario.Habilitado)"
                             label="habilitado"
@@ -89,6 +89,7 @@
                               (click)="Inhabilitar(usuario, usuario.Habilitado)"
                               class="p-button-outlined p-button-rounded p-button-danger"></button>
                     </ng-template>
+                  </td>
                   <td class="text-center">
                     <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
                       <mat-icon>more_vert</mat-icon>

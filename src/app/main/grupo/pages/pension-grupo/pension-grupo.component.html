@@ -1,5 +1,5 @@
 <div class="main p-4 animate__animated animate__fadeIn">
-  <p-card header="Lista de grupos y pensiones">
+  <p-card header="Lista de estudiantes en grupo">
     <div class="flex justify-content-center justify-content-between">
       <div class="col-6">
         <span class="p-input-icon-left">
@@ -11,54 +11,65 @@
       </div>
       <div class="col-6 flex justify-content-end">
         <div>
-          <button pButton
+          <!-- <button pButton
                   pRipple
                   type="button"
                   icon="fa-solid fa-plus"
                   label="Grupo"
                   routerLink="/system/grupos/add-grupo"
-                  class="p-button-rounded"></button>
+                  class="p-button-rounded"></button> -->
         </div>
       </div>
     </div>
     <div class="grid content">
       <div class="col table-responsive">
-        <p-table [value]="_grupo.listGrupos" responsiveLayout="scroll" [rowHover]="true">
+        <p-table [value]="listaEstudiantes" responsiveLayout="scroll" [rowHover]="true">
           <ng-template pTemplate="header">
               <tr>
-                <th>Cód.</th>
-                <th>Bandera</th>
-                <th>Nombre</th>
-                <th>Curso</th>
-                <th>Nivel</th>
-                <th>Horario</th>
-                <th>Modalidad</th>
-                <th>Fecha Inicio - Finalizaión</th>
-                <th>Max. alumnos</th>
-                <th>Num. alumnos</th>
-                <th>Docente asignado</th>
-                <th>Operación</th>
+                <th>N°</th>
+                <th>Nombres y apellidos</th>
+                <th>Celular - Email</th>
+                <th>Estado matricula</th>
+                <th>Tipo población</th>
+                <th>Matricula</th>
+                <th>Pensión</th>
+                <!-- <th>Curso</th> -->
+                <!-- <th>Nivel</th> -->
+                <!-- <th>Horario</th> -->
+                <!-- <th>Modalidad</th> -->
+                <!-- <th>Fecha Inicio - Finalizaión</th> -->
+                <!-- <th>Max. alumnos</th> -->
+                <!-- <th>Num. alumnos</th> -->
+                <!-- <th>Docente asignado</th> -->
+                <!-- <th>Operación</th> -->
               </tr>
           </ng-template>
           <ng-template pTemplate="body" let-grupo let-rowIndex="rowIndex">
               <tr class="select-tr">
-                  <td>G-{{grupo.Id}}</td>
-                  <td><img class="img-flag" [src]="grupo.curso.UrlBandera" alt="" srcset=""></td>
-                  <td>{{grupo.tipoGrupo.NombreGrupo | titlecase}}</td>
-                  <td>{{grupo.curso.NombreCurso | titlecase}}</td>
-                  <td>{{grupo.curso.NivelCurso | titlecase}}</td>
-                  <td>{{grupo.horario.HoraInicio | date:'h:mm a'}} - {{grupo.horario.HoraFinal | date:'h:mm a'}}</td>
-                  <td>{{grupo.Modalidad}}</td>
+                  <td>{{rowIndex+1}}</td>
                   <td>
+                      {{grupo.estudiante.Nombres | titlecase}}
+                      {{grupo.estudiante.ApellidoPaterno | titlecase}}
+                      {{grupo.estudiante.ApellidoMaterno | titlecase}}</td>
+                  <td>{{grupo.estudiante.CodePhone}} {{grupo.estudiante.Celular}} <br> {{grupo.estudiante.Email}} </td>
+                  <td><p-tag severity="success">{{grupo.matricula.EstadoMatricula}}</p-tag></td>
+                  <td>{{grupo.matricula.denomiServicio.Descripcion}}</td>
+                  <td>S/. {{grupo.matricula.denomiServicio.MontoMatricula}}</td>
+                  <td>S/. {{grupo.matricula.denomiServicio.MontoPension}}</td>
+                  <!-- <td>{{grupo.curso.NombreCurso | titlecase}}</td> -->
+                  <!-- <td>{{grupo.curso.NivelCurso | titlecase}}</td> -->
+                  <!-- <td>{{grupo.horario.HoraInicio | date:'h:mm a'}} - {{grupo.horario.HoraFinal | date:'h:mm a'}}</td> -->
+                  <!-- <td>{{grupo.Modalidad}}</td> -->
+                  <!-- <td>
                     <p-tag icon="pi pi-calendar"
                            [rounded]="true"
                            severity="info">
                            <span class="m-1">{{grupo.FechaInicioGrupo | date}} a {{grupo.FechaFinalGrupo | date}}</span></p-tag>
-                  </td>
-                  <td>{{grupo.MaximoEstudiantes}}</td>
-                  <td>{{grupo.NumeroEstudiantes}}</td>
-                  <td>{{grupo.docente.Nombres | titlecase}} {{grupo.docente.ApellidoPaterno | titlecase}}</td>
-                  <td>
+                  </td> -->
+                  <!-- <td>{{grupo.MaximoEstudiantes}}</td> -->
+                  <!-- <td>{{grupo.NumeroEstudiantes}}</td> -->
+                  <!-- <td>{{grupo.docente.Nombres | titlecase}} {{grupo.docente.ApellidoPaterno | titlecase}}</td> -->
+                  <!-- <td>
                     <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
                       <mat-icon>more_vert</mat-icon>
                     </button>
@@ -80,27 +91,27 @@
                         <span>Dar de grupo</span>
                       </button>
                     </mat-menu>
-                  </td>
+                  </td> -->
               </tr>
           </ng-template>
         </p-table>
         <div>
-          <div class="mt-4" *ngIf="_grupo.respGrupo && _grupo.respGrupo.count">
+          <div class="mt-4" *ngIf="resAlumnoEnGrupo && resAlumnoEnGrupo.count">
             <div class="grid content">
               <div class="col-12 md:col-3">
-                  <p class="text-muted">Total de grupos: {{_grupo.respGrupo.count}}</p>
+                  <p class="text-muted">Total de grupos: {{resAlumnoEnGrupo.count}}</p>
               </div>
               <div class="col-12 md:col-6">
                 <p-paginator [rows]="5"
-                             [totalRecords]="_grupo.respGrupo.count!"
+                             [totalRecords]="resAlumnoEnGrupo.count!"
                              [rowsPerPageOptions]="[5,10,15,20]"
                              (onPageChange)="paginate($event)"></p-paginator>
               </div>
               <div class="col-12 md:col-3"></div>
             </div>
           </div>
-          <app-loadding *ngIf="_grupo.loadingLista && _grupo.listGrupos.length==0" msg="Lista de grupos"></app-loadding>
-          <app-lista-vacia *ngIf="_grupo.listGrupos.length==0 && !_grupo.loadingLista" msg="No se encontraron grupos registrados"></app-lista-vacia>
+          <app-loadding *ngIf="loadingLista && listaEstudiantes.length==0" msg="Lista de grupos"></app-loadding>
+          <app-lista-vacia *ngIf="listaEstudiantes.length==0 && !loadingLista" msg="No se encontraron grupos registrados"></app-lista-vacia>
         </div>
       </div>
     </div>

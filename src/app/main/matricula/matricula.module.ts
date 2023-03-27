@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { MatriculaRoutingModule } from './matricula-routing.module';
 import { MatriculaComponent } from './pages/matricula/matricula.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PrimengModule } from 'src/app/primeng/primeng.module';
 import { ListMatriculaComponent } from './pages/list-matricula/list-matricula.component';
 import { AddMatriculaComponent } from './pages/add-matricula/add-matricula.component';
@@ -22,6 +22,7 @@ import { MaterialModule } from 'src/app/material/material.module';
     CommonModule,
     MatriculaRoutingModule,
     ReactiveFormsModule,
+    FormsModule,
     PrimengModule,
     SharedModule,
     HttpClientModule,

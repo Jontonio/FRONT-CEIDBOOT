@@ -12,7 +12,7 @@ export class ListGrupoComponent {
   /** Variables de clase */
   startPage:number = 0;
 
-  constructor(private _msg:MessageService, public _grupo:GrupoService) {}
+  constructor(private readonly _msg:MessageService, public readonly _grupo:GrupoService) {}
 
   ngOnDestroy(): void {
     if(this._grupo.listGrupos$) this._grupo.listGrupos$.unsubscribe();

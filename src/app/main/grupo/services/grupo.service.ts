@@ -5,6 +5,7 @@ import { Observable, Subscription } from 'rxjs';
 import { HttpClient } from "@angular/common/http";
 import { Grupo, ResGrupo, ResTipoGrupo } from '../class/Grupo';
 import { SocketService } from 'src/app/services/socket.service';
+import { ResAddEnGrupo } from '../../matricula/class/AlumnoEnGrupo';
 
 
 @Injectable({
@@ -60,6 +61,10 @@ export class GrupoService{
     return this.http.get<ResHorario>(`${environment.BASE_URL}/horario/get-horarios`);
   }
 
+  getEstudiantesEnGrupoEspecifico(Id:number, limit:number = 5, offset:number = 0):Observable<ResAddEnGrupo>{
+    return this.http.get<ResAddEnGrupo>(`${environment.BASE_URL}/estudiante-en-grupo/get-estudiantes-en-grupo-especifico/${Id}?limit=${limit}&offset=${offset}`);
+  }
+
   /** Listen Sockets */
 
   OnGrupos(){
@@ -101,5 +106,6 @@ export class GrupoService{
       error: (e) => console.log(e)
     })
   }
+
 
 }

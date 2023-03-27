@@ -11,6 +11,7 @@ class Curso {
   DescripcionCurso: string;
   NumModulos: number;
   Estado?: boolean;
+  EstadoApertura:boolean;
   createdAt?: string;
   updatedAt?: string;
 

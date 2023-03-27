@@ -55,6 +55,40 @@ export class ListCursoComponent {
     });
   }
 
+  cursoApertura(curso:Curso) {
+    this.position = 'top';
+    let msgConfirm = (!curso.EstadoApertura)?'aperturar el curso':'cerrar el curso';
+    let msgoptions = (!curso.EstadoApertura)?'serán':'no serán';
+
+    this._confService.confirm({
+        message: `¿Está seguro de ${msgConfirm} de <b>${curso.NombreCurso}</b>?<br>
+                  una vez confirmado los cursos ${msgoptions} públicos`,
+        header: `Confirmación de la ${msgConfirm}`,
+        icon: 'pi pi-info-circle',
+        accept: () => {
+          const newCurso = curso;
+          newCurso.EstadoApertura = !curso.EstadoApertura;
+          this.updateCurso(newCurso, newCurso.Id!);
+        },
+        reject: (type:any) => {
+          console.log("No eliminar");
+        },
+        key: "cursoAperturaDialog"
+    });
+  }
+
+  updateCurso(curso:Curso, Id:number){
+    this._curso.updateCurso(Id, curso).subscribe({
+      next: (value) => {
+        if(!value.ok){ return; }
+        this._socket.EmitEvent('updated_list_curso');
+      },
+      error: (e) => {
+        console.log(e)
+      },
+    })
+  }
+
   deleteCurso(Id:number){
     this.deleteCurso$ = this._curso.deleteCurso(Id!).subscribe({
       next: (value) => {
