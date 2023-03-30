@@ -5,6 +5,15 @@ class ResEstudiante{
   constructor(public msg:string, public  ok:boolean, public data: Estudiante | Estudiante[], public count?:number){}
 }
 
+class ResEmailDocEstudiante{
+  constructor(public msg:string, public  ok:boolean, public data: Estudiante){}
+}
+
+interface EmailDocumento {
+  Documento: string;
+  Email: string;
+}
+
 class Estudiante {
   Id:number;
   TipoDocumento:string;
@@ -64,4 +73,4 @@ class Estudiante {
 }
 
 
-export { Estudiante, ResEstudiante }
+export { Estudiante, ResEstudiante, ResEmailDocEstudiante, EmailDocumento }

@@ -15,7 +15,7 @@ import { DenominServicio } from 'src/app/denomin-servicio/class/Denomin-servicio
 import { Matricula } from 'src/app/main/matricula/class/Matricula';
 import { Estudiante } from 'src/app/main/matricula/class/Estudiante';
 import { Institucion } from 'src/app/main/matricula/class/Institucion';
-import { MatStepper } from '@angular/material/stepper';
+import { MatStepper, MatStepperNext } from '@angular/material/stepper';
 import { SocketService } from 'src/app/services/socket.service';
 import { Code } from 'src/app/main/grupo/class/Code';
 import { Apoderado } from 'src/app/main/matricula/class/Apoderado';
@@ -34,6 +34,7 @@ interface Card {
 export class FormMatriculaComponent implements OnInit {
 
   @ViewChild('stepper') stepper:MatStepper;
+  @ViewChild('nexButton') nexButton:MatStepperNext;
 
   isUpdate:boolean       = false;
   loadGetData:boolean    = false;
@@ -77,6 +78,8 @@ export class FormMatriculaComponent implements OnInit {
   TipoDocumentoSelected:string;
   selecInstitucion:Institucion;
   country:Code;
+  today:Date;
+  hayError:boolean;
 
   constructor(private fb:FormBuilder,
               private readonly _global:GlobalService,
@@ -93,8 +96,8 @@ export class FormMatriculaComponent implements OnInit {
   ngOnInit(): void {
 
     this._socket.statusServer = true;
-
     this.TipoDocumentoSelected = 'DNI';
+    this.hayError = false;
 
     this.optionSexo = [
       { name:'Masculino', code:'masculino' },
@@ -128,7 +131,7 @@ export class FormMatriculaComponent implements OnInit {
 
     this.msgTooltipEmail = 'Es de suma importancia que verifique que esté correctamente escrito, para el envío de información académica';
     this.msgTooltipCel = 'Es de suma importancia que el número tenga una cuenta de WhatsApp'
-
+    this.today = new Date();
     this.getListCursos();
     this.getListHorarios();
     this.getListDenominServicio();
@@ -289,7 +292,6 @@ export class FormMatriculaComponent implements OnInit {
   getListCursos(){
     this.listCursos$ = this._global.getCursosMatricula().subscribe({
       next: (resp) => {
-        console.log(resp)
         if(resp.ok){
           this.listCursos = resp.data as Array<Curso>;
         }
@@ -322,32 +324,92 @@ export class FormMatriculaComponent implements OnInit {
     })
   }
 
+  completeDataEstudiante(estudiante:Estudiante){
+    // parsing fecha nacimiento
+    const fechaNacimiento = moment(estudiante.FechaNacimiento);
+    // complete data estudiante
+    this.Nombres.setValue(estudiante.Nombres);
+    this.TipoDocumento.setValue(estudiante.TipoDocumento);
+    this.Nombres.setValue(estudiante.Nombres);
+    this.ApellidoPaterno.setValue(estudiante.ApellidoPaterno);
+    this.ApellidoMaterno.setValue(estudiante.ApellidoMaterno);
+    this.FechaNacimiento.setValue(fechaNacimiento.toDate());
+    this.Sexo.setValue(estudiante.Sexo);
+    this.Direccion.setValue(estudiante.Direccion);
+    this.Celular.setValue(estudiante.Celular);
+    this.Email.setValue(estudiante.Email);
+    this.Departamento.setValue(estudiante.departamento);
+    this.Provincia.setValue(estudiante.provincia);
+    this.Distrito.setValue(estudiante.distrito);
+    this.getOneCountryCode(estudiante.Code);
+    //verificar si alumno es mayor
+    this.EsMayor.setValue(estudiante.EsMayor);
+    (!this.EsMayor.value)?this.completeDataApoderado(estudiante.apoderado):'';
+  }
+
   completeData(estudiante:Person){
     this.formEstudiante.controls['Nombres'].setValue(estudiante.nombres);
     this.formEstudiante.controls['ApellidoPaterno'].setValue(estudiante.apellidoPaterno);
     this.formEstudiante.controls['ApellidoMaterno'].setValue(estudiante.apellidoMaterno);
   }
 
-  Reniec(documento:string=''){
+  searchEstudiante(documento:string=''){
+
     if(!documento) return;
-    if(documento.length==8 && this.TipoDocumento.value=='DNI' && this.Documento.valid){
-      this.loadGetData = true;
-      this._global.apiReniec(documento).subscribe({
-        next: (value) => {
-          if(value.ok){
-            this.completeData(value.data);
-            this.toast('success',value.msg,'Datos consultados a RENIEC')
-          }else{
-            this.toast('warn',value.msg,'Datos consultados a RENIEC')
-          }
-          this.loadGetData = false;
-        },
-        error: (e) => {
-          this.loadGetData = false;
-          console.log(e);
-        }
-      })
+
+    if(this.TipoDocumento.value=='DNI' && documento.length==8 && this.Documento.valid){
+      this.getEstudiante(documento);
     }
+
+    if(this.TipoDocumento.value=='CDE' && this.Documento.valid){
+      this.getEstudiante(documento, false);
+    }
+
+  }
+
+  getEstudiante(documento:string, isPeru:boolean = true){
+
+    this.loadGetData = true;
+
+    this._global.getEstudiante(documento).subscribe({
+      next: (value) => {
+        if(value.ok){
+          //TODO: estudiante existe
+          console.log(value.data)
+          this.toast('info', value.msg);
+          this.completeDataEstudiante(value.data as Estudiante);
+          this.loadGetData = false;
+        }else{
+          //TODO: estudinate no existe
+          this.getDataReniec(documento, isPeru);
+        }
+      },
+      error: (err) => {
+
+      }
+    })
+  }
+
+  getDataReniec(documento:string, isPeru:boolean = true){
+
+    if(!isPeru) return;
+
+    this._global.apiReniec(documento).subscribe({
+      next: (value) => {
+        if(value.ok){
+          this.completeData(value.data);
+          this.toast('success',value.msg,'Datos consultados a RENIEC')
+        }else{
+          this.toast('warn',value.msg,'Datos consultados a RENIEC')
+        }
+        this.loadGetData = false;
+      },
+      error: (e) => {
+        this.loadGetData = false;
+        console.log(e);
+      }
+    })
+
   }
 
   getDepartamentos(){
@@ -386,12 +448,32 @@ export class FormMatriculaComponent implements OnInit {
   }
 
   validFormEstudent(){
+
     if(this.formEstudiante.invalid){
       Object.keys(this.formEstudiante.controls).forEach( inputName => {
         this.formEstudiante.controls[inputName].markAsDirty();
       })
       return;
     }
+
+    this._global.getEmailDocEstudiante({Documento:this.Documento.value, Email: this.Email.value})
+      .subscribe({
+      next: (value) => {
+        if(!value.ok){
+          this.toast('error', value.msg);
+          this.Email.setErrors({notUnique:true});
+          this.hayError = true;
+        }else{
+          this.hayError = false;
+          this._msg.clear('message-matricula');
+        }
+      },
+      error: (e) => {
+        console.log(e)
+        this.messageError(e);
+      }
+    })
+
   }
 
   validFormMayoria(){
@@ -424,7 +506,6 @@ export class FormMatriculaComponent implements OnInit {
   validEdad(fechaNaci:Date){
     if(this.FechaNacimiento.valid){
       const fechaNacimiento = moment(fechaNaci);
-      console.log(fechaNacimiento.year())
       const edad = moment().year() - fechaNacimiento.year()
       if(edad < 18 ){
         this.displayMayoria = true;
@@ -494,6 +575,7 @@ export class FormMatriculaComponent implements OnInit {
                                     estudiante,
                                     this.Poblacion.value,
                                     this.Curso.value,
+                                    this.Horario.value,
                                     institucion);
     this._global.registerMatricula(matricula).subscribe({
       next:(value) => {
@@ -501,10 +583,14 @@ export class FormMatriculaComponent implements OnInit {
           this.stepper.reset();
           this.toast('success', value.msg);
           this._socket.EmitEvent('updated_list_matriculados');
+        }else{
+          this.toast('warn', value.msg);
         }
-        console.log(value)
       },
-      error:(e) => this.messageError(e)
+      error:(e) => {
+        console.log(e)
+        this.messageError(e)
+      }
     })
 
   }
@@ -555,7 +641,7 @@ export class FormMatriculaComponent implements OnInit {
   }
 
   completeDataApoderado(apoderado:Apoderado){
-    console.log(apoderado)
+    // this.DNIApoderado.setValue(apoderado.DNIApoderado);
     this.NomApoderado.setValue(apoderado.NomApoderado);
     this.ApellidoPApoderado.setValue(apoderado.ApellidoPApoderado);
     this.ApellidoMApoderado.setValue(apoderado.ApellidoMApoderado);
@@ -563,7 +649,6 @@ export class FormMatriculaComponent implements OnInit {
   }
 
   searchApoderado(DNI:string){
-    console.log(DNI)
     if(DNI.length==8 && this.DNIApoderado.valid){
       this.loadGetApoderado = true;
       this._global.getApoderado(DNI).subscribe({
@@ -582,6 +667,17 @@ export class FormMatriculaComponent implements OnInit {
     }
   }
 
+  getOneCountryCode(code:string){
+    this._main.getOneCountryByCode(code).subscribe({
+      next: (resp) => {
+        if(resp.length!=0){
+          this.country = resp[0];
+        }
+      },
+      error:(e) => console.log(e)
+    })
+  }
+
   selectedCurso(curso:Curso){
     this.selecCurso = curso;
   }
@@ -598,8 +694,8 @@ export class FormMatriculaComponent implements OnInit {
     this.country = country;
   }
 
-  toast(type:string, msg:string, detail:string=''){
-    this._msg.add({severity:type, summary:msg, detail});
+  toast(severity:string, summary:string, detail:string=''){
+    this._msg.add({severity, summary, detail, key:'message-matricula'});
   }
 
   messageError(e:any){

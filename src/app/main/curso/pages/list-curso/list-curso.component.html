@@ -24,7 +24,6 @@
         </div>
       </div>
     </div>
-    <div class="grid content">
       <div class="col table-responsive">
         <p-table [value]="_curso.listCursos" responsiveLayout="scroll" [rowHover]="true">
           <ng-template pTemplate="header">
@@ -82,26 +81,25 @@
               </tr>
           </ng-template>
         </p-table>
-        <div>
-          <div class="mt-4" *ngIf="_curso.respCurso && _curso.respCurso.count">
-            <div class="grid content">
-              <div class="col-12 md:col-3">
-                  <p class="text-muted">Total de cursos: {{_curso.respCurso.count}}</p>
-              </div>
-              <div class="col-12 md:col-6">
-                <p-paginator [rows]="5"
-                             [totalRecords]="_curso.respCurso.count!"
-                             [rowsPerPageOptions]="[5,10,15,20]"
-                             (onPageChange)="paginate($event)"></p-paginator>
-              </div>
-              <div class="col-12 md:col-3"></div>
-            </div>
-          </div>
-          <app-loadding *ngIf="_curso.loadingLista && _curso.listCursos.length==0" msg="Lista de cursos"></app-loadding>
-          <app-lista-vacia *ngIf="_curso.listCursos.length==0 && !_curso.loadingLista" msg="No se encontraron cursos registrados"></app-lista-vacia>
-        </div>
       </div>
-    </div>
+      <div>
+        <div class="mt-4" *ngIf="_curso.respCurso && _curso.respCurso.count">
+          <div class="grid content">
+            <div class="col-12 md:col-3">
+                <p class="text-muted">Total de cursos: {{_curso.respCurso.count}}</p>
+            </div>
+            <div class="col-12 md:col-6">
+              <p-paginator [rows]="5"
+                            [totalRecords]="_curso.respCurso.count!"
+                            [rowsPerPageOptions]="[5,10,15,20]"
+                            (onPageChange)="paginate($event)"></p-paginator>
+            </div>
+            <div class="col-12 md:col-3"></div>
+          </div>
+        </div>
+        <app-loadding *ngIf="_curso.loadingLista && _curso.listCursos.length==0" msg="Lista de cursos"></app-loadding>
+        <app-lista-vacia *ngIf="_curso.listCursos.length==0 && !_curso.loadingLista" msg="No se encontraron cursos registrados"></app-lista-vacia>
+      </div>
   </p-card>
 </div>
 

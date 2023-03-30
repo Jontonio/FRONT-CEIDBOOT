@@ -9,12 +9,9 @@ export class SocketService {
 
   statusServer:boolean = false;
 
-  constructor( private socket:Socket ) {
-    console.log(this.statusServer)
-  }
+  constructor( private socket:Socket ){}
 
   OnEvent(event:string):Observable<any>{
-
     return this.socket.fromEvent(event);
   }
 

@@ -8,6 +8,7 @@ import { ResHorario } from '../main/grupo/class/Horario';
 import { ResDenominServicio } from '../denomin-servicio/class/Denomin-servicio';
 import { Matricula, ResMatricula } from '../main/matricula/class/Matricula';
 import { ResApoderado } from '../main/matricula/class/Apoderado';
+import { EmailDocumento, ResEmailDocEstudiante, ResEstudiante } from '../main/matricula/class/Estudiante';
 
 @Injectable({
   providedIn: 'root'
@@ -50,6 +51,10 @@ export class GlobalService {
     return this.http.post<ResPerson>(`${environment.BASE_URL}/usuario/usuario-reniec`, { DNI } );
   }
 
+  getEstudiante(DNI:string):Observable<ResEstudiante>{
+    return this.http.get<ResEstudiante>(`${environment.BASE_URL}/estudiante/get-estudiante-by-documento/${DNI}`);
+  }
+
   getCursosMatricula():Observable<ResCurso>{
     return this.http.get<ResCurso>(`${environment.BASE_URL}/curso/get-cursos-matriculas`);
   }
@@ -64,6 +69,10 @@ export class GlobalService {
 
   getApoderado(DNI:string):Observable<ResApoderado>{
     return this.http.get<ResApoderado>(`${environment.BASE_URL}/apoderado/get-one-apoderado/${DNI}`);
+  }
+
+  getEmailDocEstudiante(data:EmailDocumento):Observable<ResEmailDocEstudiante>{
+    return this.http.post<ResEmailDocEstudiante>(`${environment.BASE_URL}/estudiante/verify-documento-email`, data);
   }
 
   registerMatricula(data:Matricula):Observable<ResMatricula>{

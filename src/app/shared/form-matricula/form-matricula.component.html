@@ -1,5 +1,7 @@
+<p-messages key="message-matricula"></p-messages>
 <mat-stepper linear="true" #stepper>
   <mat-step [stepControl]="formEstudiante">
+    <p-messages key="message-error-code"></p-messages>
     <form [formGroup]="formEstudiante">
       <ng-template matStepLabel>Información personal</ng-template>
         <div class="grid content">
@@ -26,7 +28,7 @@
                         type="text"
                         autocomplete="off"
                         [maxlength]="(TipoDocumento.value=='DNI'?8:11)"
-                        (ngModelChange)="Reniec($event)"
+                        (ngModelChange)="searchEstudiante($event)"
                         formControlName="Documento"
                         pInputText/>
                   </div>
@@ -96,6 +98,7 @@
                 <p-calendar inputId="FechaNacimiento"
                             placeholder="DD-MM-AAAA"
                             dateFormat="dd-mm-yy"
+                            [maxDate]="today"
                             (ngModelChange)="validEdad($event)"
                             class="p-fluid p-grid p-formgrid"
                             formControlName="FechaNacimiento"></p-calendar>
@@ -127,9 +130,8 @@
                 </app-input-code>
               </div>
               <div class="col-7 md:col-9">
-                <label for="Celular" class="block mb-2">Celular</label>
                 <input id="Celular"
-                      class="p-fluid p-grid p-formgrid input-form"
+                      class="p-fluid p-grid p-formgrid input-form mt-celular"
                       type="text"
                       autocomplete="off"
                       formControlName="Celular"
@@ -195,7 +197,7 @@
         <div>
           <br>
           <div align="end" class="mt-2 mr-3 mb-4">
-            <button mat-raised-button matStepperNext (click)="validFormEstudent()">Siguiente</button>
+            <button #nexButton mat-raised-button matStepperNext (click)="validFormEstudent()">Siguiente</button>
           </div>
         </div>
     </form>
@@ -242,7 +244,6 @@
                     type="text"
                     autocomplete="off"
                     [maxlength]="50"
-                    (ngModelChange)="Reniec($event)"
                     formControlName="NomApoderado"
                     pInputText/>
               <small *ngIf="NomApoderado.hasError('pattern') && !NomApoderado.hasError('required')"
@@ -299,7 +300,7 @@
       <br>
       <div align="end" class="mr-2 mt-2 mb-4">
         <button mat-raised-button matStepperPrevious class="mr-2">Regresar</button>
-        <button mat-raised-button matStepperNext (click)="validFormMayoria()">Siguiente</button>
+        <button mat-raised-button matStepperNext (click)="validFormMayoria()" [disabled]="hayError">Siguiente</button>
       </div>
     </form>
   </mat-step>

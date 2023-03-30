@@ -24,7 +24,6 @@
         </div>
       </div>
     </div>
-    <div class="grid content">
       <div class="col table-responsive">
         <p-table [value]="_docente.listDocentes" responsiveLayout="scroll" [rowHover]="true">
           <ng-template pTemplate="header">
@@ -63,26 +62,25 @@
               </tr>
           </ng-template>
         </p-table>
-        <div>
-          <div class="mt-4" *ngIf="_docente.respDocente && _docente.respDocente.count">
-            <div class="grid content">
-              <div class="col-12 md:col-3">
-                  <p class="text-muted">Total de docentes: {{_docente.respDocente.count}}</p>
-              </div>
-              <div class="col-12 md:col-6">
-                <p-paginator [rows]="5"
-                             [totalRecords]="_docente.respDocente.count!"
-                             [rowsPerPageOptions]="[5,10,15,20]"
-                             (onPageChange)="paginate($event)"></p-paginator>
-              </div>
-              <div class="col-12 md:col-3"></div>
-            </div>
-          </div>
-          <app-loadding *ngIf="_docente.loadingLista && _docente.listDocentes.length==0" msg="Lista de docentes"></app-loadding>
-          <app-lista-vacia *ngIf="_docente.listDocentes.length==0 && !_docente.loadingLista" msg="No se encontraron docentes registrados"></app-lista-vacia>
-        </div>
       </div>
-    </div>
+      <div>
+        <div class="mt-4" *ngIf="_docente.respDocente && _docente.respDocente.count">
+          <div class="grid content">
+            <div class="col-12 md:col-3">
+                <p class="text-muted">Total de docentes: {{_docente.respDocente.count}}</p>
+            </div>
+            <div class="col-12 md:col-6">
+              <p-paginator [rows]="5"
+                            [totalRecords]="_docente.respDocente.count!"
+                            [rowsPerPageOptions]="[5,10,15,20]"
+                            (onPageChange)="paginate($event)"></p-paginator>
+            </div>
+            <div class="col-12 md:col-3"></div>
+          </div>
+        </div>
+        <app-loadding *ngIf="_docente.loadingLista && _docente.listDocentes.length==0" msg="Lista de docentes"></app-loadding>
+        <app-lista-vacia *ngIf="_docente.listDocentes.length==0 && !_docente.loadingLista" msg="No se encontraron docentes registrados"></app-lista-vacia>
+      </div>
   </p-card>
 </div>
 

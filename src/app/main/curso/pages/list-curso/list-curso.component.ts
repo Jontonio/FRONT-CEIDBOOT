@@ -81,6 +81,7 @@ export class ListCursoComponent {
     this._curso.updateCurso(Id, curso).subscribe({
       next: (value) => {
         if(!value.ok){ return; }
+        this.toast('success', value.msg);
         this._socket.EmitEvent('updated_list_curso');
       },
       error: (e) => {

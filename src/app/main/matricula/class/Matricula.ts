@@ -1,4 +1,5 @@
 import { Curso } from "../../curso/class/Curso";
+import { Horario } from "../../grupo/class/Horario";
 import { Estudiante } from "./Estudiante";
 import { Institucion } from "./Institucion";
 import { Servicio } from "./Servicio";
@@ -17,6 +18,7 @@ class Matricula {
   estudiante:Estudiante;
   denomiServicio:Servicio;
   curso:Curso;
+  horario:Horario;
   institucion:Institucion;
   createdAt?:string;
   updatedAt?:string;
@@ -28,6 +30,7 @@ class Matricula {
               estudiante:Estudiante,
               denomiServicio:Servicio,
               curso:Curso,
+              horario:Horario,
               institucion:Institucion){
                 this.DeclaraJurada = DeclaraJurada;
                 this.RequiTecnologico = RequiTecnologico;
@@ -35,6 +38,7 @@ class Matricula {
                 this.estudiante = estudiante;
                 this.denomiServicio = denomiServicio;
                 this.curso = curso;
+                this.horario = horario;
                 this.institucion = institucion;
   }
 

@@ -145,6 +145,9 @@ footer{
 * Inputs
 *
 */
+.mt-celular{
+  margin-top: 26px !important;
+}
 .full-width{
   width: 100% !important;
 }
@@ -167,6 +170,9 @@ footer{
 }
 .img-flag{
   width: 40px;
+}
+.img-flag-2{
+  width: 80px;
 }
 .recoment-box{
   padding: 13px;
@@ -280,6 +286,27 @@ footer{
 .mat-select-placeholder{
   color: var(--text-color);
 }
+.p-datatable-wrapper{
+  overflow: visible !important;
+}
+.tag-custom{
+  background: linear-gradient(-225deg,#AC32E4 0%,#7918F2 48%,#4801FF 100%) !important;
+}
+.th-column{
+  background: red !important;
+}
+.td-1{
+  background: red;
+  width: 100px;
+}
+.td-2{
+  background: rgb(187, 129, 129);
+  width: 200px;
+}
+.td-3{
+  background: rgb(84, 22, 146);
+  width: 300px;
+}
 @media only screen and (max-width: 767px) {
   /* Estilos para teléfonos móviles aquí */
   .image-login{
@@ -331,6 +358,13 @@ footer{
     margin-top: 20px;
     margin-bottom: 20px;
   }
+  table{
+    table-layout: fixed;
+    width: 100%;
+  }
+  th, td{
+    word-wrap: normal !important;
+  }
 
 }
 @media only screen and (min-width: 768px) and (max-width: 991px) {
@@ -345,5 +379,5 @@ footer{
   /* Estilos para escritorio grande aquí */
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+// html, body { height: 100%; }
+// body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

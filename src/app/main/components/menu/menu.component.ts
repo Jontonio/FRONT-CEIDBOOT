@@ -65,7 +65,7 @@ export class MenuComponent implements OnInit {
         icon: 'fa-solid fa-house'
       },
       {
-        label: 'Grupos y pensiones',
+        label: 'Grupos',
         icon: 'fa-solid fa-users-rectangle',
         routerLink:'/system/grupos/lista-grupos',
       },

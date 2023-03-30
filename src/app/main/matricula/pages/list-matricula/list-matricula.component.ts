@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { MatSelectChange } from '@angular/material/select';
+import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
+import { Dropdown } from 'primeng/dropdown';
+import { elementAt } from 'rxjs/internal/operators/elementAt';
 import { Grupo } from 'src/app/main/grupo/class/Grupo';
 import { GrupoService } from 'src/app/main/grupo/services/grupo.service';
 import { SocketService } from 'src/app/services/socket.service';
@@ -15,6 +17,8 @@ import { MatriculaService } from '../../services/matricula.service';
 })
 export class ListMatriculaComponent implements OnInit {
 
+  @ViewChildren('elemento') dropdowns:QueryList<Dropdown>;
+
   /** Variables de clase */
   startPage:number = 0;
   position:string;
@@ -25,14 +29,13 @@ export class ListMatriculaComponent implements OnInit {
   listAddEnGrupo:any[] = [];
   loadingSave:boolean = false;
   visibleAsignarGrupo:boolean = false;
-
-  selecGrupo:Grupo;
-  IdSelect:number | undefined;
+  formSelectGrupo:FormGroup;
 
   constructor(private readonly _msg:MessageService,
               public readonly _matricula:MatriculaService,
               private readonly _socket:SocketService,
               public readonly _grupo:GrupoService,
+              private readonly fb:FormBuilder,
               public readonly _confirService:ConfirmationService) {}
 
   ngOnInit(): void {}
@@ -62,11 +65,14 @@ export class ListMatriculaComponent implements OnInit {
   deleteMatriculado(Id:number){
     this._matricula.removeMatriculado(Id).subscribe({
       next: (value) => {
-        this._socket.EmitEvent('updated_list_matriculados');
-        console.log(value)
+        if(value.ok){
+          this.toast('success', value.msg);
+          this._socket.EmitEvent('updated_list_matriculados');
+        }
       },
       error: (e) => {
         console.log(e)
+        this.messageError(e);
       }
     })
   }
@@ -81,10 +87,6 @@ export class ListMatriculaComponent implements OnInit {
     this.infoMatricula = matricula;
   }
 
-  selectedGrupo({ value }:MatSelectChange){
-    this.IdSelect = value;
-  }
-
   deleteDuplicate(list:any[], data:any){
     const i = list.findIndex( item => item.matricula.Id==data.matricula.Id)
     return list.splice(i, 1);
@@ -96,16 +98,26 @@ export class ListMatriculaComponent implements OnInit {
 
   save({Id, estudiante }:Matricula){
 
-    if(this.IdSelect){
-      const data:any = { grupo: {'Id':this.IdSelect }, matricula:{'Id':Id}, estudiante:{'Id':estudiante.Id }};
-      this.loadingSave = true;
+    let IdGrupo:number | undefined;
+    this.loadingSave = true;
+
+    this.dropdowns.toArray().forEach( element => {
+      if(element.name===`elemento${Id}`){
+        if(element.value){
+          IdGrupo = element.value.Id;
+        }
+        return;
+      }
+    })
+
+    if(IdGrupo){
+      const data:any = { grupo: {'Id': IdGrupo }, matricula:{'Id':Id}, estudiante:{'Id':estudiante.Id }};
       this._matricula.addAlumnoEnGrupo( data ).subscribe({
         next: (value) => {
           if(value.ok){
             this.toast('success', value.msg)
             this._socket.EmitEvent('updated_list_matriculados');
             this._socket.EmitEvent('updated_list_grupo');
-            this.IdSelect = undefined;
           }else{
             this.toast('warn', value.msg)
           }
@@ -116,7 +128,10 @@ export class ListMatriculaComponent implements OnInit {
           console.log(e)
         }
       })
+    }else{
+      this.loadingSave = false;
     }
+
   }
 
 

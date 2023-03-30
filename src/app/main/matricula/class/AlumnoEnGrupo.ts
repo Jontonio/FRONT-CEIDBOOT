@@ -11,7 +11,6 @@ class AlumnoEnGrupo {
   estudiante: Estudiante;
   grupo: Grupo;
   matricula: Matricula;
-  curso:Curso;
   Id: number;
   Estado: boolean;
   createdAt: string;

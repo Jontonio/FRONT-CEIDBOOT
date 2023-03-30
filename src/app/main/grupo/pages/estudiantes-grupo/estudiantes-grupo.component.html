@@ -1,0 +1,145 @@
+<div class="main p-4 animate__animated animate__fadeIn">
+  <div class="mb-3">
+    <div *ngIf="grupo && curso">
+      <p-card>
+        <div class="p-2">
+          <div class="grid justify-content-between">
+            <h2>Datos del grupo</h2>
+            <img class="img-flag-2 pr-2" [src]="curso.UrlBandera" alt="">
+          </div>
+          <div class="grid content content-info-grupo">
+            <div class="col-12 md:col-7">
+              <div class="grid content">
+                <div class="col-12 md:col-4">
+                  <p class="mt-2"><b>Código de grupo</b></p>
+                  <p class="mt-1">{{grupo.Id}}</p>
+                  <p class="mt-2"><b>Grupo</b></p>
+                  <p class="mt-1">{{grupo.tipoGrupo.NombreGrupo | titlecase}}</p>
+                  <p class="mt-2"><b>Fecha inicio</b></p>
+                  <p class="mt-1"><p-tag>{{ grupo.FechaInicioGrupo | date:'short'}} <i class="fa-regular fa-calendar ml-2"></i></p-tag></p>
+                </div>
+                <div class="col-12 md:col-4">
+                  <p class="mt-2"><b>País</b></p>
+                  <p class="mt-1">{{curso.NombrePais | titlecase}}</p>
+                  <p class="mt-2"><b>Nivel del curso</b></p>
+                  <p class="mt-1">{{curso.NivelCurso }}</p>
+                  <p class="mt-2"><b>Fecha finalización</b></p>
+                  <p class="mt-1"><p-tag>{{ grupo.FechaFinalGrupo | date:'short'}} <i class="fa-regular fa-calendar ml-2"></i></p-tag></p>
+                </div>
+                <div class="col-12 md:col-4">
+                  <p class="mt-2"><b>Curso dictado</b></p>
+                  <p class="mt-1">{{curso.NombreCurso | titlecase}}</p>
+                  <p class="mt-2"><b>Núm. módulos</b></p>
+                  <p class="mt-1">{{curso.NumModulos}} Módulos</p>
+                  <p class="mt-2"><b>Núm. máximo estudiantes</b></p>
+                  <p class="mt-1">{{grupo.MaximoEstudiantes}} estudinates</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 md:col-5">
+              <div class="grid content">
+                <div class="col-12 md:col-6">
+                  <p class="mt-2"><b>Nombres del docente</b></p>
+                  <p class="mt-1">{{docente.Nombres | titlecase}} {{grupo.docente.ApellidoPaterno | titlecase}} {{grupo.docente.ApellidoMaterno | titlecase}}</p>
+                  <p class="mt-2"><b>Dirección del docente</b></p>
+                  <p class="mt-1">{{docente.Direccion }}</p>
+                </div>
+                <div class="col-12 md:col-6">
+                  <p class="mt-2"><b>Email del docente</b></p>
+                  <p class="mt-1">{{docente.Email}}</p>
+                  <p class="mt-2"><b>Celular del docente</b></p>
+                  <p class="mt-1">{{docente.Celular}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </p-card>
+    </div>
+  </div>
+  <p-card header="Lista de estudiantes en grupo">
+    <div class="flex justify-content-center justify-content-between">
+      <div class="col-6">
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input type="text"
+                 pInputText
+                 placeholder="Buscar grupo" />
+      </span>
+      </div>
+      <div class="col-6 flex justify-content-end">
+        <div>
+          <!-- <button pButton
+                  pRipple
+                  type="button"
+                  icon="fa-solid fa-plus"
+                  label="Grupo"
+                  routerLink="/system/grupos/add-grupo"
+                  class="p-button-rounded"></button> -->
+        </div>
+      </div>
+    </div>
+    <div class="col table-responsive">
+      <p-table [value]="listaEstudiantes"  [resizableColumns]="true" styleClass="p-datatable-gridlines" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+            <tr>
+              <th>N°</th>
+              <th>Nombres y apellidos</th>
+              <th>Contacto</th>
+              <th>Estado matricula</th>
+              <th>Tipo población</th>
+              <th>Matricula</th>
+              <th>Pensión</th>
+              <th>Pagos por módulo</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-grupo let-rowIndex="rowIndex">
+            <tr class="select-tr">
+              <td>{{rowIndex+1}}</td>
+                <!-- <td>
+                  <div class="grid">
+                    <div class="col-3 flex justify-content-center">
+                      <img class="img-flag" [alt]="'Bandera'+grupo.matricula.curso.NombreCurso" [src]="grupo.matricula.curso.UrlBandera" alt="" srcset="">
+                    </div>
+                    <div class="col-9 flex flex-column">
+                      <b>{{grupo.matricula.curso.NombreCurso | uppercase}}</b>
+                      {{grupo.matricula.curso.NivelCurso}}
+                    </div>
+                  </div>
+                </td> -->
+                <td>
+                    {{grupo.estudiante.Nombres | titlecase}}
+                    {{grupo.estudiante.ApellidoPaterno | titlecase}}
+                    {{grupo.estudiante.ApellidoMaterno | titlecase}}</td>
+                <td>{{grupo.estudiante.CodePhone}} {{grupo.estudiante.Celular}} <br> {{grupo.estudiante.Email}} </td>
+                <td><p-tag severity="success">{{grupo.matricula.EstadoMatricula}}</p-tag></td>
+                <td>{{grupo.matricula.denomiServicio.Descripcion}}</td>
+                <td>S/. {{grupo.matricula.denomiServicio.MontoMatricula}}</td>
+                <td>S/. {{grupo.matricula.denomiServicio.MontoPension}}</td>
+                <td></td>
+            </tr>
+        </ng-template>
+      </p-table>
+    </div>
+    <div>
+      <div class="mt-4" *ngIf="resAlumnoEnGrupo && resAlumnoEnGrupo.count">
+        <div class="grid content flex justify-content-between">
+          <p class="text-muted">Total de estudiantes: {{resAlumnoEnGrupo.count}}</p>
+          <p></p>
+        </div>
+        <div class="grid content flex justify-content-between">
+          <div></div>
+          <div>
+            <p-paginator [rows]="5"
+                          [totalRecords]="resAlumnoEnGrupo.count!"
+                          [rowsPerPageOptions]="[5,10,15,20]"
+                          (onPageChange)="paginate($event)"></p-paginator>
+          </div>
+          <div></div>
+        </div>
+      </div>
+      <app-loadding *ngIf="loadingLista && listaEstudiantes.length==0" msg="Lista de grupos"></app-loadding>
+      <app-lista-vacia *ngIf="listaEstudiantes.length==0 && !loadingLista" msg="No se encontraron grupos registrados"></app-lista-vacia>
+    </div>
+  </p-card>
+</div>

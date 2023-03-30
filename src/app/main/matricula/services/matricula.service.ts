@@ -53,6 +53,7 @@ export class MatriculaService{
         this.loadingLista = false;
         if(value.ok){
           this.respMatricula = value;
+          console.log(value)
           this.listMatriculados = value.data as Array<Matricula>;
         }
       },
