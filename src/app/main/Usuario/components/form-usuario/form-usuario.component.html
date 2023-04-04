@@ -76,9 +76,9 @@
         <div class="col">
           <label for="rol" class="block mb-2"><i class="fa-solid fa-gears"></i> Rol del usuario</label>
           <p-dropdown class="p-fluid p-grid p-formgrid"
-                      formControlName="rol"
                       [options]="roles"
-                      placeholder="Rol del usuario"
+                      formControlName="rol"
+                      placeholder="Seleccione una opción"
                       (ngModelChange)="selectRole($event)"
                       optionLabel="TipoRol">
             <ng-template pTemplate="selectedItem">

@@ -35,7 +35,18 @@ body::-webkit-scrollbar-thumb:hover {
 body::-webkit-scrollbar-thumb:active {
   background-color: #999999;
 }
-
+.content-tables{
+  overflow-x: scroll !important;
+  cursor: pointer;
+}
+.content-tables::-webkit-scrollbar-thumb:hover {
+  background: #b3b3b3;
+  transition: transform 0.5s ease-in-out;
+}
+.content-tables::-webkit-scrollbar{
+  width: 8px;
+  height: 12px;
+}
 /* Estilo para asignar el color a los contenedores*/
 .text-layout{
   color: var(--text-color);
@@ -292,19 +303,13 @@ footer{
 .tag-custom{
   background: linear-gradient(-225deg,#AC32E4 0%,#7918F2 48%,#4801FF 100%) !important;
 }
-.th-column{
-  background: red !important;
-}
 .td-1{
-  background: red;
-  width: 100px;
+  width: 150px;
 }
 .td-2{
-  background: rgb(187, 129, 129);
-  width: 200px;
+  width: 250px;
 }
 .td-3{
-  background: rgb(84, 22, 146);
   width: 300px;
 }
 @media only screen and (max-width: 767px) {
@@ -358,14 +363,6 @@ footer{
     margin-top: 20px;
     margin-bottom: 20px;
   }
-  table{
-    table-layout: fixed;
-    width: 100%;
-  }
-  th, td{
-    word-wrap: normal !important;
-  }
-
 }
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   /* Estilos para tabletas en modo retrato aquí */
@@ -378,6 +375,3 @@ footer{
 @media only screen and (min-width: 1200px) {
   /* Estilos para escritorio grande aquí */
 }
-
-// html, body { height: 100%; }
-// body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

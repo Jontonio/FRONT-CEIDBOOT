@@ -28,11 +28,12 @@ export class FormUsuarioComponent implements OnInit {
   isUpdate:boolean = false;
   selecRol:Rol;
 
-  roles:Rol[];
+  roles:Rol[] = [];
   Id?:number;
   country:Code;
   urlLista:string;
   loadingGetUpdate:boolean;
+  showValidacion:boolean = false;
 
   constructor(private route:Router,
               private fb:FormBuilder,
@@ -65,6 +66,8 @@ export class FormUsuarioComponent implements OnInit {
       Direccion:[null, [Validators.required]],
       rol:[null, [Validators.required]]
     })
+
+
   }
 
   /** Getters */
@@ -97,8 +100,11 @@ export class FormUsuarioComponent implements OnInit {
   }
 
   getRoles(){
+
     this._usuario.getRoles().subscribe({
-      next: (resp) => this.roles = resp.data,
+      next: (resp) =>{
+        this.roles = resp.data
+        console.log(this.roles)},
       error: (err) => console.log(err)
     })
   }
@@ -133,6 +139,10 @@ export class FormUsuarioComponent implements OnInit {
     this.Nombres.setValue(person.nombres);
     this.ApellidoPaterno.setValue(person.apellidoPaterno);
     this.ApellidoMaterno.setValue(person.apellidoMaterno);
+  }
+
+  formTest(){
+    console.log(this.FormUsuario)
   }
 
   ready(){

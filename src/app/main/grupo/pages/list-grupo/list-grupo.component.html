@@ -21,10 +21,8 @@
         </div>
       </div>
     </div>
-    <div class="col table-responsive">
-      <p-table [value]="_grupo.listGrupos"
-               responsiveLayout="scroll"
-               [rowHover]="true">
+    <div class="col table-responsive content-tables">
+      <p-table [value]="_grupo.listGrupos" responsiveLayout="scroll" [rowHover]="true" [resizableColumns]="true" columnResizeMode="expand">
         <ng-template pTemplate="header">
             <tr>
               <th>Cód.</th>
@@ -47,7 +45,7 @@
               <td><img class="img-flag" [src]="grupo.curso.UrlBandera" alt="" srcset=""></td>
               <td>{{grupo.tipoGrupo.NombreGrupo | titlecase}}</td>
               <td>{{grupo.curso.NombreCurso | titlecase}}</td>
-              <td>{{grupo.curso.NivelCurso | titlecase}}</td>
+              <td>{{grupo.curso.nivel.Nivel | titlecase}}</td>
               <td>{{grupo.horario.HoraInicio | date:'h:mm a'}} - {{grupo.horario.HoraFinal | date:'h:mm a'}}</td>
               <td>{{grupo.Modalidad}}</td>
               <td>

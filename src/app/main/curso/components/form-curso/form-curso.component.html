@@ -44,7 +44,7 @@
         </div>
       </div>
       <div class="col above-col">
-        <label for="Nombres" class="block mb-2">Nombre del Curso</label>
+        <label for="Nombres" class="block mb-2">Idioma</label>
         <div class="p-inputgroup">
           <span class="p-inputgroup-addon"><i class="fa-solid fa-book"></i></span>
           <input id="Nombres"
@@ -62,14 +62,12 @@
       </div>
       <div class="grid content">
         <div class="col-12 md:col-6">
-          <label for="usuario" class="block mb-2">Nivel</label>
+          <label for="niveles" class="block mb-2">Nivel</label>
           <p-dropdown class="p-fluid p-grid p-formgrid"
                       [options]="niveles"
-                      placeholder="Nivel del curso"
-                      optionValue="code"
-                      formControlName="NivelCurso"
-                      optionLabel="name"></p-dropdown>
-          <small *ngIf="NivelCurso.hasError('required') && NivelCurso.dirty"
+                      formControlName="nivel"
+                      optionLabel="Nivel"></p-dropdown>
+          <small *ngIf="nivel.hasError('required') && nivel.dirty"
                  class="p-error">El nivel del curso es <strong>requerido</strong></small>
         </div>
         <div class="col-12 md:col-6">

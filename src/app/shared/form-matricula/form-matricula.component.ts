@@ -34,7 +34,6 @@ interface Card {
 export class FormMatriculaComponent implements OnInit {
 
   @ViewChild('stepper') stepper:MatStepper;
-  @ViewChild('nexButton') nexButton:MatStepperNext;
 
   isUpdate:boolean       = false;
   loadGetData:boolean    = false;
@@ -69,7 +68,7 @@ export class FormMatriculaComponent implements OnInit {
   selecCurso:Curso;
   selecHorario:Horario;
 
-  listDepartamentos:Departamento[] = [];
+  listDepartamentos:Departamento[];
   listProvincias:Provincia[] = [];
   listDistritos:Distrito[] = [];
   msgTooltipEmail:string;
@@ -106,8 +105,8 @@ export class FormMatriculaComponent implements OnInit {
     ];
 
     this.optionEdad = [
-      { name:'Soy mayor de edad', value:true },
-      { name:'Soy menor de edad', value:false },
+      { name:'Si', value:true },
+      { name:'No', value:false },
     ]
 
     this.optionInstitucion = [
@@ -128,6 +127,7 @@ export class FormMatriculaComponent implements OnInit {
       {name: 'DNI', code: 'DNI'},
       {name: 'Carnet de extranjería', code: 'CDE' }
     ];
+    this.listDepartamentos = [];
 
     this.msgTooltipEmail = 'Es de suma importancia que verifique que esté correctamente escrito, para el envío de información académica';
     this.msgTooltipCel = 'Es de suma importancia que el número tenga una cuenta de WhatsApp'
@@ -162,9 +162,9 @@ export class FormMatriculaComponent implements OnInit {
       Direccion:[null, Validators.required],
       Celular:[null, [Validators.pattern(/^([0-9])*$/), Validators.required]],
       Email:[null, [Validators.required,Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
-      Departamento:[null, [Validators.required]],
-      Provincia:[null, [Validators.required]],
-      Distrito:[null, [Validators.required]],
+      Departamento:[null, Validators.required],
+      Provincia:[null, Validators.required],
+      Distrito:[null, Validators.required]
     })
   }
 
@@ -325,15 +325,13 @@ export class FormMatriculaComponent implements OnInit {
   }
 
   completeDataEstudiante(estudiante:Estudiante){
-    // parsing fecha nacimiento
-    const fechaNacimiento = moment(estudiante.FechaNacimiento);
+    console.log("here")
     // complete data estudiante
     this.Nombres.setValue(estudiante.Nombres);
     this.TipoDocumento.setValue(estudiante.TipoDocumento);
     this.Nombres.setValue(estudiante.Nombres);
     this.ApellidoPaterno.setValue(estudiante.ApellidoPaterno);
     this.ApellidoMaterno.setValue(estudiante.ApellidoMaterno);
-    this.FechaNacimiento.setValue(fechaNacimiento.toDate());
     this.Sexo.setValue(estudiante.Sexo);
     this.Direccion.setValue(estudiante.Direccion);
     this.Celular.setValue(estudiante.Celular);
@@ -354,6 +352,7 @@ export class FormMatriculaComponent implements OnInit {
   }
 
   searchEstudiante(documento:string=''){
+    console.log("here")
 
     if(!documento) return;
 
@@ -449,6 +448,7 @@ export class FormMatriculaComponent implements OnInit {
 
   validFormEstudent(){
 
+    console.log("here")
     if(this.formEstudiante.invalid){
       Object.keys(this.formEstudiante.controls).forEach( inputName => {
         this.formEstudiante.controls[inputName].markAsDirty();

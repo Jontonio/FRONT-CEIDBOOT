@@ -25,7 +25,7 @@
       </div>
     </div>
       <div class="col table-responsive">
-        <p-table [value]="_curso.listCursos" responsiveLayout="scroll" [rowHover]="true">
+        <p-table [value]="_curso.listCursos" [resizableColumns]="true" columnResizeMode="expand" responsiveLayout="scroll">
           <ng-template pTemplate="header">
               <tr>
                 <th>ID</th>
@@ -43,10 +43,10 @@
                 <td>{{startPage  + (rowIndex+1)}}</td>
                 <td><img class="img-flag" [src]="curso.UrlBandera" alt="" srcset=""></td>
                 <td>{{curso.NombreCurso | titlecase}}</td>
-                <td>{{curso.NivelCurso | titlecase}}</td>
-                <td>{{curso.NumModulos}}</td>
+                <td>{{curso.nivel.Nivel | titlecase}}</td>
+                <td>{{curso.NumModulos}} Módulos</td>
                 <td>
-                  <p-tag styleClass="mr-2" severity="info">{{curso.DescripcionCurso}}</p-tag>
+                  <p-tag styleClass="mr-2" severity="info">{{curso.DescripcionCurso | slice:0:40}}...</p-tag>
                 </td>
                 <td>
                   <div *ngIf="curso.EstadoApertura else disable">

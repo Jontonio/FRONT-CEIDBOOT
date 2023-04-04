@@ -47,7 +47,7 @@ export class AddCursoComponent {
         setTimeout(() => {
           this.loading = false;
           if(!resCurso.ok){
-            this.toast('warn',resCurso.msg,'');
+            this.toast('warn', resCurso.msg);
             return;
           }
           this._socket.EmitEvent('updated_list_curso');

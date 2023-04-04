@@ -1,3 +1,5 @@
+import { Nivel } from "./Nivel";
+
 class ResCurso {
   constructor(public msg:string, public ok:boolean, public data: Curso | Curso[], public count?:number){}
 }
@@ -7,7 +9,7 @@ class Curso {
   NombrePais: string;
   UrlBandera: string;
   NombreCurso: string;
-  NivelCurso: string;
+  nivel: Nivel;
   DescripcionCurso: string;
   NumModulos: number;
   Estado?: boolean;
@@ -19,7 +21,7 @@ class Curso {
     NombrePais: string,
     UrlBandera: string,
     NombreCurso: string,
-    NivelCurso: string,
+    nivel: Nivel,
     DescripcionCurso: string,
     NumModulos: number,
     Id?: number,
@@ -31,7 +33,7 @@ class Curso {
       this.NombrePais = NombrePais;
       this.UrlBandera = UrlBandera;
       this.NombreCurso = NombreCurso;
-      this.NivelCurso = NivelCurso;
+      this.nivel = nivel;
       this.DescripcionCurso = DescripcionCurso;
       this.NumModulos = NumModulos;
       this.Estado = Estado;

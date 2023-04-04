@@ -37,6 +37,7 @@ import { KnobModule } from 'primeng/knob';
 import { TooltipModule } from 'primeng/tooltip';
 import { CheckboxModule } from 'primeng/checkbox';
 import { SplitButtonModule } from 'primeng/splitbutton';
+import { PanelModule } from 'primeng/panel';
 
 /**
  * array of modules
@@ -74,6 +75,7 @@ const listModules:any[] = [
   KnobModule,
   TooltipModule,
   CheckboxModule,
+  PanelModule,
   SplitButtonModule
 ]
 

@@ -1,6 +1,6 @@
 <p-messages key="message-matricula"></p-messages>
 <mat-stepper linear="true" #stepper>
-  <mat-step [stepControl]="formEstudiante">
+  <mat-step>
     <p-messages key="message-error-code"></p-messages>
     <form [formGroup]="formEstudiante">
       <ng-template matStepLabel>Información personal</ng-template>
@@ -161,7 +161,7 @@
                       class="p-error">El campo email es <strong>requerido</strong></small>
             </div>
             <div class="col-12">
-              <label for="IdDepartamento" class="block mb-2">Departamento</label>
+              <label for="Departamento" class="block mb-2">Departamento</label>
               <p-dropdown class="p-fluid p-grid p-formgrid"
                           formControlName="Departamento"
                           [options]="listDepartamentos"
@@ -183,7 +183,7 @@
                       class="p-error">La pronvincia es <strong>requerida</strong></small>
             </div>
             <div class="col-12">
-              <label for="IdDistrito" class="block mb-2">Distrito</label>
+              <label for="Distrito" class="block mb-2">Distrito</label>
               <p-dropdown class="p-fluid p-grid p-formgrid"
                           formControlName="Distrito"
                           [options]="listDistritos"
@@ -197,12 +197,12 @@
         <div>
           <br>
           <div align="end" class="mt-2 mr-3 mb-4">
-            <button #nexButton mat-raised-button matStepperNext (click)="validFormEstudent()">Siguiente</button>
+            <button mat-raised-button matStepperNext (click)="validFormEstudent()">Siguiente</button>
           </div>
         </div>
     </form>
   </mat-step>
-  <mat-step [stepControl]="formMayorEdad">
+  <mat-step>
     <form [formGroup]="formMayorEdad">
       <ng-template matStepLabel>Mayoria de edad</ng-template>
       <div class="grid content">
@@ -304,7 +304,7 @@
       </div>
     </form>
   </mat-step>
-  <mat-step [stepControl]="formCurso">
+  <mat-step>
     <form [formGroup]="formCurso">
       <ng-template matStepLabel>Idioma</ng-template>
       <div class="grid content">
@@ -320,7 +320,7 @@
               <div class="country-item country-item-value" *ngIf="selecCurso">
                 <span class="ml-1">
                   <img class="flag-code-country" [src]="selecCurso.UrlBandera" [alt]="selecCurso.NombreCurso"/>
-                  <span class="ml-1">{{selecCurso.NombreCurso}} - {{selecCurso.NivelCurso}}</span>
+                  <span class="ml-1">{{selecCurso.NombreCurso}} - {{selecCurso.nivel.Nivel}}</span>
                 </span>
               </div>
             </ng-template>
@@ -336,7 +336,7 @@
         </div>
         <div class="col-12">
           <label for="Horario" class="block mb-2">Horario</label>
-            <p-dropdown class="p-fluid p-grid p-formgrid"
+            <p-dropdown class="p-fluid p-grid"
                         [options]="listHorarios"
                         placeholder="Selecione el horario"
                         formControlName="Horario"
@@ -377,7 +377,7 @@
       </div>
     </form>
   </mat-step>
-  <mat-step [stepControl]="formAcademica">
+  <mat-step>
     <form [formGroup]="formAcademica">
       <ng-template matStepLabel>Formación</ng-template>
       <div class="grid content">

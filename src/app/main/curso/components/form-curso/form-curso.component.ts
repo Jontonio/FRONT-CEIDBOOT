@@ -9,11 +9,7 @@ import { Curso } from '../../class/Curso';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CursoService } from '../../services/curso.service';
 import { optionOperation } from '../../../class/global';
-
-export interface Nivel {
-  name:string,
-  code:string;
-}
+import { Nivel } from '../../class/Nivel';
 
 export interface Modulo {
   name:string,
@@ -35,7 +31,7 @@ export class FormCursoComponent implements OnInit {
   debouncer = new Subject();
   formCurso:FormGroup;
   paisesSugeridos:Pais  [] = [];
-  niveles        :Nivel [] = [];
+  niveles        :Nivel [];
   modulo         :Modulo[] = [];
 
   urlSelectedFlag:string | undefined;
@@ -52,9 +48,8 @@ export class FormCursoComponent implements OnInit {
               private readonly _msg:MessageService,
               private readonly _curso:CursoService,
               private readonly _main:MainService) {
-
+    this.niveles = [];
     this.createFormCurso();
-    this.createNiveles();
     this.createModulos();
     this.urlLista = '/system/cursos/lista-cursos';
     this.defaultFlag = './assets/images/default-flag.png';
@@ -62,6 +57,8 @@ export class FormCursoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.getNiveles();
 
     this.debouncer
       .pipe(
@@ -84,12 +81,19 @@ export class FormCursoComponent implements OnInit {
     }
   }
 
-  createNiveles(){
-    this.niveles = [
-      {name: 'Básico', code: 'Básico'},
-      {name: 'Intermedio', code: 'Intermedio'},
-      {name: 'Avanzado', code: 'Avanzado'},
-    ];
+  getNiveles(){
+    this._curso.getAllNiveles().subscribe({
+      next: (value) => {
+        if(!value.ok){
+          this.toast('error', value.msg);
+          return;
+        }
+        this.niveles = value.data as Array<Nivel>;
+      },
+      error: (e) => {
+
+      }
+    })
   }
 
   createFormCurso(){
@@ -97,9 +101,9 @@ export class FormCursoComponent implements OnInit {
       NombrePais:[null,[Validators.required, Validators.pattern(/^([a-z ñáéíóú]{2,60})$/i)]],
       NombreCurso:[null,[Validators.required, Validators.pattern(/^([a-z ñáéíóú]{2,60})$/i)]],
       DescripcionCurso:[null, Validators.required],
-      NivelCurso:[null, Validators.required],
       NumModulos:[null, Validators.required],
-      UrlBandera:[null],
+      nivel:[null, Validators.required],
+      UrlBandera:[null]
     })
   }
 
@@ -116,8 +120,8 @@ export class FormCursoComponent implements OnInit {
   get DescripcionCurso(){
     return this.formCurso.controls['DescripcionCurso'];
   }
-  get NivelCurso(){
-    return this.formCurso.controls['NivelCurso'];
+  get nivel(){
+    return this.formCurso.controls['nivel'];
   }
   get NumModulos(){
     return this.formCurso.controls['NumModulos'];
@@ -178,7 +182,7 @@ export class FormCursoComponent implements OnInit {
   completeDataUpdate(curso:Curso){
     this.NombrePais.setValue(curso.NombrePais);
     this.NombreCurso.setValue(curso.NombreCurso);
-    this.NivelCurso.setValue(curso.NivelCurso);
+    this.nivel.setValue(curso.nivel);
     this.NumModulos.setValue(curso.NumModulos);
     this.UrlBandera.setValue(curso.UrlBandera);
     this.DescripcionCurso.setValue(curso.DescripcionCurso);
@@ -195,8 +199,8 @@ export class FormCursoComponent implements OnInit {
     }
 
     if(!this.urlSelectedFlag) this.UrlBandera.setValue(this.defaultFlag);
-    this.dataCurso.emit({data:this.formCurso.value, option: this.isUpdate, Id:this.Id });
 
+    this.dataCurso.emit({data:this.formCurso.value, option: this.isUpdate, Id:this.Id });
   }
 
   returnLista(){

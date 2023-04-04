@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment';
 import { Curso, ResCurso } from "../class/Curso";
 import { Observable, Subscription } from 'rxjs';
 import { SocketService } from "src/app/services/socket.service";
+import { ResNivel } from "../class/Nivel";
 
 @Injectable({
   providedIn:'root'
@@ -29,6 +30,10 @@ export class CursoService{
 
   getAllCursos(limit:number = 5, offset:number = 0):Observable<ResCurso>{
     return this.http.get<ResCurso>(`${environment.BASE_URL}/curso/get-cursos?limit=${limit}&offset=${offset}`);
+  }
+
+  getAllNiveles(limit:number = 10, offset:number = 0):Observable<ResNivel>{
+    return this.http.get<ResNivel>(`${environment.BASE_URL}/nivel/get-all-niveles?limit=${limit}&offset=${offset}`);
   }
 
   getAllListCursos():Observable<ResCurso>{

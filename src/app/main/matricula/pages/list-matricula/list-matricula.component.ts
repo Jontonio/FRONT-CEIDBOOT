@@ -129,6 +129,7 @@ export class ListMatriculaComponent implements OnInit {
         }
       })
     }else{
+      this.toast('warn','Es necesario selecionar un grupo para asignar al estudiante')
       this.loadingSave = false;
     }
 

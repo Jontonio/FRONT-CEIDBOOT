@@ -13,8 +13,8 @@ const materialComponents:any[] = [
   MatButtonModule,
   MatMenuModule,
   MatIconModule,
-  MatSelectModule,
-  MatFormFieldModule
+  // MatSelectModule,
+  // MatFormFieldModule
 ]
 
 @NgModule({

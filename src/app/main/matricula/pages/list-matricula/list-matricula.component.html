@@ -26,12 +26,15 @@
       </div>
     </div>
     <div class="col table-responsive">
-      <p-table [value]="_matricula.listMatriculados" responsiveLayout="scroll" [rowHover]="true">
+      <p-table [value]="_matricula.listMatriculados"
+               dataKey="listaMatriculados"
+               responsiveLayout="scroll"
+               [rowHover]="true"
+               styleClass="p-datatable-sm">
         <ng-template pTemplate="header">
             <tr>
               <th>ID</th>
               <th>Nombres</th>
-              <th>Celular</th>
               <th>Curso inscrito</th>
               <th>Horario inscrito</th>
               <th>Tipo población</th>
@@ -41,19 +44,21 @@
               <th>Mas</th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-matriculado let-rowIndex="rowIndex">
+        <ng-template pTemplate="body" let-matriculado let-rowIndex="rowIndex" let-expanded="expanded">
           <tr>
             <td>{{startPage  + (rowIndex+1)}}</td>
             <td>{{matriculado.estudiante.Nombres | titlecase}} {{matriculado.estudiante.ApellidoPaterno | titlecase}}</td>
-            <td><p-tag severity="success">{{matriculado.estudiante.CodePhone}} {{matriculado.estudiante.Celular}}</p-tag>
+            <!-- <td><p-tag severity="success">{{matriculado.estudiante.CodePhone}} {{matriculado.estudiante.Celular}}</p-tag>
                 <div *ngIf="matriculado.estudiante.apoderado" class="mt-1">
                   <p-tag severity="danger">+51 {{matriculado.estudiante.apoderado.CelApoderado}}</p-tag>
                 </div>
-            </td>
-            <td>{{matriculado.curso.NombreCurso | titlecase}} - {{matriculado.curso.NivelCurso | titlecase}}</td>
-            <td><p-tag severity="warning">{{matriculado.horario.HoraInicio | date:'h:mm a'}} - {{matriculado.horario.HoraFinal | date:'h:mm a'}}</p-tag></td>
-            <td>{{matriculado.denomiServicio.Descripcion | slice:0:35}}...
-                <p-tag label="Info" severity="info" class="td-poblacion" (click)="moreService(matriculado.denomiServicio)">Mas</p-tag>
+            </td> -->
+            <td><b>{{matriculado.curso.NombreCurso | uppercase}}</b> {{matriculado.curso.NivelCurso | titlecase}}</td>
+            <td class="td-1"><p-tag severity="warning">{{matriculado.horario.HoraInicio | date:'h:mm a'}} - {{matriculado.horario.HoraFinal | date:'h:mm a'}}</p-tag></td>
+            <td>
+              <div class="td-2">
+                {{matriculado.denomiServicio.Descripcion | slice:0:35}}...<p-tag label="Info" severity="info" class="td-poblacion" (click)="moreService(matriculado.denomiServicio)">Mas</p-tag>
+              </div>
             </td>
             <td><p-tag>{{matriculado.createdAt | date:'short'}}</p-tag> </td>
             <td>
@@ -116,24 +121,24 @@
           </tr>
         </ng-template>
       </p-table>
-    </div>
-    <div>
-      <div class="mt-4" *ngIf="_matricula.respMatricula && _matricula.respMatricula.count">
-        <div class="grid content">
-          <div class="col-12 md:col-3">
-              <p class="text-muted">Total de inscritos: {{_matricula.respMatricula.count}}</p>
+      <div>
+        <div class="mt-4" *ngIf="_matricula.respMatricula && _matricula.respMatricula.count">
+          <div class="grid content">
+            <div class="col-12 md:col-3">
+                <p class="text-muted">Total de inscritos: {{_matricula.respMatricula.count}}</p>
+            </div>
+            <div class="col-12 md:col-6">
+              <p-paginator [rows]="5"
+                            [totalRecords]="_matricula.respMatricula.count!"
+                            [rowsPerPageOptions]="[5,10,15,20]"
+                            (onPageChange)="paginate($event)"></p-paginator>
+            </div>
+            <div class="col-12 md:col-3"></div>
           </div>
-          <div class="col-12 md:col-6">
-            <p-paginator [rows]="5"
-                          [totalRecords]="_matricula.respMatricula.count!"
-                          [rowsPerPageOptions]="[5,10,15,20]"
-                          (onPageChange)="paginate($event)"></p-paginator>
-          </div>
-          <div class="col-12 md:col-3"></div>
         </div>
+        <app-loadding *ngIf="_matricula.loadingLista && _matricula.listMatriculados.length==0" msg="Lista de cursos"></app-loadding>
+        <app-lista-vacia *ngIf="_matricula.listMatriculados.length==0 && !_matricula.loadingLista" msg="No se encontraron cursos registrados"></app-lista-vacia>
       </div>
-      <app-loadding *ngIf="_matricula.loadingLista && _matricula.listMatriculados.length==0" msg="Lista de cursos"></app-loadding>
-      <app-lista-vacia *ngIf="_matricula.listMatriculados.length==0 && !_matricula.loadingLista" msg="No se encontraron cursos registrados"></app-lista-vacia>
     </div>
   </p-card>
 </div>
@@ -194,7 +199,7 @@
                       <img class="flag" [src]="infoMatricula.curso.UrlBandera" alt="">
                     </div>
                     <div class="col-12 md:col-4 mt-2"> {{infoMatricula.curso.NombreCurso | titlecase}}</div>
-                    <div class="col-12 md:col-4 mt-2"> {{infoMatricula.curso.NivelCurso }}</div>
+                    <div class="col-12 md:col-4 mt-2"> {{infoMatricula.curso.nivel.Nivel }}</div>
                   </div>
                 </div>
               </div>

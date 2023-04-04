@@ -25,7 +25,7 @@
       </div>
     </div>
     <div class="col table-responsive">
-      <p-table [value]="_usuario.listUsuarios" responsiveLayout="scroll" [rowHover]="true">
+      <p-table [value]="_usuario.listUsuarios" [resizableColumns]="true" columnResizeMode="expand" responsiveLayout="scroll">
         <ng-template pTemplate="header">
             <tr>
                 <th>ID</th>
