@@ -13,6 +13,7 @@ import { AvatarNamePipe } from './pipes/avatar-name.pipe';
 import { FechaAccesoPipe } from './pipes/fecha-acceso.pipe';
 import { MaterialModule } from 'src/app/material/material.module';
 import { SkeletonFormComponent } from './components/skeleton-form/skeleton-form.component';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 
 @NgModule({

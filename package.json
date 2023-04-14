@@ -24,9 +24,10 @@
     "angularx-qrcode": "^13.0.15",
     "moment": "^2.29.4",
     "ngx-socket-io": "^4.2.0",
+    "ngx-spinner": "^13.1.1",
     "primeflex": "^3.3.0",
     "primeicons": "^5.0.0",
-    "primeng": "^13.4.1",
+    "primeng": "^13.0.0",
     "rxjs": "~7.4.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"

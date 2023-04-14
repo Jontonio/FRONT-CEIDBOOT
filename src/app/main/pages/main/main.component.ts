@@ -10,6 +10,7 @@ import { DOCUMENT } from '@angular/common';
 
 import * as moment from 'moment';
 import { ChabotService } from '../../chat-bot/services/chatbot.service';
+import { UnAuthorizedService } from 'src/app/services/unauthorized.service';
 moment.locale("es");
 
 @Component({
@@ -23,6 +24,7 @@ export class MainComponent implements OnInit {
   themeSelecion = false;
   display:boolean = false;
   ruta: MenuItem[];
+  displayModalAuth:boolean;
 
   /** representa la cuenta regresiva del modal */
   contador:number = 20;
@@ -36,7 +38,8 @@ export class MainComponent implements OnInit {
   constructor(@Inject(DOCUMENT)
               private readonly document:Document,
               private readonly route:Router,
-              private readonly _auth:AuthService,
+              public  readonly _auth:AuthService,
+              public  readonly _unAuth:UnAuthorizedService,
               public  readonly _global:GlobalService,
               private readonly idle: Idle,
               private readonly ngZone: NgZone,
@@ -103,13 +106,18 @@ export class MainComponent implements OnInit {
     this._auth.logout(data).subscribe({
       next:(value) => {
         if(!value.ok) return;
-        if(this._auth.readToken()) this._auth.deleteToken();
-        this.modeTheme(false, false);
-        this.route.navigate(['/main/auth/login']);
+        this.resetAuth();
       },
       error:(err) => console.log("cerrar sesión",err)
     })
 
+  }
+
+  resetAuth(){
+    if(this._auth.readToken()) this._auth.deleteToken();
+    this.modeTheme(false, false);
+    this._unAuth.showModalAuth = false;
+    this.route.navigate(['/main/auth/login']);
   }
 
 }

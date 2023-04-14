@@ -14,6 +14,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { MaterialModule } from 'src/app/material/material.module';
 import { FormGrupoComponent } from './components/form-grupo/form-grupo.component';
 import { EstudiantesGrupoComponent } from './pages/estudiantes-grupo/estudiantes-grupo.component';
+import { NgxSpinnerModule } from "ngx-spinner";
 
 
 @NgModule({
@@ -25,7 +26,7 @@ import { EstudiantesGrupoComponent } from './pages/estudiantes-grupo/estudiantes
     ModalHorarioComponent,
     ModalTipoGrupoComponent,
     FormGrupoComponent,
-    EstudiantesGrupoComponent
+    EstudiantesGrupoComponent,
   ],
   imports: [
     CommonModule,
@@ -33,7 +34,8 @@ import { EstudiantesGrupoComponent } from './pages/estudiantes-grupo/estudiantes
     ReactiveFormsModule,
     PrimengModule,
     MaterialModule,
-    SharedModule
+    SharedModule,
+    NgxSpinnerModule
   ]
 })
 export class GrupoModule { }

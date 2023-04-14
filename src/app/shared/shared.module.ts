@@ -11,10 +11,14 @@ import { SkeletonTableComponent } from './skeleton-table/skeleton-table.componen
 import { FormMatriculaComponent } from './form-matricula/form-matricula.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../material/material.module';
+import { ShowFileComponent } from './show-file/show-file.component';
+import { NgxSpinnerModule } from "ngx-spinner";
+import { SafeUrlPipe } from '../pipes/safe-url.pipe';
 
 
 @NgModule({
   declarations: [
+    SafeUrlPipe,
     NavbarComponent,
     FooterComponent,
     ImgLandingPageComponent,
@@ -22,13 +26,15 @@ import { MaterialModule } from '../material/material.module';
     ListaVaciaComponent,
     LoaddingComponent,
     SkeletonTableComponent,
-    FormMatriculaComponent
+    FormMatriculaComponent,
+    ShowFileComponent,
   ],
   imports: [
     CommonModule,
     PrimengModule,
     MaterialModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxSpinnerModule
   ],
   exports:[
     NavbarComponent,
@@ -37,7 +43,8 @@ import { MaterialModule } from '../material/material.module';
     InputCodeComponent,
     ListaVaciaComponent,
     LoaddingComponent,
-    FormMatriculaComponent
+    FormMatriculaComponent,
+    ShowFileComponent
   ]
 })
 export class SharedModule { }

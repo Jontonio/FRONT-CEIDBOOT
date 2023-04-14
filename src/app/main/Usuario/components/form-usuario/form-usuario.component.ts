@@ -10,6 +10,8 @@ import { Code } from '../../../grupo/class/Code';
 import { MainService } from '../../../services/main.service';
 import { optionOperation } from '../../../class/global';
 import { UsuarioService } from '../../services/usuario.service';
+import { UnAuthorizedService } from 'src/app/services/unauthorized.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-form-usuario',
@@ -40,8 +42,9 @@ export class FormUsuarioComponent implements OnInit {
               private activeRouter:ActivatedRoute,
               private _global:GlobalService,
               private _main:MainService,
-              public _usuario:UsuarioService,
-              private _msg:MessageService) {
+              private _msg:MessageService,
+              private _unAuth:UnAuthorizedService,
+              public _usuario:UsuarioService) {
 
     this.createFormUsuario();
     this.urlLista = '/system/usuarios/lista-usuarios';
@@ -55,7 +58,6 @@ export class FormUsuarioComponent implements OnInit {
   }
 
   createFormUsuario(){
-
     this.FormUsuario = this.fb.group({
       DNI:[null,[Validators.required,Validators.pattern(/^([0-9])*$/)]],
       Nombres:[null, [Validators.required,Validators.pattern(/^([a-z ñáéíóú]{2,60})$/i)]],
@@ -66,8 +68,6 @@ export class FormUsuarioComponent implements OnInit {
       Direccion:[null, [Validators.required]],
       rol:[null, [Validators.required]]
     })
-
-
   }
 
   /** Getters */
@@ -100,12 +100,12 @@ export class FormUsuarioComponent implements OnInit {
   }
 
   getRoles(){
-
     this._usuario.getRoles().subscribe({
-      next: (resp) =>{
-        this.roles = resp.data
-        console.log(this.roles)},
-      error: (err) => console.log(err)
+      next: (resp) => this.roles = resp.data,
+      error: (e) => {
+        this.messageError(e);
+        this._unAuth.unAuthResponse(e)
+      }
     })
   }
 
@@ -126,10 +126,11 @@ export class FormUsuarioComponent implements OnInit {
           this.DNI.enable();
           this.loadGetData = false;
         },
-        error: (err) => {
+        error: (e) => {
           this.loadGetData = false;
           this.DNI.enable();
-          console.log(err);
+          this.messageError(e);
+          this._unAuth.unAuthResponse(e);
         }
       })
     }
@@ -188,16 +189,17 @@ export class FormUsuarioComponent implements OnInit {
     this.loadingGetUpdate = true;
     this._usuario.getUsuario(id).subscribe({
       next: (resp) => {
+        console.log(resp)
         this.loadingGetUpdate = false;
         if(!resp.ok) return;
         this.completeDataUpdate(resp.data as Usuario);
       },
       error: (e) => {
-        console.log(e);
         this.loadingGetUpdate = false;
-        this.route.navigate([this.urlLista]);
+        this._unAuth.unAuthResponse(e);
         this.messageError(e);
-      },
+        this.route.navigate([this.urlLista]);
+      }
     })
   }
 
@@ -224,7 +226,10 @@ export class FormUsuarioComponent implements OnInit {
       next: (resp) => {
         if(resp.length!=0) this.country = resp[0];
       },
-      error:(err) => console.log(err)
+      error:(e) => {
+        this.messageError(e);
+        this._unAuth.unAuthResponse(e);
+      }
     })
   }
 
@@ -236,7 +241,8 @@ export class FormUsuarioComponent implements OnInit {
     this.country = country;
   }
 
-  messageError(e:any){
+  messageError(e:HttpErrorResponse){
+    if(e.status==401) return;
     const msg = e.error.message;
     Array.isArray(msg)? msg.forEach( (e:string) => this.toast('error',e,'Error de validación de datos')):
                                                    this.toast('error',msg,`${e.error.error}:${e.error.statusCode}`)

@@ -14,13 +14,12 @@
       </div>
       <div class="col-6 flex justify-content-end">
         <div>
-          <button pButton
-                  pRipple
+          <button mat-raised-button
                   type="button"
-                  icon="fa-solid fa-plus"
-                  label="Docente"
-                  routerLink="/system/docentes/add-docente"
-                  class="p-button-rounded"></button>
+                  class="button-custom-round"
+                  routerLink="/system/docentes/add-docente">
+                  <i class="fa-solid fa-plus"></i> Nuevo docente
+          </button>
         </div>
       </div>
     </div>
@@ -46,18 +45,8 @@
                     {{docente.Direccion}}
                   </td>
                   <td>
-                    <button pButton
-                            pRipple
-                            type="button"
-                            (click)="dialogDelete(docente)"
-                            class="p-button-danger p-button-text">
-                            <i class="pi pi-delete-left"></i> Eliminar</button>
-                    <button pButton
-                            pRipple
-                            type="button"
-                            (click)="sendEditDocente(docente)"
-                            class="p-button-text p-button-plain">
-                            <i class="pi pi-pencil mr-2"></i> Editar</button>
+                    <button mat-raised-button color="warn" (click)="dialogDelete(docente)"><i class="fa-solid fa-trash"></i> Eliminar</button>
+                    <button mat-raised-button (click)="sendEditDocente(docente)" class="ml-2"><i class="pi pi-pencil"></i> Editar</button>
                   </td>
               </tr>
           </ng-template>

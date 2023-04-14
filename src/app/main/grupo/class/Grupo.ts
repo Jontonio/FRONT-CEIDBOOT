@@ -19,6 +19,7 @@ class Grupo {
   NumeroEstudiantes:number;
   Estado: boolean;
   Modalidad:string;
+  RequeridoPPago:boolean;
   createdAt?: string;
   updatedAt?: string;
   docente:Docente;

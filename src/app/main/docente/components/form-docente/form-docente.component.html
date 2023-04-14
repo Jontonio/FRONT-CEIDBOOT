@@ -151,14 +151,14 @@
   <div class="flex justify-content-end">
     <button mat-raised-button
             color="primary"
-            class="p-button-c"
+            class="button-custom"
             (click)="ready()"
             [disabled]="loading">
             <i [class]="loading?'pi pi-spin pi-spinner':'pi pi-save'"></i> {{isUpdate?'Guardar':'Registrar'}}
     </button>
     <button mat-raised-button
             color="primary"
-            class="p-button-c ml-2"
+            class="button-custom ml-2"
             (click)="returnLista()"> Cancelar
     </button>
   </div>

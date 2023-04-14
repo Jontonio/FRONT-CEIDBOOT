@@ -150,7 +150,8 @@ export class FormGrupoComponent implements OnInit {
       docente:[null, Validators.required],
       curso:[null, Validators.required],
       tipoGrupo:[null, Validators.required],
-      horario:[null, Validators.required]
+      horario:[null, Validators.required],
+      RequeridoPPago:[false, Validators.required ]
     })
 
   }
@@ -182,6 +183,9 @@ export class FormGrupoComponent implements OnInit {
   }
   get MaximoEstudiantes(){
     return this.FormGrupo.controls['MaximoEstudiantes'];
+  }
+  get RequeridoPPago(){
+    return this.FormGrupo.controls['RequeridoPPago'];
   }
 
   toast(type:string, msg:string, detail:string=''){
@@ -241,6 +245,7 @@ export class FormGrupoComponent implements OnInit {
     this.horario.setValue(grupo.horario);
     this.MaximoEstudiantes.setValue(grupo.MaximoEstudiantes);
     this.DescGrupo.setValue(grupo.DescGrupo);
+    this.RequeridoPPago.setValue(grupo.RequeridoPPago);
   }
 
   resetGrupo(){
@@ -255,6 +260,8 @@ export class FormGrupoComponent implements OnInit {
 
   selectedCurso(curso:Curso){
     this.selecCurso = curso;
+    this.FechaInicioGrupo.setValue(null);
+    this.FechaFinalGrupo.setValue(null);
   }
 
   selectedTiposNombres(tipo:TipoGrupo){

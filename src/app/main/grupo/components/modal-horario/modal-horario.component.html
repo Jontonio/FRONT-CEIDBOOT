@@ -48,7 +48,10 @@
             </div>
           </form>
         <ng-template pTemplate="footer">
-        <p-button [icon]="loadHorario?'pi pi-spin pi-spinner':'pi pi-save'" (click)="saveHorario()" label="Registrar" styleClass="p-button-text"></p-button>
-        <p-button (click)="closeModal()" label="Cancelar" styleClass="p-button-text"></p-button>
+          <button mat-raised-button
+                  class="button-custom"
+                  (click)="saveHorario()"><i [class]="loadHorario?'pi pi-spin pi-spinner':'pi pi-save'"></i> Registrar</button>
+          <button mat-raised-button
+                  (click)="closeModal()">Cancelar</button>
         </ng-template>
 </p-dialog>

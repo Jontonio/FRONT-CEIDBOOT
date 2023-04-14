@@ -1,7 +1,7 @@
 <div class="main p-4">
   <p-card>
     <div class="mb-2">
-      <h2 class="ml-1">Lista de inscritos</h2>
+      <h2 class="ml-1">Lista de prematriculados</h2>
     </div>
     <div class="grid justify-content-center justify-content-between">
       <div class="col-12 md:col-6">
@@ -15,13 +15,12 @@
       </div>
       <div class="col-12 md:col-6 flex justify-content-end">
         <div>
-          <button pButton
-                  pRipple
+          <button mat-raised-button
                   type="button"
-                  icon="fa-solid fa-user-plus"
-                  label="Matricula"
-                  routerLink="/system/matricula/nueva-matricula"
-                  class="p-button-rounded mr-2"></button>
+                  class="button-custom-round"
+                  routerLink="/system/matricula/nueva-matricula">
+                  <i class="fa-solid fa-user-plus"></i> Matricula
+          </button>
         </div>
       </div>
     </div>
@@ -37,7 +36,7 @@
               <th>Nombres</th>
               <th>Curso inscrito</th>
               <th>Horario inscrito</th>
-              <th>Tipo población</th>
+              <th>Requisitos</th>
               <th>Fecha. Inscripción</th>
               <th>Grupos</th>
               <th>Asignar</th>
@@ -53,12 +52,10 @@
                   <p-tag severity="danger">+51 {{matriculado.estudiante.apoderado.CelApoderado}}</p-tag>
                 </div>
             </td> -->
-            <td><b>{{matriculado.curso.NombreCurso | uppercase}}</b> {{matriculado.curso.NivelCurso | titlecase}}</td>
+            <td><b>{{matriculado.curso.NombreCurso | uppercase}}</b><br>{{matriculado.curso.nivel.Nivel | titlecase}}</td>
             <td class="td-1"><p-tag severity="warning">{{matriculado.horario.HoraInicio | date:'h:mm a'}} - {{matriculado.horario.HoraFinal | date:'h:mm a'}}</p-tag></td>
             <td>
-              <div class="td-2">
-                {{matriculado.denomiServicio.Descripcion | slice:0:35}}...<p-tag label="Info" severity="info" class="td-poblacion" (click)="moreService(matriculado.denomiServicio)">Mas</p-tag>
-              </div>
+              <button mat-button (click)="showFile(matriculado)"><i class="pi pi-file-pdf icon-size"></i> ver</button>
             </td>
             <td><p-tag>{{matriculado.createdAt | date:'short'}}</p-tag> </td>
             <td>
@@ -83,10 +80,10 @@
                 </ng-template>
               </p-dropdown>
             </td>
-            <td>
+            <td class="text-center">
               <button mat-raised-button
                       color="primary"
-                      class="p-button-c"
+                      class="button-custom"
                       (click)="save(matriculado)"
                       [disabled]="loadingSave">Asignar
               </button>
@@ -179,14 +176,15 @@
                     {{infoMatricula.estudiante.ApellidoPaterno | titlecase}}
                     {{infoMatricula.estudiante.ApellidoMaterno | titlecase}}</p>
                   <p class="m-2"><i class="fa-regular fa-envelope"></i> {{infoMatricula.estudiante.Email}}</p>
+                  <p class="m-2"><i class="fa-sharp fa-solid fa-phone"></i> {{infoMatricula.estudiante.CodePhone}} {{infoMatricula.estudiante.Celular}}</p>
                 </div>
                 <div class="col-12 md:col-6" *ngIf="infoMatricula.estudiante.apoderado">
                   <h3>Apoderado</h3>
-                  <p class="m-2"><i class="fa-regular fa-id-card"></i> {{infoMatricula.estudiante.apoderado.DNIApoderado}}</p>
+                  <p class="m-2"><i class="fa-regular fa-id-card"></i> {{infoMatricula.estudiante.apoderado.TipoDocumento}} {{infoMatricula.estudiante.apoderado.Documento}}</p>
                   <p class="m-2"><i class="fa-regular fa-user"></i> {{infoMatricula.estudiante.apoderado.NomApoderado | titlecase}}
                     {{infoMatricula.estudiante.apoderado.ApellidoPApoderado | titlecase}}
                     {{infoMatricula.estudiante.apoderado.ApellidoMApoderado | titlecase}}</p>
-                  <p class="m-2"><i class="fa-sharp fa-solid fa-phone"></i> {{infoMatricula.estudiante.apoderado.CelApoderado}}</p>
+                  <p class="m-2"><i class="fa-sharp fa-solid fa-phone"></i> {{infoMatricula.estudiante.apoderado.CodePhone}} {{infoMatricula.estudiante.apoderado.CelApoderado}}</p>
                 </div>
               </div>
             </div>
@@ -194,7 +192,7 @@
               <div class="col-12 md:col-6">
                 <div>
                   <h3>Curso inscrito</h3>
-                  <div class="grid content">
+                  <div class="grid content" *ngIf="infoMatricula.curso">
                     <div class="col-12 md:col-4">
                       <img class="flag" [src]="infoMatricula.curso.UrlBandera" alt="">
                     </div>
@@ -224,15 +222,4 @@
           </div>
 </p-dialog>
 
-<!-- <td>
-  <mat-form-field appearance="legacy">
-    <mat-select disableRipple
-                (selectionChange)="selectedGrupo($event, matriculado)"
-                placeholder="Selecione un grupo">
-      <mat-option>Ninguno</mat-option>
-      <mat-option *ngFor="let grupo of _grupo.listGrupos" [value]="grupo.Id">
-        <b>G-{{grupo.Id}}</b> {{grupo.curso.NombreCurso | titlecase }} - {{grupo.curso.NivelCurso}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-</td> -->
+<app-show-file [FileURL]="FileMatriculaURL"></app-show-file>

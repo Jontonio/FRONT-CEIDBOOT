@@ -1,6 +1,29 @@
 
 <app-menu></app-menu>
 <router-outlet></router-outlet>
+<p-dialog [modal]="true"
+          [closable]="false"
+          [(visible)]="_unAuth.showModalAuth"
+          [breakpoints]="{'960px': '75vw'}"
+          [style]="{width: '30vw'}"
+          [draggable]="false"
+          [resizable]="false">
+          <div class="content-modal-auth" *ngIf="_unAuth.httpErrorResponse">
+            <div class="text-center">
+              <h2 class="p-2"><i class="fa-solid fa-circle-exclamation"></i> Error de acceso {{_unAuth.httpErrorResponse.error.message}}</h2>
+              <p>Por favor, pulse sobre el siguiente botón para volver a acceder al sistema CEIDBOT</p>
+              <div>
+                <img class="unauthorized-img" src="./assets/images/unauthorized-01.svg" alt="" srcset="">
+              </div>
+              <div class="mt-2">
+                <button mat-raised-button
+                        class="mr-2 full-width button-custom-round"
+                        (click)="resetAuth()">Volver a iniciar sesión</button>
+              </div>
+            </div>
+          </div>
+</p-dialog>
+
 <!-- A component that is used to show messages to the user. -->
 <p-toast position="top-right" [breakpoints]="{'920px': {width: '100%', right: '0', left: '0', padding:'10px'}}"></p-toast>
 

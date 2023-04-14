@@ -8,3 +8,9 @@ export interface optionOperation{
   option: boolean // true = update, false = register
   Id?: number // this is required if is update
 }
+
+export interface FileDrive{
+  webContentLink:string,
+  webViewLink:string
+}
+

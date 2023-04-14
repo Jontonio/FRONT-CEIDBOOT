@@ -1,4 +1,5 @@
 import { Curso } from "../../curso/class/Curso";
+import { Grupo } from "../../grupo/class/Grupo";
 import { Horario } from "../../grupo/class/Horario";
 import { Estudiante } from "./Estudiante";
 import { Institucion } from "./Institucion";
@@ -17,9 +18,10 @@ class Matricula {
   CarCompromiso:boolean;
   estudiante:Estudiante;
   denomiServicio:Servicio;
-  curso:Curso;
-  horario:Horario;
   institucion:Institucion;
+  FileMatriculaURL:string;
+  curso?:Curso;
+  horario?:Horario;
   createdAt?:string;
   updatedAt?:string;
 
@@ -29,17 +31,28 @@ class Matricula {
               CarCompromiso:boolean,
               estudiante:Estudiante,
               denomiServicio:Servicio,
-              curso:Curso,
-              horario:Horario,
-              institucion:Institucion){
+              institucion:Institucion,
+              FileMatriculaURL:string,
+              curso?:Curso,
+              horario?:Horario){
                 this.DeclaraJurada = DeclaraJurada;
                 this.RequiTecnologico = RequiTecnologico;
                 this.CarCompromiso = CarCompromiso;
                 this.estudiante = estudiante;
                 this.denomiServicio = denomiServicio;
+                this.institucion = institucion;
+                this.FileMatriculaURL = FileMatriculaURL;
                 this.curso = curso;
                 this.horario = horario;
-                this.institucion = institucion;
+  }
+
+  /** seters */
+  setCurso(curso:Curso){
+    this.curso = curso;
+  }
+
+  setHorario(horario:Horario){
+    this.horario = horario;
   }
 
 }

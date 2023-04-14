@@ -62,7 +62,7 @@
                 class="p-error">El tipo de docente es <strong>requerido</strong></small>
       </div>
       <div class="col">
-        <label for="curso" class="block mb-2">Curso</label>
+        <label for="curso" class="block mb-2">Idioma</label>
           <p-dropdown class="p-fluid p-grid p-formgrid"
                       [options]="ListCursos"
                       placeholder="Seleciona el curso"
@@ -73,14 +73,14 @@
               <div class="country-item country-item-value" *ngIf="selecCurso">
                 <span class="ml-1">
                   <img class="flag-code-country" [src]="selecCurso.UrlBandera" [alt]="selecCurso.NombreCurso"/>
-                  <span class="ml-1">{{selecCurso.NombreCurso}} - {{selecCurso.nivel.Nivel}}</span>
+                  <span class="ml-1">{{selecCurso.NombreCurso | titlecase}} - {{selecCurso.nivel.Nivel}}</span>
                 </span>
               </div>
             </ng-template>
             <ng-template let-curso pTemplate="item">
               <div>
                 <img class="flag-code-country" [src]="curso.UrlBandera" [alt]="curso.NombreCurso"/>
-                <span class="ml-1">{{curso.NombreCurso | titlecase}} - {{curso.NivelCurso | titlecase}}</span>
+                <span class="ml-1">{{curso.NombreCurso | titlecase}} - {{curso.nivel.Nivel | titlecase}}</span>
               </div>
             </ng-template>
           </p-dropdown>
@@ -176,7 +176,7 @@
       </div>
       <div class="col">
         <label for="DescGrupo" class="block mb-2">Descripción del grupo</label>
-        <textarea rows="7"
+        <textarea rows="6"
                   cols="30"
                   pInputTextarea
                   formControlName="DescGrupo"
@@ -185,19 +185,28 @@
         <small *ngIf="DescGrupo.hasError('required') && DescGrupo.dirty"
                class="p-error">La descripción del grupo es <strong>requerido</strong></small>
       </div>
+      <div class="col">
+        <label for="RequeridoPPago" class="block mb-2">Pago primer módulo y libro</label>
+        <div class="field-checkbox">
+          <p-checkbox [binary]="true" inputId="RequeridoPPago" formControlName="RequeridoPPago"></p-checkbox>
+          <label for="RequeridoPPago">Marque si para matricularse en el grupo es necesario realizar el primer pago de la pensión y el pago del libro.</label>
+        </div>
+        <small *ngIf="RequeridoPPago.hasError('required') && RequeridoPPago.dirty"
+                    class="p-error">Este campo es <strong>requerido</strong></small>
+      </div>
     </div>
   </div>
   <div class="flex justify-content-end mt-2">
       <button mat-raised-button
               color="primary"
-              class="p-button-c"
+              class="button-custom"
               (click)="ready()"
               [disabled]="loading">
               <i [class]="loading?'pi pi-spin pi-spinner':'pi pi-save'"></i> {{isUpdate?'Guardar':'Registrar'}}
       </button>
       <button mat-raised-button
               color="primary"
-              class="p-button-c ml-2"
+              class="button-custom ml-2"
               (click)="returnLista()"> Cancelar
       </button>
   </div>

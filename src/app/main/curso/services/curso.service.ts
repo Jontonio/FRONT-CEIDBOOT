@@ -5,6 +5,7 @@ import { Curso, ResCurso } from "../class/Curso";
 import { Observable, Subscription } from 'rxjs';
 import { SocketService } from "src/app/services/socket.service";
 import { ResNivel } from "../class/Nivel";
+import { UnAuthorizedService } from "src/app/services/unauthorized.service";
 
 @Injectable({
   providedIn:'root'
@@ -19,6 +20,7 @@ export class CursoService{
   public loadingLista:boolean = false;
 
   constructor(private http:HttpClient,
+              private _unAuth:UnAuthorizedService,
               private _socket:SocketService){
                 this.getListaCursos();
                 this.OnListaCursos();
@@ -68,9 +70,9 @@ export class CursoService{
           this.listCursos = value.data as Array<Curso>;
         }
       },
-      error: (err) => {
-        console.log("Error lista cursos")
+      error: (e) => {
         this.loadingLista = false;
+        this._unAuth.unAuthResponse(e);
       }
     })
   }
@@ -83,7 +85,7 @@ export class CursoService{
           this.listCursos = value.data as Array<Curso>;
         }
       },
-      error: (e) => console.log(e)
+      error: (e) => this._unAuth.unAuthResponse(e)
     })
   }
 

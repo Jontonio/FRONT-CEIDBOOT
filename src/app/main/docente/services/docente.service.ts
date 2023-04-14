@@ -5,6 +5,7 @@ import { Observable, Subscription } from 'rxjs';
 
 import { Docente, ResDocente } from "../class/Docente";
 import { SocketService } from 'src/app/services/socket.service';
+import { UnAuthorizedService } from 'src/app/services/unauthorized.service';
 
 
 @Injectable({
@@ -20,6 +21,7 @@ export class DocenteService{
   public loadingLista:boolean = false;
 
   constructor(private http:HttpClient,
+              private readonly _error:UnAuthorizedService,
               private _socket:SocketService){
                 this.getListaDocentes();
                 this.OnDocentes();
@@ -71,8 +73,8 @@ export class DocenteService{
           this.listDocentes = value.data as Array<Docente>;
         }
       },
-      error: (err) => {
-        console.log("Error lista docentes")
+      error: (e) => {
+        this._error.unAuthResponse(e);
         this.loadingLista = false;
       }
     })
@@ -86,7 +88,7 @@ export class DocenteService{
           this.listDocentes = value.data as Array<Docente>;
         }
       },
-      error: (e) => console.log(e)
+      error: (e) => this._error.unAuthResponse(e)
     })
   }
 

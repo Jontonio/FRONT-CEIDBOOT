@@ -8,6 +8,11 @@ import { environment } from 'src/environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokeInterceptorsService } from './interceptors/token-interceptors.service';
+import { LOCALE_ID } from '@angular/core';
+
+import localEs from "@angular/common/locales/es-PE";
+import { registerLocaleData } from "@angular/common";
+registerLocaleData(localEs);
 
 const config: SocketIoConfig = { url: environment.BASE_URL, options: {} };
 
@@ -22,9 +27,10 @@ const config: SocketIoConfig = { url: environment.BASE_URL, options: {} };
     BrowserAnimationsModule,
     HttpClientModule
   ],
+  bootstrap: [AppComponent],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: TokeInterceptorsService, multi:true }
-  ],
-  bootstrap: [AppComponent]
+    {provide: LOCALE_ID, useValue: 'es-PE' },
+    { provide: HTTP_INTERCEPTORS, useClass: TokeInterceptorsService, multi:true },
+  ]
 })
 export class AppModule { }

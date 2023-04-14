@@ -1,0 +1,53 @@
+<div class="header-conatiner-pagos"></div>
+<div class="container-pagos">
+  <div class="content-form-pagos">
+    <div class="mb-2">
+      <p-card>
+        <p><i class="fa-solid fa-message"></i> Para subir su voucher de pago es necesario consultar sus datos en el siguiente formulario.</p>
+      </p-card>
+    </div>
+    <p-card>
+      <div class="mb-3">
+        <h2>Formulario de pago</h2>
+      </div>
+      <form [formGroup]="formBusqueda">
+        <div class="field">
+          <label for="usuario" class="block mb-2">Tipo documento</label>
+          <p-dropdown class="p-fluid p-grid p-formgrid"
+                      [options]="card"
+                      formControlName="TipoDocumento"
+                      (ngModelChange)="changeCard($event)"
+                      optionValue="code"
+                      optionLabel="name">
+                  </p-dropdown>
+          <small *ngIf="TipoDocumento.hasError('required') && TipoDocumento.dirty"
+                class="p-error">El tipo de documento es <strong>requerido</strong></small>
+        </div>
+        <div class="field">
+          <label for="Documento" class="block"><i class="fa-regular fa-address-card"></i> {{TipoDocumentoSelected}}</label>
+          <input id="Documento"
+                 type="text"
+                 formControlName="Documento"
+                 [maxLength]="TipoDocumentoSelected=='DNI'?8:15"
+                 minlength="8"
+                 [placeholder]="'Digite su '+TipoDocumentoSelected"
+                 pInputText/>
+          <small *ngIf="Documento.hasError('pattern') && !Documento.hasError('required')"
+                 class="p-error">Digite un número de {{TipoDocumentoSelected}} <strong>válido</strong></small>
+          <small *ngIf="Documento.hasError('required') && Documento.dirty"
+                 class="p-error">El {{TipoDocumentoSelected}} es <strong>requerido</strong></small>
+        </div>
+        <div class="field">
+          <button pButton
+                  pRipple
+                  type="button"
+                  [label]="loading?'CONSULTANDO':'CONSULTAR'"
+                  (click)="search()"
+                  [disabled]="loading"
+                  class="p-button-raised full-width mt-3 button-custom-round"></button>
+        </div>
+      </form>
+    </p-card>
+  </div>
+</div>
+

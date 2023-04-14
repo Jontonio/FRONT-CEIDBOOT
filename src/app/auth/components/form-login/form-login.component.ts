@@ -41,6 +41,7 @@ export class FormLoginComponent {
     this.loading = true;
     this._auth.login(this.formLogin.value).subscribe({
       next: (res) => {
+        console.log(res)
         setTimeout(()=>{
           this.loading = false;
           if(!res.ok){

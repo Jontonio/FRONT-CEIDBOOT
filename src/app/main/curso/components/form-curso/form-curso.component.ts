@@ -103,6 +103,7 @@ export class FormCursoComponent implements OnInit {
       DescripcionCurso:[null, Validators.required],
       NumModulos:[null, Validators.required],
       nivel:[null, Validators.required],
+      LinkRequistos:[null, [Validators.pattern(/^(http:\/\/|https:\/\/|ftp:\/\/)?([a-zA-Z0-9]+([\-\.]{1}[a-zA-Z0-9]+)*\.[a-zA-Z]{2,63}(:[0-9]{1,5})?(\/.*)?)$/)]],
       UrlBandera:[null]
     })
   }
@@ -125,6 +126,9 @@ export class FormCursoComponent implements OnInit {
   }
   get NumModulos(){
     return this.formCurso.controls['NumModulos'];
+  }
+  get LinkRequistos(){
+    return this.formCurso.controls['LinkRequistos'];
   }
 
   teclaPresionada(){
@@ -186,6 +190,7 @@ export class FormCursoComponent implements OnInit {
     this.NumModulos.setValue(curso.NumModulos);
     this.UrlBandera.setValue(curso.UrlBandera);
     this.DescripcionCurso.setValue(curso.DescripcionCurso);
+    this.LinkRequistos.setValue(curso.LinkRequistos);
     this.urlSelectedFlag = curso.UrlBandera;
   }
 

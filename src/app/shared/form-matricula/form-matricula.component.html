@@ -1,6 +1,6 @@
 <p-messages key="message-matricula"></p-messages>
 <mat-stepper linear="true" #stepper>
-  <mat-step>
+  <mat-step [stepControl]="formEstudiante">
     <p-messages key="message-error-code"></p-messages>
     <form [formGroup]="formEstudiante">
       <ng-template matStepLabel>Información personal</ng-template>
@@ -124,19 +124,23 @@
                       class="p-error">El campo dirección del estudiante es <strong>requerido</strong></small>
             </div>
             <div class="grid content">
-              <div class="col-5 md:col-3">
+              <div class="col-4 md:col-4">
                 <app-input-code [country]="country"
                                 (selectedCountry)="selectedCountry($event)">
                 </app-input-code>
               </div>
-              <div class="col-7 md:col-9">
-                <input id="Celular"
-                      class="p-fluid p-grid p-formgrid input-form mt-celular"
-                      type="text"
-                      autocomplete="off"
-                      formControlName="Celular"
-                      [maxLength]="15"
-                      pInputText/>
+              <div class="col-8 md:col-8">
+                <label for="Email" class="block mb-2 dot">.</label>
+                <div class="p-inputgroup">
+                  <span class="p-inputgroup-addon"><i class="fa-brands fa-whatsapp fa-xl"></i></span>
+                  <input id="Celular"
+                        class="p-fluid p-grid p-formgrid input-form"
+                        type="text"
+                        autocomplete="off"
+                        formControlName="Celular"
+                        [maxLength]="isPeru?9:15"
+                        pInputText/>
+                </div>
                 <small *ngIf="Celular.hasError('pattern') && !Celular.hasError('required')"
                       class="p-error">Digite un Celular <strong>válido</strong></small>
                 <small *ngIf="Celular.hasError('required') && Celular.dirty"
@@ -160,37 +164,39 @@
               <small *ngIf="Email.hasError('required') && Email.dirty"
                       class="p-error">El campo email es <strong>requerido</strong></small>
             </div>
-            <div class="col-12">
-              <label for="Departamento" class="block mb-2">Departamento</label>
-              <p-dropdown class="p-fluid p-grid p-formgrid"
-                          formControlName="Departamento"
-                          [options]="listDepartamentos"
-                          (ngModelChange)="selectedDepartamento($event)"
-                          placeholder="Departamento"
-                          optionLabel="NombreDepartamento"></p-dropdown>
-              <small *ngIf="Departamento.hasError('required') && Departamento.dirty"
-                      class="p-error">El departamento es <strong>requerido</strong></small>
-            </div>
-            <div class="col-12">
-              <label for="IdProvincia" class="block mb-2">Provincia</label>
-              <p-dropdown class="p-fluid p-grid p-formgrid"
-                          formControlName="Provincia"
-                          [options]="listProvincias"
-                          placeholder="Provincia"
-                          (ngModelChange)="selectedProvincia($event)"
-                          optionLabel="NombreProvincia"></p-dropdown>
-              <small *ngIf="Provincia.hasError('required') && Provincia.dirty"
-                      class="p-error">La pronvincia es <strong>requerida</strong></small>
-            </div>
-            <div class="col-12">
-              <label for="Distrito" class="block mb-2">Distrito</label>
-              <p-dropdown class="p-fluid p-grid p-formgrid"
-                          formControlName="Distrito"
-                          [options]="listDistritos"
-                          placeholder="Distrito"
-                          optionLabel="NombreDistrito"></p-dropdown>
-              <small *ngIf="Distrito.hasError('required') && Distrito.dirty"
-                      class="p-error">El distrito es <strong>requerido</strong></small>
+            <div *ngIf="isPeru">
+              <div class="col-12">
+                <label for="Departamento" class="block mb-2">Departamento</label>
+                <p-dropdown class="p-fluid p-grid p-formgrid"
+                            formControlName="Departamento"
+                            [options]="listDepartamentos"
+                            (ngModelChange)="selectedDepartamento($event)"
+                            placeholder="Departamento"
+                            optionLabel="NombreDepartamento"></p-dropdown>
+                <small *ngIf="Departamento.hasError('required') && Departamento.dirty"
+                        class="p-error">El departamento es <strong>requerido</strong></small>
+              </div>
+              <div class="col-12">
+                <label for="IdProvincia" class="block mb-2">Provincia</label>
+                <p-dropdown class="p-fluid p-grid p-formgrid"
+                            formControlName="Provincia"
+                            [options]="listProvincias"
+                            placeholder="Provincia"
+                            (ngModelChange)="selectedProvincia($event)"
+                            optionLabel="NombreProvincia"></p-dropdown>
+                <small *ngIf="Provincia.hasError('required') && Provincia.dirty"
+                        class="p-error">La pronvincia es <strong>requerida</strong></small>
+              </div>
+              <div class="col-12">
+                <label for="Distrito" class="block mb-2">Distrito</label>
+                <p-dropdown class="p-fluid p-grid p-formgrid"
+                            formControlName="Distrito"
+                            [options]="listDistritos"
+                            placeholder="Distrito"
+                            optionLabel="NombreDistrito"></p-dropdown>
+                <small *ngIf="Distrito.hasError('required') && Distrito.dirty"
+                        class="p-error">El distrito es <strong>requerido</strong></small>
+              </div>
             </div>
             </div>
         </div>
@@ -202,7 +208,7 @@
         </div>
     </form>
   </mat-step>
-  <mat-step>
+  <mat-step [stepControl]="formMayorEdad">
     <form [formGroup]="formMayorEdad">
       <ng-template matStepLabel>Mayoria de edad</ng-template>
       <div class="grid content">
@@ -220,21 +226,21 @@
         </div>
         <div *ngIf="displayMayoria" class="grid content">
           <div class="col-12">
-            <label for="DNIApoderado" class="block mb-2">DNI Apoderado</label>
+            <label for="DocumentoApoderado" class="block mb-2">{{TipoDocumento.value}} apoderado</label>
             <div class="p-inputgroup">
             <span class="p-inputgroup-addon"><i [class]="loadGetApoderado?'pi pi-spin pi-spinner':'pi pi-id-card'"></i></span>
-            <input id="DNIApoderado"
+            <input id="DocumentoApoderado"
                   class="p-fluid p-grid p-formgrid input-form"
                   type="text"
                   autocomplete="off"
                   (ngModelChange)="searchApoderado($event)"
-                  [maxlength]="8"
-                  formControlName="DNIApoderado"
+                  [maxlength]="isPeru?8:15"
+                  formControlName="DocumentoApoderado"
                   pInputText/>
             </div>
-            <small *ngIf="DNIApoderado.hasError('pattern') && !DNIApoderado.hasError('required')"
+            <small *ngIf="DocumentoApoderado.hasError('pattern') && !DocumentoApoderado.hasError('required')"
                     class="p-error">Digite un DNI <strong>válido</strong></small>
-            <small *ngIf="DNIApoderado.hasError('required') && DNIApoderado.dirty"
+            <small *ngIf="DocumentoApoderado.hasError('required') && DocumentoApoderado.dirty"
                     class="p-error">El campo DNI del apoderado es <strong>requerido</strong></small>
           </div>
           <div class="col-12">
@@ -277,23 +283,29 @@
               <small *ngIf="ApellidoMApoderado.hasError('required') && ApellidoMApoderado.dirty"
                       class="p-error">El campo apellido materno del apoderado es <strong>requerido</strong></small>
           </div>
-          <div class="col-12">
-            <label for="CelApoderado" class="block mb-2">Celular del apoderado</label>
-            <div class="p-inputgroup">
-              <span class="p-inputgroup-addon"><i class="fa-solid fa-phone"></i></span>
-              <input id="CelApoderado"
-                    class="p-fluid p-grid p-formgrid input-form"
-                    type="text"
-                    [pTooltip]="msgTooltipCel" tooltipPosition="bottom"
-                    autocomplete="off"
-                    [maxlength]="9"
-                    formControlName="CelApoderado"
-                    pInputText/>
+          <div class="grid content">
+            <div class="col-4 md:col-4">
+              <app-input-code [country]="country"
+                              (selectedCountry)="selectedCountry($event)">
+              </app-input-code>
             </div>
-            <small *ngIf="CelApoderado.hasError('pattern') && !CelApoderado.hasError('required')"
+            <div class="col-8 md:col-8">
+              <label for="Email" class="block mb-2 dot">.</label>
+              <div class="p-inputgroup">
+                <span class="p-inputgroup-addon"><i class="fa-brands fa-whatsapp fa-xl"></i></span>
+                <input id="CelApoderado"
+                      class="p-fluid p-grid p-formgrid input-form"
+                      type="text"
+                      autocomplete="off"
+                      formControlName="CelApoderado"
+                      [maxLength]="isPeru?9:15"
+                      pInputText/>
+              </div>
+              <small *ngIf="CelApoderado.hasError('pattern') && !CelApoderado.hasError('required')"
                 class="p-error">Digite un número de celular <strong>válido</strong></small>
-            <small *ngIf="CelApoderado.hasError('required') && CelApoderado.dirty"
+              <small *ngIf="CelApoderado.hasError('required') && CelApoderado.dirty"
                     class="p-error">El campo celular del apoderado es <strong>requerido</strong></small>
+            </div>
           </div>
         </div>
       </div>
@@ -304,80 +316,71 @@
       </div>
     </form>
   </mat-step>
-  <mat-step>
-    <form [formGroup]="formCurso">
-      <ng-template matStepLabel>Idioma</ng-template>
+  <mat-step [stepControl]="formGrupo">
+    <form [formGroup]="formGrupo">
+      <ng-template matStepLabel>Grupo y curso</ng-template>
       <div class="grid content">
         <div class="col-12">
-          <label for="Curso" class="block mb-2">Curso</label>
-          <p-dropdown class="p-fluid p-grid p-formgrid"
-                      formControlName="Curso"
-                      [options]="listCursos"
-                      placeholder="Selececione"
-                      (ngModelChange)="selectedCurso($event)"
-                      optionLabel="NombreCurso">
-            <ng-template pTemplate="selectedItem">
-              <div class="country-item country-item-value" *ngIf="selecCurso">
-                <span class="ml-1">
-                  <img class="flag-code-country" [src]="selecCurso.UrlBandera" [alt]="selecCurso.NombreCurso"/>
-                  <span class="ml-1">{{selecCurso.NombreCurso}} - {{selecCurso.nivel.Nivel}}</span>
-                </span>
-              </div>
-            </ng-template>
-            <ng-template let-curso pTemplate="item">
-              <div>
-                <img class="flag-code-country" [src]="curso.UrlBandera" [alt]="curso.NombreCurso"/>
-                <span class="ml-1">{{curso.NombreCurso | titlecase}} - {{curso.NivelCurso | titlecase}}</span>
-              </div>
-            </ng-template>
-          </p-dropdown>
-          <small *ngIf="Curso.hasError('required') && Curso.dirty"
-                  class="p-error">El campo de curso <strong>requerido</strong></small>
-        </div>
-        <div class="col-12">
-          <label for="Horario" class="block mb-2">Horario</label>
-            <p-dropdown class="p-fluid p-grid"
-                        [options]="listHorarios"
-                        placeholder="Selecione el horario"
-                        formControlName="Horario"
-                        (ngModelChange)="selectedHorario($event)"
-                        optionLabel="HoraInicio">
+          <div class="content-select-grupo">
+            <label for="grupo" class="block mb-2">Selecione el idioma</label>
+            <p-dropdown class="p-fluid p-grid p-formgrid"
+                        [options]="listGrupos"
+                        formControlName="grupo"
+                        placeholder="Selecione el grupo"
+                        (ngModelChange)="selectGrupo($event)">
               <ng-template pTemplate="selectedItem">
-                <div class="country-item country-item-value" *ngIf="selecHorario">
+                <div class="grupo-item grupo-item-value" *ngIf="selecGrupo">
                   <span class="ml-1">
-                    <span class="ml-1">{{selecHorario.HoraInicio | date:'h:mm a'}} - {{selecHorario.HoraFinal | date:'h:mm a'}}</span>
+                    <img class="flag-code-country" [src]="selecGrupo.curso.UrlBandera" alt="">
+                    <span class="ml-1">{{selecGrupo.curso.NombreCurso | titlecase }} {{selecGrupo.curso.nivel.Nivel}}
+                    <p-tag severity="warning">{{selecGrupo.horario.HoraInicio | date:'h:mm a'}} - {{selecGrupo.horario.HoraFinal | date:'h:mm a'}}</p-tag></span>
                   </span>
                 </div>
               </ng-template>
-              <ng-template let-horario pTemplate="item">
+              <ng-template let-grupo pTemplate="item">
                 <div>
-                  <span class="ml-1">{{horario.HoraInicio | date:'h:mm a'}} - {{horario.HoraFinal | date:'h:mm a'}}</span>
+                  <img class="flag-code-country" [src]="grupo.curso.UrlBandera" alt="">
+                  <span class="ml-1 mr-1">{{grupo.curso.NombreCurso | titlecase }} {{grupo.curso.nivel.Nivel}} - <i class="fa-regular fa-clock fa-spin"></i> {{grupo.horario.HoraInicio | date:'h:mm a'}} - {{grupo.horario.HoraFinal | date:'h:mm a'}}</span>
+                  <p-tag severity="warning" *ngIf="!grupo.RequeridoPPago">New</p-tag>
                 </div>
               </ng-template>
             </p-dropdown>
-            <small *ngIf="Horario.hasError('required') && Horario.dirty"
-                  class="p-error">El horario es <strong>requerido</strong></small>
-        </div>
-        <div class="col-12">
-          <label for="Modalidad" class="block mb-2">Modalidad</label>
-          <p-dropdown class="p-fluid p-grid p-formgrid"
-                      formControlName="Modalidad"
-                      [options]="_main.modalidades"
-                      placeholder="Selececione"
-                      optionValue="value"
-                      optionLabel="name"></p-dropdown>
-          <small *ngIf="Modalidad.hasError('required') && Modalidad.dirty"
-                  class="p-error">El campo modalidad es <strong>requerido</strong></small>
+            <small *ngIf="grupo.hasError('required') && grupo.dirty"
+                    class="p-error">El campo grupo es <strong>requerido</strong></small>
+            <div *ngIf="selecGrupo">
+              <p-fieldset legend="Idioma selecionado">
+                <div class="grid content">
+                  <div class="col-12 md:col-6">
+                    <p class="mt-2"><b>Idioma</b></p>
+                    <p class="mt-1">{{selecGrupo.curso.NombreCurso | titlecase}}</p>
+                    <p class="mt-2"><b>Nivel del curso</b></p>
+                    <p class="mt-1">{{selecGrupo.curso.nivel.Nivel }}</p>
+                    <p class="mt-2"><b>Grupo</b></p>
+                    <p class="mt-1">{{selecGrupo.tipoGrupo.NombreGrupo | titlecase}}</p>
+                  </div>
+                  <div class="col-12 md:col-6">
+                    <p class="mt-2"><b>Número de módulos</b></p>
+                    <p class="mt-1">{{selecGrupo.curso.NumModulos}} Módulos</p>
+                    <p class="mt-2"><b>Inicio del grupo</b></p>
+                    <p class="mt-1"><i class="fa-regular fa-calendar mr-2"></i> {{selecGrupo.FechaInicioGrupo | date:'mediumDate'}}</p>
+                    <p class="mt-2"><b>Finalización del grupo</b></p>
+                    <p class="mt-1"><i class="fa-regular fa-calendar mr-2"></i> {{ selecGrupo.FechaFinalGrupo | date:'mediumDate'}}</p>
+                  </div>
+                </div>
+            </p-fieldset>
+
+            </div>
+          </div>
         </div>
       </div>
       <br>
       <div align="end" class="mr-2 mt-2 mb-4">
         <button mat-raised-button matStepperPrevious class="mr-2">Regresar</button>
-        <button mat-raised-button matStepperNext (click)="validFormCurso()">Siguiente</button>
+        <button mat-raised-button matStepperNext (click)="validformGrupo()">Siguiente</button>
       </div>
     </form>
   </mat-step>
-  <mat-step>
+  <mat-step [stepControl]="formAcademica">
     <form [formGroup]="formAcademica">
       <ng-template matStepLabel>Formación</ng-template>
       <div class="grid content">
@@ -392,7 +395,7 @@
                   class="p-error">El campo de población de edad <strong>requerido</strong></small>
         </div>
         <div class="col-12">
-          <label for="NombreInstitucion" class="block mb-2">Intitución</label>
+          <label for="NombreInstitucion" class="block mb-2">¿Eres estudiante de la UNAJMA?</label>
           <p-dropdown class="p-fluid p-grid p-formgrid"
                       formControlName="NombreInstitucion"
                       [options]="optionInstitucion"
@@ -449,7 +452,49 @@
       <br>
       <div align="end" class="mr-2 mt-2 mb-4">
         <button mat-raised-button matStepperPrevious class="mr-2">Regresar</button>
-        <button mat-raised-button (click)="ready()">guardar</button>
+        <button mat-raised-button matStepperNext (click)="validFormAcademica()">Siguiente</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="formFiles">
+    <form [formGroup]="formFiles" method="post">
+      <ng-template matStepLabel>Documentos</ng-template>
+        <div class="grid content">
+          <div class="col-12 md:col-12">
+            <label for="FileMatriculaURL" class="block mb-2">Documentos como requisitos para su matricula <b>(Formato PDF)</b></label>
+            <input class="p-fluid p-grid p-formgrid"
+                   type="file"
+                   id="input-file"
+                   name="file"
+                   accept="application/pdf"
+                   formControlName="FileMatriculaURL"
+                   (change)="onFileMatriculaChange($event)"
+                   pInputText/>
+            <small *ngIf="FileMatriculaURL.hasError('required') && FileMatriculaURL.dirty"
+                   class="p-error">El documento de requisitos es <strong>requerido</strong></small>
+            <p-progressBar *ngIf="loadingFileMatricula" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+          </div>
+          <div class="col-12 md:col-12" *ngIf="selecGrupo && selecGrupo.RequeridoPPago">
+            <label for="CP" class="block mb-2">Vouchers de pago de la primera mensualidad, matricula y pago del libro <b>(Escaneado en un solo PDF)</b></label>
+            <input class="p-fluid p-grid p-formgrid"
+                   type="file"
+                   autocomplete="off"
+                   formControlName="FilePagoURL"
+                   (change)="onFilePagoChange($event)"
+                   accept="application/pdf"
+                   pInputText/>
+            <small *ngIf="FilePagoURL.hasError('required') && FilePagoURL.dirty"
+                   class="p-error">El voucher de pago de la primera mensualidad, matricula y del libro son <strong>requerido</strong></small>
+            <p-progressBar *ngIf="loadingFilePago" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+          </div>
+          <div class="col-12">
+            <b>ANTES DE ENVIAR SU INFORMACIÓN, VERIFIQUE QUE SE ENCUENTRE DIGITADO CORRECTAMENTE**</b>
+          </div>
+        </div>
+      <br>
+      <div align="end" class="mr-2 mt-2 mb-4">
+        <button mat-raised-button matStepperPrevious class="mr-2">Regresar</button>
+        <button mat-raised-button (click)="ready()" [disabled]="loadingFileMatricula || loadingFilePago || loadingSave">guardar</button>
       </div>
     </form>
   </mat-step>

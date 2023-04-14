@@ -5,16 +5,16 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatListModule } from '@angular/material/list';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 const materialComponents:any[] = [
   MatStepperModule,
   MatButtonModule,
   MatMenuModule,
   MatIconModule,
-  // MatSelectModule,
-  // MatFormFieldModule
+  MatListModule,
+  MatSnackBarModule
 ]
 
 @NgModule({

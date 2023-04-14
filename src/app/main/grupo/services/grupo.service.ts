@@ -5,7 +5,8 @@ import { Observable, Subscription } from 'rxjs';
 import { HttpClient } from "@angular/common/http";
 import { Grupo, ResGrupo, ResTipoGrupo } from '../class/Grupo';
 import { SocketService } from 'src/app/services/socket.service';
-import { ResAddEnGrupo } from '../../matricula/class/AlumnoEnGrupo';
+import { UnAuthorizedService } from 'src/app/services/unauthorized.service';
+import { ResEstudianteEnGrupo } from '../class/EstudianteGrupo';
 
 
 @Injectable({
@@ -22,7 +23,9 @@ export class GrupoService{
   public loadingLista:boolean;
   public respGrupo:ResGrupo;
 
-  constructor(private http:HttpClient, private _socket:SocketService){
+  constructor(private http:HttpClient,
+              private _unAuth:UnAuthorizedService,
+              private _socket:SocketService){
     this.listGrupos = [];
     this.loadingLista = false;
     this.getListaGrupos();
@@ -61,8 +64,8 @@ export class GrupoService{
     return this.http.get<ResHorario>(`${environment.BASE_URL}/horario/get-horarios`);
   }
 
-  getEstudiantesEnGrupoEspecifico(Id:number, limit:number = 5, offset:number = 0):Observable<ResAddEnGrupo>{
-    return this.http.get<ResAddEnGrupo>(`${environment.BASE_URL}/estudiante-en-grupo/get-estudiantes-en-grupo-especifico/${Id}?limit=${limit}&offset=${offset}`);
+  getEstudiantesEnGrupoEspecifico(Id:number, limit:number = 5, offset:number = 0):Observable<ResEstudianteEnGrupo>{
+    return this.http.get<ResEstudianteEnGrupo>(`${environment.BASE_URL}/estudiante-en-grupo/get-estudiantes-en-grupo-especifico/${Id}?limit=${limit}&offset=${offset}`);
   }
 
   /** Listen Sockets */
@@ -88,8 +91,8 @@ export class GrupoService{
         this.respGrupo = value;
         this.listGrupos = value.data as Array<Grupo>;
       },
-      error: (err) => {
-        console.log("Error lista de usuarios")
+      error: (e) => {
+        this._unAuth.unAuthResponse(e);
         this.loadingLista = false;
       }
     })
@@ -103,7 +106,7 @@ export class GrupoService{
           this.listGrupos = value.data as Array<Grupo>;
         }
       },
-      error: (e) => console.log(e)
+      error: (e) => this._unAuth.unAuthResponse(e)
     })
   }
 

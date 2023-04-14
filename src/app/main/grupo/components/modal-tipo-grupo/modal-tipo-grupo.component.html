@@ -1,5 +1,4 @@
-<p-dialog header="Nuevo nombre de grupo"
-          [(visible)]="openModalTGrupo"
+<p-dialog [(visible)]="openModalTGrupo"
           [modal]="true"
           [style]="{width: '45vw'}"
           [breakpoints]="{'960px': '75vw', '640px': '90vw'}"
@@ -40,7 +39,12 @@
             </div>
           </form>
         <ng-template pTemplate="footer">
-        <p-button [icon]="loadHorario?'pi pi-spin pi-spinner':'pi pi-save'" (click)="saveTipoGrupo()" label="Registrar" styleClass="p-button-text"></p-button>
-        <p-button (click)="closeModal()" label="Cancelar" styleClass="p-button-text"></p-button>
+          <button mat-raised-button
+                  class="button-custom"
+                  (click)="saveTipoGrupo()"><i [class]="loadHorario?'pi pi-spin pi-spinner':'pi pi-save'"></i> Registrar</button>
+          <button mat-raised-button
+                  (click)="closeModal()">Cancelar</button>
+        <!-- <p-button [icon]="loadHorario?'pi pi-spin pi-spinner':'pi pi-save'" (click)="saveTipoGrupo()" label="Registrar" styleClass="p-button-text"></p-button>
+        <p-button (click)="closeModal()" label="Cancelar" styleClass="p-button-text"></p-button> -->
         </ng-template>
 </p-dialog>

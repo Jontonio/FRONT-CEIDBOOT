@@ -14,6 +14,7 @@ class Curso {
   NumModulos: number;
   Estado?: boolean;
   EstadoApertura:boolean;
+  LinkRequistos?:string;
   createdAt?: string;
   updatedAt?: string;
 

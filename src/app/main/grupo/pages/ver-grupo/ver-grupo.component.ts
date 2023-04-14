@@ -4,6 +4,8 @@ import { MessageService } from 'primeng/api';
 import { Grupo } from 'src/app/main/grupo/class/Grupo';
 import { GrupoService } from 'src/app/main/grupo/services/grupo.service';
 import { Subscription } from 'rxjs';
+import { UnAuthorizedService } from 'src/app/services/unauthorized.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-ver-grupo',
@@ -22,6 +24,7 @@ export class VerGrupoComponent implements OnInit {
 
   constructor(private routerActive:ActivatedRoute,
               private _grupo:GrupoService,
+              private readonly _unAuth:UnAuthorizedService,
               private route:Router,
               private _msg:MessageService) {
     this.getIdParams(this.routerActive);
@@ -44,12 +47,14 @@ export class VerGrupoComponent implements OnInit {
       },
       error: (e) =>{
         this.messageError(e);
+        this._unAuth.unAuthResponse(e);
         this.route.navigate([this.urlLista]);
       }
     })
   }
 
-  messageError(e:any){
+  messageError(e:HttpErrorResponse){
+    if(e.status==401) return;
     const msg = e.error.message;
     Array.isArray(msg)?msg.forEach((e) => this.toast('error',e,'Error de validación de datos')):
                                                   this.toast('error',msg,`${e.error.error}:${e.error.statusCode}`)

@@ -14,13 +14,12 @@
       </div>
       <div class="col-6 flex justify-content-end">
         <div>
-          <button pButton
-                  pRipple
+          <button mat-raised-button
                   type="button"
-                  icon="fa-solid fa-plus"
-                  label="Nuevo curso"
-                  routerLink="/system/cursos/add-curso"
-                  class="p-button-rounded"></button>
+                  class="button-custom-round"
+                  routerLink="/system/cursos/add-curso">
+                  <i class="fa-solid fa-plus"></i> Nuevo curso
+          </button>
         </div>
       </div>
     </div>
@@ -63,9 +62,9 @@
                     </button>
                   </ng-template>
                 </td>
-                <td>
+                <td class="text-center">
                   <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-                    <mat-icon>more_vert</mat-icon>
+                    <mat-icon><i class="fa-solid fa-circle-chevron-down"></i></mat-icon>
                   </button>
                   <mat-menu #menu="matMenu">
                     <button mat-menu-item [routerLink]="['/system/cursos/editar-curso', curso.Id]">
@@ -119,6 +118,3 @@
                  acceptLabel="Confirmar"
                  [breakpoints]="{'960px': '75vw', '640px': '100vw'}"
                  rejectButtonStyleClass="p-button-outlined"></p-confirmDialog>
-
-<!-- A component that is used to show messages to the user. -->
-<p-toast position="top-right" [breakpoints]="{'920px': {width: '100%', right: '0', left: '0', padding:'10px'}}"></p-toast>

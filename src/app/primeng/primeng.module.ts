@@ -38,6 +38,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { CheckboxModule } from 'primeng/checkbox';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { PanelModule } from 'primeng/panel';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 /**
  * array of modules
@@ -76,7 +77,8 @@ const listModules:any[] = [
   TooltipModule,
   CheckboxModule,
   PanelModule,
-  SplitButtonModule
+  SplitButtonModule,
+  ProgressBarModule
 ]
 
 @NgModule({

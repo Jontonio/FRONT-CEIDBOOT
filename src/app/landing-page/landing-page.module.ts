@@ -14,6 +14,8 @@ import { AuthModule } from '../auth/auth.module';
 import { MatriculaComponent } from './pages/matricula/matricula.component';
 import { MessageService } from 'primeng/api';
 import { MaterialModule } from '../material/material.module';
+import { PagosComponent } from './pages/pagos/pagos.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -22,11 +24,13 @@ import { MaterialModule } from '../material/material.module';
     WeComponent,
     MorThingsComponent,
     HomeComponent,
-    MatriculaComponent
+    MatriculaComponent,
+    PagosComponent
   ],
   imports: [
     CommonModule,
     RouterModule,
+    ReactiveFormsModule,
     PrimengModule,
     MaterialModule,
     LandingPageRoutingModule,

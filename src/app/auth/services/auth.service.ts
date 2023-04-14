@@ -1,5 +1,5 @@
 import { environment } from 'src/environments/environment';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { Router } from "@angular/router";
@@ -13,9 +13,9 @@ import { Logout, ResLogout } from '../interfaces/Logout';
 })
 export class AuthService {
 
-  userAuth:UserLogin | undefined;
+  public userAuth:UserLogin | undefined;
 
-  constructor( private http:HttpClient, private route:Router ){}
+  constructor( private http:HttpClient, private route:Router){}
 
   login(data:Login):Observable<ResLogin>{
     return this.http.post<ResLogin>(`${environment.BASE_URL}/auth/login`, data );

@@ -12,11 +12,10 @@ export class ValidateUserGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean>{
 
     return new Promise((resolve, reject) => {
+      console.log("here")
 
       this._auth.authenticated().subscribe({
-
         next: (res) => {
-
           if(res.ok){
             this._auth.userAuth = res.user;
             resolve(true);
@@ -25,7 +24,6 @@ export class ValidateUserGuard implements CanActivate {
             this._auth.deleteToken();
             resolve(false)
           }
-
         },
         error: (err) => {
           this._auth.deleteToken();

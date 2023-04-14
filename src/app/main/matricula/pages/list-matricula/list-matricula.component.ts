@@ -9,6 +9,8 @@ import { SocketService } from 'src/app/services/socket.service';
 import { Matricula } from '../../class/Matricula';
 import { Servicio } from '../../class/Servicio';
 import { MatriculaService } from '../../services/matricula.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ShowFileComponent } from 'src/app/shared/show-file/show-file.component';
 
 @Component({
   selector: 'app-list-matricula',
@@ -18,6 +20,7 @@ import { MatriculaService } from '../../services/matricula.service';
 export class ListMatriculaComponent implements OnInit {
 
   @ViewChildren('elemento') dropdowns:QueryList<Dropdown>;
+  @ViewChild(ShowFileComponent) showFileComponent:ShowFileComponent;
 
   /** Variables de clase */
   startPage:number = 0;
@@ -30,12 +33,13 @@ export class ListMatriculaComponent implements OnInit {
   loadingSave:boolean = false;
   visibleAsignarGrupo:boolean = false;
   formSelectGrupo:FormGroup;
+  FileMatriculaURL:string;
 
   constructor(private readonly _msg:MessageService,
               public readonly _matricula:MatriculaService,
               private readonly _socket:SocketService,
               public readonly _grupo:GrupoService,
-              private readonly fb:FormBuilder,
+              private readonly spinner:NgxSpinnerService,
               public readonly _confirService:ConfirmationService) {}
 
   ngOnInit(): void {}
@@ -96,6 +100,12 @@ export class ListMatriculaComponent implements OnInit {
     return list.filter(item => item.grupo.Id!==undefined);
   }
 
+  showFile(matricula:Matricula){
+    this.showFileComponent.showModal();
+    this.showFileComponent.showSpinner();
+    this.FileMatriculaURL = matricula.FileMatriculaURL;
+  }
+
   save({Id, estudiante }:Matricula){
 
     let IdGrupo:number | undefined;
@@ -134,7 +144,6 @@ export class ListMatriculaComponent implements OnInit {
     }
 
   }
-
 
   toast(severity:string, summary:string, detail:string=''){
     this._msg.add({severity, summary, detail});

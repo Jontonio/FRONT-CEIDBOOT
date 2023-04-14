@@ -5,6 +5,7 @@ import { ResUsuario, Usuario } from "../class/Usuario";
 import { environment } from 'src/environments/environment';
 import { ResRol } from "src/app/class/Rol";
 import { Subscription } from 'rxjs';
+import { UnAuthorizedService } from "src/app/services/unauthorized.service";
 
 @Injectable({
   providedIn:"root"
@@ -18,7 +19,9 @@ export class UsuarioService {
   public loadingLista:boolean = false;
   public respUsuario  :ResUsuario | undefined;
 
-  constructor(private http:HttpClient, private _socket:SocketService){
+  constructor(private http:HttpClient,
+              private readonly _unAuth:UnAuthorizedService,
+              private _socket:SocketService){
     this.getListaUsuarios();
     this.OnListaUsuarios();
   }
@@ -75,8 +78,8 @@ export class UsuarioService {
           this.listUsuarios = value.data as Array<Usuario>;
         }
       },
-      error: (err) => {
-        console.log("Error lista de usuarios")
+      error: (e) => {
+        this._unAuth.unAuthResponse(e);
         this.loadingLista = false;
       }
     })
@@ -90,7 +93,7 @@ export class UsuarioService {
           this.listUsuarios = value.data as Array<Usuario>;
         }
       },
-      error: (e) => console.log(e)
+      error: (e) => this._unAuth.unAuthResponse(e)
     })
   }
 

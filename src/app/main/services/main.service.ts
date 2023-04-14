@@ -77,6 +77,7 @@ export class MainService{
     const url = `${environment.BASE_URL}/ubigeo/provincia/${IdPadreUbigeo}`;
     return this.http.get<Provincia[]>(url);
   }
+
   getDistritos(IdPadreUbigeo:number):Observable<Distrito[]>{
     const url = `${environment.BASE_URL}/ubigeo/distrito/${IdPadreUbigeo}`;
     return this.http.get<Distrito[]>(url);

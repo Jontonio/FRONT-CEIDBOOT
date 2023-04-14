@@ -5,7 +5,9 @@ import { Subscription } from 'rxjs';
 import { UserLogin } from 'src/app/auth/interfaces/ResLogin';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { UsuarioService } from 'src/app/main/usuario/services/usuario.service';
+import { UnAuthorizedService } from 'src/app/services/unauthorized.service';
 import { SocketService } from 'src/app/services/socket.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-perfil',
@@ -13,6 +15,7 @@ import { SocketService } from 'src/app/services/socket.service';
   styleUrls: ['./perfil.component.scss']
 })
 export class PerfilComponent implements OnInit {
+
   /** Subscription Variables */
   updateUsuario$:Subscription;
   updatePassword$:Subscription;
@@ -26,13 +29,12 @@ export class PerfilComponent implements OnInit {
 
   constructor(public readonly _auth:AuthService,
               private readonly fb:FormBuilder,
+              private readonly _unAuth:UnAuthorizedService,
               private readonly _msg:MessageService,
               private readonly _socket:SocketService,
               private readonly _usuario:UsuarioService) {
-
                 this.createFormUsuario();
                 this.createFormChangePassword();
-
               }
 
   ngOnInit(): void {
@@ -109,6 +111,8 @@ export class PerfilComponent implements OnInit {
       },
       error: (e) => {
         console.log(e)
+        this.messageError(e);
+        this._unAuth.unAuthResponse(e);
       }
     })
   }
@@ -137,14 +141,14 @@ export class PerfilComponent implements OnInit {
     this._msg.add({severity, summary, detail});
   }
 
-  messageError(e:any){
+  messageError(e:HttpErrorResponse){
     const msg = e.error.message;
-    Array.isArray(msg)?msg.forEach((e:string) => this.toast('error',e,'Error de validación de datos')):
-                                                  this.toast('error',msg,`${e.error.error}:${e.error.statusCode}`)
+    if(e.status==401) return;
+    Array.isArray(msg)?msg.forEach((e:string) => this.toast('error', e,'Error de validación de datos')):
+                                                  this.toast('error', msg,`${e.error.error}:${e.error.statusCode}`)
   }
 
   save(){
-
     if(this.usuarioForm.invalid){
       Object.keys(this.usuarioForm.controls).forEach( input => this.usuarioForm.controls[input].markAsDirty())
       return;
@@ -158,14 +162,14 @@ export class PerfilComponent implements OnInit {
         this.toast('success', value.msg);
       },
       error: (e) => {
-        this.messageError(e)
         this.loadingUsuario = false;
+        this.messageError(e)
+        this._unAuth.unAuthResponse(e);
       }
     })
   }
 
   savePassword(){
-
     if(this.passwordChangeForm.invalid){
       Object.keys(this.passwordChangeForm.controls)
             .forEach( input => this.passwordChangeForm.controls[input].markAsDirty())
@@ -191,6 +195,7 @@ export class PerfilComponent implements OnInit {
       error: (e)=> {
         this.messageError(e)
         this.loadingPassword = false;
+        this._unAuth.unAuthResponse(e);
       }
     })
 

@@ -1,0 +1,23 @@
+/* Estilos para card como contenido principal */
+.container-pagos{
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+.header-conatiner-pagos{
+  height: 100px;
+}
+.content-form-pagos{
+  width: 500px;
+}
+@media only screen and (max-width: 767px) {
+  /* Estilos para teléfonos móviles aquí */
+  .content-form-pagos{
+    width: 95%;
+    padding: 2px;
+  }
+  .header-conatiner-pagos{
+    height: 80px;
+  }
+}

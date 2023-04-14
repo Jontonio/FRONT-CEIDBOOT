@@ -11,13 +11,12 @@
       </div>
       <div class="col-6 flex justify-content-end">
         <div>
-          <button pButton
-                  pRipple
+          <button mat-raised-button
                   type="button"
-                  icon="fa-solid fa-plus"
-                  label="Grupo"
-                  routerLink="/system/grupos/add-grupo"
-                  class="p-button-rounded"></button>
+                  class="button-custom-round"
+                  routerLink="/system/grupos/add-grupo">
+                  <i class="fa-solid fa-plus"></i> Nuevo grupo
+          </button>
         </div>
       </div>
     </div>
@@ -26,26 +25,31 @@
         <ng-template pTemplate="header">
             <tr>
               <th>Cód.</th>
-              <th>Bandera</th>
+              <th>Idioma</th>
               <th>Nombre</th>
-              <th>Curso</th>
-              <th>Nivel</th>
               <th>Horario</th>
               <th>Modalidad</th>
               <th>Fecha Inicio - Finalizaión</th>
-              <th>Max. alumnos</th>
-              <th>Num. alumnos</th>
-              <th>Docente asignado</th>
+              <th>Alumnos</th>
+              <th>Requi. Primer pago</th>
               <th>Operación</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-grupo let-rowIndex="rowIndex">
             <tr class="select-tr">
               <td>G-{{grupo.Id}}</td>
-              <td><img class="img-flag" [src]="grupo.curso.UrlBandera" alt="" srcset=""></td>
+              <td>
+                <div class="grid">
+                  <div class="col-3 flex justify-content-center">
+                    <img class="img-flag mr-2" [alt]="'Bandera'+grupo.curso.NombreCurso" [src]="grupo.curso.UrlBandera" alt="" srcset="">
+                  </div>
+                  <div class="col-9 flex flex-column">
+                    <b class="mr-2 mb-1">{{grupo.curso.NombreCurso | titlecase}}</b>
+                    {{grupo.curso.nivel.Nivel}}
+                  </div>
+                </div>
+              </td>
               <td>{{grupo.tipoGrupo.NombreGrupo | titlecase}}</td>
-              <td>{{grupo.curso.NombreCurso | titlecase}}</td>
-              <td>{{grupo.curso.nivel.Nivel | titlecase}}</td>
               <td>{{grupo.horario.HoraInicio | date:'h:mm a'}} - {{grupo.horario.HoraFinal | date:'h:mm a'}}</td>
               <td>{{grupo.Modalidad}}</td>
               <td>
@@ -54,12 +58,18 @@
                         severity="info">
                         <span class="m-1">{{grupo.FechaInicioGrupo | date}} a {{grupo.FechaFinalGrupo | date}}</span></p-tag>
               </td>
-              <td>{{grupo.MaximoEstudiantes}}</td>
-              <td>{{grupo.NumeroEstudiantes}}</td>
-              <td>{{grupo.docente.Nombres | titlecase}} {{grupo.docente.ApellidoPaterno | titlecase}}</td>
+              <td>{{grupo.NumeroEstudiantes}} de {{grupo.MaximoEstudiantes}}</td>
               <td>
+                <span *ngIf="grupo.RequeridoPPago else notRequired">
+                  <p-tag styleClass="mr-2" icon="pi pi-check" severity="success" value="Requerido"></p-tag>
+                </span>
+                <ng-template #notRequired>
+                  <p-tag icon="pi pi-times" severity="danger" value="No requerido"></p-tag>
+                </ng-template>
+              </td>
+              <td class="text-center">
                 <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-                  <mat-icon>more_vert</mat-icon>
+                  <mat-icon><i class="fa-solid fa-circle-chevron-down"></i></mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">
                   <button mat-menu-item [routerLink]="['/system/grupos/ver-grupo', grupo.Id]">
@@ -68,15 +78,15 @@
                   </button>
                   <button mat-menu-item [routerLink]="['/system/grupos/estudiantes-grupo', grupo.Id]">
                     <mat-icon><i class="fa-solid fa-graduation-cap"></i></mat-icon>
-                    <span>Estudiantes</span>
+                    <span>Estudiantes en el grupo</span>
                   </button>
                   <button mat-menu-item [routerLink]="['/system/grupos/edit-grupo', grupo.Id]">
                     <mat-icon><i class="fa-solid fa-pen-to-square"></i></mat-icon>
-                    <span>Editar grupo</span>
+                    <span>Editar datos del grupo</span>
                   </button>
                   <button mat-menu-item>
                     <mat-icon><i class="fa-solid fa-trash-can"></i></mat-icon>
-                    <span>Dar de grupo</span>
+                    <span>Dar de baja al grupo</span>
                   </button>
                 </mat-menu>
               </td>

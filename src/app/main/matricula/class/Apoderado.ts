@@ -7,18 +7,24 @@ class Apoderado {
   ApellidoMApoderado:string;
   ApellidoPApoderado:string;
   CelApoderado:string;
-  DNIApoderado:string;
+  TipoDocumento:string;
+  Documento:string;
   Estado:boolean;
   NomApoderado:string;
+  Code:string;
+  CodePhone:string;
   createdAt:Date;
   updateAt:Date;
 
-  constructor(DNI:string, Nombres:string, ApellidoPaterno:string, ApellidoMaterno:string, Celular:string){
+  constructor(TipoDocumento:string, Documento:string, Nombres:string, ApellidoPaterno:string, ApellidoMaterno:string, Celular:string, Code:string, CodePhone:string){
     this.ApellidoMApoderado = ApellidoMaterno;
     this.ApellidoPApoderado = ApellidoPaterno;
     this.CelApoderado = Celular;
-    this.DNIApoderado = DNI
+    this.TipoDocumento = TipoDocumento;
+    this.Documento = Documento;
     this.NomApoderado = Nombres;
+    this.Code = Code;
+    this.CodePhone = CodePhone;
   }
 
 }

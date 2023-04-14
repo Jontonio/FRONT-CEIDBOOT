@@ -4,7 +4,8 @@ import { HttpClient } from "@angular/common/http";
 import { Observable, Subscription } from "rxjs";
 import { Matricula, ResMatricula } from "../class/Matricula";
 import { SocketService } from "src/app/services/socket.service";
-import { ResAddEnGrupo } from "../class/AlumnoEnGrupo";
+import { UnAuthorizedService } from "src/app/services/unauthorized.service";
+import { ResEstudianteEnGrupo } from "../../grupo/class/EstudianteGrupo";
 
 @Injectable({
   providedIn:'root'
@@ -16,13 +17,15 @@ export class MatriculaService{
   loadingLista:boolean = true;
   respMatricula:ResMatricula;
 
-  constructor(private readonly http:HttpClient, private readonly _scoket:SocketService){
+  constructor(private readonly http:HttpClient,
+              private readonly _unAuth:UnAuthorizedService,
+              private readonly _scoket:SocketService){
     this.getListaMatriculados();
     this.OnDocentes();
   }
 
   getAllMatriculados(limit:number = 5, offset:number = 0):Observable<ResMatricula>{
-    return this.http.get<ResMatricula>(`${environment.BASE_URL}/matricula/get-matriculas-estudiantes?limit=${limit}&offset=${offset}`);
+    return this.http.get<ResMatricula>(`${environment.BASE_URL}/matricula/get-prematriculas-estudiantes?limit=${limit}&offset=${offset}`);
   }
 
   removeMatriculado(Id:number){
@@ -30,7 +33,7 @@ export class MatriculaService{
   }
 
   addAlumnoEnGrupo(data:any){
-    return this.http.post<ResAddEnGrupo>(`${environment.BASE_URL}/estudiante-en-grupo/add-estudiante-en-grupo`, data);
+    return this.http.post<ResEstudianteEnGrupo>(`${environment.BASE_URL}/estudiante-en-grupo/register-estudiante-prematricula`, data);
   }
 
   /**
@@ -50,15 +53,17 @@ export class MatriculaService{
     this.loadingLista = true;
     this.listMatriculados$ = this.getAllMatriculados(limit, offset).subscribe({
       next: (value) => {
+        console.log(value)
         this.loadingLista = false;
-        if(value.ok){
-          this.respMatricula = value;
+        if(!value.ok){
           console.log(value)
-          this.listMatriculados = value.data as Array<Matricula>;
+          return;
         }
+        this.respMatricula = value;
+        this.listMatriculados = value.data as Array<Matricula>;
       },
       error: (e) =>{
-        console.log(e)
+        this._unAuth.unAuthResponse(e);
         this.loadingLista = false;
       }
     })
@@ -72,7 +77,7 @@ export class MatriculaService{
           this.listMatriculados = value.data as Array<Matricula>;
         }
       },
-      error: (e) => console.log(e)
+      error: (e) => this._unAuth.unAuthResponse(e)
     })
   }
 

@@ -1,5 +1,5 @@
 import { environment } from 'src/environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ResPerson } from '../class/Person';
@@ -9,6 +9,8 @@ import { ResDenominServicio } from '../denomin-servicio/class/Denomin-servicio';
 import { Matricula, ResMatricula } from '../main/matricula/class/Matricula';
 import { ResApoderado } from '../main/matricula/class/Apoderado';
 import { EmailDocumento, ResEmailDocEstudiante, ResEstudiante } from '../main/matricula/class/Estudiante';
+import { ResGrupo } from '../main/grupo/class/Grupo';
+import { EstudianteEnGrupo, ResEstudianteEnGrupo } from '../main/grupo/class/EstudianteGrupo';
 
 @Injectable({
   providedIn: 'root'
@@ -55,12 +57,8 @@ export class GlobalService {
     return this.http.get<ResEstudiante>(`${environment.BASE_URL}/estudiante/get-estudiante-by-documento/${DNI}`);
   }
 
-  getCursosMatricula():Observable<ResCurso>{
-    return this.http.get<ResCurso>(`${environment.BASE_URL}/curso/get-cursos-matriculas`);
-  }
-
-  getHorariosMatricula():Observable<ResHorario>{
-    return this.http.get<ResHorario>(`${environment.BASE_URL}/horario/get-horarios-matricula`);
+  getGruposMatricula():Observable<ResGrupo>{
+    return this.http.get<ResGrupo>(`${environment.BASE_URL}/grupo/get-grupos-matricula`);
   }
 
   getDenominacionServicios():Observable<ResDenominServicio>{
@@ -75,8 +73,17 @@ export class GlobalService {
     return this.http.post<ResEmailDocEstudiante>(`${environment.BASE_URL}/estudiante/verify-documento-email`, data);
   }
 
-  registerMatricula(data:Matricula):Observable<ResMatricula>{
-    return this.http.post<ResMatricula>(`${environment.BASE_URL}/matricula/matricular-estudiante`, data);
+  registerMatricula(data:EstudianteEnGrupo):Observable<ResEstudianteEnGrupo>{
+    return this.http.post<ResEstudianteEnGrupo>(`${environment.BASE_URL}/estudiante-en-grupo/register-estudiante-from-matricula`, data);
   }
+
+  registerPrematricula(data:Matricula):Observable<ResEstudianteEnGrupo>{
+    return this.http.post<ResEstudianteEnGrupo>(`${environment.BASE_URL}/matricula/matricular-estudiante`, data);
+  }
+
+  uploadFileMatricula(data:any):Observable<any>{
+    return this.http.post<any>(`${environment.BASE_URL}/matricula/file-matricula`, data);
+  }
+
 
 }

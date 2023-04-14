@@ -11,14 +11,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DescripcionPipe } from '../pipes/descripcion.pipe';
 import { SharedModule } from '../shared/shared.module';
+import { MaterialModule } from '../material/material.module';
 
 @NgModule({
-  providers: [MessageService, ConfirmationService],
   declarations: [
     MainComponent,
     MenuComponent,
     AulaComponent,
-    DescripcionPipe,
+    DescripcionPipe
   ],
   imports: [
     CommonModule,
@@ -26,8 +26,10 @@ import { SharedModule } from '../shared/shared.module';
     PrimengModule,
     ReactiveFormsModule,
     FormsModule,
+    MaterialModule,
     SharedModule,
     NgIdleModule.forRoot()
-  ]
+  ],
+  providers: [ ConfirmationService, MessageService ]
 })
 export class MainModule { }

@@ -7,8 +7,7 @@ import { PrimengModule } from '../primeng/primeng.module';
 import { FormLoginComponent } from './components/form-login/form-login.component';
 import { SharedModule } from '../shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
-import { TokeInterceptorsService } from '../interceptors/token-interceptors.service';
+import { HttpClientModule } from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -19,7 +18,6 @@ import { TokeInterceptorsService } from '../interceptors/token-interceptors.serv
     CommonModule,
     RouterModule,
     PrimengModule,
-    SharedModule,
     ReactiveFormsModule,
     HttpClientModule
   ],

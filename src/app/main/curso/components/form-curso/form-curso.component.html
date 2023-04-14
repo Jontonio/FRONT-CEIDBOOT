@@ -64,29 +64,46 @@
         <div class="col-12 md:col-6">
           <label for="niveles" class="block mb-2">Nivel</label>
           <p-dropdown class="p-fluid p-grid p-formgrid"
-                      [options]="niveles"
-                      formControlName="nivel"
-                      optionLabel="Nivel"></p-dropdown>
+          [options]="niveles"
+          placeholder="Seleccione el nivel del curso"
+          formControlName="nivel"
+          optionLabel="Nivel"></p-dropdown>
           <small *ngIf="nivel.hasError('required') && nivel.dirty"
-                 class="p-error">El nivel del curso es <strong>requerido</strong></small>
+          class="p-error">El nivel del curso es <strong>requerido</strong></small>
         </div>
         <div class="col-12 md:col-6">
           <label for="usuario" class="block mb-2">Módulos del curso</label>
           <p-dropdown class="p-fluid p-grid p-formgrid"
-                      [options]="modulo"
-                      placeholder="Módulos del curso"
-                      optionValue="cantidad"
-                      formControlName="NumModulos"
-                      optionLabel="name"></p-dropdown>
+          [options]="modulo"
+          placeholder="Módulos del curso"
+          optionValue="cantidad"
+          formControlName="NumModulos"
+          optionLabel="name"></p-dropdown>
           <small *ngIf="NumModulos.hasError('required') && NumModulos.dirty"
-                 class="p-error">El campo módulos del curso es <strong>requerido</strong></small>
+          class="p-error">El campo módulos del curso es <strong>requerido</strong></small>
         </div>
+      </div>
+      <div class="col-12 mt-1">
+        <label for="LinkRequistos" class="block mb-2">Link de requisitos del curso (opcional)</label>
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon"><i class="fa-solid fa-link"></i></span>
+          <input id="LinkRequistos"
+                class="p-fluid p-grid p-formgrid"
+                type="text"
+                autocomplete="off"
+                formControlName="LinkRequistos"
+                pInputText/>
+        </div>
+        <small *ngIf="LinkRequistos.hasError('pattern') && !LinkRequistos.hasError('required')"
+              class="p-error">Digite un link <strong>válido</strong></small>
+        <!-- <small *ngIf="LinkRequistos.hasError('required') && LinkRequistos.dirty"
+              class="p-error">El campo nombre del curso es <strong>requerido</strong></small> -->
       </div>
     </div>
     <div class="col-12 md:col-6">
       <div class="col">
         <label for="Nombres" class="block mb-2">Descripción del curso</label>
-        <textarea rows="10"
+        <textarea rows="15"
                   cols="30"
                   pInputTextarea
                   formControlName="DescripcionCurso"
@@ -100,14 +117,14 @@
   <div class="flex justify-content-end">
     <button mat-raised-button
             color="primary"
-            class="p-button-c"
+            class="button-custom"
             (click)="ready()"
             [disabled]="loading">
             <i [class]="loading?'pi pi-spin pi-spinner':'pi pi-save'"></i> {{isUpdate?'Guardar':'Registrar'}}
     </button>
     <button mat-raised-button
             color="primary"
-            class="p-button-c ml-2"
+            class="button-custom ml-2"
             (click)="returnLista()"> Cancelar
     </button>
   </div>

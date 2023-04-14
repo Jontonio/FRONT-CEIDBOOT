@@ -26,9 +26,20 @@ export class NavbarComponent implements OnInit {
           routerLink:'/main/nosotros'
       },
       {
-          label:'Matriculas',
-          icon:'fa-solid fa-graduation-cap',
-          routerLink:'/main/matricula'
+        label:'Servicios',
+        icon:'fa-solid fa-globe',
+        items:[
+          {
+            label:'Matriculas',
+            icon:'fa-solid fa-graduation-cap',
+            routerLink:'/main/matricula'
+          },
+          {
+            label:'Pagos',
+            icon:'fa-solid fa-bag-shopping',
+            routerLink:'/main/pagos'
+          }
+        ]
       }
     ];
   }

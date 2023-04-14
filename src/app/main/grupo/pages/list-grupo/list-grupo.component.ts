@@ -23,14 +23,4 @@ export class ListGrupoComponent {
     this._grupo.getListaGrupos(event.rows, event.first);
   }
 
-  messageError(e:any){
-    const msg = e.error.message;
-    Array.isArray(msg)?msg.forEach((e) => this.toast('error',e,'Error de validación de datos')):
-                                          this.toast('error',msg,`${e.error.error}:${e.error.statusCode}`)
-  }
-
-  toast(type:string, msg:string, detail:string=''){
-    this._msg.add({severity:type, summary:msg, detail});
-  }
-
 }

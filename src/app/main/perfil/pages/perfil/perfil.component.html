@@ -129,7 +129,7 @@
       <div class="flex justify-content-end mt-3">
         <button mat-raised-button
                 color="primary"
-                class="p-button-c"
+                class="button-custom"
                 (click)="save()"
                 [disabled]="usuarioForm.invalid || loadingUsuario">
                 <i [class]="loadingUsuario?'pi pi-spin pi-spinner':'pi pi-save'"></i> Guardar
@@ -195,7 +195,7 @@
       <div class="flex justify-content-end mt-3">
         <button mat-raised-button
                 color="primary"
-                class="p-button-c"
+                class="button-custom"
                 (click)="savePassword()"
                 [disabled]="loadingPassword">
                 <i [class]="loadingPassword?'pi pi-spin pi-spinner':''"></i> Cambiar contraseña

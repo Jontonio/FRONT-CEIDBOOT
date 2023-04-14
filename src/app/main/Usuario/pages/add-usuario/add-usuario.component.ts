@@ -3,11 +3,12 @@ import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { optionOperation } from 'src/app/main/class/global';
 import { Usuario } from 'src/app/main/usuario/class/Usuario';
-import { FormUsuarioComponent } from 'src/app/main/usuario/components/form-usuario/form-usuario.component';
-import { GlobalService } from 'src/app/services/global.service';
 import { SocketService } from 'src/app/services/socket.service';
 import { Subscription } from "rxjs";
 import { UsuarioService } from '../../services/usuario.service';
+import { FormUsuarioComponent } from '../../components/form-usuario/form-usuario.component';
+import { UnAuthorizedService } from 'src/app/services/unauthorized.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-add-usuario',
@@ -29,6 +30,7 @@ export class AddUsuarioComponent {
 
   constructor(private route:Router,
               public _usuario:UsuarioService,
+              private readonly _unAuth:UnAuthorizedService,
               private _socket:SocketService,
               private _msg:MessageService) {
                 this.urlLista = '/system/usuarios/lista-usuarios';
@@ -45,7 +47,8 @@ export class AddUsuarioComponent {
     this._msg.add({severity, summary, detail});
   }
 
-  messageError(e:any){
+  messageError(e:HttpErrorResponse){
+    if(e.status==401) return;
     const msg = e.error.message;
     Array.isArray(msg)?msg.forEach((e:string) => this.toast('error',e,'Error de validación de datos')):
                                                   this.toast('error',msg,`${e.error.error}:${e.error.statusCode}`)
@@ -66,6 +69,7 @@ export class AddUsuarioComponent {
       error: (e) => {
         this.loading = false;
         this.messageError(e);
+        this._unAuth.unAuthResponse(e);
       }
     })
   }
@@ -75,6 +79,7 @@ export class AddUsuarioComponent {
       next: (value) => {
         this.loading = false;
         if(!value.ok){
+          console.log(value)
           this.toast('error', 'Error al actualizar usuario', value.msg)
           return;
         }
@@ -84,7 +89,9 @@ export class AddUsuarioComponent {
       },
       error: (e) => {
         this.loading = false;
+        console.log(e)
         this.messageError(e);
+        this._unAuth.unAuthResponse(e);
         this.route.navigate([this.urlLista]);
       }
     })

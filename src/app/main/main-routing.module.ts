@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { ValidateUserGuard } from '../guards/validate-user.guard';
 import { AulaComponent } from './pages/aula/aula.component';
 import { MainComponent } from './pages/main/main.component';
-import { PerfilComponent } from './perfil/pages/perfil/perfil.component';
 import { ChatBotComponent } from './chat-bot/pages/chat-bot/chat-bot.component';
 
 const routes: Routes = [

@@ -4,21 +4,23 @@ import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import * as moment from 'moment';
 
-import { Curso } from 'src/app/main/curso/class/Curso';
 import { Departamento, Distrito, Provincia } from 'src/app/main/class/Ubigeo';
 import { Edad, Escuela, opInstitucion, Sexo } from '../../main/matricula/interfaces/global';
 import { GlobalService } from 'src/app/services/global.service';
-import { Horario } from 'src/app/main/grupo/class/Horario';
 import { MainService } from 'src/app/main/services/main.service';
 import { Person } from 'src/app/class/Person';
 import { DenominServicio } from 'src/app/denomin-servicio/class/Denomin-servicio';
 import { Matricula } from 'src/app/main/matricula/class/Matricula';
 import { Estudiante } from 'src/app/main/matricula/class/Estudiante';
 import { Institucion } from 'src/app/main/matricula/class/Institucion';
-import { MatStepper, MatStepperNext } from '@angular/material/stepper';
+import { MatStepper } from '@angular/material/stepper';
 import { SocketService } from 'src/app/services/socket.service';
 import { Code } from 'src/app/main/grupo/class/Code';
 import { Apoderado } from 'src/app/main/matricula/class/Apoderado';
+import { Grupo } from 'src/app/main/grupo/class/Grupo';
+import { FileDrive } from 'src/app/main/class/global';
+import { EstudianteEnGrupo } from 'src/app/main/grupo/class/EstudianteGrupo';
+import { Mensualidad } from 'src/app/main/grupo/class/Mensualidad';
 
 interface Card {
   name: string,
@@ -41,15 +43,24 @@ export class FormMatriculaComponent implements OnInit {
   estudiaUnajma:boolean = false;
   isUNAJMA:boolean = false;
   loadGetApoderado:boolean = false;
+  loadingFileMatricula:boolean = false;
+  loadingFilePago:boolean = false;
+  loadingSave:boolean = false;
+
+  fileMatricula:FileDrive;
+  filePago:FileDrive;
 
   formEstudiante:FormGroup;
   formMayorEdad:FormGroup;
-  formCurso:FormGroup;
+  formGrupo:FormGroup;
   formAcademica:FormGroup;
+  formFiles:FormGroup;
 
   optionSexo:Sexo[];
   optionEdad:Edad[];
   card:Card[] = [];
+
+  file:File;
 
   optionInstitucion:opInstitucion[];
   optionEscuelas:Escuela[];
@@ -57,16 +68,13 @@ export class FormMatriculaComponent implements OnInit {
   listDepartamentos$:Subscription;
   listProvincias$:Subscription;
   listDistritos$:Subscription;
-  listCursos$:Subscription;
-  listHorarios$:Subscription;
+  listGrupos$:Subscription;
   listDenominServicio$:Subscription;
 
-  listCursos:Curso[];
-  listHorarios:Horario[];
+  listGrupos:Grupo[];
   listDenominServicio:DenominServicio[];
 
-  selecCurso:Curso;
-  selecHorario:Horario;
+  selecGrupo:Grupo;
 
   listDepartamentos:Departamento[];
   listProvincias:Provincia[] = [];
@@ -79,15 +87,17 @@ export class FormMatriculaComponent implements OnInit {
   country:Code;
   today:Date;
   hayError:boolean;
+  isPeru:boolean;
 
   constructor(private fb:FormBuilder,
               private readonly _global:GlobalService,
               private readonly _msg:MessageService,
-              private readonly _socket:SocketService,
+              private _socket:SocketService,
               public readonly _main:MainService) {
                 this.createFormEstudiante();
                 this.createFormMayorEdad();
-                this.createFormCurso();
+                this.createformGrupo();
+                this.createFormFiles();
                 this.getDepartamentos();
                 this.createFormAcademica();
               }
@@ -110,8 +120,8 @@ export class FormMatriculaComponent implements OnInit {
     ]
 
     this.optionInstitucion = [
-      { name:'Soy persona externa', value:'persona externa'},
-      { name:'Soy estudiante de la UNAJMA', value:'UNAJMA'},
+      { name:'No', value:'persona externa'},
+      { name:'Si', value:'UNAJMA'},
     ]
 
     this.optionEscuelas = [
@@ -127,27 +137,27 @@ export class FormMatriculaComponent implements OnInit {
       {name: 'DNI', code: 'DNI'},
       {name: 'Carnet de extranjería', code: 'CDE' }
     ];
+
     this.listDepartamentos = [];
 
     this.msgTooltipEmail = 'Es de suma importancia que verifique que esté correctamente escrito, para el envío de información académica';
     this.msgTooltipCel = 'Es de suma importancia que el número tenga una cuenta de WhatsApp'
     this.today = new Date();
-    this.getListCursos();
-    this.getListHorarios();
     this.getListDenominServicio();
+    this.getListGrupos();
     this.inicializateCodes();
   }
 
   inicializateCodes(){
     this.country = { name:'Peru', codePhone:'+51', flag:'https://flagcdn.com/pe.svg', code:'PE'};
+    this.isPeru = true;
   }
 
   ngOnDestroy(): void {
-    if(this.listCursos$) this.listCursos$.unsubscribe();
-    if(this.listHorarios$) this.listHorarios$.unsubscribe();
     if(this.listDepartamentos$) this.listDepartamentos$.unsubscribe();
     if(this.listProvincias$) this.listProvincias$.unsubscribe();
     if(this.listDistritos$) this.listDistritos$.unsubscribe();
+    if(this.listGrupos$) this.listGrupos$.unsubscribe();
   }
 
   createFormEstudiante(){
@@ -171,19 +181,24 @@ export class FormMatriculaComponent implements OnInit {
   createFormMayorEdad(){
     this.formMayorEdad = this.fb.group({
       EsMayor:[null, [Validators.required]],
-      DNIApoderado:[null],
+      DocumentoApoderado:[null],
       NomApoderado:[null],
       ApellidoPApoderado:[null],
       ApellidoMApoderado:[null],
-      CelApoderado:[null],
+      CelApoderado:[null]
     })
   }
 
-  createFormCurso(){
-    this.formCurso = this.fb.group({
-      Curso:[null, Validators.required],
-      Modalidad:[null, Validators.required],
-      Horario:[null, Validators.required],
+  createformGrupo(){
+    this.formGrupo = this.fb.group({
+      grupo:[null, Validators.required],
+    })
+  }
+
+  createFormFiles(){
+    this.formFiles = this.fb.group({
+      FileMatriculaURL:[null, Validators.required],
+      FilePagoURL:[null, Validators.required]
     })
   }
 
@@ -243,8 +258,8 @@ export class FormMatriculaComponent implements OnInit {
   get EsMayor(){
     return this.formMayorEdad.controls['EsMayor'];
   }
-  get DNIApoderado(){
-    return this.formMayorEdad.controls['DNIApoderado'];
+  get DocumentoApoderado(){
+    return this.formMayorEdad.controls['DocumentoApoderado'];
   }
   get NomApoderado(){
     return this.formMayorEdad.controls['NomApoderado'];
@@ -258,16 +273,10 @@ export class FormMatriculaComponent implements OnInit {
   get CelApoderado(){
     return this.formMayorEdad.controls['CelApoderado'];
   }
-  get Curso(){
-    return this.formCurso.controls['Curso'];
-  }
-  get Modalidad(){
-    return this.formCurso.controls['Modalidad'];
-  }
-  get Horario(){
-    return this.formCurso.controls['Horario'];
-  }
 
+  get grupo(){
+    return this.formGrupo.controls['grupo'];
+  }
 
   get Poblacion(){
     return this.formAcademica.controls['Poblacion'];
@@ -289,28 +298,12 @@ export class FormMatriculaComponent implements OnInit {
     return this.formAcademica.controls['CarCompromiso'];
   }
 
-  getListCursos(){
-    this.listCursos$ = this._global.getCursosMatricula().subscribe({
-      next: (resp) => {
-        if(resp.ok){
-          this.listCursos = resp.data as Array<Curso>;
-        }
-      },
-      error: (e) => console.log(e)
-    })
+  get FileMatriculaURL(){
+    return this.formFiles.controls['FileMatriculaURL'];
   }
 
-  getListHorarios(){
-    this.listHorarios$ = this._global.getHorariosMatricula().subscribe({
-      next: (resp) => {
-        if(resp.ok){
-          this.listHorarios = resp.data as Array<Horario>;
-        }
-      },
-      error: (e) => {
-        console.log(e)
-      }
-    })
+  get FilePagoURL(){
+    return this.formFiles.controls['FilePagoURL'];
   }
 
   getListDenominServicio(){
@@ -320,12 +313,22 @@ export class FormMatriculaComponent implements OnInit {
           this.listDenominServicio = resp.data as Array<DenominServicio>;
         }
       },
-      error: (e) => console.log(e)
+      error: (e) => this.messageError(e)
+    })
+  }
+
+  getListGrupos(){
+    this.listGrupos$ = this._global.getGruposMatricula().subscribe({
+      next: (resp) => {
+        if(resp.ok){
+          this.listGrupos = resp.data as Array<Grupo>;
+        }
+      },
+      error: (e) => this.messageError(e)
     })
   }
 
   completeDataEstudiante(estudiante:Estudiante){
-    console.log("here")
     // complete data estudiante
     this.Nombres.setValue(estudiante.Nombres);
     this.TipoDocumento.setValue(estudiante.TipoDocumento);
@@ -352,7 +355,6 @@ export class FormMatriculaComponent implements OnInit {
   }
 
   searchEstudiante(documento:string=''){
-    console.log("here")
 
     if(!documento) return;
 
@@ -374,17 +376,18 @@ export class FormMatriculaComponent implements OnInit {
       next: (value) => {
         if(value.ok){
           //TODO: estudiante existe
-          console.log(value.data)
           this.toast('info', value.msg);
           this.completeDataEstudiante(value.data as Estudiante);
-          this.loadGetData = false;
         }else{
           //TODO: estudinate no existe
           this.getDataReniec(documento, isPeru);
         }
+        this.loadGetData = false;
       },
-      error: (err) => {
-
+      error: (e) => {
+        this.loadGetData = false;
+        console.log(e)
+        this.messageError(e);
       }
     })
   }
@@ -429,7 +432,7 @@ export class FormMatriculaComponent implements OnInit {
       next: (value) => {
         this.listProvincias = value;
       },
-      error: (e) => console.log(e)
+      error: (e) => this.messageError(e)
     })
   }
 
@@ -440,15 +443,13 @@ export class FormMatriculaComponent implements OnInit {
       next: (value) => {
         this.listDistritos = value;
       },
-      error: (err) => {
-        console.log(err);
-      }
+      error: (e) => this.messageError(e)
     })
   }
 
+  /** Valid forms */
   validFormEstudent(){
 
-    console.log("here")
     if(this.formEstudiante.invalid){
       Object.keys(this.formEstudiante.controls).forEach( inputName => {
         this.formEstudiante.controls[inputName].markAsDirty();
@@ -468,10 +469,7 @@ export class FormMatriculaComponent implements OnInit {
           this._msg.clear('message-matricula');
         }
       },
-      error: (e) => {
-        console.log(e)
-        this.messageError(e);
-      }
+      error: (e) => this.messageError(e)
     })
 
   }
@@ -485,10 +483,10 @@ export class FormMatriculaComponent implements OnInit {
     }
   }
 
-  validFormCurso(){
-    if(this.formCurso.invalid){
-      Object.keys(this.formCurso.controls).forEach( inputName => {
-        this.formCurso.controls[inputName].markAsDirty();
+  validformGrupo(){
+    if(this.formGrupo.invalid){
+      Object.keys(this.formGrupo.controls).forEach( inputName => {
+        this.formGrupo.controls[inputName].markAsDirty();
       })
       return;
     }
@@ -509,7 +507,7 @@ export class FormMatriculaComponent implements OnInit {
       const edad = moment().year() - fechaNacimiento.year()
       if(edad < 18 ){
         this.displayMayoria = true;
-        this.DNIApoderado.addValidators([Validators.required,Validators.pattern(/^([0-9])*$/)]);
+        this.DocumentoApoderado.addValidators([Validators.required,Validators.pattern(/^([0-9])*$/)]);
         this.NomApoderado.addValidators([Validators.required,Validators.pattern(/^([a-z ñáéíóú]{2,60})$/i)]);
         this.ApellidoPApoderado.addValidators([Validators.required,Validators.pattern(/^([a-z ñáéíóú]{1,60})$/i)]);
         this.ApellidoMApoderado.addValidators([Validators.required,Validators.pattern(/^([a-z ñáéíóú]{1,60})$/i)]);
@@ -517,19 +515,19 @@ export class FormMatriculaComponent implements OnInit {
         this.EsMayor.setValue(false);
       }else{
         this.displayMayoria = false;
-        this.DNIApoderado.clearValidators();
+        this.DocumentoApoderado.clearValidators();
         this.NomApoderado.clearValidators();
         this.ApellidoPApoderado.clearValidators();
         this.ApellidoMApoderado.clearValidators();
         this.CelApoderado.clearValidators();
 
-        this.DNIApoderado.updateValueAndValidity();
+        this.DocumentoApoderado.updateValueAndValidity();
         this.NomApoderado.updateValueAndValidity();
         this.ApellidoMApoderado.updateValueAndValidity();
         this.ApellidoPApoderado.updateValueAndValidity();
         this.CelApoderado.updateValueAndValidity();
 
-        this.DNIApoderado.markAsPristine();
+        this.DocumentoApoderado.markAsPristine();
         this.NomApoderado.markAsPristine();
         this.ApellidoPApoderado.markAsPristine();
         this.ApellidoMApoderado.markAsPristine();
@@ -541,12 +539,21 @@ export class FormMatriculaComponent implements OnInit {
 
   ready(){
 
-    if(this.formAcademica.invalid){
-      Object.keys(this.formAcademica.controls).forEach( input => {
-        this.formAcademica.controls[input].markAsDirty();
+    if(this.formFiles.invalid){
+      Object.keys(this.formFiles.controls).forEach( input => {
+        this.formFiles.controls[input].markAsDirty();
       })
       return;
     }
+
+    const apoderado = new Apoderado(this.TipoDocumento.value,
+                                    this.DocumentoApoderado.value,
+                                    this.NomApoderado.value,
+                                    this.ApellidoPApoderado.value,
+                                    this.ApellidoMApoderado.value,
+                                    this.CelApoderado.value,
+                                    this.country.code,
+                                    this.country.codePhone);
 
     const estudiante = new Estudiante(this.TipoDocumento.value,
                                       this.Documento.value,
@@ -561,7 +568,7 @@ export class FormMatriculaComponent implements OnInit {
                                       this.Direccion.value,
                                       this.Email.value,
                                       this.EsMayor.value,
-                                      this.formMayorEdad.value,
+                                      apoderado,
                                       this.Departamento.value,
                                       this.Provincia.value,
                                       this.Distrito.value);
@@ -574,50 +581,81 @@ export class FormMatriculaComponent implements OnInit {
                                     this.CarCompromiso.value,
                                     estudiante,
                                     this.Poblacion.value,
-                                    this.Curso.value,
-                                    this.Horario.value,
-                                    institucion);
-    this._global.registerMatricula(matricula).subscribe({
+                                    institucion,
+                                    this.fileMatricula.webViewLink);
+    const mensualidad = new Mensualidad(this.filePago.webViewLink);
+    const estudianteEnGrupo = new EstudianteEnGrupo(estudiante, this.selecGrupo, matricula, mensualidad);
+    this.selecGrupo.RequeridoPPago?this.registerMatricula(estudianteEnGrupo):this.registerPrematricula(matricula);
+
+  }
+
+  registerMatricula(estudianteEnGrupo:EstudianteEnGrupo){
+    this.loadingSave = true;
+    this._global.registerMatricula(estudianteEnGrupo).subscribe({
       next:(value) => {
         if(value.ok){
+          console.log(value)
           this.stepper.reset();
           this.toast('success', value.msg);
           this._socket.EmitEvent('updated_list_matriculados');
         }else{
           this.toast('warn', value.msg);
         }
+        this.loadingSave = false;
       },
       error:(e) => {
-        console.log(e)
+        this.loadingSave = false;
         this.messageError(e)
       }
     })
+  }
 
+  registerPrematricula(matricula:Matricula){
+    matricula.setCurso(this.selecGrupo.curso);
+    matricula.setHorario(this.selecGrupo.horario);
+    this.loadingSave = true;
+    this._global.registerPrematricula(matricula).subscribe({
+      next:(value) => {
+        if(value.ok){
+          console.log(value)
+          this.stepper.reset();
+          this.toast('success', value.msg);
+          this._socket.EmitEvent('updated_list_matriculados');
+        }else{
+          this.toast('warn', value.msg);
+        }
+        this.loadingSave = false;
+      },
+      error:(e) => {
+        this.loadingSave = false;
+        this.messageError(e)
+      }
+    })
   }
 
   selecOptionEdad(value:boolean){
     if(!value){
       this.displayMayoria = true;
-      this.DNIApoderado.addValidators([Validators.required,Validators.pattern(/^([0-9])*$/)]);
+      this.DocumentoApoderado.addValidators([Validators.required,Validators.pattern(/^([0-9])*$/)]);
       this.NomApoderado.addValidators([Validators.required,Validators.pattern(/^([a-z ñáéíóú]{2,60})$/i)]);
       this.ApellidoPApoderado.addValidators([Validators.required,Validators.pattern(/^([a-z ñáéíóú]{1,60})$/i)]);
       this.ApellidoMApoderado.addValidators([Validators.required,Validators.pattern(/^([a-z ñáéíóú]{1,60})$/i)]);
       this.CelApoderado.addValidators([Validators.pattern(/^([0-9])*$/), Validators.required]);
     }else{
       this.displayMayoria = false;
-      this.DNIApoderado.clearValidators();
+      this.DocumentoApoderado.clearValidators();
       this.NomApoderado.clearValidators();
       this.ApellidoPApoderado.clearValidators();
       this.ApellidoMApoderado.clearValidators();
       this.CelApoderado.clearValidators();
 
-      this.DNIApoderado.updateValueAndValidity();
+      this.DocumentoApoderado.updateValueAndValidity();
       this.NomApoderado.updateValueAndValidity();
       this.ApellidoMApoderado.updateValueAndValidity();
       this.ApellidoPApoderado.updateValueAndValidity();
       this.CelApoderado.updateValueAndValidity();
 
-      this.DNIApoderado.markAsPristine();
+      this.DocumentoApoderado.markAsPristine();
       this.NomApoderado.markAsPristine();
       this.ApellidoPApoderado.markAsPristine();
       this.ApellidoMApoderado.markAsPristine();
@@ -649,7 +687,7 @@ export class FormMatriculaComponent implements OnInit {
   }
 
   searchApoderado(DNI:string){
-    if(DNI.length==8 && this.DNIApoderado.valid){
+    if(DNI.length==8 && this.DocumentoApoderado.valid){
       this.loadGetApoderado = true;
       this._global.getApoderado(DNI).subscribe({
         next: (value) => {
@@ -674,24 +712,103 @@ export class FormMatriculaComponent implements OnInit {
           this.country = resp[0];
         }
       },
-      error:(e) => console.log(e)
+      error:(e) => this.messageError(e)
     })
-  }
-
-  selectedCurso(curso:Curso){
-    this.selecCurso = curso;
-  }
-
-  selectedHorario(horario:Horario){
-    this.selecHorario = horario;
   }
 
   changeCard(event:string){
     this.TipoDocumentoSelected = this.TipoDocumento.value;
   }
 
+  clearValidatorsPago(){
+    this.FilePagoURL.clearValidators();
+    this.FilePagoURL.updateValueAndValidity();
+    this.FilePagoURL.markAsPristine();
+  }
+
+  addValidatorPago(){
+    this.FilePagoURL.addValidators([Validators.required]);
+  }
+
+  selectGrupo(event:Grupo){
+    this.selecGrupo = event;
+    console.log(this.selecGrupo)
+    this.selecGrupo.RequeridoPPago?this.addValidatorPago():this.clearValidatorsPago();
+  }
+
+  requiredCountry(){
+    this.Departamento.addValidators([Validators.required]);
+    this.Provincia.addValidators([Validators.required]);
+    this.Distrito.addValidators([Validators.required]);
+  }
+
+  notRequiredCountry(){
+
+      this.Departamento.clearValidators();
+      this.Provincia.clearValidators();
+      this.Distrito.clearValidators();
+
+      this.Departamento.updateValueAndValidity();
+      this.Provincia.updateValueAndValidity();
+      this.Distrito.updateValueAndValidity();
+
+      this.Departamento.markAsPristine();
+      this.Provincia.markAsPristine();
+      this.Distrito.markAsPristine();
+
+  }
+
   selectedCountry(country:Code){
     this.country = country;
+    this.isPeru = (this.country.code!='PE')?false:true;
+    this.isPeru?this.requiredCountry():this.notRequiredCountry();
+  }
+
+  onFileMatriculaChange(fileChangeEvent:any) {
+    this.file = fileChangeEvent.target.files[0];
+    if(!this.file )return;
+    this.loadingFileMatricula = true;
+    this.FileMatriculaURL.disable();
+    let formData = new FormData();
+    formData.append('file', this.file, this.file.name);
+    formData.append('id_grupo', String(this.selecGrupo.Id));
+    formData.append('tipo', 'matricula');
+    this._global.uploadFileMatricula(formData).subscribe({
+      next: (value) => {
+        this.loadingFileMatricula = false;
+        this.FileMatriculaURL.enable();
+        this.fileMatricula = value;
+      },
+      error: (e) => {
+        this.FileMatriculaURL.enable();
+        this.loadingFileMatricula = false;
+        this.messageError(e)
+      },
+    })
+  }
+
+  onFilePagoChange(fileChangeEvent:any) {
+    this.file = fileChangeEvent.target.files[0];
+    if(!this.file )return;
+    this.loadingFilePago = true;
+    this.FilePagoURL.disable();
+    let formData = new FormData();
+    formData.append('file', this.file, this.file.name);
+    formData.append('id_grupo', String(this.selecGrupo.Id));
+    formData.append('tipo', 'mensualidad');
+
+    this._global.uploadFileMatricula(formData).subscribe({
+      next: (value) => {
+        this.loadingFilePago = false;
+        this.FilePagoURL.enable();
+        this.filePago = value;
+      },
+      error: (e) => {
+        this.FilePagoURL.enable();
+        this.loadingFilePago = false;
+        this.messageError(e)
+      }
+    })
   }
 
   toast(severity:string, summary:string, detail:string=''){

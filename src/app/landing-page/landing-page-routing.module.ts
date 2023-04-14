@@ -5,6 +5,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { MainComponent } from './pages/main/main.component';
 import { MatriculaComponent } from './pages/matricula/matricula.component';
 import { WeComponent } from './pages/we/we.component';
+import { PagosComponent } from './pages/pagos/pagos.component';
 
 const routes: Routes = [
   {
@@ -14,6 +15,7 @@ const routes: Routes = [
       { path:'home', component:HomeComponent },
       { path:'nosotros', component:WeComponent },
       { path:'matricula', component:MatriculaComponent },
+      { path:'pagos', component:PagosComponent },
       { path:'auth/login', component:LoginComponent }
     ]
   }

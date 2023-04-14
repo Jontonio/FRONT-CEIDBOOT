@@ -1,133 +1,181 @@
 <div class="main p-4 animate__animated animate__fadeIn">
   <div class="mb-3">
     <p-card>
-      <div class="pl-2 pr-2">
-        <p-fieldset legend="Datos del grupo" [toggleable]="true">
-          <div class="p-2" *ngIf="grupo && curso">
-            <div class="grid justify-content-between">
-              <!-- <img class="img-flag-2 pr-2" [src]="curso.UrlBandera" alt=""> -->
-            </div>
-            <div class="grid content content-info-grupo">
-              <div class="col-12 md:col-7">
-                <div class="grid content">
-                  <div class="col-12 md:col-4">
-                    <img class="img-flag-2 pr-2 mt-2" [src]="curso.UrlBandera" alt="">
-                    <p class="mt-2"><b>Grupo</b></p>
-                    <p class="mt-1">{{grupo.tipoGrupo.NombreGrupo | titlecase}}</p>
-                    <p class="mt-2"><b>Fecha inicio</b></p>
-                    <p class="mt-1"><p-tag>{{ grupo.FechaInicioGrupo | date:'short'}} <i class="fa-regular fa-calendar ml-2"></i></p-tag></p>
-                  </div>
-                  <div class="col-12 md:col-4">
-                    <p class="mt-2"><b>Código de grupo</b></p>
-                    <p class="mt-1">{{grupo.Id}}</p>
-                    <p class="mt-2"><b>Nivel del curso</b></p>
-                    <p class="mt-1">{{curso.nivel.Nivel }}</p>
-                    <p class="mt-2"><b>Fecha finalización</b></p>
-                    <p class="mt-1"><p-tag>{{ grupo.FechaFinalGrupo | date:'short'}} <i class="fa-regular fa-calendar ml-2"></i></p-tag></p>
-                  </div>
-                  <div class="col-12 md:col-4">
-                    <p class="mt-2"><b>País</b></p>
-                    <p class="mt-1">{{curso.NombrePais | titlecase}}</p>
-                    <p class="mt-2"><b>Núm. módulos</b></p>
-                    <p class="mt-1">{{curso.NumModulos}} Módulos</p>
-                    <p class="mt-2"><b>Curso dictado</b></p>
-                    <p class="mt-1">{{curso.NombreCurso | titlecase}}</p>
-                  </div>
-                </div>
+      <div class="grid">
+        <div class="col-12 md:col-6">
+          <p-fieldset legend="Datos del grupo">
+            <div class="p-2" *ngIf="grupo && curso">
+              <div class="flex justify-content-between">
+                <h2><p>{{curso.NombreCurso | titlecase}} - {{curso.nivel.Nivel }}</p></h2>
+                <p-tag>Cód: G-{{grupo.Id}}</p-tag>
               </div>
-              <div class="col-12 md:col-5">
-                <div class="grid content">
-                  <div class="col-12 md:col-6">
-                    <p class="mt-2"><b>Nombres del docente</b></p>
-                    <p class="mt-1">{{docente.Nombres | titlecase}} {{grupo.docente.ApellidoPaterno | titlecase}} {{grupo.docente.ApellidoMaterno | titlecase}}</p>
-                    <p class="mt-2"><b>Dirección del docente</b></p>
-                    <p class="mt-1">{{docente.Direccion }}</p>
-                  </div>
-                  <div class="col-12 md:col-6">
-                    <p class="mt-2"><b>Email del docente</b></p>
-                    <p class="mt-1">{{docente.Email}}</p>
-                    <p class="mt-2"><b>Celular del docente</b></p>
-                    <p class="mt-1">{{docente.Celular}}</p>
-                  </div>
+              <div class="grid content content-info-grupo">
+                <div class="col-12 md:col-7">
+                  <p class="mt-2"><b>Número de módulos</b></p>
+                  <p class="mt-1">{{curso.NumModulos}} Módulos</p>
+                  <p class="mt-2"><b>Grupo asignado</b></p>
+                  <p class="mt-1">{{grupo.tipoGrupo.NombreGrupo | titlecase}}</p>
+                </div>
+                <div class="col-12 md:col-5">
+                  <p class="mt-2"><b>Fecha inicio</b> - <b>Fecha finalización</b></p>
+                  <p class="mt-1">
+                    <p-tag class="mr-2" severity="success">{{ grupo.FechaInicioGrupo | date:'mediumDate'}} <i class="fa-regular fa-calendar ml-2"></i></p-tag>
+                    <p-tag severity="success">{{ grupo.FechaFinalGrupo | date:'mediumDate'}} <i class="fa-regular fa-calendar ml-2"></i></p-tag>
+                  </p>
+                  <p class="mt-2"><b>Docente asignado</b></p>
+                  <p class="mt-1">{{docente.Nombres | titlecase}} {{grupo.docente.ApellidoPaterno | titlecase}}</p>
                 </div>
               </div>
             </div>
-          </div>
-        </p-fieldset>
-        <br>
-        <p-fieldset legend="Estado del grupo" [toggleable]="true">
-          <div class="p-2 grid justify-content-between">
-            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Reiciendis iste ut explicabo. Totam asperiores blanditiis quis nam? Nulla a magni rem placeat,
-               ratione ab soluta! Consequuntur perferendis atque quis blanditiis!</p>
-          </div>
-        </p-fieldset>
+          </p-fieldset>
+        </div>
+        <div class="col-12 md:col-6">
+          <p-fieldset legend="Estado del grupo">
+            <div class="p-2 grid justify-content-between">
+              <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Reiciendis iste ut explicabo. Totam asperiores blanditiis quis nam? Nulla a magni rem placeat,
+                 ratione ab soluta! Consequuntur perferendis atque quis blanditiis!</p>
+            </div>
+          </p-fieldset>
+        </div>
       </div>
     </p-card>
   </div>
-  <p-card header="Lista de estudiantes en grupo">
-    <div class="flex justify-content-center justify-content-between">
-      <div class="col-6">
-        <span class="p-input-icon-left">
-          <i class="pi pi-search"></i>
-          <input type="text"
-                 pInputText
-                 placeholder="Buscar grupo" />
-      </span>
-      </div>
-      <div class="col-6 flex justify-content-end">
-        <div>
-          <!-- <button pButton
-                  pRipple
-                  type="button"
-                  icon="fa-solid fa-plus"
-                  label="Grupo"
-                  routerLink="/system/grupos/add-grupo"
-                  class="p-button-rounded"></button> -->
-        </div>
-      </div>
-    </div>
-    <div class="col table-responsive content-tables">
-      <p-table [value]="listaEstudiantes"
-               [resizableColumns]="true"
-               [rowHover]="true"
-               columnResizeMode="expand"
-               responsiveLayout="scroll">
+  <p-card>
+    <div class="col table-responsive">
+      <p-table [value]="listaEstudiantes" responsiveLayout="scroll" [rowHover]="true" dataKey="Id">
         <ng-template pTemplate="header">
             <tr>
-              <th>N°</th>
-              <th>Nombres y apellidos</th>
-              <th>Contacto</th>
-              <th>Estado matricula</th>
-              <th>Tipo población</th>
-              <th>Matricula</th>
-              <th>Pensión</th>
-              <th>Pagos por módulo</th>
+                <th style="width: 3rem"></th>
+                <th>N°</th>
+                <th>Nombres y apellidos</th>
+                <th>Contacto</th>
+                <th>Estado</th>
+                <th>Tipo población</th>
+                <th>Req. matricula</th>
+                <th>Módulos pagados</th>
+                <th>Matricula</th>
+                <th>Mensualidad</th>
+                <th>Más</th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-grupo let-rowIndex="rowIndex">
-            <tr class="select-tr">
-              <td>{{rowIndex+1}}</td>
-                <!-- <td>
-                  <div class="grid">
-                    <div class="col-3 flex justify-content-center">
-                      <img class="img-flag" [alt]="'Bandera'+grupo.matricula.curso.NombreCurso" [src]="grupo.matricula.curso.UrlBandera" alt="" srcset="">
+        <ng-template pTemplate="body" let-grupo let-rowIndex="rowIndex" let-expanded="expanded">
+          <tr class="select-tr">
+            <td>
+              <button type="button"
+                      pButton
+                      pRipple
+                      [pRowToggler]="grupo"
+                      class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+            </td>
+            <td>{{rowIndex+1}}</td>
+            <td>
+                {{grupo.estudiante.Nombres | titlecase}}
+                {{grupo.estudiante.ApellidoPaterno | titlecase}}
+                {{grupo.estudiante.ApellidoMaterno | titlecase}}</td>
+            <td>{{grupo.estudiante.CodePhone}} {{grupo.estudiante.Celular}} <br> {{grupo.estudiante.Email}} </td>
+            <td><p-tag severity="success">{{grupo.matricula.EstadoMatricula}}</p-tag></td>
+            <td>{{grupo.matricula.denomiServicio.Descripcion | slice:0:45}}...</td>
+            <td><button mat-button (click)="showFile(grupo.matricula.FileMatriculaURL)"><i class="pi pi-file-pdf icon-size"></i> ver</button></td>
+            <td>{{grupo.mensualidades.length}} de {{grupo.grupo.curso.NumModulos}}</td>
+            <td>{{grupo.matricula.denomiServicio.MontoMatricula | currency: 'PEN': 'symbol': '': 'es-PE'}}</td>
+            <td>{{grupo.matricula.denomiServicio.MontoPension | currency: 'PEN': 'symbol': '': 'es-PE'}}</td>
+            <td>
+              <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item>
+                  <mat-icon><i class="fa-solid fa-circle-info"></i></mat-icon>
+                  <span>ver más</span>
+                </button>
+                <button mat-menu-item>
+                  <mat-icon><i class="fa-brands fa-whatsapp"></i></mat-icon>
+                  <span>Notificar primer pago</span>
+                </button>
+                <button mat-menu-item>
+                  <mat-icon><i class="fa-solid fa-envelope"></i></mat-icon>
+                  <span>Notificar primer pago</span>
+                </button>
+                <button mat-menu-item>
+                  <mat-icon><i class="fa-solid fa-pen-to-square"></i></mat-icon>
+                  <span>Editar grupo</span>
+                </button>
+                <button mat-menu-item>
+                  <mat-icon><i class="fa-solid fa-trash-can"></i></mat-icon>
+                  <span>Eliminar</span>
+                </button>
+              </mat-menu>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="rowexpansion" let-grupo>
+            <tr>
+                <td colspan="11">
+                    <div class="p-p-3">
+                        <p-table [value]="grupo.mensualidades" responsiveLayout="scroll" dataKey="Id">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>N°</th>
+                                    <th>Código de voucher</th>
+                                    <th>Fecha de pago</th>
+                                    <th>Monto de pago</th>
+                                    <th>Voucher</th>
+                                    <th>Estado pago</th>
+                                    <th>Validar pago</th>
+                                    <th>Más</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowIndex="rowIndex" let-mensualidad>
+                                <tr>
+                                  <td>{{rowIndex+1}}</td>
+                                  <td>{{mensualidad.CodigoVocuher}}</td>
+                                  <td>{{mensualidad.FechaPago | date}}</td>
+                                  <td>{{grupo.matricula.denomiServicio.MontoPension | currency: 'PEN': 'symbol': '': 'es-PE' }}</td>
+                                  <td>
+                                    <button mat-button (click)="showFile(mensualidad.VoucherUrl)"><i class="pi pi-link"></i> ver</button>
+                                  </td>
+                                  <td>
+                                    <p-tag icon="pi pi-check" value="Verificado"></p-tag>
+                                    <!-- <p-tag icon="pi pi-times" severity="danger" value="No verificado"></p-tag> -->
+                                  </td>
+                                  <td><button mat-raised-button> Validar pago </button></td>
+                                  <td>
+                                    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                                      <mat-icon>more_vert</mat-icon>
+                                    </button>
+                                    <mat-menu #menu="matMenu">
+                                      <button mat-menu-item>
+                                        <mat-icon><i class="fa-solid fa-circle-info"></i></mat-icon>
+                                        <span>ver más</span>
+                                      </button>
+                                      <button mat-menu-item>
+                                        <mat-icon><i class="fa-brands fa-whatsapp"></i></mat-icon>
+                                        <span>Notificar primer pago</span>
+                                      </button>
+                                      <button mat-menu-item>
+                                        <mat-icon><i class="fa-solid fa-envelope"></i></mat-icon>
+                                        <span>Notificar primer pago</span>
+                                      </button>
+                                      <button mat-menu-item>
+                                        <mat-icon><i class="fa-solid fa-pen-to-square"></i></mat-icon>
+                                        <span>Editar grupo</span>
+                                      </button>
+                                      <button mat-menu-item>
+                                        <mat-icon><i class="fa-solid fa-trash-can"></i></mat-icon>
+                                        <span>Eliminar</span>
+                                      </button>
+                                    </mat-menu>
+                                  </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="11"><app-lista-vacia msg="No se encontraron registros de vouchers del estudiante"></app-lista-vacia></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
                     </div>
-                    <div class="col-9 flex flex-column">
-                      <b>{{grupo.matricula.curso.NombreCurso | uppercase}}</b>
-                      {{grupo.matricula.curso.NivelCurso}}
-                    </div>
-                  </div>
-                </td> -->
-                <td>
-                    {{grupo.estudiante.Nombres | titlecase}}
-                    {{grupo.estudiante.ApellidoPaterno | titlecase}}
-                    {{grupo.estudiante.ApellidoMaterno | titlecase}}</td>
-                <td>{{grupo.estudiante.CodePhone}} {{grupo.estudiante.Celular}} <br> {{grupo.estudiante.Email}} </td>
-                <td><p-tag severity="success">{{grupo.matricula.EstadoMatricula}}</p-tag></td>
-                <td>{{grupo.matricula.denomiServicio.Descripcion | slice:0:45}}...</td>
-                <td>S/. {{grupo.matricula.denomiServicio.MontoMatricula}}</td>
-                <td>S/. {{grupo.matricula.denomiServicio.MontoPension}}</td>
-                <td></td>
+                </td>
             </tr>
         </ng-template>
       </p-table>
@@ -149,8 +197,11 @@
           <div></div>
         </div>
       </div>
-      <app-loadding *ngIf="loadingLista && listaEstudiantes.length==0" msg="Lista de grupos"></app-loadding>
-      <app-lista-vacia *ngIf="listaEstudiantes.length==0 && !loadingLista" msg="No se encontraron grupos registrados"></app-lista-vacia>
+      <app-loadding *ngIf="loadingLista && listaEstudiantes.length==0" msg="Lista de usuarios"></app-loadding>
+      <app-lista-vacia *ngIf="listaEstudiantes.length==0 && !loadingLista" msg="No se encontraron usuarios registrados"></app-lista-vacia>
     </div>
   </p-card>
 </div>
+
+<app-show-file [FileURL]="FileURL"></app-show-file>
+
