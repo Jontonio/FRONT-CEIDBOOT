@@ -14,9 +14,9 @@ import { Horario } from '../../class/Horario';
 import { Modalidad } from 'src/app/main/matricula/interfaces/global';
 import { optionOperation } from 'src/app/main/class/global';
 import { SocketService } from 'src/app/services/socket.service';
+import { MainService } from 'src/app/main/services/main.service';
 
 import * as moment from 'moment';
-import { MainService } from 'src/app/main/services/main.service';
 moment.locale("es");
 
 @Component({

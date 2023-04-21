@@ -1,0 +1,10 @@
+<div class="content-iframe">
+  <iframe #iframe [src]="fileURL | safeUrl" class="iframe" (load)="loadFile()"></iframe>
+  <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)"
+               size = "default"
+               color = "#fff"
+               type = "ball-fall"
+               template="<img src='assets/icon/logo.png' />"
+               [fullScreen] = "false"><p style="color: white" > Cargando... </p>
+  </ngx-spinner>
+</div>

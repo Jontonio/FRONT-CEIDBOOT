@@ -9,7 +9,7 @@ html, body {
   margin: 0px;
   background: var(--surface-b);
   font-family: var(--font-family);
-  height: 100%;
+  height: auto;
 }
 
 /* Asignamos ancho y alto del scrollbar de la pagina*/
@@ -188,6 +188,9 @@ footer{
 .img-flag-2{
   width: 80px;
 }
+.img-flag-1{
+  width: 60px;
+}
 .recoment-box{
   padding: 13px;
   cursor: pointer;
@@ -233,7 +236,7 @@ footer{
   position: absolute;
   width: 100%;
   padding: 2px !important;
-  z-index: 20000;
+  z-index: 20;
   background: #F9A826;
 }
 .p-menubar-root-list{
@@ -334,6 +337,27 @@ footer{
 }
 .tag-custom{
   background: linear-gradient(-225deg,#AC32E4 0%,#7918F2 48%,#4801FF 100%) !important;
+}
+.p-radiobutton .p-radiobutton-box .p-radiobutton-icon {
+  background-color: #ec9b1a;
+}
+.p-radiobutton .p-radiobutton-box.p-highlight {
+  border-color: #c4c6d5 !important;
+}
+.p-inputnumber-input{
+  width: 100% !important;
+}
+.custom-btn-file{
+  color: #FFF;
+  background: #f4ab36;
+}
+.tag-a{
+  text-decoration: none;
+  color: #1E27F9;
+  cursor: pointer;
+}
+.field-checkbox, .field-radiobutton{
+  margin-bottom: 5px !important;
 }
 @media only screen and (max-width: 767px) {
   /* Estilos para teléfonos móviles aquí */

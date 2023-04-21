@@ -1,53 +1,186 @@
 <div class="header-conatiner-pagos"></div>
-<div class="container-pagos">
+<div class="container-pagos mb-5">
   <div class="content-form-pagos">
     <div class="mb-2">
-      <p-card>
+      <p-card header="Nota">
         <p><i class="fa-solid fa-message"></i> Para subir su voucher de pago es necesario consultar sus datos en el siguiente formulario.</p>
       </p-card>
     </div>
-    <p-card>
-      <div class="mb-3">
-        <h2>Formulario de pago</h2>
+    <div>
+      <div class="progressBar">
+        <p-progressBar *ngIf="loading" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
       </div>
-      <form [formGroup]="formBusqueda">
-        <div class="field">
-          <label for="usuario" class="block mb-2">Tipo documento</label>
-          <p-dropdown class="p-fluid p-grid p-formgrid"
-                      [options]="card"
-                      formControlName="TipoDocumento"
-                      (ngModelChange)="changeCard($event)"
-                      optionValue="code"
-                      optionLabel="name">
-                  </p-dropdown>
-          <small *ngIf="TipoDocumento.hasError('required') && TipoDocumento.dirty"
-                class="p-error">El tipo de documento es <strong>requerido</strong></small>
-        </div>
-        <div class="field">
-          <label for="Documento" class="block"><i class="fa-regular fa-address-card"></i> {{TipoDocumentoSelected}}</label>
-          <input id="Documento"
-                 type="text"
-                 formControlName="Documento"
-                 [maxLength]="TipoDocumentoSelected=='DNI'?8:15"
-                 minlength="8"
-                 [placeholder]="'Digite su '+TipoDocumentoSelected"
-                 pInputText/>
-          <small *ngIf="Documento.hasError('pattern') && !Documento.hasError('required')"
-                 class="p-error">Digite un número de {{TipoDocumentoSelected}} <strong>válido</strong></small>
-          <small *ngIf="Documento.hasError('required') && Documento.dirty"
-                 class="p-error">El {{TipoDocumentoSelected}} es <strong>requerido</strong></small>
-        </div>
-        <div class="field">
-          <button pButton
-                  pRipple
-                  type="button"
-                  [label]="loading?'CONSULTANDO':'CONSULTAR'"
-                  (click)="search()"
-                  [disabled]="loading"
-                  class="p-button-raised full-width mt-3 button-custom-round"></button>
-        </div>
-      </form>
-    </p-card>
+      <p-card>
+        <p-toast key="message-pagos"
+                 [breakpoints]="{'920px': {width: '100%', right: '0', left: '0'}}"
+                 [baseZIndex]="999999"></p-toast>
+        <mat-vertical-stepper [linear]="true" #stepper >
+          <mat-step [stepControl]="formBusqueda">
+            <form [formGroup]="formBusqueda">
+              <ng-template matStepLabel>Formulario de consulta</ng-template>
+              <div class="field">
+                <label for="usuario" class="block mb-2">Tipo documento</label>
+                <p-dropdown class="p-fluid p-grid p-formgrid"
+                            [options]="card"
+                            formControlName="TipoDocumento"
+                            (ngModelChange)="changeCard($event)"
+                            optionValue="code"
+                            optionLabel="name">
+                        </p-dropdown>
+                <small *ngIf="TipoDocumento.hasError('required') && TipoDocumento.dirty"
+                      class="p-error">El tipo de documento es <strong>requerido</strong></small>
+              </div>
+              <div class="field">
+                <label for="Documento" class="block">{{TipoDocumentoSelected}}</label>
+                <input id="Documento"
+                       type="text"
+                       formControlName="Documento"
+                       [maxLength]="TipoDocumentoSelected=='DNI'?8:15"
+                       minlength="8"
+                       [placeholder]="'Digite su '+TipoDocumentoSelected"
+                       pInputText/>
+                <small *ngIf="Documento.hasError('pattern') && !Documento.hasError('required')"
+                       class="p-error">Digite un número de {{TipoDocumentoSelected}} <strong>válido</strong></small>
+                <small *ngIf="Documento.hasError('required') && Documento.dirty"
+                       class="p-error">El {{TipoDocumentoSelected}} es <strong>requerido</strong></small>
+              </div>
+              <div>
+                <button mat-raised-button (click)="search()" [disabled]="loading">{{loading?'Consultando':'Consultar'}}</button>
+              </div>
+            </form>
+          </mat-step>
+          <mat-step [stepControl]="formSelectGrupo">
+            <form [formGroup]="formSelectGrupo">
+              <ng-template matStepLabel>Mis cursos</ng-template>
+              <p class="mb-3 mt-2">Usted esta matriculado en los siguientes cursos de idiomas. <b>Selecione el curso para subir el voucher</b></p>
+                <div *ngIf="estudianteEnGrupo">
+                  <div class="field-radiobutton content-items"
+                       *ngFor="let item of estudianteEnGrupo, let i=index">
+                      <p-radioButton name="EnGrupo"
+                                     [value]="item"
+                                     formControlName="EnGrupo"
+                                     [inputId]="i+''"></p-radioButton>
+                      <label class="flex justify-content-center align-items-center label-item" [for]="i">
+                        <img class="img-flag" [src]="item.grupo.curso.UrlBandera" alt="">
+                        <b>
+                          <p class="ml-2">{{item.grupo.curso.NombreCurso | titlecase}} - {{item.grupo.curso.nivel.Nivel | titlecase}}</p>
+                        </b>
+                      </label>
+                  </div>
+                  <div class="mb-3">
+                    <small *ngIf="EnGrupo.hasError('required') && EnGrupo.dirty"
+                         class="p-error">Selecione el curso para continuar*</small>
+                  </div>
+                </div>
+                <div>
+                  <button mat-raised-button matStepperPrevious class="mr-2">Regresar</button>
+                  <button mat-raised-button (click)="validSelectCurso()">Siguiente</button>
+                </div>
+            </form>
+          </mat-step>
+          <mat-step [stepControl]="formCategoriaPago">
+            <form [formGroup]="formCategoriaPago">
+              <ng-template matStepLabel>Tipo de pago</ng-template>
+              <p class="mb-3 mt-2">Selecione el tipo de pago que va a realizar</p>
+                <div *ngIf="estudianteEnGrupo">
+                  <div class="field-radiobutton content-items"
+                       *ngFor="let item of listCategoriaPago, let i=index">
+                      <p-radioButton name="categoriaPago"
+                                     [value]="item"
+                                     formControlName="categoriaPago"
+                                     [inputId]="i+''"></p-radioButton>
+                      <label class="flex justify-content-center align-items-center label-item" [for]="i">
+                        <b>
+                          <p class="ml-2">{{item.TipoCategoriaPago | titlecase}}</p>
+                        </b>
+                      </label>
+                  </div>
+                  <div class="mb-3">
+                    <small *ngIf="categoriaPago.hasError('required') && categoriaPago.dirty"
+                         class="p-error">Selecione una categoría de pago para continuar*</small>
+                  </div>
+                </div>
+                <div>
+                  <button mat-raised-button matStepperPrevious class="mr-2">Regresar</button>
+                  <button mat-raised-button (click)="validSelectCategoria()">Siguiente</button>
+                </div>
+            </form>
+          </mat-step>
+          <mat-step [stepControl]="formFile">
+            <ng-template matStepLabel>Subir vocuher</ng-template>
+            <p class="mb-3 mt-2">Complete el siguiente formulario para registrar su pago</p>
+            <form [formGroup]="formFile">
+              <div class="grid">
+                <div class="col-12 md:col-12">
+                  <div class="">
+                    <label for="MontoPagoLibro" class="block mb-2">Monto de pago S/.</label>
+                    <input id="MontoPagoLibro"
+                          class="p-fluid p-grid p-formgrid full-width"
+                          type="text"
+                          placeholder="Monto de pago"
+                          formControlName="MontoPago"
+                          autocomplete="off"
+                          pInputText/>
+                    <!-- <small *ngIf="MontoPagoLibro.hasError('pattern') && !MontoPagoLibro.hasError('required')"
+                    class="p-error">Digite un monto de pago <strong>válido</strong></small>
+                    <small *ngIf="MontoPagoLibro.hasError('required') && MontoPagoLibro.dirty"
+                            class="p-error">El campo monto de pago es <strong>requerido</strong></small> -->
+                  </div>
+                </div>
+                <div class="col-12 md:col-12">
+                  <div class="">
+                    <label for="NumOperacionLibro" class="block mb-2">Número de operación</label>
+                    <input id="NumOperacionLibro"
+                          class="p-fluid p-grid p-formgrid full-width"
+                          type="text"
+                          placeholder="Digite el número de operación"
+                          formControlName="NumOperacion"
+                          autocomplete="off"
+                          pInputText/>
+                    <!-- <small *ngIf="NumOperacionLibro.hasError('pattern') && !NumOperacionLibro.hasError('required')"
+                    class="p-error">Digite un número de operación <strong>válido</strong></small>
+                    <small *ngIf="NumOperacionLibro.hasError('required') && NumOperacionLibro.dirty"
+                            class="p-error">El campo número de operación es <strong>requerido</strong></small> -->
+                  </div>
+                </div>
+                <div class="col-12 md:col-12">
+                  <div class="">
+                    <label for="FechaPagoLibro" class="block mb-2">Fecha de pago</label>
+                    <p-inputMask mask="99/99/9999"
+                                 formControlName="FechaPago"
+                                 placeholder="DD/MM/AAAA"></p-inputMask>
+                    <!-- <small *ngIf="FechaPagoLibro.hasError('pattern') && !FechaPagoLibro.hasError('required')"
+                            class="p-error">Digite una fecha de pago <strong>válida</strong></small>
+                    <small *ngIf="FechaPagoLibro.hasError('required') && FechaPagoLibro.dirty"
+                            class="p-error">El campo fecha de pago es <strong>requerido</strong></small> -->
+                  </div>
+                </div>
+                <div class="col-12 md:col-12">
+                  <div class="flex justify-content-between justify-content-center align-items-center">
+                    <label class="block label-file">Voucher pago libro</label>
+                    <div>
+                      <button mat-raised-button
+                              [disabled]="loadingFilePago"
+                              (click)="uploadFile.click()"
+                              class="custom-btn-file">
+                              <mat-icon>{{(FileURL.value && !loadingFilePago)?'check':'attach_file'}}</mat-icon> Elija el archivo</button>
+                      <input #uploadFile
+                              formControlName="FileURL"
+                              type='file' style="display:none"/>
+                    </div>
+                    <small *ngIf="FileURL.hasError('required') && FileURL.dirty"
+                            class="p-error">El voucher del pago del libro es <strong>requerido</strong></small>
+                  </div>
+                </div>
+              </div>
+            </form>
+            <div class="mt-3">
+              <button mat-raised-button (click)="save()" [disabled]="loading"><i class="fa-regular fa-floppy-disk"></i> Guardar</button>
+            </div>
+          </mat-step>
+        </mat-vertical-stepper>
+      </p-card>
+    </div>
   </div>
 </div>
 

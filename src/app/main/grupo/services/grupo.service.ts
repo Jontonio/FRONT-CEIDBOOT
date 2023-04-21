@@ -7,6 +7,7 @@ import { Grupo, ResGrupo, ResTipoGrupo } from '../class/Grupo';
 import { SocketService } from 'src/app/services/socket.service';
 import { UnAuthorizedService } from 'src/app/services/unauthorized.service';
 import { ResEstudianteEnGrupo } from '../class/EstudianteGrupo';
+import { Pago, ResPago } from '../class/Pago';
 
 
 @Injectable({
@@ -66,6 +67,10 @@ export class GrupoService{
 
   getEstudiantesEnGrupoEspecifico(Id:number, limit:number = 5, offset:number = 0):Observable<ResEstudianteEnGrupo>{
     return this.http.get<ResEstudianteEnGrupo>(`${environment.BASE_URL}/estudiante-en-grupo/get-estudiantes-en-grupo-especifico/${Id}?limit=${limit}&offset=${offset}`);
+  }
+
+  updatePago(id:string, pago:Pago):Observable<ResPago>{
+    return this.http.patch<ResPago>(`${environment.BASE_URL}/pago/update-one-pago/${id}`, pago);
   }
 
   /** Listen Sockets */

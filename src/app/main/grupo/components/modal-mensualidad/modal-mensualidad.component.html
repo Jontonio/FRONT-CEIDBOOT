@@ -1,0 +1,66 @@
+<p-dialog header="Validación de pago"
+          [modal]="true"
+          [draggable]="false"
+          [closable]="false"
+          [(visible)]="ValidateFile"
+          [style]="{width: '70vw'}"
+          [breakpoints]="{'960px': '85vw'}" [style]="{width: '90vw'}">
+          <div class="grid" *ngIf="mensualidad">
+            <div class="col-12 md:col-8">
+              <app-iframe-file [fileURL]="mensualidad.VoucherUrl"></app-iframe-file>
+            </div>
+            <div class="col-12 md:col-4">
+              <form [formGroup]="formMensualidad">
+                <h2 class="mb-3">Formulario de verificación</h2>
+                <div class="col">
+                  <label for="CodigoVoucher" class="block mb-2">Código del voucher</label>
+                  <div class="p-inputgroup">
+                  <span class="p-inputgroup-addon"><i class="fa-solid fa-hashtag"></i></span>
+                  <input id="CodigoVoucher"
+                        class="p-fluid p-grid p-formgrid full-width"
+                        type="text"
+                        formControlName="CodigoVoucher"
+                        placeholder="Digite el código del voucher"
+                        autocomplete="off"
+                        pInputText/>
+                  </div>
+                  <small *ngIf="CodigoVoucher.hasError('pattern') && !CodigoVoucher.hasError('required')"
+                          class="p-error">Digite un código de voucher <strong>válido</strong></small>
+                  <small *ngIf="CodigoVoucher.hasError('required') && CodigoVoucher.dirty"
+                          class="p-error">El campo código de voucher es <strong>requerido</strong></small>
+                </div>
+                <div class="col-12">
+                  <label for="FechaPago" class="block mb-2">Fecha de pago</label>
+                  <p-inputMask mask="99/99/9999"
+                               formControlName="FechaPago"
+                               placeholder="DD/MM/AAAA"></p-inputMask>
+                  <small *ngIf="FechaPago.hasError('pattern') && !FechaPago.hasError('required')"
+                          class="p-error">Digite una fecha de pago <strong>válida</strong></small>
+                  <small *ngIf="FechaPago.hasError('required') && FechaPago.dirty"
+                          class="p-error">El campo fecha de pago es <strong>requerido</strong></small>
+                </div>
+                <div class="col-12">
+                  <label for="Verificado" class="block mb-2">Estado pago</label>
+                  <div class="field-checkbox">
+                    <p-checkbox [binary]="true"
+                                formControlName="Verificado"
+                                inputId="Verificado"></p-checkbox>
+                    <label for="Verificado">Los datos son correctos y se ha verificado la originalidad de los mismos.</label>
+                  </div>
+                  <small *ngIf="Verificado.hasError('required') && Verificado.dirty"
+                          class="p-error">Este campo es <strong>requerido</strong></small>
+                </div>
+                <div class="flex justify-content-between">
+                  <button mat-raised-button
+                          (click)="save()"
+                          class="button-custom mr-2 full-width" [disabled]="loading">
+                          <i [class]="false?'pi pi-spin pi-spinner':'pi pi-save'"></i> Guardar</button>
+                  <button mat-raised-button
+                          type="reset"
+                          (click)="reset()"
+                          class="button-custom full-width" [disabled]="loading">Cancelar</button>
+                </div>
+              </form>
+            </div>
+          </div>
+</p-dialog>

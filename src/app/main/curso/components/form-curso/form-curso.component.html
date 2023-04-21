@@ -84,20 +84,18 @@
         </div>
       </div>
       <div class="col-12 mt-1">
-        <label for="LinkRequistos" class="block mb-2">Link de requisitos del curso (opcional)</label>
+        <label for="LinkRequisitos" class="block mb-2">Link de requisitos del curso (opcional)</label>
         <div class="p-inputgroup">
           <span class="p-inputgroup-addon"><i class="fa-solid fa-link"></i></span>
-          <input id="LinkRequistos"
+          <input id="LinkRequisitos"
                 class="p-fluid p-grid p-formgrid"
                 type="text"
                 autocomplete="off"
-                formControlName="LinkRequistos"
+                formControlName="LinkRequisitos"
                 pInputText/>
         </div>
-        <small *ngIf="LinkRequistos.hasError('pattern') && !LinkRequistos.hasError('required')"
+        <small *ngIf="LinkRequisitos.hasError('pattern') && !LinkRequisitos.hasError('required')"
               class="p-error">Digite un link <strong>válido</strong></small>
-        <!-- <small *ngIf="LinkRequistos.hasError('required') && LinkRequistos.dirty"
-              class="p-error">El campo nombre del curso es <strong>requerido</strong></small> -->
       </div>
     </div>
     <div class="col-12 md:col-6">

@@ -12,46 +12,20 @@ import { UnAuthorizedService } from 'src/app/services/unauthorized.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import { EstudianteEnGrupo, ResEstudianteEnGrupo } from '../../class/EstudianteGrupo';
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import { ModalMensualidadComponent } from '../../components/modal-mensualidad/modal-mensualidad.component';
+import { Pago } from '../../class/Pago'
 
-export interface Product {
-  id?:string;
-  code?:string;
-  name?:string;
-  description?:string;
-  price?:number;
-  quantity?:number;
-  inventoryStatus?:string;
-  category?:string;
-  image?:string;
-  rating?:number;
-}
 
 @Component({
   selector: 'app-estudiantes-grupo',
   templateUrl: './estudiantes-grupo.component.html',
-  styleUrls: ['./estudiantes-grupo.component.scss'],
-  animations: [
-    trigger('rowExpansionTrigger', [
-        state('void', style({
-            transform: 'translateX(-10%)',
-            opacity: 0
-        })),
-        state('active', style({
-            transform: 'translateX(0)',
-            opacity: 1
-        })),
-        transition('* <=> *', animate('400ms cubic-bezier(0.86, 0, 0.07, 1)'))
-    ])
-  ]
+  styleUrls: ['./estudiantes-grupo.component.scss']
 })
 export class EstudiantesGrupoComponent implements OnInit {
 
   @ViewChild('iframe') iframe: ElementRef;
   @ViewChild(ShowFileComponent) showFileComponent:ShowFileComponent;
-
-  products: Product[];
-
+  @ViewChild(ModalMensualidadComponent) modalMensualidad:ModalMensualidadComponent;
 
   listaEstudiantes:EstudianteEnGrupo[] = [];
   resAlumnoEnGrupo:ResEstudianteEnGrupo;
@@ -62,7 +36,7 @@ export class EstudiantesGrupoComponent implements OnInit {
   curso:Curso;
   expanded:boolean = false;
   displayFile:boolean = false;
-  FileURL:string;
+  fileURL:string;
 
   constructor(private readonly _grupo:GrupoService,
               private readonly activeRoute:ActivatedRoute,
@@ -88,12 +62,12 @@ export class EstudiantesGrupoComponent implements OnInit {
       })
     ).subscribe({
       next: (value) => {
+        console.log(value)
         this.loadingLista = false;
         if(value.ok){
           this.resAlumnoEnGrupo = value;
           this.listaEstudiantes = this.resAlumnoEnGrupo.data as Array<EstudianteEnGrupo>;
         }
-        console.log(value)
       },
       error: (e) => {
         this.loadingLista = false;
@@ -112,15 +86,15 @@ export class EstudiantesGrupoComponent implements OnInit {
   showFile(fileURL:string){
     this.showFileComponent.showModal();
     this.showFileComponent.showSpinner();
-    this.FileURL = fileURL;
+    this.fileURL = fileURL;
   }
 
   closeModal(){
     this.displayFile = false;
   }
 
-  loadFile(){
-    this.spinner.hide();
+  openModalMensualidad(pago:Pago){
+    this.modalMensualidad.openModal(pago);
   }
 
   messageError(e:HttpErrorResponse){

@@ -32,5 +32,6 @@ const config: SocketIoConfig = { url: environment.BASE_URL, options: {} };
     {provide: LOCALE_ID, useValue: 'es-PE' },
     { provide: HTTP_INTERCEPTORS, useClass: TokeInterceptorsService, multi:true },
   ]
+
 })
 export class AppModule { }

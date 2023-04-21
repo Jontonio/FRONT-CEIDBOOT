@@ -14,6 +14,10 @@ const routes: Routes = [
       {
         path:'aulas', component:AulaComponent },
       {
+        path:'dashboard',
+        loadChildren: () => import('./dashboard/dashboard.module').then( mod => mod.DashboardModule )
+      },
+      {
         path:'docentes',
         loadChildren: () => import('./docente/docente.module').then( mod => mod.DocenteModule )
       },

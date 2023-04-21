@@ -39,6 +39,9 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { PanelModule } from 'primeng/panel';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { InputMaskModule } from 'primeng/inputmask';
+import { AccordionModule } from 'primeng/accordion';
 
 /**
  * array of modules
@@ -78,7 +81,10 @@ const listModules:any[] = [
   CheckboxModule,
   PanelModule,
   SplitButtonModule,
-  ProgressBarModule
+  ProgressBarModule,
+  RadioButtonModule,
+  InputMaskModule,
+  AccordionModule
 ]
 
 @NgModule({

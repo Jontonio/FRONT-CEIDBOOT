@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { Logout } from 'src/app/auth/interfaces/Logout';
 import { AuthService } from 'src/app/auth/services/auth.service';
@@ -62,7 +62,8 @@ export class MenuComponent implements OnInit {
     this.items = [
       {
         label: 'Panel principal',
-        icon: 'fa-solid fa-house'
+        icon: 'fa-solid fa-house',
+        routerLink:'/system/dashboard'
       },
       {
         label: 'Grupos',

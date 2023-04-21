@@ -32,6 +32,7 @@
                 <th pSortableColumn="NombreCurso">Curso <p-sortIcon field="NombreCurso"></p-sortIcon></th>
                 <th pSortableColumn="NivelCurso">Nivel <p-sortIcon field="NivelCurso"></p-sortIcon></th>
                 <th>Cant. Módulos</th>
+                <th>Cuenta con libros</th>
                 <th>Descripción del curso</th>
                 <th>Estado curso</th>
                 <th>Operación</th>
@@ -45,8 +46,8 @@
                 <td>{{curso.nivel.Nivel | titlecase}}</td>
                 <td>{{curso.NumModulos}} Módulos</td>
                 <td>
-                  <p-tag styleClass="mr-2" severity="info">{{curso.DescripcionCurso | slice:0:40}}...</p-tag>
-                </td>
+                  <p-tag styleClass="mr-2" [severity]="countLibros(curso.libros)==0?'info':'success'">{{countLibros(curso.libros)==0?'No cuenta libros':'Cuenta con libros'}}</p-tag></td>
+                <td>{{curso.DescripcionCurso | slice:0:40}}...</td>
                 <td>
                   <div *ngIf="curso.EstadoApertura else disable">
                     <button mat-raised-button
@@ -67,6 +68,10 @@
                     <mat-icon><i class="fa-solid fa-circle-chevron-down"></i></mat-icon>
                   </button>
                   <mat-menu #menu="matMenu">
+                    <button mat-menu-item [routerLink]="['/system/cursos/ver-curso', curso.Id]">
+                      <mat-icon><i class="fa-solid fa-circle-info"></i></mat-icon>
+                      <span>Ver más</span>
+                    </button>
                     <button mat-menu-item [routerLink]="['/system/cursos/editar-curso', curso.Id]">
                       <mat-icon><i class="fa-solid fa-pen-to-square"></i></mat-icon>
                       <span>Editar curso</span>

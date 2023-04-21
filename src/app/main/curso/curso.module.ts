@@ -11,6 +11,7 @@ import { PrimengModule } from 'src/app/primeng/primeng.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { materialize } from 'rxjs';
 import { MaterialModule } from 'src/app/material/material.module';
+import { VerCursoComponent } from './pages/ver-curso/ver-curso.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { MaterialModule } from 'src/app/material/material.module';
     AddCursoComponent,
     CursoComponent,
     ListCursoComponent,
-    FormCursoComponent
+    FormCursoComponent,
+    VerCursoComponent
   ],
   imports: [
     CommonModule,

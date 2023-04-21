@@ -38,7 +38,7 @@ export class AuthService {
   }
 
   getToken():string{
-    let token = '';
+    let token = null;
     if(this.readToken()) token = JSON.parse(localStorage.getItem('token')!);
     return token;
   }

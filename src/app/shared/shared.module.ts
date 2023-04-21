@@ -14,6 +14,7 @@ import { MaterialModule } from '../material/material.module';
 import { ShowFileComponent } from './show-file/show-file.component';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { SafeUrlPipe } from '../pipes/safe-url.pipe';
+import { IframeFileComponent } from './iframe-file/iframe-file.component';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { SafeUrlPipe } from '../pipes/safe-url.pipe';
     SkeletonTableComponent,
     FormMatriculaComponent,
     ShowFileComponent,
+    IframeFileComponent,
   ],
   imports: [
     CommonModule,
@@ -44,7 +46,8 @@ import { SafeUrlPipe } from '../pipes/safe-url.pipe';
     ListaVaciaComponent,
     LoaddingComponent,
     FormMatriculaComponent,
-    ShowFileComponent
+    ShowFileComponent,
+    IframeFileComponent
   ]
 })
 export class SharedModule { }

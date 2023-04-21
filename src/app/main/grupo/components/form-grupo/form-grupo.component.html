@@ -189,7 +189,7 @@
         <label for="RequeridoPPago" class="block mb-2">Pago primer módulo y libro</label>
         <div class="field-checkbox">
           <p-checkbox [binary]="true" inputId="RequeridoPPago" formControlName="RequeridoPPago"></p-checkbox>
-          <label for="RequeridoPPago">Marque si para matricularse en el grupo es necesario realizar el primer pago de la pensión y el pago del libro.</label>
+          <label for="RequeridoPPago">Marque si para matricularse en el grupo es necesario realizar el primer pago de la pensión y el pago de matrícula.</label>
         </div>
         <small *ngIf="RequeridoPPago.hasError('required') && RequeridoPPago.dirty"
                     class="p-error">Este campo es <strong>requerido</strong></small>

@@ -76,7 +76,7 @@
             <td><p-tag severity="success">{{grupo.matricula.EstadoMatricula}}</p-tag></td>
             <td>{{grupo.matricula.denomiServicio.Descripcion | slice:0:45}}...</td>
             <td><button mat-button (click)="showFile(grupo.matricula.FileMatriculaURL)"><i class="pi pi-file-pdf icon-size"></i> ver</button></td>
-            <td>{{grupo.mensualidades.length}} de {{grupo.grupo.curso.NumModulos}}</td>
+            <td>{{grupo.pagos.length}} de {{grupo.grupo.curso.NumModulos}}</td>
             <td>{{grupo.matricula.denomiServicio.MontoMatricula | currency: 'PEN': 'symbol': '': 'es-PE'}}</td>
             <td>{{grupo.matricula.denomiServicio.MontoPension | currency: 'PEN': 'symbol': '': 'es-PE'}}</td>
             <td>
@@ -112,33 +112,39 @@
             <tr>
                 <td colspan="11">
                     <div class="p-p-3">
-                        <p-table [value]="grupo.mensualidades" responsiveLayout="scroll" dataKey="Id">
+                        <p-table [value]="grupo.pagos" responsiveLayout="scroll" dataKey="Id">
                             <ng-template pTemplate="header">
                                 <tr>
                                     <th>N°</th>
                                     <th>Código de voucher</th>
                                     <th>Fecha de pago</th>
                                     <th>Monto de pago</th>
+                                    <th>Categoría de pago</th>
                                     <th>Voucher</th>
                                     <th>Estado pago</th>
                                     <th>Validar pago</th>
                                     <th>Más</th>
                                 </tr>
                             </ng-template>
-                            <ng-template pTemplate="body" let-rowIndex="rowIndex" let-mensualidad>
+                            <ng-template pTemplate="body" let-rowIndex="rowIndex" let-pago>
                                 <tr>
                                   <td>{{rowIndex+1}}</td>
-                                  <td>{{mensualidad.CodigoVocuher}}</td>
-                                  <td>{{mensualidad.FechaPago | date}}</td>
-                                  <td>{{grupo.matricula.denomiServicio.MontoPension | currency: 'PEN': 'symbol': '': 'es-PE' }}</td>
+                                  <td>{{pago.CodigoVoucher | empty:'código'}}</td>
+                                  <td>{{pago.FechaPago | date:'longDate' | empty:'fecha' }}</td>
+                                  <td>{{pago.MontoPago | currency: 'PEN': 'symbol': '': 'es-PE' }}</td>
+                                  <td>{{pago.categoriaPago.TipoCategoriaPago | titlecase}}</td>
                                   <td>
-                                    <button mat-button (click)="showFile(mensualidad.VoucherUrl)"><i class="pi pi-link"></i> ver</button>
+                                    <button mat-button (click)="showFile(pago.VoucherUrl)"><i class="pi pi-link"></i> ver</button>
                                   </td>
                                   <td>
-                                    <p-tag icon="pi pi-check" value="Verificado"></p-tag>
-                                    <!-- <p-tag icon="pi pi-times" severity="danger" value="No verificado"></p-tag> -->
+                                    <div *ngIf="pago.Verificado, else NotVerify">
+                                      <p-tag icon="pi pi-check" value="Verificado"></p-tag>
+                                    </div>
+                                    <ng-template #NotVerify>
+                                      <p-tag icon="pi pi-times" severity="danger" value="No verificado"></p-tag>
+                                    </ng-template>
                                   </td>
-                                  <td><button mat-raised-button> Validar pago </button></td>
+                                  <td><button mat-raised-button (click)="openModalMensualidad(pago)"> Validar pago </button></td>
                                   <td>
                                     <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
                                       <mat-icon>more_vert</mat-icon>
@@ -203,5 +209,5 @@
   </p-card>
 </div>
 
-<app-show-file [FileURL]="FileURL"></app-show-file>
-
+<app-show-file [fileURL]="fileURL"></app-show-file>
+<app-modal-mensualidad></app-modal-mensualidad>

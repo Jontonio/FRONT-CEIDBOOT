@@ -15,6 +15,8 @@ import { MaterialModule } from 'src/app/material/material.module';
 import { FormGrupoComponent } from './components/form-grupo/form-grupo.component';
 import { EstudiantesGrupoComponent } from './pages/estudiantes-grupo/estudiantes-grupo.component';
 import { NgxSpinnerModule } from "ngx-spinner";
+import { EmptyDataPipe } from 'src/app/pipes/empty-data.pipe';
+import { ModalMensualidadComponent } from './components/modal-mensualidad/modal-mensualidad.component';
 
 
 @NgModule({
@@ -27,6 +29,8 @@ import { NgxSpinnerModule } from "ngx-spinner";
     ModalTipoGrupoComponent,
     FormGrupoComponent,
     EstudiantesGrupoComponent,
+    EmptyDataPipe,
+    ModalMensualidadComponent,
   ],
   imports: [
     CommonModule,

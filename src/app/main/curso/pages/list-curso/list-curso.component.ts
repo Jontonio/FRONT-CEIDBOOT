@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { Curso } from 'src/app/main/curso/class/Curso';
 import { CursoService } from 'src/app/main/curso/services/curso.service';
 import { SocketService } from 'src/app/services/socket.service';
+import { Libro } from '../../class/Libro';
 
 
 @Component({
@@ -110,10 +111,12 @@ export class ListCursoComponent {
 
   messageError(e:any){
     const msg = e.error.message;
-    Array.isArray(msg)?msg.forEach(e => this.toast('error',e,'Error de validación de datos')):
-                                        this.toast('error',msg,`${e.error.error}:${e.error.statusCode}`)
+    Array.isArray(msg)?msg.forEach(e => this.toast('error', e, 'Error de validación de datos')):
+                                        this.toast('error', msg, `${e.error.error}:${e.error.statusCode}`)
   }
 
-
+  countLibros(libros:Libro[]){
+    return libros.filter( libro => libro.Estado== true ).length;
+  }
 
 }

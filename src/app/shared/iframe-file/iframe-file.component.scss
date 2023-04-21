@@ -1,0 +1,14 @@
+.iframe{
+  width: 100%;
+  height: 430px;
+}
+.content-iframe{
+  overflow: hidden !important;
+  position: relative;
+}
+@media only screen and (min-width: 1200px) {
+  /* Estilos para escritorio grande aquí */
+  .iframe{
+    height: 430px;
+  }
+}

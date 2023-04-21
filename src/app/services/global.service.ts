@@ -11,6 +11,9 @@ import { ResApoderado } from '../main/matricula/class/Apoderado';
 import { EmailDocumento, ResEmailDocEstudiante, ResEstudiante } from '../main/matricula/class/Estudiante';
 import { ResGrupo } from '../main/grupo/class/Grupo';
 import { EstudianteEnGrupo, ResEstudianteEnGrupo } from '../main/grupo/class/EstudianteGrupo';
+import { FileDrive } from '../main/class/global';
+import { Pago, ResPago } from '../main/grupo/class/Pago';
+import { ResCategoriaPago } from '../main/grupo/class/CategoriaPago';
 
 @Injectable({
   providedIn: 'root'
@@ -73,6 +76,14 @@ export class GlobalService {
     return this.http.post<ResEmailDocEstudiante>(`${environment.BASE_URL}/estudiante/verify-documento-email`, data);
   }
 
+  getCategoriaPago():Observable<ResCategoriaPago>{
+    return this.http.get<ResCategoriaPago>(`${environment.BASE_URL}/categoria-pago/get-all-categoria-pago`);
+  }
+
+  consultaEstudianteGrupo(data:any):Observable<ResEstudianteEnGrupo>{
+    return this.http.post<ResEstudianteEnGrupo>(`${environment.BASE_URL}/estudiante-en-grupo/consulta-estudiante-en-grupo`, data);
+  }
+
   registerMatricula(data:EstudianteEnGrupo):Observable<ResEstudianteEnGrupo>{
     return this.http.post<ResEstudianteEnGrupo>(`${environment.BASE_URL}/estudiante-en-grupo/register-estudiante-from-matricula`, data);
   }
@@ -81,8 +92,12 @@ export class GlobalService {
     return this.http.post<ResEstudianteEnGrupo>(`${environment.BASE_URL}/matricula/matricular-estudiante`, data);
   }
 
-  uploadFileMatricula(data:any):Observable<any>{
-    return this.http.post<any>(`${environment.BASE_URL}/matricula/file-matricula`, data);
+  uploadFile(data:FormData):Observable<FileDrive>{
+    return this.http.post<FileDrive>(`${environment.BASE_URL}/matricula/upload-file`, data);
+  }
+
+  registerPago( data:Pago ):Observable<ResPago>{
+    return this.http.post<ResPago>(`${environment.BASE_URL}/mensualidad/pago-mensualidad`, data);
   }
 
 

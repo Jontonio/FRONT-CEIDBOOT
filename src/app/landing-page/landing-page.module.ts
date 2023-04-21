@@ -16,6 +16,7 @@ import { MessageService } from 'primeng/api';
 import { MaterialModule } from '../material/material.module';
 import { PagosComponent } from './pages/pagos/pagos.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ExampleNumOperacionComponent } from './pages/example-num-operacion/example-num-operacion.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     MorThingsComponent,
     HomeComponent,
     MatriculaComponent,
-    PagosComponent
+    PagosComponent,
+    ExampleNumOperacionComponent
   ],
   imports: [
     CommonModule,

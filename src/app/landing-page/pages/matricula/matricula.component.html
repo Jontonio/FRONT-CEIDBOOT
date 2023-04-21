@@ -1,27 +1,29 @@
 <div class="header-form-matricula"></div>
-<div class="grid content animate__animated animate__fadeIn p-1 pb-5">
-  <div class="col-12 md:col-3">
-    <p-card>
-      <h3><i class="fa-solid fa-circle-info"></i> Requisitos para matrícula</h3>
-      <mat-list>
-        <div mat-subheader>Documentos</div>
-        <mat-list-item *ngFor="let note of notes">
-          <mat-icon matListItemIcon class="mr-2">note</mat-icon>
-          <div matListItemTitle><a [href]="note.link" target="_blank" rel="noopener noreferrer">{{note.name}}</a></div>
-        </mat-list-item>
-        <mat-divider></mat-divider>
-        <div mat-subheader>Folders</div>
-        <mat-list-item *ngFor="let folder of folders">
-          <mat-icon matListItemIcon class="mr-2">folder</mat-icon>
-          <div matListItemTitle>{{folder.name}}</div>
-        </mat-list-item>
-      </mat-list>
-    </p-card>
-  </div>
-  <div class="col-12 md:col-9">
-    <p-card>
-      <h2><i class="fa-solid fa-graduation-cap"></i> Separa tu cupo</h2>
-      <app-form-matricula></app-form-matricula>
-    </p-card>
+<div class="content-matricula">
+  <div class="grid content animate__animated animate__fadeIn p-1 pb-5">
+    <div class="col-12 md:col-3">
+      <p-card>
+        <h3><i class="fa-solid fa-circle-info"></i> Requisitos para matrícula</h3>
+        <mat-list>
+          <div mat-subheader>Documentos</div>
+          <mat-list-item *ngFor="let note of notes">
+            <mat-icon matListItemIcon class="mr-2">note</mat-icon>
+            <div matListItemTitle><a class="tag-a" [href]="note.link" target="_blank" rel="noopener noreferrer">{{note.name}}</a></div>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+          <div mat-subheader>Folders</div>
+          <mat-list-item *ngFor="let folder of folders">
+            <mat-icon matListItemIcon class="mr-2">folder</mat-icon>
+            <div matListItemTitle>{{folder.name}}</div>
+          </mat-list-item>
+        </mat-list>
+      </p-card>
+    </div>
+    <div class="col-12 md:col-9">
+      <p-card>
+        <h2><i class="fa-solid fa-graduation-cap"></i> Separa tu cupo</h2>
+        <app-form-matricula></app-form-matricula>
+      </p-card>
+    </div>
   </div>
 </div>

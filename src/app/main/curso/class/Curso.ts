@@ -1,3 +1,4 @@
+import { Libro } from "./Libro";
 import { Nivel } from "./Nivel";
 
 class ResCurso {
@@ -10,11 +11,12 @@ class Curso {
   UrlBandera: string;
   NombreCurso: string;
   nivel: Nivel;
+  libros:Libro[];
   DescripcionCurso: string;
   NumModulos: number;
   Estado?: boolean;
   EstadoApertura:boolean;
-  LinkRequistos?:string;
+  LinkRequisitos?:string;
   createdAt?: string;
   updatedAt?: string;
 

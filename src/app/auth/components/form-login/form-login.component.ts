@@ -41,7 +41,6 @@ export class FormLoginComponent {
     this.loading = true;
     this._auth.login(this.formLogin.value).subscribe({
       next: (res) => {
-        console.log(res)
         setTimeout(()=>{
           this.loading = false;
           if(!res.ok){
@@ -49,7 +48,7 @@ export class FormLoginComponent {
             return;
           }
           this._auth.saveToken(res.token);
-          this.route.navigate(['/system']);
+          this.route.navigate(['/system/dashboard']);
         },300)
       },
       error: (err) => console.log(err)

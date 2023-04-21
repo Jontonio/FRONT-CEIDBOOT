@@ -1,6 +1,6 @@
 <p-messages key="message-matricula"></p-messages>
 <mat-stepper linear="true" #stepper>
-  <mat-step [stepControl]="formEstudiante">
+  <mat-step>
     <p-messages key="message-error-code"></p-messages>
     <form [formGroup]="formEstudiante">
       <ng-template matStepLabel>Información personal</ng-template>
@@ -208,7 +208,7 @@
         </div>
     </form>
   </mat-step>
-  <mat-step [stepControl]="formMayorEdad">
+  <mat-step>
     <form [formGroup]="formMayorEdad">
       <ng-template matStepLabel>Mayoria de edad</ng-template>
       <div class="grid content">
@@ -316,7 +316,7 @@
       </div>
     </form>
   </mat-step>
-  <mat-step [stepControl]="formGrupo">
+  <mat-step>
     <form [formGroup]="formGrupo">
       <ng-template matStepLabel>Grupo y curso</ng-template>
       <div class="grid content">
@@ -340,7 +340,7 @@
               <ng-template let-grupo pTemplate="item">
                 <div>
                   <img class="flag-code-country" [src]="grupo.curso.UrlBandera" alt="">
-                  <span class="ml-1 mr-1">{{grupo.curso.NombreCurso | titlecase }} {{grupo.curso.nivel.Nivel}} - <i class="fa-regular fa-clock fa-spin"></i> {{grupo.horario.HoraInicio | date:'h:mm a'}} - {{grupo.horario.HoraFinal | date:'h:mm a'}}</span>
+                  <span class="ml-1 mr-1">{{grupo.curso.NombreCurso | titlecase }} {{grupo.curso.nivel.Nivel}} - {{grupo.horario.HoraInicio | date:'h:mm a'}} a {{grupo.horario.HoraFinal | date:'h:mm a'}}</span>
                   <p-tag severity="warning" *ngIf="!grupo.RequeridoPPago">New</p-tag>
                 </div>
               </ng-template>
@@ -380,7 +380,7 @@
       </div>
     </form>
   </mat-step>
-  <mat-step [stepControl]="formAcademica">
+  <mat-step>
     <form [formGroup]="formAcademica">
       <ng-template matStepLabel>Formación</ng-template>
       <div class="grid content">
@@ -389,6 +389,7 @@
           <p-dropdown class="p-fluid p-grid p-formgrid"
                       formControlName="Poblacion"
                       [options]="listDenominServicio"
+                      (ngModelChange)="selectServicio($event)"
                       placeholder="Selececionea la población que pertenece"
                       optionLabel="Descripcion"></p-dropdown>
           <small *ngIf="Poblacion.hasError('required') && Poblacion.dirty"
@@ -456,46 +457,242 @@
       </div>
     </form>
   </mat-step>
-  <mat-step [stepControl]="formFiles">
+  <mat-step>
     <form [formGroup]="formFiles" method="post">
-      <ng-template matStepLabel>Documentos</ng-template>
-        <div class="grid content">
-          <div class="col-12 md:col-12">
-            <label for="FileMatriculaURL" class="block mb-2">Documentos como requisitos para su matricula <b>(Formato PDF)</b></label>
-            <input class="p-fluid p-grid p-formgrid"
-                   type="file"
-                   id="input-file"
-                   name="file"
-                   accept="application/pdf"
-                   formControlName="FileMatriculaURL"
-                   (change)="onFileMatriculaChange($event)"
-                   pInputText/>
-            <small *ngIf="FileMatriculaURL.hasError('required') && FileMatriculaURL.dirty"
-                   class="p-error">El documento de requisitos es <strong>requerido</strong></small>
-            <p-progressBar *ngIf="loadingFileMatricula" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
-          </div>
-          <div class="col-12 md:col-12" *ngIf="selecGrupo && selecGrupo.RequeridoPPago">
-            <label for="CP" class="block mb-2">Vouchers de pago de la primera mensualidad, matricula y pago del libro <b>(Escaneado en un solo PDF)</b></label>
-            <input class="p-fluid p-grid p-formgrid"
-                   type="file"
-                   autocomplete="off"
-                   formControlName="FilePagoURL"
-                   (change)="onFilePagoChange($event)"
-                   accept="application/pdf"
-                   pInputText/>
-            <small *ngIf="FilePagoURL.hasError('required') && FilePagoURL.dirty"
-                   class="p-error">El voucher de pago de la primera mensualidad, matricula y del libro son <strong>requerido</strong></small>
-            <p-progressBar *ngIf="loadingFilePago" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
-          </div>
-          <div class="col-12">
-            <b>ANTES DE ENVIAR SU INFORMACIÓN, VERIFIQUE QUE SE ENCUENTRE DIGITADO CORRECTAMENTE**</b>
-          </div>
+      <ng-template matStepLabel>Adjuntar archivos</ng-template>
+      <div class="pl-1 pr-1 mt-2">
+        <div>
+          <p-messages [(value)]="messages" [enableService]="false" [closable]="false"></p-messages>
         </div>
+        <p-accordion [activeIndex]="0">
+          <p-progressBar *ngIf="loadingDocumentoMatricula" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+          <p-accordionTab header="Cargue los documentos como requisitos para su matricula">
+            <div class="col-12 md:col-12 flex justify-content-between justify-content-center align-items-center file-content">
+              <label class="block">Documentos de requisitos para su matricula</label>
+              <div class="text-center">
+                <div (click)="uploadFile.click()">
+                  <button mat-raised-button
+                          [disabled]="loadingDocumentoMatricula"
+                          class="custom-btn-file">
+                    <mat-icon>{{(fileDocumentoMatricula.value && !loadingDocumentoMatricula)?'check':'attach_file'}}</mat-icon> Elija el archivo</button>
+                  <input #uploadFile
+                         formControlName="fileDocumentoMatricula"
+                         (change)="onDocumentoMatriculaChange($event)"
+                         type='file' style="display:none"/>
+                </div>
+                <small *ngIf="fileDocumentoMatricula.hasError('required') && fileDocumentoMatricula.dirty"
+                        class="p-error">El documento de requisitos es <strong>requerido</strong></small>
+              </div>
+            </div>
+          </p-accordionTab>
+          <p-progressBar *ngIf="loadingFilePagoMatricula" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+          <p-accordionTab *ngIf="selecGrupo && selecGrupo.RequeridoPPago" header="Cargue su voucher del pago de matrícula">
+            <div class="grid">
+              <div class="col-12 md:col-3">
+                <label for="MontoPagoMatricula" class="block mb-2">Monto de pago S/.</label>
+                <input id="MontoPagoMatricula"
+                       class="p-fluid p-grid p-formgrid full-width"
+                       type="text"
+                       formControlName="MontoPagoMatricula"
+                       autocomplete="off"
+                       pInputText/>
+                <small *ngIf="MontoPagoMatricula.hasError('pattern') && !MontoPagoMatricula.hasError('required')"
+                        class="p-error">Digite un monto de pago <strong>válido</strong></small>
+                <small *ngIf="MontoPagoMatricula.hasError('required') && MontoPagoMatricula.dirty"
+                        class="p-error">El campo monto de pago es <strong>requerido</strong></small>
+              </div>
+              <div class="col-12 md:col-3">
+                <label for="NumOperacionMatricula" class="block mb-2">N° de operación <a class="tag-a" (click)="showFileExample()">Ver ejemplo</a></label>
+                <input id="NumOperacionMatricula"
+                       class="p-fluid p-grid p-formgrid full-width"
+                       type="text"
+                       placeholder="Número de operación"
+                       formControlName="NumOperacionMatricula"
+                       autocomplete="off"
+                       pInputText/>
+                <small *ngIf="NumOperacionMatricula.hasError('pattern') && !NumOperacionMatricula.hasError('required')"
+                        class="p-error">Digite un número de operación <strong>válido</strong></small>
+                <small *ngIf="NumOperacionMatricula.hasError('required') && NumOperacionMatricula.dirty"
+                        class="p-error">El campo número de operación es <strong>requerido</strong></small>
+              </div>
+              <div class="col-12 md:col-3">
+                <label for="FechaPagoMatricula" class="block mb-2">Fecha de pago</label>
+                <p-inputMask mask="99/99/9999"
+                              formControlName="FechaPagoMatricula"
+                              placeholder="DD/MM/AAAA"></p-inputMask>
+                <small *ngIf="FechaPagoMatricula.hasError('pattern') && !FechaPagoMatricula.hasError('required')"
+                        class="p-error">Digite una fecha de pago <strong>válida</strong></small>
+                <small *ngIf="FechaPagoMatricula.hasError('required') && FechaPagoMatricula.dirty"
+                        class="p-error">El campo fecha de pago es <strong>requerido</strong></small>
+              </div>
+              <div class="col-12 md:col-3">
+                <div class="text-center">
+                  <label class="block label-file">Voucher pago matrícula</label>
+                  <div>
+                    <button mat-raised-button
+                            [disabled]="loadingFilePagoMatricula"
+                            (click)="uploadFile.click()"
+                            class="custom-btn-file">
+                            <mat-icon>{{(filePagoMatricula.value && !loadingFilePagoMatricula)?'check':'attach_file'}}</mat-icon> Elija el archivo</button>
+                    <input #uploadFile
+                            formControlName="filePagoMatricula"
+                            (change)="onFilePagoMatriculaChange($event)"
+                            type='file' style="display:none"/>
+                  </div>
+                  <small *ngIf="filePagoMatricula.hasError('required') && filePagoMatricula.dirty"
+                          class="p-error">El voucher de pago matrícula es <strong>requerido</strong></small>
+                </div>
+              </div>
+            </div>
+          </p-accordionTab>
+          <p-progressBar *ngIf="loadingFilePagoLibro" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+          <p-accordionTab *ngIf="selecGrupo && selecGrupo.RequeridoPPago && countLibros(selecGrupo.curso.libros)!=0" header="Cargue su voucher del pago del libro">
+            <div class="grid">
+              <div class="col-12 md:col-3">
+                <div class="">
+                  <label for="MontoPagoLibro" class="block mb-2">Monto de pago S/.</label>
+                  <input id="MontoPagoLibro"
+                        class="p-fluid p-grid p-formgrid full-width"
+                        type="text"
+                        placeholder="Monto de pago"
+                        formControlName="MontoPagoLibro"
+                        autocomplete="off"
+                        pInputText/>
+                  <small *ngIf="MontoPagoLibro.hasError('pattern') && !MontoPagoLibro.hasError('required')"
+                  class="p-error">Digite un monto de pago <strong>válido</strong></small>
+                  <small *ngIf="MontoPagoLibro.hasError('required') && MontoPagoLibro.dirty"
+                          class="p-error">El campo monto de pago es <strong>requerido</strong></small>
+                </div>
+              </div>
+              <div class="col-12 md:col-3">
+                <div class="">
+                  <label for="NumOperacionLibro" class="block mb-2">Número de operación</label>
+                  <input id="NumOperacionLibro"
+                        class="p-fluid p-grid p-formgrid full-width"
+                        type="text"
+                        placeholder="Número de operación"
+                        formControlName="NumOperacionLibro"
+                        autocomplete="off"
+                        pInputText/>
+                  <small *ngIf="NumOperacionLibro.hasError('pattern') && !NumOperacionLibro.hasError('required')"
+                  class="p-error">Digite un número de operación <strong>válido</strong></small>
+                  <small *ngIf="NumOperacionLibro.hasError('required') && NumOperacionLibro.dirty"
+                          class="p-error">El campo número de operación es <strong>requerido</strong></small>
+                </div>
+              </div>
+              <div class="col-12 md:col-3">
+                <div class="">
+                  <label for="FechaPagoLibro" class="block mb-2">Fecha de pago</label>
+                  <p-inputMask mask="99/99/9999"
+                               formControlName="FechaPagoLibro"
+                               placeholder="DD/MM/AAAA"></p-inputMask>
+                  <small *ngIf="FechaPagoLibro.hasError('pattern') && !FechaPagoLibro.hasError('required')"
+                          class="p-error">Digite una fecha de pago <strong>válida</strong></small>
+                  <small *ngIf="FechaPagoLibro.hasError('required') && FechaPagoLibro.dirty"
+                          class="p-error">El campo fecha de pago es <strong>requerido</strong></small>
+                </div>
+              </div>
+              <div class="col-12 md:col-3">
+                <div class="text-center">
+                  <label class="block label-file">Voucher pago libro</label>
+                  <div>
+                    <button mat-raised-button
+                            [disabled]="loadingFilePagoLibro"
+                            (click)="uploadFile.click()"
+                            class="custom-btn-file">
+                            <mat-icon>{{(filePagoLibro.value && !loadingFilePagoLibro)?'check':'attach_file'}}</mat-icon> Elija el archivo</button>
+                    <input #uploadFile
+                            formControlName="filePagoLibro"
+                            (change)="onFilePagoLibroChange($event)"
+                            type='file' style="display:none"/>
+                  </div>
+                  <small *ngIf="filePagoLibro.hasError('required') && filePagoLibro.dirty"
+                          class="p-error">El voucher del pago del libro es <strong>requerido</strong></small>
+                </div>
+              </div>
+            </div>
+          </p-accordionTab>
+          <p-progressBar *ngIf="loadingFilePagoMensualidad" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+          <p-accordionTab *ngIf="selecGrupo && selecGrupo.RequeridoPPago" header="Cargue su voucher del pago de su primera mensualidad">
+            <div class="grid">
+              <div class="col-12 md:col-3">
+                <div class="">
+                  <label for="MontoPagoMensualidad" class="block mb-2">Monto pago S/</label>
+                  <input id="MontoPagoMensualidad"
+                         class="p-fluid p-grid p-formgrid full-width"
+                         type="text"
+                         placeholder="Digite el número de operación"
+                         formControlName="MontoPagoMensualidad"
+                         autocomplete="off"
+                         pInputText/>
+                  <small *ngIf="MontoPagoMensualidad.hasError('pattern') && !MontoPagoMensualidad.hasError('required')"
+                          class="p-error">Digite un monto de pago <strong>válido</strong></small>
+                  <small *ngIf="MontoPagoMensualidad.hasError('required') && MontoPagoMensualidad.dirty"
+                          class="p-error">El campo monto de pago es <strong>requerido</strong></small>
+                </div>
+              </div>
+              <div class="col-12 md:col-3">
+                <div class="">
+                  <label for="NumOperacionMensualidad" class="block mb-2">Número de operación</label>
+                  <input id="NumOperacionMensualidad"
+                         class="p-fluid p-grid p-formgrid full-width"
+                         type="text"
+                         placeholder="Número de operación"
+                         formControlName="NumOperacionMensualidad"
+                         autocomplete="off"
+                         pInputText/>
+                  <small *ngIf="NumOperacionMensualidad.hasError('pattern') && !NumOperacionMensualidad.hasError('required')"
+                          class="p-error">Digite un número de operación <strong>válido</strong></small>
+                  <small *ngIf="NumOperacionMensualidad.hasError('required') && NumOperacionMensualidad.dirty"
+                          class="p-error">El campo número de operación es <strong>requerido</strong></small>
+                </div>
+              </div>
+              <div class="col-12 md:col-3">
+                <div class="">
+                  <label for="FechaPagoMensualidad" class="block mb-2">Fecha de pago</label>
+                  <p-inputMask mask="99/99/9999"
+                               formControlName="FechaPagoMensualidad"
+                               placeholder="DD/MM/AAAA"></p-inputMask>
+                  <small *ngIf="FechaPagoMensualidad.hasError('pattern') && !FechaPagoMensualidad.hasError('required')"
+                          class="p-error">Digite una fecha de pago <strong>válida</strong></small>
+                  <small *ngIf="FechaPagoMensualidad.hasError('required') && FechaPagoMensualidad.dirty"
+                          class="p-error">El campo fecha de pago es <strong>requerido</strong></small>
+                </div>
+              </div>
+              <div class="col-12 md:col-3">
+                <div class="text-center">
+                  <label class="block label-file">Voucher pago mensualidad</label>
+                  <div>
+                    <button mat-raised-button
+                            [disabled]="loadingFilePagoMensualidad"
+                            (click)="uploadFile.click()"
+                            class="custom-btn-file">
+                            <mat-icon>{{(filePagoMensualidad.value && !loadingFilePagoMensualidad)?'check':'attach_file'}}</mat-icon> Elija el archivo</button>
+                    <input #uploadFile
+                            formControlName="filePagoMensualidad"
+                            (change)="onFilePagoMensualidadChange($event)"
+                            type='file' style="display:none"/>
+                  </div>
+                  <small *ngIf="filePagoMensualidad.hasError('required') && filePagoMensualidad.dirty"
+                          class="p-error">El voucher del pago de mensualidad es <strong>requerido</strong></small>
+                </div>
+              </div>
+            </div>
+          </p-accordionTab>
+        </p-accordion>
+      </div>
       <br>
       <div align="end" class="mr-2 mt-2 mb-4">
         <button mat-raised-button matStepperPrevious class="mr-2">Regresar</button>
-        <button mat-raised-button (click)="ready()" [disabled]="loadingFileMatricula || loadingFilePago || loadingSave">guardar</button>
+        <button mat-raised-button
+                (click)="ready()"
+                [disabled]="loadingDocumentoMatricula  ||
+                            loadingFilePagoLibro       ||
+                            loadingFilePagoMatricula   ||
+                            loadingFilePagoMensualidad ||
+                            loadingSave">guardar</button>
       </div>
     </form>
   </mat-step>
 </mat-stepper>
+<!-- <app-show-file fileURL="https://drive.google.com/file/d/1A8mF2DQrgSPsVmgDzbWH03BmmNHhfAi1/view?usp=sharing"></app-show-file> -->

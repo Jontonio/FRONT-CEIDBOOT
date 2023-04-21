@@ -4,17 +4,9 @@
           [closable]="false"
           [(visible)]="displayFile"
           [style]="{width: '70vw'}"
+          [baseZIndex]="999999"
           [breakpoints]="{'960px': '85vw'}" [style]="{width: '90vw'}">
-          <div class="content-iframe">
-            <iframe #iframe [src]="FileURL | safeUrl" class="iframe" (load)="loadFile()"></iframe>
-            <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)"
-                         size = "default"
-                         color = "#fff"
-                         type = "ball-fall"
-                         template="<img src='assets/icon/logo.png' />"
-                         [fullScreen] = "false"><p style="color: white" > Cargando... </p>
-            </ngx-spinner>
-          </div>
+          <app-iframe-file [fileURL]="fileURL"></app-iframe-file>
           <ng-template pTemplate="footer">
             <p-button (click)="closeModal()" label="Cerrar" styleClass="p-button-text"></p-button>
           </ng-template>

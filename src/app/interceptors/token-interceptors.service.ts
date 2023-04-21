@@ -44,7 +44,7 @@ export class TokeInterceptorsService implements HttpInterceptor {
 
   initExcludeURLs(){
     this.listURLs = [
-      `${this.BASE_URL}/matricula/file-matricula`,
+      `${this.BASE_URL}/matricula/upload-file`,
       `${this.BASE_URL}/estudiante-en-grupo/register-estudiante-from-matricula`
     ]
   }

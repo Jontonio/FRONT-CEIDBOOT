@@ -8,7 +8,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class ShowFileComponent implements OnInit {
 
-  @Input() FileURL:string;
+  @Input() fileURL:string;
   displayFile:boolean = false;
 
   constructor(private readonly spinner:NgxSpinnerService) { }
