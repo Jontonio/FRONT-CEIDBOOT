@@ -29,7 +29,6 @@
 
   </div>
 </div>
-
 <p-sidebar [(visible)]="display">
   <div class="flex justify-content-center flex align-items-center">
     <img src="assets/icon/CEIDBOT.svg" alt="" srcset="">
@@ -37,14 +36,16 @@
   </div>
   <p-divider layout="horizontal"></p-divider>
   <div class="menu">
-    <div *ngFor="let menu of items"
-          [routerLink]="menu.routerLink"
-          routerLinkActive="active"
-          class="col flex
-          justify-content-start
-          align-items-center
-          item font">
-      <i [class]="menu.icon"></i><p class="ml-3">{{menu.label}}</p>
+    <div *ngFor="let menu of items">
+      <div  *showForRoles="menu.role"
+            [routerLink]="menu.routerLink"
+            routerLinkActive="active"
+            class="col flex
+            justify-content-start
+            align-items-center
+            item font">
+        <i [class]="menu.icon"></i><p class="ml-3">{{menu.label}}</p>
+      </div>
     </div>
     <div routerLinkActive="active"
          (click)="this.logout()"

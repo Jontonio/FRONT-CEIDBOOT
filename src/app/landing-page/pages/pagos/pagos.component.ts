@@ -11,6 +11,8 @@ import { Message, MessageService } from 'primeng/api';
 import { switchMap } from 'rxjs';
 import { Pago } from 'src/app/main/grupo/class/Pago';
 import { CategoriaPago } from 'src/app/main/grupo/class/CategoriaPago';
+import { Grupo } from 'src/app/main/grupo/class/Grupo';
+import * as moment from 'moment';
 
 interface Card {
   name: string,
@@ -89,9 +91,9 @@ export class PagosComponent {
   createFormularioFile(){
     this.formFile = this.fb.group({
       FileURL:[null, Validators.required ],
-      MontoPago:[null, Validators.required],
-      NumOperacion:[null, Validators.required],
-      FechaPago:[null, Validators.required]
+      MontoPago:[null, [Validators.required, Validators.pattern(/^([0-9])*$/)]],
+      NumOperacion:[null, [Validators.required, Validators.pattern(/^([0-9])*$/)]],
+      FechaPago:[null, [Validators.required, Validators.pattern(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[012])\/\d{4}$/)]]
     })
   }
 
@@ -154,34 +156,49 @@ export class PagosComponent {
   }
 
   validSelectCurso(){
+    /** verificar los rdio butons de los cursos */
     if(this.EnGrupo.invalid){
       this.EnGrupo.markAsDirty();
       return;
     }
+    /** setear el valor de IsVerifySelectCurso en true el cual significa que eligió un grupo */
     this.IsVerifySelectCurso.setValue(true);
+    /** limpiar los mensajes en pantalla */
+    this._msg.clear();
+    /** Seguir con el siguiente stepper */
     this.goForward();
   }
 
   validSelectCategoria(){
+    /** verificar el radio butons de categoria de pago */
     if(this.categoriaPago.invalid){
       this.categoriaPago.markAsDirty();
       return;
     }
+    /** setear el valor de IsVerifyCategoriaPago en true el cual significa que eligió una categoria de pago */
     this.IsVerifyCategoriaPago.setValue(true);
+    /** mostramos valor dependiendo de el tipo de pago */
+    this.selectedCategoria(this.categoriaPago.value.CodeCategoriaPago);
+    console.log(this.categoriaPago.value)
+    console.log(this.formSelectGrupo.value)
+    /** continuar con el siguiente stepper */
     this.goForward();
   }
 
   search(){
-
+    /** Validar solo el campo documento */
     if(this.Documento.invalid){
       this.Documento.markAsDirty();
       return;
     }
 
+    /** arreglo para almacenar la lista de cursos del estudiante */
     this.estudianteEnGrupo = [];
+    /** Reseteamos los formularios siguientes por si el usuarios regresa y hace la busqueda */
     this.formSelectGrupo.reset();
     this.formFile.reset();
     this.loading = true;
+    /** Realizar la consulta de la persona */
     this._global.consultaEstudianteGrupo(this.formBusqueda.value).subscribe({
       next: (value) => {
         this.loading = false;
@@ -204,13 +221,37 @@ export class PagosComponent {
 
   }
 
+  selectedCategoria(categoria:string){
+    /** validamos la categoria elegida */
+    const { matricula } = this.EnGrupo.value as EstudianteEnGrupo;
+    const { denomiServicio } = matricula;
+
+    if(categoria=='category_matricula'){
+      const monto = denomiServicio.MontoMatricula;
+      this.setValueMontoPago( monto );
+      return;
+    }
+
+    if(categoria=='category_mensualidad'){
+      const monto = denomiServicio.MontoPension;
+      this.setValueMontoPago( monto );
+      return;
+    }
+  }
+
+  setValueMontoPago(monto:number){
+    this.MontoPago.setValue( monto );
+    this.MontoPago.disable();
+    this.MontoPago.patchValue( monto );
+  }
+
   selectFile(fileChangeEvent:any){
     this.file = fileChangeEvent.target.files[0];
     if(!this.file )return;
     this.formData = new FormData();
     this.formData.append('file', this.file, this.file.name);
     this.formData.append('id_grupo', String(this.EnGrupo.value.grupo.Id));
-    this.formData.append('tipo', 'mensualidad');
+    this.formData.append('tipo', this.categoriaPago.value.TipoCategoriaPago);
   }
 
   save(){
@@ -232,10 +273,21 @@ export class PagosComponent {
 
     this.loading = true;
     this.FileURL.disable();
+    // console.log(new Pago("file.webViewLink",
+    //   moment(this.FechaPago.value,'DD/MM/YYYY').toDate(),
+    //   this.NumOperacion.value,
+    //   this.MontoPago.value,
+    //   this.categoriaPago.value,
+    //   this.EnGrupo.value.Id))
     //TODO:upload file and register data width switchMap
     this._global.uploadFile(this.formData)
     .pipe(
-      switchMap((file) => this._global.registerPago(new Pago(file.webViewLink, this.EnGrupo.value.Id, '1000', 100))))
+      switchMap((file) => this._global.registerPago(new Pago(file.webViewLink,
+                                                             moment(this.FechaPago.value,'DD/MM/YYYY').toDate(),
+                                                             this.NumOperacion.value,
+                                                             this.MontoPago.value,
+                                                             this.categoriaPago.value,
+                                                             this.EnGrupo.value.Id))))
       .subscribe({
         next:(value) => {
           if(value.ok){
@@ -248,7 +300,7 @@ export class PagosComponent {
         error:(e) => {
           this.FileURL.enable();
           this.loading = false;
-          console.log(e)
+          this.messageError(e);
         }
       })
   }

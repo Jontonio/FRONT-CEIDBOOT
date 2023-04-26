@@ -2,7 +2,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { Subscription } from 'rxjs';
+import { Subscription, tap } from 'rxjs';
 
 import { Curso } from 'src/app/main/curso/class/Curso';
 import { CursoService } from 'src/app/main/curso/services/curso.service';
@@ -17,6 +17,7 @@ import { SocketService } from 'src/app/services/socket.service';
 import { MainService } from 'src/app/main/services/main.service';
 
 import * as moment from 'moment';
+import { EstadoGrupo } from '../../class/EstadoGrupo';
 moment.locale("es");
 
 @Component({
@@ -48,10 +49,12 @@ export class FormGrupoComponent implements OnInit {
   selecTipoNombres:TipoGrupo;
   selecHorario:Horario;
   opModalHorario:boolean = false;
+  initialEstadoGrupo:EstadoGrupo;
 
   isUpdate:boolean = false;
   Id:number;
   urlLista:string;
+  isEmptyListEstadoGrupo:boolean;
 
   constructor(public readonly _main:MainService,
               private readonly _msg:MessageService,
@@ -64,6 +67,7 @@ export class FormGrupoComponent implements OnInit {
               private readonly _curso:CursoService) {
 
               this.createFormGrupo();
+              this.isEmptyListEstadoGrupo = false;
   }
 
   ngOnInit(): void {
@@ -72,6 +76,7 @@ export class FormGrupoComponent implements OnInit {
     this.getListCursos();
     this.getListTiposGrupos();
     this.getListHorarios();
+    this.getListaEstadosGrupo();
 
     this.OnListTNombreGrupos();
     this.OnListHorarios();
@@ -139,9 +144,34 @@ export class FormGrupoComponent implements OnInit {
     })
   }
 
+  getListaEstadosGrupo(){
+    this._grupo.getAllEstadoGrupo().pipe(
+      tap( estadoGrupo => {
+        /** aqui cateamos con valor del grupo de estado de matricula */
+        const arrEstado = estadoGrupo.data as Array<EstadoGrupo>;
+        this.initialEstadoGrupo = arrEstado[0];
+        this.estadoGrupo.setValue(this.initialEstadoGrupo);
+        return;
+      })
+    )
+    .subscribe({
+      next: (value) => {
+        if(!value.ok){
+          this.isEmptyListEstadoGrupo = true;
+          this.toast('warn', value.msg,'','message-register-grupo');
+          return;
+        }
+      },
+      error: (e) => {
+       this.messageError(e);
+      }
+    })
+  }
+
   createFormGrupo(){
 
     this.FormGrupo = this.fb.group({
+      estadoGrupo:[null, Validators.required],
       DescGrupo:[null, Validators.required],
       Modalidad:[null, [Validators.required]],
       FechaInicioGrupo:[null, [Validators.required]],
@@ -187,9 +217,12 @@ export class FormGrupoComponent implements OnInit {
   get RequeridoPPago(){
     return this.FormGrupo.controls['RequeridoPPago'];
   }
+  get estadoGrupo(){
+    return this.FormGrupo.controls['estadoGrupo'];
+  }
 
-  toast(type:string, msg:string, detail:string=''){
-    this._msg.add({severity:type, summary:msg, detail});
+  toast(type:string, msg:string, detail:string='', key:string=''){
+    this._msg.add({severity:type, summary:msg, detail, key});
   }
 
   messageError(e:any){
@@ -222,13 +255,12 @@ export class FormGrupoComponent implements OnInit {
 
   ready(){
 
+    /** validate data */
     if(this.FormGrupo.invalid){
-      Object.keys( this.FormGrupo.controls ).forEach( input => {
-        this.FormGrupo.controls[input].markAsDirty();
-      });
+      Object.keys( this.FormGrupo.controls ).forEach( input => this.FormGrupo.controls[input].markAsDirty() );
       return;
     }
-
+    /** emit data */
     this.formData.emit({data:this.FormGrupo.value, option: this.isUpdate, Id:this.Id });
 
   }
@@ -246,6 +278,7 @@ export class FormGrupoComponent implements OnInit {
     this.MaximoEstudiantes.setValue(grupo.MaximoEstudiantes);
     this.DescGrupo.setValue(grupo.DescGrupo);
     this.RequeridoPPago.setValue(grupo.RequeridoPPago);
+    this.estadoGrupo.setValue(grupo.estadoGrupo);
   }
 
   resetGrupo(){

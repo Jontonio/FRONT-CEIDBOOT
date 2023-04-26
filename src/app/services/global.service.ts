@@ -97,7 +97,7 @@ export class GlobalService {
   }
 
   registerPago( data:Pago ):Observable<ResPago>{
-    return this.http.post<ResPago>(`${environment.BASE_URL}/mensualidad/pago-mensualidad`, data);
+    return this.http.post<ResPago>(`${environment.BASE_URL}/pago/register-pago`, data);
   }
 
 

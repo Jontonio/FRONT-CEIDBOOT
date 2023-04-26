@@ -42,6 +42,7 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputMaskModule } from 'primeng/inputmask';
 import { AccordionModule } from 'primeng/accordion';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 
 /**
  * array of modules
@@ -84,7 +85,8 @@ const listModules:any[] = [
   ProgressBarModule,
   RadioButtonModule,
   InputMaskModule,
-  AccordionModule
+  AccordionModule,
+  OverlayPanelModule
 ]
 
 @NgModule({

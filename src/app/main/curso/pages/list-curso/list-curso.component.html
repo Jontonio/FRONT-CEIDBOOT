@@ -46,7 +46,10 @@
                 <td>{{curso.nivel.Nivel | titlecase}}</td>
                 <td>{{curso.NumModulos}} Módulos</td>
                 <td>
-                  <p-tag styleClass="mr-2" [severity]="countLibros(curso.libros)==0?'info':'success'">{{countLibros(curso.libros)==0?'No cuenta libros':'Cuenta con libros'}}</p-tag></td>
+                  <p-tag styleClass="mr-2"
+                         [pTooltip]="countLibros(curso.libros)==0?'El curso no incluye pago del libro en la matrícula':'El curso incluye pago del libro en la matrícula'"
+                         tooltipPosition="bottom"
+                         [severity]="countLibros(curso.libros)==0?'info':'success'">{{countLibros(curso.libros)==0?'No cuenta libros':'Cuenta con libros'}}</p-tag></td>
                 <td>{{curso.DescripcionCurso | slice:0:40}}...</td>
                 <td>
                   <div *ngIf="curso.EstadoApertura else disable">

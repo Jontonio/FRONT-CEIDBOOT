@@ -75,7 +75,7 @@
                 </ng-template>
                 <ng-template let-grupo pTemplate="item">
                   <div>
-                    <span class="ml-1">{{grupo.curso.NombreCurso | titlecase }} - {{grupo.curso.NivelCurso}} <p-tag severity="success">{{grupo.horario.HoraInicio | date:'h:mm a'}} - {{grupo.horario.HoraFinal | date:'h:mm a'}}</p-tag></span>
+                    <span class="ml-1">{{grupo.curso.NombreCurso | titlecase }} - {{grupo.curso.nivel.Nivel}} <p-tag severity="success">{{grupo.horario.HoraInicio | date:'h:mm a'}} - {{grupo.horario.HoraFinal | date:'h:mm a'}}</p-tag></span>
                   </div>
                 </ng-template>
               </p-dropdown>

@@ -1,4 +1,4 @@
-<div class="main p-4 animate__animated animate__fadeIn">
+<div class="animate__animated animate__fadeIn">
   <p-card header="Lista de grupos">
     <div class="flex justify-content-center justify-content-between">
       <div class="col-6">
@@ -31,12 +31,15 @@
               <th>Modalidad</th>
               <th>Fecha Inicio - Finalizaión</th>
               <th>Alumnos</th>
-              <th>Requi. Primer pago</th>
+              <th>Req. Primer pago</th>
+              <th>Estado grupo</th>
               <th>Operación</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-grupo let-rowIndex="rowIndex">
-            <tr class="select-tr">
+            <tr class="tr-custom" [ngClass]="{'state-1':grupo.estadoGrupo.CodeEstado==='status_matricula',
+                                              'state-2':grupo.estadoGrupo.CodeEstado==='status_en_clases',
+                                              'state-3':grupo.estadoGrupo.CodeEstado==='status_finalizado'}">
               <td>G-{{grupo.Id}}</td>
               <td>
                 <div class="grid">
@@ -50,26 +53,25 @@
                 </div>
               </td>
               <td>{{grupo.tipoGrupo.NombreGrupo | titlecase}}</td>
-              <td>{{grupo.horario.HoraInicio | date:'h:mm a'}} - {{grupo.horario.HoraFinal | date:'h:mm a'}}</td>
+              <td><p-tag severity="info">{{grupo.horario.HoraInicio | date:'h:mm a'}} - {{grupo.horario.HoraFinal | date:'h:mm a'}}</p-tag></td>
               <td>{{grupo.Modalidad}}</td>
               <td>
-                <p-tag icon="pi pi-calendar"
-                        [rounded]="true"
-                        severity="info">
-                        <span class="m-1">{{grupo.FechaInicioGrupo | date}} a {{grupo.FechaFinalGrupo | date}}</span></p-tag>
+                <p-tag [rounded]="true"
+                       severity="warning">{{grupo.FechaInicioGrupo | date}} a {{grupo.FechaFinalGrupo | date}}</p-tag>
               </td>
               <td>{{grupo.NumeroEstudiantes}} de {{grupo.MaximoEstudiantes}}</td>
               <td>
                 <span *ngIf="grupo.RequeridoPPago else notRequired">
-                  <p-tag styleClass="mr-2" icon="pi pi-check" severity="success" value="Requerido"></p-tag>
+                  <p-tag styleClass="mr-2" icon="pi pi-check" severity="success" value="Requiere"></p-tag>
                 </span>
                 <ng-template #notRequired>
-                  <p-tag icon="pi pi-times" severity="danger" value="No requerido"></p-tag>
+                  <p-tag icon="pi pi-times" severity="danger" value="No requiere"></p-tag>
                 </ng-template>
               </td>
+              <td>{{grupo.estadoGrupo.EstadoGrupo}}</td>
               <td class="text-center">
                 <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-                  <mat-icon><i class="fa-solid fa-circle-chevron-down"></i></mat-icon>
+                  <mat-icon><i class="fa-solid fa-ellipsis-vertical"></i></mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">
                   <button mat-menu-item [routerLink]="['/system/grupos/ver-grupo', grupo.Id]">

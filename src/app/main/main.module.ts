@@ -6,23 +6,25 @@ import { MainComponent } from './pages/main/main.component';
 import { PrimengModule } from '../primeng/primeng.module';
 import { NgIdleModule } from '@ng-idle/core';
 import { MenuComponent } from './components/menu/menu.component';
-import { AulaComponent } from './pages/aula/aula.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DescripcionPipe } from '../pipes/descripcion.pipe';
 import { SharedModule } from '../shared/shared.module';
 import { MaterialModule } from '../material/material.module';
+import { ShowForRolesDirective } from './directive/show-for-roles.directive';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
   declarations: [
     MainComponent,
     MenuComponent,
-    AulaComponent,
-    DescripcionPipe
+    DescripcionPipe,
+    ShowForRolesDirective,
   ],
   imports: [
     CommonModule,
     MainRoutingModule,
+    NgxChartsModule,
     PrimengModule,
     ReactiveFormsModule,
     FormsModule,
@@ -30,6 +32,9 @@ import { MaterialModule } from '../material/material.module';
     SharedModule,
     NgIdleModule.forRoot()
   ],
-  providers: [ ConfirmationService, MessageService ]
+  providers: [ ConfirmationService, MessageService ],
+  exports:[
+    ShowForRolesDirective
+  ]
 })
 export class MainModule { }

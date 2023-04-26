@@ -1,137 +1,134 @@
-<div class="main p-4">
-  <p-card>
-    <div class="mb-2">
-      <h2 class="ml-1">Lista de usuarios</h2>
+<p-card>
+  <div class="mb-2">
+    <h2 class="ml-1">Lista de usuarios</h2>
+  </div>
+  <div class="flex justify-content-center justify-content-between">
+    <div class="col-6">
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input type="text"
+                pInputText
+                placeholder="Buscar usuario" />
+    </span>
     </div>
-    <div class="flex justify-content-center justify-content-between">
-      <div class="col-6">
-        <span class="p-input-icon-left">
-          <i class="pi pi-search"></i>
-          <input type="text"
-                 pInputText
-                 placeholder="Buscar usuario" />
-      </span>
-      </div>
-      <div class="col-6 flex justify-content-end">
-        <div>
-          <button mat-raised-button
-                  type="button"
-                  class="button-custom-round"
-                  routerLink="/system/usuarios/add-usuario">
-                  <i class="fa-solid fa-plus"></i> Usuario
-          </button>
-        </div>
+    <div class="col-6 flex justify-content-end">
+      <div>
+        <button mat-raised-button
+                type="button"
+                class="button-custom-round"
+                routerLink="/system/usuarios/add-usuario">
+                <i class="fa-solid fa-plus"></i> Usuario
+        </button>
       </div>
     </div>
-    <div class="col table-responsive">
-      <p-table [value]="_usuario.listUsuarios" [resizableColumns]="true" columnResizeMode="expand" responsiveLayout="scroll">
-        <ng-template pTemplate="header">
-            <tr>
-                <th>ID</th>
-                <th>Avatar</th>
-                <th pSortableColumn="Nombres">Nombres<p-sortIcon field="Nombres"></p-sortIcon></th>
-                <th pSortableColumn="Email">Email <p-sortIcon field="Email"></p-sortIcon></th>
-                <th>Celular</th>
-                <th>Último acceso</th>
-                <th>Rol</th>
-                <th>Acceso</th>
-                <th>Operación</th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-usuario let-rowIndex="rowIndex">
-            <tr>
-              <td>{{startPage + (rowIndex+1)}}</td>
-              <td>
-                <div class="content-avatar">
-                  <p-avatar [label]="usuario.Nombres | avatarName"
-                            [style]="{'background-color': '#9c27b0', 'color': '#ffffff'}"
-                            shape="circle"></p-avatar>
+  </div>
+  <div class="col table-responsive">
+    <p-table [value]="_usuario.listUsuarios" [resizableColumns]="true" columnResizeMode="expand" responsiveLayout="scroll">
+      <ng-template pTemplate="header">
+          <tr>
+              <th>ID</th>
+              <th>Avatar</th>
+              <th pSortableColumn="Nombres">Nombres<p-sortIcon field="Nombres"></p-sortIcon></th>
+              <th pSortableColumn="Email">Email <p-sortIcon field="Email"></p-sortIcon></th>
+              <th>Celular</th>
+              <th>Último acceso</th>
+              <th>Rol</th>
+              <th>Acceso</th>
+              <th>Operación</th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-usuario let-rowIndex="rowIndex">
+          <tr>
+            <td>{{startPage + (rowIndex+1)}}</td>
+            <td>
+              <div class="content-avatar">
+                <p-avatar [label]="usuario.Nombres | avatarName"
+                          [style]="{'background-color': '#9c27b0', 'color': '#ffffff'}"
+                          shape="circle"></p-avatar>
+              </div>
+            </td>
+            <td>{{ usuario.Nombres | titlecase }} {{ usuario.ApellidoPaterno | titlecase }}</td>
+            <td>{{ usuario.Email | titlecase }}</td>
+            <td>{{usuario.CodePhone}} {{ usuario.Celular}}</td>
+            <td>
+              <div *ngIf="imAuth?.Id==usuario.Id else other">
+                <p-tag styleClass="mr-2" severity="warning" value="Mi cuenta" [rounded]="true"></p-tag>
+              </div>
+              <ng-template #other>
+                <div *ngIf="usuario.FechaAcceso else acess">
+                  <p-tag styleClass="mr-2" severity="success" [value]="usuario.FechaAcceso | date:'MMM d, h:mm a' | fechAcceso" [rounded]="true"></p-tag>
                 </div>
-              </td>
-              <td>{{ usuario.Nombres | titlecase }} {{ usuario.ApellidoPaterno | titlecase }}</td>
-              <td>{{ usuario.Email | titlecase }}</td>
-              <td>{{usuario.CodePhone}} {{ usuario.Celular}}</td>
-              <td>
-                <div *ngIf="imAuth?.Id==usuario.Id else other">
-                  <p-tag styleClass="mr-2" severity="warning" value="Mi cuenta" [rounded]="true"></p-tag>
-                </div>
-                <ng-template #other>
-                  <div *ngIf="usuario.FechaAcceso else acess">
-                    <p-tag styleClass="mr-2" severity="success" [value]="usuario.FechaAcceso | date:'MMM d, h:mm a' | fechAcceso" [rounded]="true"></p-tag>
-                  </div>
-                  <ng-template #acess>
-                    <p-tag styleClass="mr-2" severity="danger" [value]="usuario.FechaAcceso | fechAcceso" [rounded]="true"></p-tag>
-                  </ng-template>
+                <ng-template #acess>
+                  <p-tag styleClass="mr-2" severity="danger" [value]="usuario.FechaAcceso | fechAcceso" [rounded]="true"></p-tag>
                 </ng-template>
+              </ng-template>
 
-              </td>
-              <td>
-                <p-tag styleClass="mr-2"
-                        severity="info"
-                        [value]="usuario.rol.TipoRol" [rounded]="true"></p-tag>
-              </td>
-              <td>
-                <button *ngIf="usuario.Habilitado else disable"
-                        pButton
+            </td>
+            <td>
+              <p-tag styleClass="mr-2"
+                      severity="info"
+                      [value]="usuario.rol.TipoRol" [rounded]="true"></p-tag>
+            </td>
+            <td>
+              <button *ngIf="usuario.Habilitado else disable"
+                      pButton
+                      pRipple
+                      type="button"
+                      [disabled]="imAuth?.Id==usuario.Id?true:false"
+                      (click)="Inhabilitar(usuario, usuario.Habilitado)"
+                      label="habilitado"
+                      class="p-button-outlined p-button-rounded"></button>
+              <ng-template #disable>
+                <button pButton
                         pRipple
                         type="button"
-                        [disabled]="imAuth?.Id==usuario.Id?true:false"
+                        label="Inhabilitado"
                         (click)="Inhabilitar(usuario, usuario.Habilitado)"
-                        label="habilitado"
-                        class="p-button-outlined p-button-rounded"></button>
-                <ng-template #disable>
-                  <button pButton
-                          pRipple
-                          type="button"
-                          label="Inhabilitado"
-                          (click)="Inhabilitar(usuario, usuario.Habilitado)"
-                          class="p-button-outlined p-button-rounded p-button-danger"></button>
-                </ng-template>
-              </td>
-              <td class="text-center">
-                <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-                  <mat-icon>more_vert</mat-icon>
+                        class="p-button-outlined p-button-rounded p-button-danger"></button>
+              </ng-template>
+            </td>
+            <td class="text-center">
+              <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item [routerLink]="['/system/usuarios/editar-usuario', usuario.Id]">
+                  <mat-icon><i class="fa-solid fa-pen-to-square"></i></mat-icon>
+                  <span>Editar usuario</span>
                 </button>
-                <mat-menu #menu="matMenu">
-                  <button mat-menu-item [routerLink]="['/system/usuarios/editar-usuario', usuario.Id]">
-                    <mat-icon><i class="fa-solid fa-pen-to-square"></i></mat-icon>
-                    <span>Editar usuario</span>
-                  </button>
-                  <button mat-menu-item
-                          [disabled]="imAuth?.Id==usuario.Id?true:false"
-                          (click)="dialogDelete(usuario)">
-                    <mat-icon><i class="fa-solid fa-trash-can"></i></mat-icon>
-                    <span>Eliminar usuario</span>
-                  </button>
-                </mat-menu>
-              </td>
-            </tr>
-        </ng-template>
-      </p-table>
-    </div>
-    <div>
-      <div class="mt-4" *ngIf="_usuario.respUsuario && _usuario.respUsuario.count">
-        <div class="grid content flex justify-content-between">
-          <p class="text-muted">Total de usuarios: {{_usuario.respUsuario.count}}</p>
-          <p></p>
-        </div>
-        <div class="grid content flex justify-content-between">
-          <div></div>
-          <div>
-            <p-paginator [rows]="5"
-                          [totalRecords]="_usuario.respUsuario.count!"
-                          [rowsPerPageOptions]="[5,10,15,20]"
-                          (onPageChange)="paginate($event)"></p-paginator>
-          </div>
-          <div></div>
-        </div>
+                <button mat-menu-item
+                        [disabled]="imAuth?.Id==usuario.Id?true:false"
+                        (click)="dialogDelete(usuario)">
+                  <mat-icon><i class="fa-solid fa-trash-can"></i></mat-icon>
+                  <span>Eliminar usuario</span>
+                </button>
+              </mat-menu>
+            </td>
+          </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  <div>
+    <div class="mt-4" *ngIf="_usuario.respUsuario && _usuario.respUsuario.count">
+      <div class="grid content flex justify-content-between">
+        <p class="text-muted">Total de usuarios: {{_usuario.respUsuario.count}}</p>
+        <p></p>
       </div>
-      <app-loadding *ngIf="_usuario.loadingLista && _usuario.listUsuarios.length==0" msg="Lista de usuarios"></app-loadding>
-      <app-lista-vacia *ngIf="_usuario.listUsuarios.length==0 && !_usuario.loadingLista" msg="No se encontraron usuarios registrados"></app-lista-vacia>
+      <div class="grid content flex justify-content-between">
+        <div></div>
+        <div>
+          <p-paginator [rows]="5"
+                        [totalRecords]="_usuario.respUsuario.count!"
+                        [rowsPerPageOptions]="[5,10,15,20]"
+                        (onPageChange)="paginate($event)"></p-paginator>
+        </div>
+        <div></div>
+      </div>
     </div>
-  </p-card>
-</div>
-
+    <app-loadding *ngIf="_usuario.loadingLista && _usuario.listUsuarios.length==0" msg="Lista de usuarios"></app-loadding>
+    <app-lista-vacia *ngIf="_usuario.listUsuarios.length==0 && !_usuario.loadingLista" msg="No se encontraron usuarios registrados"></app-lista-vacia>
+  </div>
+</p-card>
 <!-- Delete message dialog -->
 <p-confirmDialog [style]="{width: '50vw'}"
                  key="deleteUsuarioDialog"

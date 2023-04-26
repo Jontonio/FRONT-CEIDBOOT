@@ -19,12 +19,6 @@ export class UnAuthorizedService{
       this.showModalAuth = true;
       return;
     }
-    console.log(e)
-    this.toast(e.message);
-    this.showModalAuth = false;
-  }
-
-  toast(summary:string){
   }
 
 }

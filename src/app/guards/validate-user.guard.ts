@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { AuthService } from '../auth/services/auth.service';
+import { MessageService } from 'primeng/api';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -9,26 +11,29 @@ export class ValidateUserGuard implements CanActivate {
 
   constructor(private _auth:AuthService, private route:Router){}
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean>{
+  canActivate(): Promise<boolean | UrlTree>{
 
-    return new Promise((resolve, reject) => {
-      console.log("here")
+    return new Promise((resolve) => {
 
       this._auth.authenticated().subscribe({
         next: (res) => {
-          if(res.ok){
-            this._auth.userAuth = res.user;
-            resolve(true);
-          }else{
-            this.route.navigate(['/main/auth/login']);
+          console.log(res)
+          if(!res.ok){
             this._auth.deleteToken();
-            resolve(false)
+            resolve(this.route.createUrlTree(['/main/auth/login']));
           }
+
+          this._auth.userAuth = res.user;
+          resolve(true);
+
         },
-        error: (err) => {
+        error: (e) => {
           this._auth.deleteToken();
-          this.route.navigate(['/main/auth/login']);
-          reject(err);
+          if(e.status==401){
+            resolve(this.route.createUrlTree(['/unauthorized-page']))
+            return;
+          }
+          resolve(this.route.createUrlTree(['/main/auth/login']))
         }
 
       })

@@ -8,12 +8,16 @@ import { SocketService } from 'src/app/services/socket.service';
 import { UnAuthorizedService } from 'src/app/services/unauthorized.service';
 import { ResEstudianteEnGrupo } from '../class/EstudianteGrupo';
 import { Pago, ResPago } from '../class/Pago';
+import { ResEstadoGrupo } from '../class/EstadoGrupo';
 
 
 @Injectable({
   providedIn:"root"
 })
 export class GrupoService{
+
+  /** variable privada  */
+  private BASE_URL:string;
 
   /** Subscription Variables */
   public listGrupos$:Subscription;
@@ -27,6 +31,7 @@ export class GrupoService{
   constructor(private http:HttpClient,
               private _unAuth:UnAuthorizedService,
               private _socket:SocketService){
+    this.BASE_URL = environment.BASE_URL;
     this.listGrupos = [];
     this.loadingLista = false;
     this.getListaGrupos();
@@ -34,43 +39,47 @@ export class GrupoService{
   }
 
   createHorario(data:Horario):Observable<ResHorario>{
-    return this.http.post<ResHorario>(`${environment.BASE_URL}/horario/create-horario`, data);
+    return this.http.post<ResHorario>(`${this.BASE_URL}/horario/create-horario`, data);
   }
 
   createTipoGrupo(data:Grupo):Observable<ResGrupo>{
-    return this.http.post<ResGrupo>(`${environment.BASE_URL}/grupo/create-tipo-grupo`, data);
+    return this.http.post<ResGrupo>(`${this.BASE_URL}/grupo/create-tipo-grupo`, data);
   }
 
   createGrupo(data:Grupo):Observable<ResGrupo>{
-    return this.http.post<ResGrupo>(`${environment.BASE_URL}/grupo/create-grupo`, data);
+    return this.http.post<ResGrupo>(`${this.BASE_URL}/grupo/create-grupo`, data);
   }
 
   updateGrupo(id:number, data:Grupo):Observable<ResGrupo>{
-    return this.http.patch<ResGrupo>(`${environment.BASE_URL}/grupo/update-grupo/${id}`, data);
+    return this.http.patch<ResGrupo>(`${this.BASE_URL}/grupo/update-grupo/${id}`, data);
   }
 
   getOneGrupo(id:number):Observable<ResGrupo>{
-    return this.http.get<ResGrupo>(`${environment.BASE_URL}/grupo/get-one-grupo/${id}`);
+    return this.http.get<ResGrupo>(`${this.BASE_URL}/grupo/get-one-grupo/${id}`);
   }
 
   getAllGrupos(limit:number = 5, offset:number = 0):Observable<ResGrupo>{
-    return this.http.get<ResGrupo>(`${environment.BASE_URL}/grupo/get-grupos?limit=${limit}&offset=${offset}`);
+    return this.http.get<ResGrupo>(`${this.BASE_URL}/grupo/get-grupos?limit=${limit}&offset=${offset}`);
   }
 
   getAllTipoGrupos():Observable<ResTipoGrupo>{
-    return this.http.get<ResTipoGrupo>(`${environment.BASE_URL}/grupo/get-tipo-grupos`);
+    return this.http.get<ResTipoGrupo>(`${this.BASE_URL}/grupo/get-tipo-grupos`);
+  }
+
+  getAllEstadoGrupo():Observable<ResEstadoGrupo>{
+    return this.http.get<ResEstadoGrupo>(`${this.BASE_URL}/estado-grupo/get-lista-estados`);
   }
 
   getAllHorarios():Observable<ResHorario>{
-    return this.http.get<ResHorario>(`${environment.BASE_URL}/horario/get-horarios`);
+    return this.http.get<ResHorario>(`${this.BASE_URL}/horario/get-horarios`);
   }
 
   getEstudiantesEnGrupoEspecifico(Id:number, limit:number = 5, offset:number = 0):Observable<ResEstudianteEnGrupo>{
-    return this.http.get<ResEstudianteEnGrupo>(`${environment.BASE_URL}/estudiante-en-grupo/get-estudiantes-en-grupo-especifico/${Id}?limit=${limit}&offset=${offset}`);
+    return this.http.get<ResEstudianteEnGrupo>(`${this.BASE_URL}/estudiante-en-grupo/get-estudiantes-en-grupo-especifico/${Id}?limit=${limit}&offset=${offset}`);
   }
 
   updatePago(id:string, pago:Pago):Observable<ResPago>{
-    return this.http.patch<ResPago>(`${environment.BASE_URL}/pago/update-one-pago/${id}`, pago);
+    return this.http.patch<ResPago>(`${this.BASE_URL}/pago/update-one-pago/${id}`, pago);
   }
 
   /** Listen Sockets */
@@ -92,6 +101,7 @@ export class GrupoService{
     this.listGrupos$ = this.getAllGrupos(limit, offset).subscribe({
       next: (value) => {
         this.loadingLista = false;
+        console.log(value)
         if(!value.ok) return;
         this.respGrupo = value;
         this.listGrupos = value.data as Array<Grupo>;

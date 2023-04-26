@@ -1,11 +1,11 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-import { MenuItem } from 'primeng/api';
-import { Logout } from 'src/app/auth/interfaces/Logout';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { GlobalService } from 'src/app/services/global.service';
 import { SocketService } from 'src/app/services/socket.service';
+import { Menu } from '../../class/Menu';
+import { Logout } from 'src/app/auth/interfaces/Logout';
 
 @Component({
   selector: 'app-menu',
@@ -14,7 +14,7 @@ import { SocketService } from 'src/app/services/socket.service';
 })
 export class MenuComponent implements OnInit {
 
-  items      :MenuItem[];
+  items      :Menu[];
   display    :boolean = false;
   changeTheme:boolean = false;
 
@@ -63,42 +63,62 @@ export class MenuComponent implements OnInit {
       {
         label: 'Panel principal',
         icon: 'fa-solid fa-house',
-        routerLink:'/system/dashboard'
+        routerLink:'/system/dashboard',
+        role:['admin_role']
       },
       {
         label: 'Grupos',
         icon: 'fa-solid fa-users-rectangle',
         routerLink:'/system/grupos/lista-grupos',
+        role:['admin_role','user_role','viewer_role']
       },
       {
         label: 'Matriculas',
         icon: 'fa-solid fa-landmark',
-        routerLink:'/system/matricula/matriculados'
+        routerLink:'/system/matricula/matriculados',
+        role:['admin_role','user_role','viewer_role']
       },
       {
         label: 'Cursos',
         icon: 'fa-solid fa-book',
         routerLink:'/system/cursos/lista-cursos',
+        role:['admin_role','user_role','viewer_role']
       },
       {
         label: 'Docentes',
         icon: 'fa-solid fa-chalkboard-user',
         routerLink:'/system/docentes/lista-docentes',
+        role:['admin_role','user_role','viewer_role']
+      },
+      {
+        label: 'Servicios',
+        icon: 'fa-solid fa-earth-europe',
+        routerLink:'/system/nuestros-servicios/tipo-poblacion',
+        role:['admin_role','user_role','viewer_role']
       },
       {
         label: 'ChatBot',
         icon: 'pi pi-qrcode',
-        routerLink:'/system/chat-bot'
+        routerLink:'/system/chat-bot',
+        role:['admin_role','user_role','viewer_role']
       },
       {
         label: 'Usuarios',
         icon: 'fa-solid fa-users',
-        routerLink:'/system/usuarios/lista-usuarios'
+        routerLink:'/system/usuarios/lista-usuarios',
+        role:['admin_role']
+      },
+      {
+        label: 'Configuraciones',
+        icon: 'fa-solid fa-gear',
+        routerLink:'/system/config/general',
+        role:['admin_role']
       },
       {
         label: 'Perfil',
         icon: 'fa-solid fa-user',
-        routerLink:'/system/perfil'
+        routerLink:'/system/perfil',
+        role:['admin_role','user_role','viewer_role']
       }
     ];
   }

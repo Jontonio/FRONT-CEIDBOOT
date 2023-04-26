@@ -1,11 +1,14 @@
 <form [formGroup]="FormGrupo">
-  <div class="mb-1">
+  <div class="mb-4">
     <div *ngIf="isUpdate else notUpdate">
       <h2 class="ml-1"><i class="fa-solid fa-pen-to-square"></i> Editar grupo</h2>
     </div>
     <ng-template #notUpdate>
       <h2 class="ml-1"><i class="fa-solid fa-plus"></i> Registro grupo</h2>
     </ng-template>
+  </div>
+  <div class="mt-4">
+    <p-messages key="message-register-grupo" [closable]="true"></p-messages>
   </div>
   <div class="grid content content-form">
     <div class="col-12 md:col-6">
@@ -201,7 +204,7 @@
               color="primary"
               class="button-custom"
               (click)="ready()"
-              [disabled]="loading">
+              [disabled]="loading || isEmptyListEstadoGrupo">
               <i [class]="loading?'pi pi-spin pi-spinner':'pi pi-save'"></i> {{isUpdate?'Guardar':'Registrar'}}
       </button>
       <button mat-raised-button

@@ -6,6 +6,8 @@ import { GrupoService } from 'src/app/main/grupo/services/grupo.service';
 import { Subscription } from 'rxjs';
 import { UnAuthorizedService } from 'src/app/services/unauthorized.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { EstadoGrupo } from '../../class/EstadoGrupo';
+import { SocketService } from 'src/app/services/socket.service';
 
 @Component({
   selector: 'app-ver-grupo',
@@ -19,12 +21,15 @@ export class VerGrupoComponent implements OnInit {
 
   /** Variables de clase */
   grupo:Grupo;
+  listEstadoGrupo:EstadoGrupo[];
+  estadoGrupo:EstadoGrupo;
   urlLista:string;
-  loaddingImage:boolean = true;
+  loadingSave:boolean = false;
 
   constructor(private routerActive:ActivatedRoute,
               private _grupo:GrupoService,
               private readonly _unAuth:UnAuthorizedService,
+              private readonly _socket:SocketService,
               private route:Router,
               private _msg:MessageService) {
     this.getIdParams(this.routerActive);
@@ -44,6 +49,7 @@ export class VerGrupoComponent implements OnInit {
       next: (value) => {
         if(!value.ok) return;
         this.grupo = value.data as Grupo;
+        this.getEstadosGrupo();
       },
       error: (e) =>{
         this.messageError(e);
@@ -51,6 +57,45 @@ export class VerGrupoComponent implements OnInit {
         this.route.navigate([this.urlLista]);
       }
     })
+  }
+
+  getEstadosGrupo(){
+    this._grupo.getAllEstadoGrupo().subscribe({
+      next: (value) => {
+        if(value.ok){
+          this.listEstadoGrupo = value.data as Array<EstadoGrupo>;
+          this.estadoGrupo = this.grupo.estadoGrupo;
+          return;
+        }
+        this.toast('warn', value.msg);
+      },
+      error: (e) => {
+
+      }
+    })
+  }
+
+  saveEstadoGrupo(){
+
+    if((!this.estadoGrupo) && (!this.grupo)) return;
+    this.loadingSave = true;
+    this.loadingSave = false;
+    this._grupo.updateGrupo(this.grupo.Id, { estadoGrupo:{ Id:this.estadoGrupo.Id } }as Grupo)
+    .subscribe({
+      next: (value) => {
+            this.loadingSave = false;
+            if(value.ok){
+              this.toast('success', value.msg);
+              this._socket.EmitEvent('updated_list_grupo');
+              return;
+            }
+            this.toast('warn', value.msg);
+          },
+          error: (e) => {
+            this.loadingSave = false;
+            this.messageError(e);
+          }
+        })
   }
 
   messageError(e:HttpErrorResponse){

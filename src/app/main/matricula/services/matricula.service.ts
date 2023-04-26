@@ -53,10 +53,8 @@ export class MatriculaService{
     this.loadingLista = true;
     this.listMatriculados$ = this.getAllMatriculados(limit, offset).subscribe({
       next: (value) => {
-        console.log(value)
         this.loadingLista = false;
         if(!value.ok){
-          console.log(value)
           return;
         }
         this.respMatricula = value;

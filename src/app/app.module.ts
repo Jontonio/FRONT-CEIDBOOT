@@ -12,13 +12,15 @@ import { LOCALE_ID } from '@angular/core';
 
 import localEs from "@angular/common/locales/es-PE";
 import { registerLocaleData } from "@angular/common";
+import { UnauthorizedPageComponent } from './pages/unauthorized-page/unauthorized-page.component';
 registerLocaleData(localEs);
 
 const config: SocketIoConfig = { url: environment.BASE_URL, options: {} };
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    UnauthorizedPageComponent
   ],
   imports: [
     BrowserModule,

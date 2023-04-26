@@ -1,4 +1,4 @@
-import { Rol } from "src/app/class/Rol";
+import { Rol } from "src/app/auth/class/Rol";
 
 class ResUsuario{
   constructor(public msg:string, public  ok:boolean, public data: Usuario | Usuario[], public count?:number){}

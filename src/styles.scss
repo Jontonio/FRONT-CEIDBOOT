@@ -359,6 +359,22 @@ footer{
 .field-checkbox, .field-radiobutton{
   margin-bottom: 5px !important;
 }
+.content-chart{
+  height: auto;
+  width: 100% !important;
+  display: flex !important;
+}
+.bg-note{
+  background: #3B444C;
+}
+.forgot-password{
+  color: #3B444C;
+  cursor: pointer;
+}
+.forgot-password:hover{
+  color:#1f2448;
+  text-decoration: underline;
+}
 @media only screen and (max-width: 767px) {
   /* Estilos para teléfonos móviles aquí */
   .image-login{

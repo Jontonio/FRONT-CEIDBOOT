@@ -1,5 +1,6 @@
 import { Curso } from "../../curso/class/Curso";
 import { Docente } from "../../docente/class/Docente";
+import { EstadoGrupo } from "./EstadoGrupo";
 import { Horario } from "./Horario";
 
 class ResGrupo {
@@ -11,7 +12,7 @@ class ResTipoGrupo {
 }
 
 class Grupo {
-  Id?: number;
+  Id: number;
   FechaInicioGrupo:Date;
   FechaFinalGrupo:Date;
   DescGrupo: string;
@@ -23,6 +24,7 @@ class Grupo {
   createdAt?: string;
   updatedAt?: string;
   docente:Docente;
+  estadoGrupo:EstadoGrupo;
   horario:Horario;
   tipoGrupo:TipoGrupo;
   curso:Curso;

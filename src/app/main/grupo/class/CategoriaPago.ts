@@ -6,11 +6,13 @@ class ResCategoriaPago {
 class CategoriaPago{
     Id:number;
     TipoCategoriaPago:string;
+    CodeCategoriaPago:string;
     Estado:boolean;
     createdAt:Date;
     updatedAt:Date;
-    constructor(TipoCategoriaPago:string){
+    constructor(TipoCategoriaPago:string, CodeCategoriaPago:string){
       this.TipoCategoriaPago = TipoCategoriaPago;
+      this.CodeCategoriaPago = CodeCategoriaPago;
     }
 }
 

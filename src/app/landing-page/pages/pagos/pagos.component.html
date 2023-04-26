@@ -1,5 +1,5 @@
 <div class="header-conatiner-pagos"></div>
-<div class="container-pagos mb-5">
+<div class="container-pagos animate__animated animate__fadeIn mb-5">
   <div class="content-form-pagos">
     <div class="mb-2">
       <p-card header="Nota">
@@ -10,14 +10,15 @@
       <div class="progressBar">
         <p-progressBar *ngIf="loading" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
       </div>
-      <p-card>
-        <p-toast key="message-pagos"
+      <p-card header="Formulario de consulta">
+        <p-messages key="message-pagos"></p-messages>
+        <!-- <p-toast key="message-pagos"
                  [breakpoints]="{'920px': {width: '100%', right: '0', left: '0'}}"
-                 [baseZIndex]="999999"></p-toast>
+                 [baseZIndex]="999999"></p-toast> -->
         <mat-vertical-stepper [linear]="true" #stepper >
           <mat-step [stepControl]="formBusqueda">
             <form [formGroup]="formBusqueda">
-              <ng-template matStepLabel>Formulario de consulta</ng-template>
+              <ng-template matStepLabel>Consultar datos</ng-template>
               <div class="field">
                 <label for="usuario" class="block mb-2">Tipo documento</label>
                 <p-dropdown class="p-fluid p-grid p-formgrid"
@@ -63,7 +64,7 @@
                       <label class="flex justify-content-center align-items-center label-item" [for]="i">
                         <img class="img-flag" [src]="item.grupo.curso.UrlBandera" alt="">
                         <b>
-                          <p class="ml-2">{{item.grupo.curso.NombreCurso | titlecase}} - {{item.grupo.curso.nivel.Nivel | titlecase}}</p>
+                          <p class="ml-2">{{item.grupo.curso.NombreCurso | titlecase}} {{item.grupo.curso.nivel.Nivel | lowercase}}</p>
                         </b>
                       </label>
                   </div>
@@ -82,17 +83,15 @@
             <form [formGroup]="formCategoriaPago">
               <ng-template matStepLabel>Tipo de pago</ng-template>
               <p class="mb-3 mt-2">Selecione el tipo de pago que va a realizar</p>
-                <div *ngIf="estudianteEnGrupo">
+                <div>
                   <div class="field-radiobutton content-items"
-                       *ngFor="let item of listCategoriaPago, let i=index">
+                       *ngFor="let categoria of listCategoriaPago, let indice=index">
                       <p-radioButton name="categoriaPago"
-                                     [value]="item"
+                                     [value]="categoria"
                                      formControlName="categoriaPago"
-                                     [inputId]="i+''"></p-radioButton>
-                      <label class="flex justify-content-center align-items-center label-item" [for]="i">
-                        <b>
-                          <p class="ml-2">{{item.TipoCategoriaPago | titlecase}}</p>
-                        </b>
+                                     [inputId]="indice+''"></p-radioButton>
+                      <label class="flex justify-content-center align-items-center label-item"
+                             [for]="indice"><b><p class="ml-2">{{categoria.TipoCategoriaPago | titlecase}}</p></b>
                       </label>
                   </div>
                   <div class="mb-3">
@@ -111,21 +110,20 @@
             <p class="mb-3 mt-2">Complete el siguiente formulario para registrar su pago</p>
             <form [formGroup]="formFile">
               <div class="grid">
-                <div class="col-12 md:col-12">
-                  <div class="">
-                    <label for="MontoPagoLibro" class="block mb-2">Monto de pago S/.</label>
-                    <input id="MontoPagoLibro"
-                          class="p-fluid p-grid p-formgrid full-width"
-                          type="text"
-                          placeholder="Monto de pago"
-                          formControlName="MontoPago"
-                          autocomplete="off"
-                          pInputText/>
-                    <!-- <small *ngIf="MontoPagoLibro.hasError('pattern') && !MontoPagoLibro.hasError('required')"
-                    class="p-error">Digite un monto de pago <strong>válido</strong></small>
-                    <small *ngIf="MontoPagoLibro.hasError('required') && MontoPagoLibro.dirty"
-                            class="p-error">El campo monto de pago es <strong>requerido</strong></small> -->
-                  </div>
+                <div class="col">
+                  <label for="MontoPago" class="block mb-2">Monto de pago S/.</label>
+                  <p-inputNumber inputId="minmaxfraction"
+                                  mode="decimal"
+                                  class="p-fluid p-grid p-formgrid full-width"
+                                  formControlName="MontoPago"
+                                  [min]="0"
+                                  [max]="1000"
+                                  [minFractionDigits]="2"
+                                  [maxFractionDigits]="5"></p-inputNumber>
+                  <small *ngIf="MontoPago.hasError('pattern') && !MontoPago.hasError('required')"
+                          class="p-error">Digite un monto de pago <strong>válido</strong></small>
+                  <small *ngIf="MontoPago.hasError('required') && MontoPago.dirty"
+                          class="p-error">El campo monto de pago es <strong>requerido</strong></small>
                 </div>
                 <div class="col-12 md:col-12">
                   <div class="">
@@ -134,13 +132,14 @@
                           class="p-fluid p-grid p-formgrid full-width"
                           type="text"
                           placeholder="Digite el número de operación"
+                          maxlength="20"
                           formControlName="NumOperacion"
                           autocomplete="off"
                           pInputText/>
-                    <!-- <small *ngIf="NumOperacionLibro.hasError('pattern') && !NumOperacionLibro.hasError('required')"
+                    <small *ngIf="NumOperacion.hasError('pattern') && !NumOperacion.hasError('required')"
                     class="p-error">Digite un número de operación <strong>válido</strong></small>
-                    <small *ngIf="NumOperacionLibro.hasError('required') && NumOperacionLibro.dirty"
-                            class="p-error">El campo número de operación es <strong>requerido</strong></small> -->
+                    <small *ngIf="NumOperacion.hasError('required') && NumOperacion.dirty"
+                            class="p-error">El campo número de operación es <strong>requerido</strong></small>
                   </div>
                 </div>
                 <div class="col-12 md:col-12">
@@ -149,33 +148,40 @@
                     <p-inputMask mask="99/99/9999"
                                  formControlName="FechaPago"
                                  placeholder="DD/MM/AAAA"></p-inputMask>
-                    <!-- <small *ngIf="FechaPagoLibro.hasError('pattern') && !FechaPagoLibro.hasError('required')"
+                    <small *ngIf="FechaPago.hasError('pattern') && !FechaPago.hasError('required')"
                             class="p-error">Digite una fecha de pago <strong>válida</strong></small>
-                    <small *ngIf="FechaPagoLibro.hasError('required') && FechaPagoLibro.dirty"
-                            class="p-error">El campo fecha de pago es <strong>requerido</strong></small> -->
+                    <small *ngIf="FechaPago.hasError('required') && FechaPago.dirty"
+                            class="p-error">El campo fecha de pago es <strong>requerido</strong></small>
                   </div>
                 </div>
                 <div class="col-12 md:col-12">
-                  <div class="flex justify-content-between justify-content-center align-items-center">
-                    <label class="block label-file">Voucher pago libro</label>
-                    <div>
+                  <div class="flex justify-content-between justify-content-center align-items-center content-file">
+                    <label class="block label-file">Voucher de pago</label>
+                    <div class="flex flex-column">
                       <button mat-raised-button
                               [disabled]="loadingFilePago"
                               (click)="uploadFile.click()"
                               class="custom-btn-file">
                               <mat-icon>{{(FileURL.value && !loadingFilePago)?'check':'attach_file'}}</mat-icon> Elija el archivo</button>
                       <input #uploadFile
+                              (change)="selectFile($event)"
                               formControlName="FileURL"
                               type='file' style="display:none"/>
+                      <small *ngIf="FileURL.hasError('required') && FileURL.dirty"
+                              class="p-error">El voucher del pago es <strong>requerido</strong></small>
                     </div>
-                    <small *ngIf="FileURL.hasError('required') && FileURL.dirty"
-                            class="p-error">El voucher del pago del libro es <strong>requerido</strong></small>
                   </div>
                 </div>
               </div>
             </form>
             <div class="mt-3">
-              <button mat-raised-button (click)="save()" [disabled]="loading"><i class="fa-regular fa-floppy-disk"></i> Guardar</button>
+              <button mat-raised-button
+                      class="button-custom"
+                      (click)="save()"
+                      [disabled]="loading">
+                <i [ngClass]="{'pi-spin pi-spinner': loading,
+                               'pi-save':!loading}" class="pi mr-1"></i> Registrar
+              </button>
             </div>
           </mat-step>
         </mat-vertical-stepper>

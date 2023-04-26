@@ -1,0 +1,69 @@
+<div class="grid">
+  <div class="col-12 md:col-6">
+    <p-card>
+      <button mat-raised-button (click)="showSideBar()">nuevo estado grupo</button>
+    </p-card>
+  </div>
+  <div class="col-12 md:col-6">
+    <p-card></p-card>
+  </div>
+</div>
+
+<p-sidebar [(visible)]="sidebarVisible" position="right">
+  <form [formGroup]="formEstadoGrupo">
+    <div class="p-2">
+      <h3 class="mb-2"><i class="fa-solid fa-layer-group"></i> {{isUpdateEstadoGrupo?'Editar':'Nuevo'}} estado</h3>
+      <app-note-message msg="Es importante describir los estados del grupo debido a que tienen el flujo del sistema."></app-note-message>
+      <div class="col">
+        <label for="EstadoGrupo" class="block mb-2">Nombre de estado</label>
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon"><i class="fa-solid fa-book"></i></span>
+          <input id="EstadoGrupo"
+                class="p-fluid p-grid p-formgrid input-form"
+                type="text"
+                formControlName="EstadoGrupo"
+                (ngModelChange)="createCodeEstado($event)"
+                autocomplete="off"
+                maxlength="100"
+                pInputText/>
+        </div>
+        <small *ngIf="EstadoGrupo.hasError('required') && EstadoGrupo.dirty"
+              class="p-error">El campo nombre de estado es <strong>requerido</strong></small>
+      </div>
+      <div class="col">
+        <label for="codeEstado" class="block mb-2">Código de estado</label>
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon"><i class="fa-solid fa-code"></i></span>
+          <input id="CodeEstado"
+                class="p-fluid p-grid p-formgrid input-form"
+                type="text"
+                formControlName="CodeEstado"
+                autocomplete="off"
+                maxlength="100"
+                pInputText/>
+        </div>
+        <small *ngIf="CodeEstado.hasError('required') && CodeEstado.dirty"
+              class="p-error">El campo codigo de estado es <strong>requerido</strong></small>
+      </div>
+      <div class="col">
+        <label for="DescripcionEstadoGrupo" class="block mb-2">Descripción del estado del grupo</label>
+        <textarea rows="10"
+                  cols="30"
+                  pInputTextarea
+                  formControlName="DescripcionEstadoGrupo"
+                  maxlength="350"
+                  class="p-fluid p-grid p-formgrid"></textarea>
+        <small *ngIf="DescripcionEstadoGrupo.hasError('pattern') && !DescripcionEstadoGrupo.hasError('required')"
+                class="p-error">Digite una descripción del libro <strong>válida</strong></small>
+        <small *ngIf="DescripcionEstadoGrupo.hasError('required') && DescripcionEstadoGrupo.dirty"
+              class="p-error">El campo descripción del estado es <strong>requerido</strong></small>
+      </div>
+      <div class="col">
+        <button mat-raised-button
+                class="button-custom"
+                [disabled]="loadingEstadoGrupo"
+                (click)="saveEstadoGrupo()"><i class="pi pi-save"></i> {{isUpdateEstadoGrupo?'Guardar':'Registrar'}}</button>
+      </div>
+    </div>
+  </form>
+</p-sidebar>

@@ -1,14 +1,19 @@
-<!-- <ngx-charts-bar-horizontal
+<div class="content-chart horizontal">
+  <ngx-charts-bar-horizontal
   [results]="single"
+  scheme="nightLights"
   [gradient]="gradient"
   [xAxis]="showXAxis"
   [yAxis]="showYAxis"
+  [showDataLabel]="true"
   [legend]="showLegend"
+  [customColors]="colorScheme"
   [showXAxisLabel]="showXAxisLabel"
   [showYAxisLabel]="showYAxisLabel"
+  [showGridLines]="false"
   [xAxisLabel]="xAxisLabel"
   [yAxisLabel]="yAxisLabel"
-  (select)="onSelect($event)"
-  (activate)="onActivate($event)"
-  (deactivate)="onDeactivate($event)">
-</ngx-charts-bar-horizontal> -->
+  (select)="onSelect($event)">
+  </ngx-charts-bar-horizontal>
+</div>
+

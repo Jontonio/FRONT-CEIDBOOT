@@ -1,7 +1,7 @@
 <div>
   <div class="c-skeleton"></div>
 </div>
-<div class="main content-grupo animate__animated animate__bounceInDown" *ngIf="grupo">
+<div class="content-grupo animate__animated animate__fadeIn" *ngIf="grupo">
   <div class="grid content view-grupo">
     <div class="col-12 md:col-4">
       <div class="conten-sub-buttons">
@@ -10,39 +10,46 @@
                 type="button"
                 icon="fa-solid fa-arrow-left"
                 routerLink="/system/grupos/lista-grupos"
-                pTooltip="Regresara a lista" tooltipPosition="right"
+                pTooltip="Regresara a lista" tooltipPosition="bottom"
                 class="p-button-rounded p-button-text mr-3 custom-btn"></button>
         <button pButton
                 pRipple
                 type="button"
-                icon="fa-solid fa-user-plus"
-                pTooltip="Agredar estudiante" tooltipPosition="right"
+                icon="fa-solid fa-users"
+                pTooltip="Estudiantes en el grupo" tooltipPosition="bottom"
                 class="p-button-rounded p-button-text p-button-plain custom-btn"></button>
         <button pButton
                 pRipple
                 type="button"
                 icon="fa-solid fa-pen-to-square"
                 [routerLink]="['/system/grupos/edit-grupo', grupo.Id]"
-                pTooltip="Editar grupo" tooltipPosition="right"
+                pTooltip="Editar grupo" tooltipPosition="bottom"
+                class="p-button-rounded p-button-text p-button-plain custom-btn"></button>
+        <button pButton
+                pRipple
+                type="button"
+                icon="fa-solid fa-trash-can"
+                [routerLink]="['/system/grupos/edit-grupo', grupo.Id]"
+                pTooltip="Dar de baja el grupo" tooltipPosition="bottom"
                 class="p-button-rounded p-button-text p-button-plain custom-btn"></button>
       </div>
-      <p-card>
-        <div>
+      <div class="mt-2">
+        <p-fieldset legend="Información del grupo">
           <div class="flex justify-content-center justify-content-between">
-            <h2 class="mb-2">Información del grupo</h2>
+            <h2 class="mb-2">{{grupo.tipoGrupo.NombreGrupo | titlecase }}</h2>
             <p-tag styleClass="mr-2" severity="success" [rounded]="true"><p>Cód: G-{{grupo.Id}}</p></p-tag>
           </div>
           <div>
-            <p class="mt-2"><b>Nombre asignado</b></p>
-            <p class="mt-1">{{grupo.tipoGrupo.NombreGrupo | titlecase }}</p>
+            <p class="mt-2"><b>Estado del grupo</b></p>
+            <p class="mt-1"><p-tag severity="info">{{grupo.estadoGrupo.EstadoGrupo}}</p-tag></p>
             <p class="mt-2">
-              <b><i class="fa-solid fa-calendar-days mr-1"></i> Fecha de inicio - finalización del grupo</b>
+              <b>Fecha de inicio - finalización del grupo</b>
             </p>
             <div class="mt-1">
-              {{grupo.FechaInicioGrupo | date}} - {{grupo.FechaFinalGrupo | date}}
+              {{grupo.FechaInicioGrupo | date:'longDate'}} al {{grupo.FechaFinalGrupo | date:'longDate'}}
             </div>
             <p class="mt-2">
-              <b><i class="fa-solid fa-school mr-1"></i> Cantidad máximo de estudiantes</b>
+              <b> Cantidad máximo de estudiantes</b>
             </p>
             <p class="mt-1">
               {{grupo.MaximoEstudiantes }} estudiantes
@@ -54,7 +61,7 @@
               {{grupo.Modalidad}}
             </p>
             <p class="mt-2">
-              <b><i class="fa-solid fa-clock mr-1"></i> Horario</b>
+              <b>Horario</b>
             </p>
             <p class="mt-1">
               {{grupo.horario.HoraInicio | date:'h:mm a'}} - {{grupo.horario.HoraFinal | date:'h:mm a'}}
@@ -66,14 +73,34 @@
               {{grupo.DescGrupo}}
             </div>
           </div>
-        </div>
-      </p-card>
+        </p-fieldset>
+      </div>
+      <div class="mt-3">
+        <p-fieldset legend="Estado del grupo">
+          <div class="col-12">
+            <p-dropdown class="p-fluid p-grid p-formgrid"
+                        [options]="listEstadoGrupo"
+                        [(ngModel)]="estadoGrupo"
+                        placeholder="Selecione el grupo"
+                        optionLabel="EstadoGrupo">
+              </p-dropdown>
+          </div>
+          <div *ngIf="estadoGrupo" class="col content-description">
+            {{estadoGrupo.DescripcionEstadoGrupo}}
+          </div>
+          <div class="col">
+            <button mat-raised-button
+                    (click)="saveEstadoGrupo()"
+                    [disabled]="loadingSave">Guardar</button>
+          </div>
+        </p-fieldset>
+      </div>
     </div>
     <div class="col-12 md:col-8">
       <p-card>
         <div class="p-2">
           <div class="flex justify-content-center justify-content-between">
-            <h2 class="mb-2"><i class="fa-solid fa-book"></i> Información del curso</h2>
+            <h2 class="mb-2"><i class="fa-solid fa-book"></i> Curso en el grupo</h2>
             <img class="img-view-grupo" [src]="grupo.curso.UrlBandera" alt="">
           </div>
           <div class="grid content">
@@ -94,34 +121,28 @@
               <p class="mt-1">{{grupo.curso.DescripcionCurso}}</p>
             </div>
           </div>
+          <div class="flex justify-content-center justify-content-between">
+            <h2 class="mb-2"><i class="fa-solid fa-chalkboard-user"></i> Docente en el grupo</h2>
+          </div>
           <div class="grid content">
-            <div class="col-12 md:col-7">
-              <div class="flex justify-content-center justify-content-between">
-                <h2 class="mb-2"><i class="fa-solid fa-chalkboard-user"></i> Información del docente</h2>
-              </div>
-              <div class="grid content">
-                <div class="col-12 md:col-6">
-                  <p class="mt-2"><b>Docente</b></p>
-                  <p class="mt-1">{{grupo.docente.Nombres | titlecase}} {{grupo.docente.ApellidoPaterno | titlecase}} {{grupo.docente.ApellidoMaterno | titlecase}}</p>
-                  <p class="mt-2"><b>Dirección</b></p>
-                  <p class="mt-1">{{grupo.docente.Direccion }}</p>
-                </div>
-                <div class="col-12 md:col-6">
-                  <p class="mt-2"><b>Email</b></p>
-                  <p class="mt-1">{{grupo.docente.Email}}</p>
-                  <p class="mt-2"><b>Celular</b></p>
-                  <p class="mt-1">{{grupo.docente.Celular }}</p>
-                </div>
-              </div>
+            <div class="col-12 md:col-3">
+              <p class="mt-2"><b>Docente</b></p>
+              <p class="mt-1">{{grupo.docente.Nombres | titlecase}} {{grupo.docente.ApellidoPaterno | titlecase}} {{grupo.docente.ApellidoMaterno | titlecase}}</p>
+              <p class="mt-2"><b>Dirección</b></p>
+              <p class="mt-1">{{grupo.docente.Direccion }}</p>
             </div>
-            <div class="col-12 md:col-5">
-              <div class="flex justify-content-center justify-content-between">
-                <h2 class="mb-2">Estudiantes registrados</h2>
-              </div>
+            <div class="col-12 md:col-3">
+              <p class="mt-2"><b>Email</b></p>
+              <p class="mt-1">{{grupo.docente.Email}}</p>
+              <p class="mt-2"><b>Celular</b></p>
+              <p class="mt-1">{{grupo.docente.Celular }}</p>
+            </div>
+            <div class="col-12 md:col-6">
               <div class="col-12 flex
                           justify-content-center
                           align-items-center
                           flex-column">
+                  <h3 class="pb-2">Estudiantes registrados</h3>
                   <p-knob [(ngModel)]="grupo.NumeroEstudiantes"
                           [max]="grupo.MaximoEstudiantes"
                           [readonly]="true"
@@ -138,4 +159,4 @@
 
 </div>
 <!-- A component that is used to show messages to the user. -->
-<p-toast position="top-right" [breakpoints]="{'920px': {width: '100%', right: '0', left: '0', padding:'10px'}}"></p-toast>
+<p-toast position="top-bottom" [breakpoints]="{'920px': {width: '100%', bottom: '0', left: '0', padding:'10px'}}"></p-toast>

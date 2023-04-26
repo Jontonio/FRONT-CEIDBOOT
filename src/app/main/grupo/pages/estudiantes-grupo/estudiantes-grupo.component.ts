@@ -2,10 +2,9 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Grupo } from '../../class/Grupo';
 import { GrupoService } from '../../services/grupo.service';
-import { map, pipe, tap } from 'rxjs';
+import { map, tap } from 'rxjs';
 import { Curso } from 'src/app/main/curso/class/Curso';
 import { Docente } from 'src/app/main/docente/class/Docente';
-import { Matricula } from 'src/app/main/matricula/class/Matricula';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ShowFileComponent } from 'src/app/shared/show-file/show-file.component';
 import { UnAuthorizedService } from 'src/app/services/unauthorized.service';
@@ -14,6 +13,9 @@ import { MessageService } from 'primeng/api';
 import { EstudianteEnGrupo, ResEstudianteEnGrupo } from '../../class/EstudianteGrupo';
 import { ModalMensualidadComponent } from '../../components/modal-mensualidad/modal-mensualidad.component';
 import { Pago } from '../../class/Pago'
+import { EstadoGrupo } from '../../class/EstadoGrupo';
+import { GlobalService } from 'src/app/services/global.service';
+import { CategoriaPago } from '../../class/CategoriaPago';
 
 
 @Component({
@@ -29,6 +31,8 @@ export class EstudiantesGrupoComponent implements OnInit {
 
   listaEstudiantes:EstudianteEnGrupo[] = [];
   resAlumnoEnGrupo:ResEstudianteEnGrupo;
+  listCategoriaPago:CategoriaPago[];
+  selectCategoria:string = 'Sin filtro';
   loadingLista:boolean = false;
   startPage:number = 0;
   docente:Docente;
@@ -37,11 +41,13 @@ export class EstudiantesGrupoComponent implements OnInit {
   expanded:boolean = false;
   displayFile:boolean = false;
   fileURL:string;
+  terminoBusqueda:string = '';
 
   constructor(private readonly _grupo:GrupoService,
               private readonly activeRoute:ActivatedRoute,
               private readonly _unAuth:UnAuthorizedService,
               private readonly spinner: NgxSpinnerService,
+              private readonly _global: GlobalService,
               private _msg:MessageService) {
                 this.getIdGrupo(this.activeRoute);
    }
@@ -67,12 +73,37 @@ export class EstudiantesGrupoComponent implements OnInit {
         if(value.ok){
           this.resAlumnoEnGrupo = value;
           this.listaEstudiantes = this.resAlumnoEnGrupo.data as Array<EstudianteEnGrupo>;
+          this.getCategoriaPagos();
         }
       },
       error: (e) => {
         this.loadingLista = false;
         this.messageError(e);
         this._unAuth.unAuthResponse(e);
+      }
+    })
+  }
+
+  getCategoriaPagos(){
+    this._global.getCategoriaPago().pipe(
+      tap( resp => {
+        if(!resp.ok) return resp;
+        let newArr:CategoriaPago[] = [];
+        newArr.push(...(resp.data) as CategoriaPago[]);
+        newArr.push({ TipoCategoriaPago:'Sin filtro', CodeCategoriaPago:'all' } as CategoriaPago)
+        resp.data = newArr;
+        return resp;
+      })
+    )
+    .subscribe({
+      next: (value) => {
+        if(value.ok){
+          this.listCategoriaPago = value.data as Array<CategoriaPago>;
+          return;
+        }
+      },
+      error: (e) => {
+        console.log(e)
       }
     })
   }
@@ -91,6 +122,10 @@ export class EstudiantesGrupoComponent implements OnInit {
 
   closeModal(){
     this.displayFile = false;
+  }
+
+  selectFilter(categoriaPago:CategoriaPago){
+    this.selectCategoria = categoriaPago.TipoCategoriaPago;
   }
 
   openModalMensualidad(pago:Pago){

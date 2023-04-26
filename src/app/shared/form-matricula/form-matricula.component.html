@@ -490,12 +490,14 @@
             <div class="grid">
               <div class="col-12 md:col-3">
                 <label for="MontoPagoMatricula" class="block mb-2">Monto de pago S/.</label>
-                <input id="MontoPagoMatricula"
-                       class="p-fluid p-grid p-formgrid full-width"
-                       type="text"
-                       formControlName="MontoPagoMatricula"
-                       autocomplete="off"
-                       pInputText/>
+                  <p-inputNumber inputId="minmaxfraction"
+                                 mode="decimal"
+                                 class="p-fluid p-grid p-formgrid full-width"
+                                 formControlName="MontoPagoMatricula"
+                                 [min]="0"
+                                 [max]="1000"
+                                 [minFractionDigits]="2"
+                                 [maxFractionDigits]="5"></p-inputNumber>
                 <small *ngIf="MontoPagoMatricula.hasError('pattern') && !MontoPagoMatricula.hasError('required')"
                         class="p-error">Digite un monto de pago <strong>válido</strong></small>
                 <small *ngIf="MontoPagoMatricula.hasError('required') && MontoPagoMatricula.dirty"
@@ -549,20 +551,19 @@
           <p-accordionTab *ngIf="selecGrupo && selecGrupo.RequeridoPPago && countLibros(selecGrupo.curso.libros)!=0" header="Cargue su voucher del pago del libro">
             <div class="grid">
               <div class="col-12 md:col-3">
-                <div class="">
-                  <label for="MontoPagoLibro" class="block mb-2">Monto de pago S/.</label>
-                  <input id="MontoPagoLibro"
-                        class="p-fluid p-grid p-formgrid full-width"
-                        type="text"
-                        placeholder="Monto de pago"
-                        formControlName="MontoPagoLibro"
-                        autocomplete="off"
-                        pInputText/>
+                <label for="MontoPagoLibro" class="block mb-2">Monto de pago S/.</label>
+                  <p-inputNumber inputId="minmaxfraction"
+                                 mode="decimal"
+                                 class="p-fluid p-grid p-formgrid full-width"
+                                 formControlName="MontoPagoLibro"
+                                 [min]="0"
+                                 [max]="1000"
+                                 [minFractionDigits]="2"
+                                 [maxFractionDigits]="5"></p-inputNumber>
                   <small *ngIf="MontoPagoLibro.hasError('pattern') && !MontoPagoLibro.hasError('required')"
-                  class="p-error">Digite un monto de pago <strong>válido</strong></small>
+                          class="p-error">Digite un monto de pago <strong>válido</strong></small>
                   <small *ngIf="MontoPagoLibro.hasError('required') && MontoPagoLibro.dirty"
                           class="p-error">El campo monto de pago es <strong>requerido</strong></small>
-                </div>
               </div>
               <div class="col-12 md:col-3">
                 <div class="">
@@ -616,20 +617,19 @@
           <p-accordionTab *ngIf="selecGrupo && selecGrupo.RequeridoPPago" header="Cargue su voucher del pago de su primera mensualidad">
             <div class="grid">
               <div class="col-12 md:col-3">
-                <div class="">
-                  <label for="MontoPagoMensualidad" class="block mb-2">Monto pago S/</label>
-                  <input id="MontoPagoMensualidad"
-                         class="p-fluid p-grid p-formgrid full-width"
-                         type="text"
-                         placeholder="Digite el número de operación"
-                         formControlName="MontoPagoMensualidad"
-                         autocomplete="off"
-                         pInputText/>
+                <label for="MontoPagoMensualidad" class="block mb-2">Monto de pago S/.</label>
+                  <p-inputNumber inputId="minmaxfraction"
+                                 mode="decimal"
+                                 class="p-fluid p-grid p-formgrid full-width"
+                                 formControlName="MontoPagoMensualidad"
+                                 [min]="0"
+                                 [max]="1000"
+                                 [minFractionDigits]="2"
+                                 [maxFractionDigits]="5"></p-inputNumber>
                   <small *ngIf="MontoPagoMensualidad.hasError('pattern') && !MontoPagoMensualidad.hasError('required')"
                           class="p-error">Digite un monto de pago <strong>válido</strong></small>
                   <small *ngIf="MontoPagoMensualidad.hasError('required') && MontoPagoMensualidad.dirty"
                           class="p-error">El campo monto de pago es <strong>requerido</strong></small>
-                </div>
               </div>
               <div class="col-12 md:col-3">
                 <div class="">

@@ -15,6 +15,7 @@ import { ShowFileComponent } from './show-file/show-file.component';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { SafeUrlPipe } from '../pipes/safe-url.pipe';
 import { IframeFileComponent } from './iframe-file/iframe-file.component';
+import { NoteMessageComponent } from './note-message/note-message.component';
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { IframeFileComponent } from './iframe-file/iframe-file.component';
     FormMatriculaComponent,
     ShowFileComponent,
     IframeFileComponent,
+    NoteMessageComponent,
   ],
   imports: [
     CommonModule,
@@ -47,7 +49,8 @@ import { IframeFileComponent } from './iframe-file/iframe-file.component';
     LoaddingComponent,
     FormMatriculaComponent,
     ShowFileComponent,
-    IframeFileComponent
+    IframeFileComponent,
+    NoteMessageComponent
   ]
 })
 export class SharedModule { }

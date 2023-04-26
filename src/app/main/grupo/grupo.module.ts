@@ -17,6 +17,8 @@ import { EstudiantesGrupoComponent } from './pages/estudiantes-grupo/estudiantes
 import { NgxSpinnerModule } from "ngx-spinner";
 import { EmptyDataPipe } from 'src/app/pipes/empty-data.pipe';
 import { ModalMensualidadComponent } from './components/modal-mensualidad/modal-mensualidad.component';
+import { FilterPagoPipe } from './pipes/filter-pago.pipe';
+import { BuscarEstudiantePipe } from './pipes/buscar-estudiante.pipe';
 
 
 @NgModule({
@@ -31,6 +33,8 @@ import { ModalMensualidadComponent } from './components/modal-mensualidad/modal-
     EstudiantesGrupoComponent,
     EmptyDataPipe,
     ModalMensualidadComponent,
+    FilterPagoPipe,
+    BuscarEstudiantePipe
   ],
   imports: [
     CommonModule,
@@ -39,7 +43,7 @@ import { ModalMensualidadComponent } from './components/modal-mensualidad/modal-
     PrimengModule,
     MaterialModule,
     SharedModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
   ]
 })
 export class GrupoModule { }

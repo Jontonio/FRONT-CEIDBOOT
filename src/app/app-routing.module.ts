@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { UnauthorizedPageComponent } from './pages/unauthorized-page/unauthorized-page.component';
 
 const routes: Routes = [
   {
@@ -9,6 +10,9 @@ const routes: Routes = [
   {
     path:'system',
     loadChildren: () => import('./main/main.module').then( mod => mod.MainModule )
+  },
+  {
+    path:'unauthorized-page', component:UnauthorizedPageComponent
   },
   {
     path:'**', redirectTo:'main'

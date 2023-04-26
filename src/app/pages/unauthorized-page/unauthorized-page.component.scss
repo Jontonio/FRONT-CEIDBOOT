@@ -1,0 +1,28 @@
+.container-unauthorized{
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.img-unauthorized{
+  width: 250px;
+}
+.message-deny {
+  font-size: 25px;
+  margin-top: 10px;
+  padding: 10px;
+  font-family: 'Russo One', sans-serif;
+}
+.button-custom{
+  border: none;
+  cursor: pointer;
+  width: 100px;
+  background: #FFF;
+  border-radius: 20px;
+  border: 1px #1F2448 solid;
+  padding: 5px;
+}
+
+

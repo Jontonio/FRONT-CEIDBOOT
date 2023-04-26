@@ -79,7 +79,7 @@ export class ListCursoComponent {
   }
 
   updateCurso(curso:Curso, Id:number){
-    this._curso.updateCurso(Id, curso).subscribe({
+    this._curso.updateCurso(Id, {EstadoApertura:curso.EstadoApertura} as Curso).subscribe({
       next: (value) => {
         if(!value.ok){ return; }
         this.toast('success', value.msg);

@@ -1,0 +1,19 @@
+<div class="content-chart vertical">
+  <ngx-charts-bar-vertical-2d
+    [results]="multi"
+    scheme="nightLights"
+    [gradient]="gradient"
+    [xAxis]="showXAxis"
+    [yAxis]="showYAxis"
+    [legend]="showLegend"
+    [showXAxisLabel]="showXAxisLabel"
+    [showYAxisLabel]="showYAxisLabel"
+    [xAxisLabel]="xAxisLabel"
+    [yAxisLabel]="yAxisLabel"
+    [showGridLines]="false"
+    [legendTitle]="legendTitle"
+    (select)="onSelect($event)"
+    (activate)="onActivate($event)"
+    (deactivate)="onDeactivate($event)">
+  </ngx-charts-bar-vertical-2d>
+</div>

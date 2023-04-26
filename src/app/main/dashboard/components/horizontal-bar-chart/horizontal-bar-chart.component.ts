@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HorizontalBarChartComponent {
 
-  single: [
+  single: any[] = [
     {
       "name": "Germany",
       "value": 8940000
@@ -19,6 +19,14 @@ export class HorizontalBarChartComponent {
     {
       "name": "France",
       "value": 7200000
+    },
+    {
+      "name": "China",
+      "value": 8200000
+    },
+    {
+      "name": "Peru",
+      "value": 7200000
     }
   ];
 
@@ -27,16 +35,14 @@ export class HorizontalBarChartComponent {
   // options
   showXAxis: boolean = true;
   showYAxis: boolean = true;
-  gradient: boolean = false;
+  gradient: boolean = true;
   showLegend: boolean = true;
   showXAxisLabel: boolean = true;
   yAxisLabel: string = 'Country';
   showYAxisLabel: boolean = true;
   xAxisLabel: string = 'Population';
 
-  // colorScheme = {
-  //   domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
-  // };
+  colorScheme = { color:['#6626ED', '#3228F7', '#2F54E0', '#288BF7','#26BAED'] };
 
   constructor() {
     Object.assign(this, { single:this.single });

@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { SocketService } from "src/app/services/socket.service";
 import { ResUsuario, Usuario } from "../class/Usuario";
 import { environment } from 'src/environments/environment';
-import { ResRol } from "src/app/class/Rol";
+import { ResRol } from "src/app/auth/class/Rol";
 import { Subscription } from 'rxjs';
 import { UnAuthorizedService } from "src/app/services/unauthorized.service";
 

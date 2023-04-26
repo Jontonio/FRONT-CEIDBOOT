@@ -54,16 +54,16 @@ class Estudiante {
 
                 this.TipoDocumento = TipoDocumento;
                 this.Documento = Documento;
-                this.Nombres = Nombres;
-                this.ApellidoPaterno = ApellidoPaterno;
-                this.ApellidoMaterno = ApellidoMaterno;
+                this.Nombres = Nombres.toUpperCase();
+                this.ApellidoPaterno = ApellidoPaterno.toUpperCase();
+                this.ApellidoMaterno = ApellidoMaterno.toUpperCase();
                 this.Celular = Celular;
                 this.CodePhone = CodePhone;
                 this.Code = Code;
                 this.Sexo = Sexo;
                 this.FechaNacimiento = FechaNacimiento;
                 this.Direccion = Direccion;
-                this.Email = Email;
+                this.Email = Email.toLowerCase();
                 this.EsMayor = EsMayor;
                 this.apoderado = apoderado;
                 this.departamento = departamento;

@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Person } from 'src/app/class/Person';
-import { Rol } from 'src/app/class/Rol';
+import { Rol } from 'src/app/auth/class/Rol';
 import { GlobalService } from 'src/app/services/global.service';
 import { Usuario } from '../../class/Usuario';
 import { Code } from '../../../grupo/class/Code';
