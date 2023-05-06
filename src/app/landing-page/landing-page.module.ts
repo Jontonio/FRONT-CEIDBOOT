@@ -10,13 +10,15 @@ import { PrimengModule } from '../primeng/primeng.module';
 import { RouterModule } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { SharedModule } from '../shared/shared.module';
-import { AuthModule } from '../auth/auth.module';
 import { MatriculaComponent } from './pages/matricula/matricula.component';
 import { MessageService } from 'primeng/api';
 import { MaterialModule } from '../material/material.module';
 import { PagosComponent } from './pages/pagos/pagos.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ExampleNumOperacionComponent } from './pages/example-num-operacion/example-num-operacion.component';
+import { ExamenSuficienciaComponent } from './pages/examen-suficiencia/examen-suficiencia.component';
+import { OtrosTramitesComponent } from './pages/otros-tramites/otros-tramites.component';
+import { CertificadoEstudiosComponent } from './pages/certificado-estudios/certificado-estudios.component';
 
 
 @NgModule({
@@ -27,7 +29,10 @@ import { ExampleNumOperacionComponent } from './pages/example-num-operacion/exam
     HomeComponent,
     MatriculaComponent,
     PagosComponent,
-    ExampleNumOperacionComponent
+    ExampleNumOperacionComponent,
+    ExamenSuficienciaComponent,
+    OtrosTramitesComponent,
+    CertificadoEstudiosComponent
   ],
   imports: [
     CommonModule,
@@ -37,7 +42,6 @@ import { ExampleNumOperacionComponent } from './pages/example-num-operacion/exam
     MaterialModule,
     LandingPageRoutingModule,
     SharedModule,
-    AuthModule
   ],
   providers:[MessageService]
 })

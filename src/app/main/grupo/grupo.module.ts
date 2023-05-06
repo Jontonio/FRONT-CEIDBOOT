@@ -19,6 +19,11 @@ import { EmptyDataPipe } from 'src/app/pipes/empty-data.pipe';
 import { ModalMensualidadComponent } from './components/modal-mensualidad/modal-mensualidad.component';
 import { FilterPagoPipe } from './pipes/filter-pago.pipe';
 import { BuscarEstudiantePipe } from './pipes/buscar-estudiante.pipe';
+import { FilterStatusGrupoPipe } from './pipes/filter-status-grupo.pipe';
+import { FilterGrupoPipe } from './pipes/filter-grupo.pipe';
+import { InfoEstudianteComponent } from './pages/info-estudiante/info-estudiante.component';
+import { ChatBotModule } from '../chat-bot/chat-bot.module';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 
 @NgModule({
@@ -34,7 +39,10 @@ import { BuscarEstudiantePipe } from './pipes/buscar-estudiante.pipe';
     EmptyDataPipe,
     ModalMensualidadComponent,
     FilterPagoPipe,
-    BuscarEstudiantePipe
+    BuscarEstudiantePipe,
+    FilterStatusGrupoPipe,
+    FilterGrupoPipe,
+    InfoEstudianteComponent,
   ],
   imports: [
     CommonModule,
@@ -44,6 +52,8 @@ import { BuscarEstudiantePipe } from './pipes/buscar-estudiante.pipe';
     MaterialModule,
     SharedModule,
     NgxSpinnerModule,
+    ChatBotModule,
+    NgxChartsModule
   ]
 })
 export class GrupoModule { }

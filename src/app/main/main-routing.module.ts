@@ -2,15 +2,23 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ValidateUserGuard } from '../guards/validate-user.guard';
 import { MainComponent } from './pages/main/main.component';
-import { ChatBotComponent } from './chat-bot/pages/chat-bot/chat-bot.component';
 import { HasRoleGuard } from '../guards/has-role.guard';
+import { WelcomeComponent } from './pages/welcome/welcome.component';
 
 const routes: Routes = [
   {
     path:'',
-    component:MainComponent,
+    component: MainComponent,
     canActivate:[ValidateUserGuard],
     children:[
+      {
+        path:'welcome',
+        canActivate:[HasRoleGuard],
+        data:{
+          rolesPermitidos:['admin_role','user_role','viewer_role']
+        },
+        component:WelcomeComponent
+      },
       {
         path:'dashboard',
         canActivate:[HasRoleGuard],

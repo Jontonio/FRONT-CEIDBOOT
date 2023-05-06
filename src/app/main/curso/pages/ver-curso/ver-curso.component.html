@@ -1,65 +1,63 @@
-<div class="main p-4">
-  <div class="grid">
-    <div class="col-12 md:col-4">
-      <p-card *ngIf="curso">
+<div class="grid">
+  <div class="col-12 md:col-4">
+    <p-card *ngIf="curso">
+      <div>
+        <div class="flex justify-content-between">
+          <h2><p>{{curso.NombreCurso | titlecase}}</p></h2>
+          <img class="img-flag-1" [src]="curso.UrlBandera" alt="">
+        </div>
         <div>
-          <div class="flex justify-content-between">
-            <h2><p>{{curso.NombreCurso | titlecase}}</p></h2>
-            <img class="img-flag-1" [src]="curso.UrlBandera" alt="">
-          </div>
-          <div>
-            <p class="mt-2"><b>Nivel</b></p>
-            <p class="mt-1">{{curso.nivel.Nivel}}</p>
-            <p class="mt-2"><b>Cantidad de módulos</b></p>
-            <p class="mt-1">{{curso.NumModulos}} Módulos</p>
-            <p class="mt-2"><b>Descrión del curso</b></p>
-            <p class="mt-1">{{curso.DescripcionCurso}}</p>
-            <p class="mt-2"><b>Recurso</b></p>
-            <p class="mt-1"><a class="tag-a" [href]="curso.LinkRequisitos?curso.LinkRequisitos:'#'" target="_blank">Información del curso</a></p>
-          </div>
+          <p class="mt-2"><b>Nivel</b></p>
+          <p class="mt-1">{{curso.nivel.Nivel}}</p>
+          <p class="mt-2"><b>Cantidad de módulos</b></p>
+          <p class="mt-1">{{curso.NumModulos}} Módulos</p>
+          <p class="mt-2"><b>Descrión del curso</b></p>
+          <p class="mt-1">{{curso.DescripcionCurso}}</p>
+          <p class="mt-2"><b>Recurso</b></p>
+          <p class="mt-1"><a class="tag-a" [href]="curso.LinkRequisitos?curso.LinkRequisitos:'#'" target="_blank">Información del curso</a></p>
         </div>
-        <ng-template pTemplate="footer">
-          <button mat-raised-button
-                  class="mr-2 button-custom-round"
-                  [routerLink]="['/system/cursos/editar-curso', curso.Id]"><i class="fa-solid fa-pen-to-square"></i> Editar curso</button>
-          <button mat-raised-button
-                  (click)="addLibro()"
-                  class="button-custom-round"><i class="fa-solid fa-plus"></i> Agregar libro</button>
-        </ng-template>
-      </p-card>
-    </div>
-    <div class="col-12 md:col-8">
-      <p-card header="Lista de libros">
-        <div class="col table-responsive" *ngIf="curso">
-          <p-table [value]="curso.libros" [resizableColumns]="true" columnResizeMode="expand" responsiveLayout="scroll">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>ID</th>
-                    <th>Título</th>
-                    <th>Descripción del libro</th>
-                    <th>Precio del libro</th>
-                    <th>Operación</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-libro let-rowIndex="rowIndex">
-                <tr *ngIf="libro.Estado">
-                    <td>{{ rowIndex+1 }}</td>
-                    <td>{{ libro.TituloLibro }}</td>
-                    <td>{{ libro.DescripcionLibro | slice:0:40}}...</td>
-                    <td>{{ libro.CostoLibro | currency: 'PEN': 'symbol': '': 'es-PE'}}</td>
-                    <td>
-                      <button mat-raised-button color="warn" (click)="dialogDeleteLibro(libro)"><i class="fa-solid fa-trash"></i> Eliminar</button>
-                      <button mat-raised-button (click)="sendEditLibro(libro)" class="ml-2"><i class="pi pi-pencil"></i> Editar</button>
-                    </td>
-                </tr>
-            </ng-template>
-          </p-table>
-        </div>
-        <div *ngIf="curso">
-          <app-lista-vacia *ngIf="countLibros(curso.libros)==0 && !loading" msg="El curso no cuenta con libros registrados"></app-lista-vacia>
-        </div>
-      </p-card>
-    </div>
+      </div>
+      <ng-template pTemplate="footer">
+        <button mat-raised-button
+                class="mr-2 button-custom-round"
+                [routerLink]="['/system/cursos/editar-curso', curso.Id]"><i class="fa-solid fa-pen-to-square"></i> Editar curso</button>
+        <button mat-raised-button
+                (click)="addLibro()"
+                class="button-custom-round"><i class="fa-solid fa-plus"></i> Agregar libro</button>
+      </ng-template>
+    </p-card>
+  </div>
+  <div class="col-12 md:col-8">
+    <p-card header="Lista de libros">
+      <div class="col table-responsive" *ngIf="curso">
+        <p-table [value]="curso.libros" [resizableColumns]="true" columnResizeMode="expand" responsiveLayout="scroll">
+          <ng-template pTemplate="header">
+              <tr>
+                  <th>ID</th>
+                  <th>Título</th>
+                  <th>Descripción del libro</th>
+                  <th>Precio del libro</th>
+                  <th>Operación</th>
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-libro let-rowIndex="rowIndex">
+              <tr *ngIf="libro.Estado">
+                  <td>{{ rowIndex+1 }}</td>
+                  <td>{{ libro.TituloLibro }}</td>
+                  <td>{{ libro.DescripcionLibro | slice:0:40}}...</td>
+                  <td>{{ libro.CostoLibro | currency: 'PEN': 'symbol': '': 'es-PE'}}</td>
+                  <td>
+                    <button mat-raised-button color="warn" (click)="dialogDeleteLibro(libro)"><i class="fa-solid fa-trash"></i> Eliminar</button>
+                    <button mat-raised-button (click)="sendEditLibro(libro)" class="ml-2"><i class="pi pi-pencil"></i> Editar</button>
+                  </td>
+              </tr>
+          </ng-template>
+        </p-table>
+      </div>
+      <div *ngIf="curso">
+        <app-lista-vacia *ngIf="countLibros(curso.libros)==0 && !loading" msg="El curso no cuenta con libros registrados"></app-lista-vacia>
+      </div>
+    </p-card>
   </div>
 </div>
 <p-sidebar [(visible)]="sidebarVisible" position="right">

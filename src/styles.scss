@@ -34,6 +34,21 @@ body::-webkit-scrollbar-thumb:hover {
 body::-webkit-scrollbar-thumb:active {
   background-color: #999999;
 }
+.p-sidebar-content::-webkit-scrollbar-thumb{
+  background: var(--surface-300);
+  border-radius: 2px;
+}
+.p-sidebar-content::-webkit-scrollbar {
+  width: 10px;
+  height: 8px;
+}
+
+:root{
+  --my-font: var(--my-font);
+}
+h3{
+  font-family: var(--my-font);
+}
 .content-tables{
   overflow-x: scroll !important;
   cursor: pointer;
@@ -67,16 +82,16 @@ body::-webkit-scrollbar-thumb:active {
   height: 100%;
 }
 .title-main h1{
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--my-font);
   font-size: 65px;
   height: auto;
 }
 .title-main p{
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--my-font);
   font-size: 20px;
 }
 .font{
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--my-font);
 }
 /**
 * Styles for images
@@ -128,7 +143,7 @@ footer{
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--my-font);
   padding: 20px;
 }
 .grid-footer{
@@ -374,6 +389,32 @@ footer{
 .forgot-password:hover{
   color:#1f2448;
   text-decoration: underline;
+}
+.label-item{
+  cursor: pointer;
+}
+.content-items{
+  border-radius: 5px;
+  height: 50px;
+  padding-left: 10px;
+  background-color: #FAD961;
+  color: #ffffff;
+  background-image: linear-gradient(270deg, #FAD961 0%, #F76B1C 100%);
+}
+.pointer{
+  cursor: pointer;
+}
+.p-menubar .p-submenu-list>.p-menuitem-active>p-menubarsub>.p-submenu-list {
+  width: 250px;
+}
+.p-menubar-root-list>.p-menuitem-active>p-menubarsub>.p-submenu-list{
+  width: 250px;
+}
+.content-info-operacion{
+  background: var(--surface-100);
+  color: #676767;
+  border-radius: 5px;
+  padding: 8px;
 }
 @media only screen and (max-width: 767px) {
   /* Estilos para teléfonos móviles aquí */

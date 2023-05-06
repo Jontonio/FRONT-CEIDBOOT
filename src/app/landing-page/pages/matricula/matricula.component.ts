@@ -12,9 +12,12 @@ export interface Section {
 })
 export class MatriculaComponent implements OnInit {
 
+  msg:string;
+
   constructor() { }
 
   ngOnInit(): void {
+    this.msg = 'Ten en cuenta que algunos cursos requiren los vouchers de pago. Los pagos están en base a al tipo de estudiante que se encuentra.'
   }
 
   folders: Section[] = [

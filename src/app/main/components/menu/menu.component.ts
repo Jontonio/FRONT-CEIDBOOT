@@ -50,9 +50,9 @@ export class MenuComponent implements OnInit {
     this._auth.logout(data).subscribe({
       next: (value) => {
         if(!value.ok) return;
-        if(this._auth.readToken()) this._auth.deleteToken();
+        if(this._auth.readStorage('token')) this._auth.deleteStorage('token');
         this.modeTheme(false, false);
-        this.route.navigate(['/main/auth/login']);
+        this.route.navigate(['/auth/login']);
       },
       error: (e) => console.log(e)
     })
@@ -99,7 +99,7 @@ export class MenuComponent implements OnInit {
       {
         label: 'ChatBot',
         icon: 'pi pi-qrcode',
-        routerLink:'/system/chat-bot',
+        routerLink:'/system/chat-bot/estado-bot',
         role:['admin_role','user_role','viewer_role']
       },
       {

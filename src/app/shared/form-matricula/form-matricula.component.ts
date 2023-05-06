@@ -97,6 +97,7 @@ export class FormMatriculaComponent implements OnInit {
   isPeru:boolean;
   messages: Message[];
   xampleFileURL:string;
+  hayErrorGetData:boolean;
 
   constructor(private fb:FormBuilder,
               private readonly _global:GlobalService,
@@ -119,11 +120,17 @@ export class FormMatriculaComponent implements OnInit {
     this._socket.statusServer = true;
     this.TipoDocumentoSelected = 'DNI';
     this.hayError = false;
+    this.hayErrorGetData = false;
 
     this.optionSexo = [
       { name:'Masculino', code:'masculino' },
       { name:'Femenino', code:'Femenino' },
       { name:'otros', code:'otros' },
+    ];
+
+    this.card = [
+      {name: 'DNI', code: 'DNI'},
+      {name: 'Carnet de extranjería', code: 'CDE' }
     ];
 
     this.optionEdad = [
@@ -145,10 +152,6 @@ export class FormMatriculaComponent implements OnInit {
       { name: 'Escuela Profesional de Educación Primaria Intercultural', value:'EPEPI'},
     ]
 
-    this.card = [
-      {name: 'DNI', code: 'DNI'},
-      {name: 'Carnet de extranjería', code: 'CDE' }
-    ];
 
     this.listDepartamentos = [];
 
@@ -394,8 +397,11 @@ export class FormMatriculaComponent implements OnInit {
         if(resp.ok){
           this.listDenominServicio = resp.data as Array<DenominServicio>;
         }
+        this.hayErrorGetData = false;
       },
-      error: (e) => this.messageError(e)
+      error: (e) => {
+        this.hayErrorGetData = true;
+      }
     })
   }
 
@@ -406,13 +412,16 @@ export class FormMatriculaComponent implements OnInit {
           this.listGrupos = resp.data as Array<Grupo>;
           console.log(resp.data)
         }
+        this.hayErrorGetData = false;
       },
-      error: (e) => this.messageError(e)
+      error: (e) => {
+        this.hayErrorGetData = true;
+      }
     })
   }
 
   completeDataEstudiante(estudiante:Estudiante){
-    // complete data estudiante
+    /** complete data estudiante */
     this.Nombres.setValue(estudiante.Nombres);
     this.TipoDocumento.setValue(estudiante.TipoDocumento);
     this.Nombres.setValue(estudiante.Nombres);
@@ -426,7 +435,7 @@ export class FormMatriculaComponent implements OnInit {
     this.Provincia.setValue(estudiante.provincia);
     this.Distrito.setValue(estudiante.distrito);
     this.getOneCountryCode(estudiante.Code);
-    //verificar si alumno es mayor
+    /** verificar si alumno es mayor */
     this.EsMayor.setValue(estudiante.EsMayor);
     (!this.EsMayor.value)?this.completeDataApoderado(estudiante.apoderado):'';
   }
@@ -438,13 +447,10 @@ export class FormMatriculaComponent implements OnInit {
   }
 
   searchEstudiante(documento:string=''){
-
+    /** verificar si el documento no este vacia*/
     if(!documento) return;
-
-    if(this.TipoDocumento.value=='DNI' && documento.length==8 && this.Documento.valid){
-      this.getDataReniec(documento, true);
-    }
-
+    /** validar para hacer la busqueda del documento en RENIEC */
+    (this.TipoDocumento.value=='DNI' && documento.length==8 && this.Documento.valid)?this.getDataReniec(documento, true):''
   }
 
   // getEstudiante(documento:string, isPeru:boolean = true){
@@ -471,17 +477,19 @@ export class FormMatriculaComponent implements OnInit {
   // }
 
   getDataReniec(documento:string, isPeru:boolean = true){
+    /** verificar si el documento es de perú o del extranjero */
     if(!isPeru) return;
     this.loadGetData = true;
+    /** realiza la petición de los datos mediante el enpoint */
     this._global.apiReniec(documento).subscribe({
       next: (value) => {
+        this.loadGetData = false;
         if(value.ok){
           this.completeData(value.data);
-          this.toast('success',value.msg,'Datos consultados a RENIEC')
-        }else{
-          this.toast('warn',value.msg,'Datos consultados a RENIEC')
+          this.toast('success',value.msg,'Datos consultados a RENIEC');
+          return;
         }
-        this.loadGetData = false;
+        this.toast('warn',value.msg,'Datos consultados a RENIEC')
       },
       error: (e) => {
         this.loadGetData = false;
@@ -495,9 +503,10 @@ export class FormMatriculaComponent implements OnInit {
     this.listDepartamentos$ =this._main.getDepartamentos().subscribe({
       next: (value) => {
         this.listDepartamentos = value;
+        this.hayErrorGetData = false;
       },
-      error: (err) => {
-        console.log(err);
+      error: (e) => {
+        this.hayErrorGetData = true;
       }
     })
   }
@@ -514,7 +523,6 @@ export class FormMatriculaComponent implements OnInit {
   }
 
   selectedProvincia(provincia:Provincia){
-
     if(!provincia) return;
     this._main.getDistritos(provincia.IdProvincia).subscribe({
       next: (value) => {
@@ -694,7 +702,6 @@ export class FormMatriculaComponent implements OnInit {
       }
       const estudianteEnGrupo = new EstudianteEnGrupo(estudiante, this.selecGrupo, matricula, listPagos);
       this.registerMatricula(estudianteEnGrupo);
-      console.log(estudianteEnGrupo)
     }else{
       this.registerPrematricula(matricula);
     }
@@ -955,7 +962,6 @@ export class FormMatriculaComponent implements OnInit {
       this.Departamento.markAsPristine();
       this.Provincia.markAsPristine();
       this.Distrito.markAsPristine();
-
   }
 
   selectedCountry(country:Code){

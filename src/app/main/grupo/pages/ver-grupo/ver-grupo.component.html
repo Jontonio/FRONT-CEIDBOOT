@@ -86,7 +86,7 @@
               </p-dropdown>
           </div>
           <div *ngIf="estadoGrupo" class="col content-description">
-            {{estadoGrupo.DescripcionEstadoGrupo}}
+            <app-note-message [msg]="estadoGrupo.DescripcionEstadoGrupo"></app-note-message>
           </div>
           <div class="col">
             <button mat-raised-button

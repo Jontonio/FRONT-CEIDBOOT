@@ -7,6 +7,9 @@ import { Router } from "@angular/router";
 import { Login } from "../interfaces/login.interface";
 import { UserLogin, ResLogin } from "../interfaces/ResLogin";
 import { Logout, ResLogout } from '../interfaces/Logout';
+import { DataRecovery } from '../class/global';
+import { ResResetPassword } from '../interfaces/ResResetPassword';
+import { ResChangePassword } from '../interfaces/ResChangePassword';
 
 @Injectable({
   providedIn: 'root'
@@ -25,42 +28,47 @@ export class AuthService {
     return this.http.post<ResLogout>(`${environment.BASE_URL}/auth/logout`, data );
   }
 
+  resetPassword(data:DataRecovery){
+    return this.http.patch<ResResetPassword>(`${environment.BASE_URL}/auth/reset-password`, data );
+  }
+
+  changePassword(data:any){
+    return this.http.patch<ResChangePassword>(`${environment.BASE_URL}/auth/change-password`, data );
+  }
+
   authenticated():Observable<ResLogin>{
     return this.http.get<ResLogin>(`${environment.BASE_URL}/auth/user-authenticated`);
   }
 
-  saveToken(token:string){
-    localStorage.setItem('token',JSON.stringify(token));
+  saveStorage(name:string, data:string){
+    localStorage.setItem(name, JSON.stringify(data));
   }
 
-  deleteToken(){
-    localStorage.removeItem('token');
+  deleteStorage(name:string){
+    localStorage.removeItem( name );
   }
 
-  getToken():string{
-    let token = null;
-    if(this.readToken()) token = JSON.parse(localStorage.getItem('token')!);
-    return token;
+  getStorage(name:string):string{
+    return this.readStorage(name)?JSON.parse(localStorage.getItem( name )!):null;
   }
 
   existsToken(){
-    if(this.readToken()){
-      console.log('redireccionar a system');
+    if(this.readStorage('token')){
       this.authenticated().subscribe({
         next:(res) => {
           console.log(res);
-          this.route.navigate(['/system']);
+          this.route.navigate(['/system/welcome']);
         },
         error: (err) => console.log(err)
       })
     }else{
       console.log('redirecionar a login');
-      this.route.navigate(['/main/auth/login']);
+      this.route.navigate(['/auth/login']);
     }
   }
 
-  readToken():boolean{
-    return localStorage.getItem('token')?true:false;
+  readStorage( name:string ):boolean{
+    return localStorage.getItem( name )?true:false;
   }
 
 }

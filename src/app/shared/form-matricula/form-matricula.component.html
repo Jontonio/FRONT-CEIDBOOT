@@ -1,127 +1,298 @@
-<p-messages key="message-matricula"></p-messages>
-<mat-stepper linear="true" #stepper>
-  <mat-step>
-    <p-messages key="message-error-code"></p-messages>
-    <form [formGroup]="formEstudiante">
-      <ng-template matStepLabel>Información personal</ng-template>
-        <div class="grid content">
-          <div class="col-12 md:col-6">
-            <div class="grid content">
-              <div class="col-12 md:col-6">
-                <label for="usuario" class="block mb-2">Tipo documento</label>
-                <p-dropdown class="p-fluid p-grid p-formgrid"
-                            [options]="card"
-                            formControlName="TipoDocumento"
-                            (ngModelChange)="changeCard($event)"
-                            optionValue="code"
-                            optionLabel="name">
-                        </p-dropdown>
-                <small *ngIf="TipoDocumento.hasError('required') && TipoDocumento.dirty"
-                      class="p-error">El tipo de documento es <strong>requerido</strong></small>
+<div *ngIf="hayErrorGetData, else formMatricula">
+  <div class="grid flex justify-content-center align-items-center">
+    <div class="col md:col-6 mt-3">
+      <img class="img-error" src="./assets/images/unauthorized-01.svg" alt="" srcset="">
+    </div>
+    <div class="col md:col-6">
+      <h3>Estamos presentando problemas algunos problemas.<br> Por favor intentelo más tarde</h3>
+    </div>
+  </div>
+</div>
+<ng-template #formMatricula>
+  <p-messages key="message-matricula"></p-messages>
+  <mat-stepper linear="true" #stepper>
+    <mat-step [stepControl]="formEstudiante">
+      <p-messages key="message-error-code"></p-messages>
+      <form [formGroup]="formEstudiante">
+        <ng-template matStepLabel>Información personal</ng-template>
+          <div class="grid content">
+            <div class="col-12 md:col-6">
+              <div class="grid content">
+                <div class="col-12 md:col-6">
+                  <label for="usuario" class="block mb-2">Tipo documento</label>
+                  <p-dropdown class="p-fluid p-grid p-formgrid"
+                              [options]="card"
+                              formControlName="TipoDocumento"
+                              (ngModelChange)="changeCard($event)"
+                              optionValue="code"
+                              optionLabel="name">
+                          </p-dropdown>
+                  <small *ngIf="TipoDocumento.hasError('required') && TipoDocumento.dirty"
+                        class="p-error">El tipo de documento es <strong>requerido</strong></small>
+                </div>
+                <div class="col-12 md:col-6">
+                  <label for="Documento" class="block mb-2">{{TipoDocumento.value}}</label>
+                    <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i [class]="loadGetData?'pi pi-spin pi-spinner':'pi pi-id-card'"></i></span>
+                    <input id="Documento"
+                          class="p-fluid p-grid p-formgrid input-form"
+                          type="text"
+                          autocomplete="off"
+                          [maxlength]="(TipoDocumento.value=='DNI'?8:12)"
+                          (ngModelChange)="searchEstudiante($event)"
+                          formControlName="Documento"
+                          pInputText/>
+                    </div>
+                    <small *ngIf="Documento.hasError('pattern') && !Documento.hasError('required')"
+                            class="p-error">Digite un Documento <strong>válido</strong></small>
+                    <small *ngIf="Documento.hasError('required') && Documento.dirty"
+                            class="p-error">El campo Documento es <strong>requerido</strong></small>
+                </div>
               </div>
-              <div class="col-12 md:col-6">
-                <label for="Documento" class="block mb-2">{{TipoDocumento.value}}</label>
-                  <div class="p-inputgroup">
-                  <span class="p-inputgroup-addon"><i [class]="loadGetData?'pi pi-spin pi-spinner':'pi pi-id-card'"></i></span>
-                  <input id="Documento"
+              <div class="col-12">
+                  <label for="Nombres" class="block mb-2">Nombres</label>
+                  <input id="Nombres"
                         class="p-fluid p-grid p-formgrid input-form"
                         type="text"
                         autocomplete="off"
-                        [maxlength]="(TipoDocumento.value=='DNI'?8:11)"
-                        (ngModelChange)="searchEstudiante($event)"
-                        formControlName="Documento"
+                        [maxlength]="50"
+                        formControlName="Nombres"
                         pInputText/>
+                  <small *ngIf="Nombres.hasError('pattern') && !Nombres.hasError('required')"
+                          class="p-error">Digite nombres <strong>válidos</strong></small>
+                  <small *ngIf="Nombres.hasError('required') && Nombres.dirty"
+                          class="p-error">El campo nombres del estudiante es <strong>requerido</strong></small>
+              </div>
+              <div class="col-12">
+                  <label for="ApellidoPaterno" class="block mb-2">Apellido paterno</label>
+                  <input id="ApellidoPaterno"
+                        class="p-fluid p-grid p-formgrid input-form"
+                        type="text"
+                        autocomplete="off"
+                        formControlName="ApellidoPaterno"
+                        dateFormat="dd-mm-yy"
+                        pInputText/>
+                  <small *ngIf="ApellidoPaterno.hasError('pattern') && !ApellidoPaterno.hasError('required')"
+                          class="p-error">Digite un apellido paterno <strong>válido</strong></small>
+                  <small *ngIf="ApellidoPaterno.hasError('required') && ApellidoPaterno.dirty"
+                          class="p-error">El campo apellido paterno del estudiante es <strong>requerido</strong></small>
+              </div>
+              <div class="col-12">
+                  <label for="ApellidoMaterno" class="block mb-2">Apellido materno</label>
+                  <input id="ApellidoMaterno"
+                        class="p-fluid p-grid p-formgrid input-form"
+                        type="text"
+                        autocomplete="off"
+                        formControlName="ApellidoMaterno"
+                        pInputText/>
+                  <small *ngIf="ApellidoMaterno.hasError('pattern') && !ApellidoMaterno.hasError('required')"
+                          class="p-error">Digite un apellido materno <strong>válido</strong></small>
+                  <small *ngIf="ApellidoMaterno.hasError('required') && ApellidoMaterno.dirty"
+                          class="p-error">El campo apellido materno del estudiante es <strong>requerido</strong></small>
+              </div>
+              <div class="col-12">
+                <label for="Sexo" class="block mb-2">Sexo</label>
+                <p-dropdown class="p-fluid p-grid p-formgrid"
+                            placeholder="Sexo del estudiante"
+                            [options]="optionSexo"
+                            formControlName="Sexo"
+                            optionValue="code"
+                            optionLabel="name">
+                </p-dropdown>
+                <small *ngIf="Sexo.hasError('required') && Sexo.dirty"
+                      class="p-error">El sexo del estudiante del estudiante <strong>requerido</strong></small>
+              </div>
+              <div class="col-12">
+                <label for="FechaNacimiento" class="block mb-2">Fecha de nacimiento</label>
+                <div class="p-inputgroup">
+                  <span class="p-inputgroup-addon"><i class="pi pi-calendar"></i></span>
+                  <p-calendar inputId="FechaNacimiento"
+                              placeholder="DD-MM-AAAA"
+                              dateFormat="dd-mm-yy"
+                              [maxDate]="today"
+                              (ngModelChange)="validEdad($event)"
+                              class="p-fluid p-grid p-formgrid"
+                              formControlName="FechaNacimiento"></p-calendar>
+                </div>
+                <small *ngIf="FechaNacimiento.hasError('required') && FechaNacimiento.dirty"
+                        class="p-error">La fecha de nacimiento del estudiante <strong>requerido</strong></small>
+              </div>
+            </div>
+            <div class="col-12 md:col-6">
+              <div class="col-12">
+                <label for="Direccion" class="block mb-2">Dirección actual</label>
+                <div class="p-inputgroup">
+                  <span class="p-inputgroup-addon"><i class="fa-solid fa-location-dot"></i></span>
+                  <input id="Direccion"
+                        class="p-fluid p-grid p-formgrid input-form"
+                        type="text"
+                        autocomplete="off"
+                        [maxlength]="50"
+                        formControlName="Direccion"
+                        pInputText/>
+                </div>
+                <small *ngIf="Direccion.hasError('required') && Direccion.dirty"
+                        class="p-error">El campo dirección del estudiante es <strong>requerido</strong></small>
+              </div>
+              <div class="grid content">
+                <div class="col-4 md:col-4">
+                  <app-input-code [country]="country"
+                                  (selectedCountry)="selectedCountry($event)">
+                  </app-input-code>
+                </div>
+                <div class="col-8 md:col-8">
+                  <label for="Email" class="block mb-2 dot">.</label>
+                  <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="fa-brands fa-whatsapp fa-xl"></i></span>
+                    <input id="Celular"
+                          class="p-fluid p-grid p-formgrid input-form"
+                          type="text"
+                          autocomplete="off"
+                          formControlName="Celular"
+                          [maxLength]="isPeru?9:15"
+                          pInputText/>
                   </div>
-                  <small *ngIf="Documento.hasError('pattern') && !Documento.hasError('required')"
-                          class="p-error">Digite un Documento <strong>válido</strong></small>
-                  <small *ngIf="Documento.hasError('required') && Documento.dirty"
-                          class="p-error">El campo Documento es <strong>requerido</strong></small>
+                  <small *ngIf="Celular.hasError('pattern') && !Celular.hasError('required')"
+                        class="p-error">Digite un Celular <strong>válido</strong></small>
+                  <small *ngIf="Celular.hasError('required') && Celular.dirty"
+                        class="p-error">El campo Celular es <strong>requerido</strong></small>
+                </div>
               </div>
-            </div>
-            <div class="col-12">
-                <label for="Nombres" class="block mb-2">Nombres</label>
-                <input id="Nombres"
-                      class="p-fluid p-grid p-formgrid input-form"
-                      type="text"
-                      autocomplete="off"
-                      [maxlength]="50"
-                      formControlName="Nombres"
-                      pInputText/>
-                <small *ngIf="Nombres.hasError('pattern') && !Nombres.hasError('required')"
-                        class="p-error">Digite nombres <strong>válidos</strong></small>
-                <small *ngIf="Nombres.hasError('required') && Nombres.dirty"
-                        class="p-error">El campo nombres del estudiante es <strong>requerido</strong></small>
-            </div>
-            <div class="col-12">
-                <label for="ApellidoPaterno" class="block mb-2">Apellido paterno</label>
-                <input id="ApellidoPaterno"
-                      class="p-fluid p-grid p-formgrid input-form"
-                      type="text"
-                      autocomplete="off"
-                      formControlName="ApellidoPaterno"
-                      dateFormat="dd-mm-yy"
-                      pInputText/>
-                <small *ngIf="ApellidoPaterno.hasError('pattern') && !ApellidoPaterno.hasError('required')"
-                        class="p-error">Digite un apellido paterno <strong>válido</strong></small>
-                <small *ngIf="ApellidoPaterno.hasError('required') && ApellidoPaterno.dirty"
-                        class="p-error">El campo apellido paterno del estudiante es <strong>requerido</strong></small>
-            </div>
-            <div class="col-12">
-                <label for="ApellidoMaterno" class="block mb-2">Apellido materno</label>
-                <input id="ApellidoMaterno"
-                      class="p-fluid p-grid p-formgrid input-form"
-                      type="text"
-                      autocomplete="off"
-                      formControlName="ApellidoMaterno"
-                      pInputText/>
-                <small *ngIf="ApellidoMaterno.hasError('pattern') && !ApellidoMaterno.hasError('required')"
-                        class="p-error">Digite un apellido materno <strong>válido</strong></small>
-                <small *ngIf="ApellidoMaterno.hasError('required') && ApellidoMaterno.dirty"
-                        class="p-error">El campo apellido materno del estudiante es <strong>requerido</strong></small>
-            </div>
-            <div class="col-12">
-              <label for="Sexo" class="block mb-2">Sexo</label>
-              <p-dropdown class="p-fluid p-grid p-formgrid"
-                          placeholder="Sexo del estudiante"
-                          [options]="optionSexo"
-                          formControlName="Sexo"
-                          optionValue="code"
-                          optionLabel="name">
-              </p-dropdown>
-              <small *ngIf="Sexo.hasError('required') && Sexo.dirty"
-                    class="p-error">El sexo del estudiante del estudiante <strong>requerido</strong></small>
-            </div>
-            <div class="col-12">
-              <label for="FechaNacimiento" class="block mb-2">Fecha de nacimiento</label>
-              <div class="p-inputgroup">
-                <span class="p-inputgroup-addon"><i class="pi pi-calendar"></i></span>
-                <p-calendar inputId="FechaNacimiento"
-                            placeholder="DD-MM-AAAA"
-                            dateFormat="dd-mm-yy"
-                            [maxDate]="today"
-                            (ngModelChange)="validEdad($event)"
-                            class="p-fluid p-grid p-formgrid"
-                            formControlName="FechaNacimiento"></p-calendar>
+              <div class="col-12">
+                <label for="Email" class="block mb-2">Email</label>
+                <div class="p-inputgroup">
+                  <span class="p-inputgroup-addon"><i class="fa-regular fa-envelope"></i></span>
+                  <input id="Email"
+                        class="p-fluid p-grid p-formgrid"
+                        type="text"
+                        autocomplete="off"
+                        [pTooltip]="msgTooltipEmail" tooltipPosition="bottom"
+                        formControlName="Email"
+                        pInputText/>
+                </div>
+                <small *ngIf="Email.hasError('pattern') && !Email.hasError('required')"
+                    class="p-error">Digite un email <strong>válido</strong></small>
+                <small *ngIf="Email.hasError('required') && Email.dirty"
+                        class="p-error">El campo email es <strong>requerido</strong></small>
               </div>
-              <small *ngIf="FechaNacimiento.hasError('required') && FechaNacimiento.dirty"
-                      class="p-error">La fecha de nacimiento del estudiante <strong>requerido</strong></small>
+              <div *ngIf="isPeru">
+                <div class="col-12">
+                  <label for="Departamento" class="block mb-2">Departamento</label>
+                  <p-dropdown class="p-fluid p-grid p-formgrid"
+                              formControlName="Departamento"
+                              [options]="listDepartamentos"
+                              (ngModelChange)="selectedDepartamento($event)"
+                              placeholder="Departamento"
+                              optionLabel="NombreDepartamento"></p-dropdown>
+                  <small *ngIf="Departamento.hasError('required') && Departamento.dirty"
+                          class="p-error">El departamento es <strong>requerido</strong></small>
+                </div>
+                <div class="col-12">
+                  <label for="IdProvincia" class="block mb-2">Provincia</label>
+                  <p-dropdown class="p-fluid p-grid p-formgrid"
+                              formControlName="Provincia"
+                              [options]="listProvincias"
+                              placeholder="Provincia"
+                              (ngModelChange)="selectedProvincia($event)"
+                              optionLabel="NombreProvincia"></p-dropdown>
+                  <small *ngIf="Provincia.hasError('required') && Provincia.dirty"
+                          class="p-error">La pronvincia es <strong>requerida</strong></small>
+                </div>
+                <div class="col-12">
+                  <label for="Distrito" class="block mb-2">Distrito</label>
+                  <p-dropdown class="p-fluid p-grid p-formgrid"
+                              formControlName="Distrito"
+                              [options]="listDistritos"
+                              placeholder="Distrito"
+                              optionLabel="NombreDistrito"></p-dropdown>
+                  <small *ngIf="Distrito.hasError('required') && Distrito.dirty"
+                          class="p-error">El distrito es <strong>requerido</strong></small>
+                </div>
+              </div>
+              </div>
+          </div>
+          <div>
+            <br>
+            <div align="end" class="mt-2 mr-3 mb-4">
+              <button mat-raised-button matStepperNext (click)="validFormEstudent()">Siguiente</button>
             </div>
           </div>
-          <div class="col-12 md:col-6">
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="formMayorEdad">
+      <form [formGroup]="formMayorEdad">
+        <ng-template matStepLabel>Mayoria de edad</ng-template>
+        <div class="grid content">
+          <div class="col-12">
+            <label for="EsMayor" class="block mb-2">¿Usted es mayor de edad?</label>
+            <p-dropdown class="p-fluid p-grid p-formgrid"
+                        formControlName="EsMayor"
+                        [options]="optionEdad"
+                        (ngModelChange)="selecOptionEdad($event)"
+                        placeholder="Selececione"
+                        optionValue="value"
+                        optionLabel="name"></p-dropdown>
+            <small *ngIf="EsMayor.hasError('required') && EsMayor.dirty"
+                    class="p-error">El campo de mayoria de edad <strong>requerido</strong></small>
+          </div>
+          <div *ngIf="displayMayoria" class="grid content">
             <div class="col-12">
-              <label for="Direccion" class="block mb-2">Dirección actual</label>
+              <label for="DocumentoApoderado" class="block mb-2">{{TipoDocumento.value}} apoderado</label>
               <div class="p-inputgroup">
-                <span class="p-inputgroup-addon"><i class="fa-solid fa-location-dot"></i></span>
-                <input id="Direccion"
+              <span class="p-inputgroup-addon"><i [class]="loadGetApoderado?'pi pi-spin pi-spinner':'pi pi-id-card'"></i></span>
+              <input id="DocumentoApoderado"
+                    class="p-fluid p-grid p-formgrid input-form"
+                    type="text"
+                    autocomplete="off"
+                    (ngModelChange)="searchApoderado($event)"
+                    [maxlength]="isPeru?8:15"
+                    formControlName="DocumentoApoderado"
+                    pInputText/>
+              </div>
+              <small *ngIf="DocumentoApoderado.hasError('pattern') && !DocumentoApoderado.hasError('required')"
+                      class="p-error">Digite un DNI <strong>válido</strong></small>
+              <small *ngIf="DocumentoApoderado.hasError('required') && DocumentoApoderado.dirty"
+                      class="p-error">El campo DNI del apoderado es <strong>requerido</strong></small>
+            </div>
+            <div class="col-12">
+                <label for="NomApoderado" class="block mb-2">Nombres del apoderado</label>
+                <input id="NomApoderado"
                       class="p-fluid p-grid p-formgrid input-form"
                       type="text"
                       autocomplete="off"
                       [maxlength]="50"
-                      formControlName="Direccion"
+                      formControlName="NomApoderado"
                       pInputText/>
-              </div>
-              <small *ngIf="Direccion.hasError('required') && Direccion.dirty"
-                      class="p-error">El campo dirección del estudiante es <strong>requerido</strong></small>
+                <small *ngIf="NomApoderado.hasError('pattern') && !NomApoderado.hasError('required')"
+                        class="p-error">Digite nombres <strong>válidos</strong></small>
+                <small *ngIf="NomApoderado.hasError('required') && NomApoderado.dirty"
+                        class="p-error">El campo nombre apoderado es <strong>requerido</strong></small>
+            </div>
+            <div class="col-12">
+                <label for="ApellidoPApoderado" class="block mb-2">Apellido paterno del apoderado</label>
+                <input id="ApellidoPApoderado"
+                      class="p-fluid p-grid p-formgrid input-form"
+                      type="text"
+                      autocomplete="off"
+                      formControlName="ApellidoPApoderado"
+                      pInputText/>
+                <small *ngIf="ApellidoPApoderado.hasError('pattern') && !ApellidoPApoderado.hasError('required')"
+                        class="p-error">Digite un apellido paterno <strong>válido</strong></small>
+                <small *ngIf="ApellidoPApoderado.hasError('required') && ApellidoPApoderado.dirty"
+                        class="p-error">El campo apellido paterno del apoderado es <strong>requerido</strong></small>
+            </div>
+            <div class="col-12">
+                <label for="ApellidoMApoderado" class="block mb-2">Apellido materno del apoderado</label>
+                <input id="ApellidoMApoderado"
+                      class="p-fluid p-grid p-formgrid input-form"
+                      type="text"
+                      autocomplete="off"
+                      formControlName="ApellidoMApoderado"
+                      pInputText/>
+                <small *ngIf="ApellidoMApoderado.hasError('pattern') && !ApellidoMApoderado.hasError('required')"
+                        class="p-error">Digite un apellido materno <strong>válido</strong></small>
+                <small *ngIf="ApellidoMApoderado.hasError('required') && ApellidoMApoderado.dirty"
+                        class="p-error">El campo apellido materno del apoderado es <strong>requerido</strong></small>
             </div>
             <div class="grid content">
               <div class="col-4 md:col-4">
@@ -133,566 +304,408 @@
                 <label for="Email" class="block mb-2 dot">.</label>
                 <div class="p-inputgroup">
                   <span class="p-inputgroup-addon"><i class="fa-brands fa-whatsapp fa-xl"></i></span>
-                  <input id="Celular"
+                  <input id="CelApoderado"
                         class="p-fluid p-grid p-formgrid input-form"
                         type="text"
                         autocomplete="off"
-                        formControlName="Celular"
+                        formControlName="CelApoderado"
                         [maxLength]="isPeru?9:15"
                         pInputText/>
                 </div>
-                <small *ngIf="Celular.hasError('pattern') && !Celular.hasError('required')"
-                      class="p-error">Digite un Celular <strong>válido</strong></small>
-                <small *ngIf="Celular.hasError('required') && Celular.dirty"
-                      class="p-error">El campo Celular es <strong>requerido</strong></small>
+                <small *ngIf="CelApoderado.hasError('pattern') && !CelApoderado.hasError('required')"
+                  class="p-error">Digite un número de celular <strong>válido</strong></small>
+                <small *ngIf="CelApoderado.hasError('required') && CelApoderado.dirty"
+                      class="p-error">El campo celular del apoderado es <strong>requerido</strong></small>
               </div>
-            </div>
-            <div class="col-12">
-              <label for="Email" class="block mb-2">Email</label>
-              <div class="p-inputgroup">
-                <span class="p-inputgroup-addon"><i class="fa-regular fa-envelope"></i></span>
-                <input id="Email"
-                      class="p-fluid p-grid p-formgrid"
-                      type="text"
-                      autocomplete="off"
-                      [pTooltip]="msgTooltipEmail" tooltipPosition="bottom"
-                      formControlName="Email"
-                      pInputText/>
-              </div>
-              <small *ngIf="Email.hasError('pattern') && !Email.hasError('required')"
-                  class="p-error">Digite un email <strong>válido</strong></small>
-              <small *ngIf="Email.hasError('required') && Email.dirty"
-                      class="p-error">El campo email es <strong>requerido</strong></small>
-            </div>
-            <div *ngIf="isPeru">
-              <div class="col-12">
-                <label for="Departamento" class="block mb-2">Departamento</label>
-                <p-dropdown class="p-fluid p-grid p-formgrid"
-                            formControlName="Departamento"
-                            [options]="listDepartamentos"
-                            (ngModelChange)="selectedDepartamento($event)"
-                            placeholder="Departamento"
-                            optionLabel="NombreDepartamento"></p-dropdown>
-                <small *ngIf="Departamento.hasError('required') && Departamento.dirty"
-                        class="p-error">El departamento es <strong>requerido</strong></small>
-              </div>
-              <div class="col-12">
-                <label for="IdProvincia" class="block mb-2">Provincia</label>
-                <p-dropdown class="p-fluid p-grid p-formgrid"
-                            formControlName="Provincia"
-                            [options]="listProvincias"
-                            placeholder="Provincia"
-                            (ngModelChange)="selectedProvincia($event)"
-                            optionLabel="NombreProvincia"></p-dropdown>
-                <small *ngIf="Provincia.hasError('required') && Provincia.dirty"
-                        class="p-error">La pronvincia es <strong>requerida</strong></small>
-              </div>
-              <div class="col-12">
-                <label for="Distrito" class="block mb-2">Distrito</label>
-                <p-dropdown class="p-fluid p-grid p-formgrid"
-                            formControlName="Distrito"
-                            [options]="listDistritos"
-                            placeholder="Distrito"
-                            optionLabel="NombreDistrito"></p-dropdown>
-                <small *ngIf="Distrito.hasError('required') && Distrito.dirty"
-                        class="p-error">El distrito es <strong>requerido</strong></small>
-              </div>
-            </div>
-            </div>
-        </div>
-        <div>
-          <br>
-          <div align="end" class="mt-2 mr-3 mb-4">
-            <button mat-raised-button matStepperNext (click)="validFormEstudent()">Siguiente</button>
-          </div>
-        </div>
-    </form>
-  </mat-step>
-  <mat-step>
-    <form [formGroup]="formMayorEdad">
-      <ng-template matStepLabel>Mayoria de edad</ng-template>
-      <div class="grid content">
-        <div class="col-12">
-          <label for="EsMayor" class="block mb-2">¿Usted es mayor de edad?</label>
-          <p-dropdown class="p-fluid p-grid p-formgrid"
-                      formControlName="EsMayor"
-                      [options]="optionEdad"
-                      (ngModelChange)="selecOptionEdad($event)"
-                      placeholder="Selececione"
-                      optionValue="value"
-                      optionLabel="name"></p-dropdown>
-          <small *ngIf="EsMayor.hasError('required') && EsMayor.dirty"
-                  class="p-error">El campo de mayoria de edad <strong>requerido</strong></small>
-        </div>
-        <div *ngIf="displayMayoria" class="grid content">
-          <div class="col-12">
-            <label for="DocumentoApoderado" class="block mb-2">{{TipoDocumento.value}} apoderado</label>
-            <div class="p-inputgroup">
-            <span class="p-inputgroup-addon"><i [class]="loadGetApoderado?'pi pi-spin pi-spinner':'pi pi-id-card'"></i></span>
-            <input id="DocumentoApoderado"
-                  class="p-fluid p-grid p-formgrid input-form"
-                  type="text"
-                  autocomplete="off"
-                  (ngModelChange)="searchApoderado($event)"
-                  [maxlength]="isPeru?8:15"
-                  formControlName="DocumentoApoderado"
-                  pInputText/>
-            </div>
-            <small *ngIf="DocumentoApoderado.hasError('pattern') && !DocumentoApoderado.hasError('required')"
-                    class="p-error">Digite un DNI <strong>válido</strong></small>
-            <small *ngIf="DocumentoApoderado.hasError('required') && DocumentoApoderado.dirty"
-                    class="p-error">El campo DNI del apoderado es <strong>requerido</strong></small>
-          </div>
-          <div class="col-12">
-              <label for="NomApoderado" class="block mb-2">Nombres del apoderado</label>
-              <input id="NomApoderado"
-                    class="p-fluid p-grid p-formgrid input-form"
-                    type="text"
-                    autocomplete="off"
-                    [maxlength]="50"
-                    formControlName="NomApoderado"
-                    pInputText/>
-              <small *ngIf="NomApoderado.hasError('pattern') && !NomApoderado.hasError('required')"
-                      class="p-error">Digite nombres <strong>válidos</strong></small>
-              <small *ngIf="NomApoderado.hasError('required') && NomApoderado.dirty"
-                      class="p-error">El campo nombre apoderado es <strong>requerido</strong></small>
-          </div>
-          <div class="col-12">
-              <label for="ApellidoPApoderado" class="block mb-2">Apellido paterno del apoderado</label>
-              <input id="ApellidoPApoderado"
-                    class="p-fluid p-grid p-formgrid input-form"
-                    type="text"
-                    autocomplete="off"
-                    formControlName="ApellidoPApoderado"
-                    pInputText/>
-              <small *ngIf="ApellidoPApoderado.hasError('pattern') && !ApellidoPApoderado.hasError('required')"
-                      class="p-error">Digite un apellido paterno <strong>válido</strong></small>
-              <small *ngIf="ApellidoPApoderado.hasError('required') && ApellidoPApoderado.dirty"
-                      class="p-error">El campo apellido paterno del apoderado es <strong>requerido</strong></small>
-          </div>
-          <div class="col-12">
-              <label for="ApellidoMApoderado" class="block mb-2">Apellido materno del apoderado</label>
-              <input id="ApellidoMApoderado"
-                    class="p-fluid p-grid p-formgrid input-form"
-                    type="text"
-                    autocomplete="off"
-                    formControlName="ApellidoMApoderado"
-                    pInputText/>
-              <small *ngIf="ApellidoMApoderado.hasError('pattern') && !ApellidoMApoderado.hasError('required')"
-                      class="p-error">Digite un apellido materno <strong>válido</strong></small>
-              <small *ngIf="ApellidoMApoderado.hasError('required') && ApellidoMApoderado.dirty"
-                      class="p-error">El campo apellido materno del apoderado es <strong>requerido</strong></small>
-          </div>
-          <div class="grid content">
-            <div class="col-4 md:col-4">
-              <app-input-code [country]="country"
-                              (selectedCountry)="selectedCountry($event)">
-              </app-input-code>
-            </div>
-            <div class="col-8 md:col-8">
-              <label for="Email" class="block mb-2 dot">.</label>
-              <div class="p-inputgroup">
-                <span class="p-inputgroup-addon"><i class="fa-brands fa-whatsapp fa-xl"></i></span>
-                <input id="CelApoderado"
-                      class="p-fluid p-grid p-formgrid input-form"
-                      type="text"
-                      autocomplete="off"
-                      formControlName="CelApoderado"
-                      [maxLength]="isPeru?9:15"
-                      pInputText/>
-              </div>
-              <small *ngIf="CelApoderado.hasError('pattern') && !CelApoderado.hasError('required')"
-                class="p-error">Digite un número de celular <strong>válido</strong></small>
-              <small *ngIf="CelApoderado.hasError('required') && CelApoderado.dirty"
-                    class="p-error">El campo celular del apoderado es <strong>requerido</strong></small>
             </div>
           </div>
         </div>
-      </div>
-      <br>
-      <div align="end" class="mr-2 mt-2 mb-4">
-        <button mat-raised-button matStepperPrevious class="mr-2">Regresar</button>
-        <button mat-raised-button matStepperNext (click)="validFormMayoria()" [disabled]="hayError">Siguiente</button>
-      </div>
-    </form>
-  </mat-step>
-  <mat-step>
-    <form [formGroup]="formGrupo">
-      <ng-template matStepLabel>Grupo y curso</ng-template>
-      <div class="grid content">
-        <div class="col-12">
-          <div class="content-select-grupo">
-            <label for="grupo" class="block mb-2">Selecione el idioma</label>
-            <p-dropdown class="p-fluid p-grid p-formgrid"
-                        [options]="listGrupos"
-                        formControlName="grupo"
-                        placeholder="Selecione el grupo"
-                        (ngModelChange)="selectGrupo($event)">
-              <ng-template pTemplate="selectedItem">
-                <div class="grupo-item grupo-item-value" *ngIf="selecGrupo">
-                  <span class="ml-1">
-                    <img class="flag-code-country" [src]="selecGrupo.curso.UrlBandera" alt="">
-                    <span class="ml-1">{{selecGrupo.curso.NombreCurso | titlecase }} {{selecGrupo.curso.nivel.Nivel}}
-                    <p-tag severity="warning">{{selecGrupo.horario.HoraInicio | date:'h:mm a'}} - {{selecGrupo.horario.HoraFinal | date:'h:mm a'}}</p-tag></span>
-                  </span>
-                </div>
-              </ng-template>
-              <ng-template let-grupo pTemplate="item">
-                <div>
-                  <img class="flag-code-country" [src]="grupo.curso.UrlBandera" alt="">
-                  <span class="ml-1 mr-1">{{grupo.curso.NombreCurso | titlecase }} {{grupo.curso.nivel.Nivel}} - {{grupo.horario.HoraInicio | date:'h:mm a'}} a {{grupo.horario.HoraFinal | date:'h:mm a'}}</span>
-                  <p-tag severity="warning" *ngIf="!grupo.RequeridoPPago">New</p-tag>
-                </div>
-              </ng-template>
-            </p-dropdown>
-            <small *ngIf="grupo.hasError('required') && grupo.dirty"
-                    class="p-error">El campo grupo es <strong>requerido</strong></small>
-            <div *ngIf="selecGrupo">
-              <p-fieldset legend="Idioma selecionado">
-                <div class="grid content">
-                  <div class="col-12 md:col-6">
-                    <p class="mt-2"><b>Idioma</b></p>
-                    <p class="mt-1">{{selecGrupo.curso.NombreCurso | titlecase}}</p>
-                    <p class="mt-2"><b>Nivel del curso</b></p>
-                    <p class="mt-1">{{selecGrupo.curso.nivel.Nivel }}</p>
-                    <p class="mt-2"><b>Grupo</b></p>
-                    <p class="mt-1">{{selecGrupo.tipoGrupo.NombreGrupo | titlecase}}</p>
+        <br>
+        <div align="end" class="mr-2 mt-2 mb-4">
+          <button mat-raised-button matStepperPrevious class="mr-2">Regresar</button>
+          <button mat-raised-button matStepperNext (click)="validFormMayoria()" [disabled]="hayError">Siguiente</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="formGrupo">
+      <form [formGroup]="formGrupo">
+        <ng-template matStepLabel>Grupo y curso</ng-template>
+        <div class="grid content">
+          <div class="col-12">
+            <div class="content-select-grupo">
+              <label for="grupo" class="block mb-2">Selecione el idioma</label>
+              <p-dropdown class="p-fluid p-grid p-formgrid"
+                          [options]="listGrupos"
+                          formControlName="grupo"
+                          placeholder="Selecione el grupo"
+                          (ngModelChange)="selectGrupo($event)">
+                <ng-template pTemplate="selectedItem">
+                  <div class="grupo-item grupo-item-value" *ngIf="selecGrupo">
+                    <span class="ml-1">
+                      <img class="flag-code-country" [src]="selecGrupo.curso.UrlBandera" alt="">
+                      <span class="ml-1">{{selecGrupo.curso.NombreCurso | titlecase }} {{selecGrupo.curso.nivel.Nivel}}
+                      <p-tag severity="warning">{{selecGrupo.horario.HoraInicio | date:'h:mm a'}} - {{selecGrupo.horario.HoraFinal | date:'h:mm a'}}</p-tag></span>
+                    </span>
                   </div>
-                  <div class="col-12 md:col-6">
-                    <p class="mt-2"><b>Número de módulos</b></p>
-                    <p class="mt-1">{{selecGrupo.curso.NumModulos}} Módulos</p>
-                    <p class="mt-2"><b>Inicio del grupo</b></p>
-                    <p class="mt-1"><i class="fa-regular fa-calendar mr-2"></i> {{selecGrupo.FechaInicioGrupo | date:'mediumDate'}}</p>
-                    <p class="mt-2"><b>Finalización del grupo</b></p>
-                    <p class="mt-1"><i class="fa-regular fa-calendar mr-2"></i> {{ selecGrupo.FechaFinalGrupo | date:'mediumDate'}}</p>
+                </ng-template>
+                <ng-template let-grupo pTemplate="item">
+                  <div>
+                    <img class="flag-code-country" [src]="grupo.curso.UrlBandera" alt="">
+                    <span class="ml-1 mr-1">{{grupo.curso.NombreCurso | titlecase }} {{grupo.curso.nivel.Nivel}} - {{grupo.horario.HoraInicio | date:'h:mm a'}} a {{grupo.horario.HoraFinal | date:'h:mm a'}}</span>
+                    <p-tag severity="warning" *ngIf="!grupo.RequeridoPPago">New</p-tag>
                   </div>
-                </div>
-            </p-fieldset>
+                </ng-template>
+              </p-dropdown>
+              <small *ngIf="grupo.hasError('required') && grupo.dirty"
+                      class="p-error">El campo grupo es <strong>requerido</strong></small>
+              <div *ngIf="selecGrupo">
+                <p-fieldset legend="Idioma selecionado">
+                  <div class="grid content">
+                    <div class="col-12 md:col-6">
+                      <p class="mt-2"><b>Idioma</b></p>
+                      <p class="mt-1">{{selecGrupo.curso.NombreCurso | titlecase}}</p>
+                      <p class="mt-2"><b>Nivel del curso</b></p>
+                      <p class="mt-1">{{selecGrupo.curso.nivel.Nivel }}</p>
+                      <p class="mt-2"><b>Grupo</b></p>
+                      <p class="mt-1">{{selecGrupo.tipoGrupo.NombreGrupo | titlecase}}</p>
+                    </div>
+                    <div class="col-12 md:col-6">
+                      <p class="mt-2"><b>Número de módulos</b></p>
+                      <p class="mt-1">{{selecGrupo.curso.NumModulos}} Módulos</p>
+                      <p class="mt-2"><b>Inicio del grupo</b></p>
+                      <p class="mt-1"><i class="fa-regular fa-calendar mr-2"></i> {{selecGrupo.FechaInicioGrupo | date:'mediumDate'}}</p>
+                      <p class="mt-2"><b>Finalización del grupo</b></p>
+                      <p class="mt-1"><i class="fa-regular fa-calendar mr-2"></i> {{ selecGrupo.FechaFinalGrupo | date:'mediumDate'}}</p>
+                    </div>
+                  </div>
+              </p-fieldset>
 
-            </div>
-          </div>
-        </div>
-      </div>
-      <br>
-      <div align="end" class="mr-2 mt-2 mb-4">
-        <button mat-raised-button matStepperPrevious class="mr-2">Regresar</button>
-        <button mat-raised-button matStepperNext (click)="validformGrupo()">Siguiente</button>
-      </div>
-    </form>
-  </mat-step>
-  <mat-step>
-    <form [formGroup]="formAcademica">
-      <ng-template matStepLabel>Formación</ng-template>
-      <div class="grid content">
-        <div class="col-12">
-          <label for="Poblacion" class="block mb-2">Población a la que pertenece</label>
-          <p-dropdown class="p-fluid p-grid p-formgrid"
-                      formControlName="Poblacion"
-                      [options]="listDenominServicio"
-                      (ngModelChange)="selectServicio($event)"
-                      placeholder="Selececionea la población que pertenece"
-                      optionLabel="Descripcion"></p-dropdown>
-          <small *ngIf="Poblacion.hasError('required') && Poblacion.dirty"
-                  class="p-error">El campo de población de edad <strong>requerido</strong></small>
-        </div>
-        <div class="col-12">
-          <label for="NombreInstitucion" class="block mb-2">¿Eres estudiante de la UNAJMA?</label>
-          <p-dropdown class="p-fluid p-grid p-formgrid"
-                      formControlName="NombreInstitucion"
-                      [options]="optionInstitucion"
-                      (ngModelChange)="selecOptionInstitucion($event)"
-                      placeholder="Selececione"
-                      optionValue="value"
-                      optionLabel="name">
-          </p-dropdown>
-          <small *ngIf="NombreInstitucion.hasError('required') && NombreInstitucion.dirty"
-                  class="p-error">El campo institución es <strong>requerido</strong></small>
-        </div>
-        <div *ngIf="isUNAJMA" class="col-12">
-          <label for="EscuelaProfe" class="block mb-2">Escuela profesional</label>
-          <p-dropdown class="p-fluid p-grid p-formgrid"
-                      formControlName="EscuelaProfe"
-                      [options]="optionEscuelas"
-                      placeholder="Selececione"
-                      optionValue="value"
-                      optionLabel="name"></p-dropdown>
-          <small *ngIf="EscuelaProfe.hasError('required') && EscuelaProfe.dirty"
-                  class="p-error">El campo escuela profesional <strong>requerido</strong></small>
-        </div>
-        <div class="col-12">
-          <label for="DJ" class="block mb-2">Declaración jurada</label>
-          <div class="field-checkbox">
-            <p-checkbox [binary]="true" inputId="DJ" formControlName="DeclaraJurada"></p-checkbox>
-            <label for="DJ">Tengo pleno conocimiento de los requisitos estipulados en el reglamento del CEID para ser considerado como estudiante.</label>
-          </div>
-          <small *ngIf="DeclaraJurada.hasError('required') && DeclaraJurada.dirty"
-                      class="p-error">Este campo es <strong>requerido</strong></small>
-        </div>
-        <div class="col-12">
-          <label for="RT" class="block mb-2">Requisitos tecnológicos</label>
-          <div class="field-checkbox">
-            <p-checkbox [binary]="true" inputId="RT" formControlName="RequiTecnologico"></p-checkbox>
-            <label for="RT">Cuento con una laptop o computadora con acceso a internet, con cámara y micrófino.</label>
-          </div>
-          <small *ngIf="RequiTecnologico.hasError('required') && RequiTecnologico.dirty"
-                      class="p-error">Este campo es <strong>requerido</strong></small>
-        </div>
-        <div class="col-12">
-          <label for="CP" class="block mb-2">Carta de compromiso</label>
-          <div class="field-checkbox">
-            <p-checkbox [binary]="true" inputId="CP" formControlName="CarCompromiso"></p-checkbox>
-            <label for="CP">Me comprometo a realizar los pagos correspondientes según cronograma ceid,
-                            enviar los recibos de pago al correo institucional, entregar los recibos originales a la oficina del ceid,
-                            en caso de estar fuera de la provincia coordinar con la asistente administrativa del ceid y enviar al correo
-                            institucional todos los requisitos solicitados por el CEID.</label>
-          </div>
-          <small *ngIf="CarCompromiso.hasError('required') && CarCompromiso.dirty"
-                      class="p-error">Este campo es <strong>requerido</strong></small>
-        </div>
-      </div>
-      <br>
-      <div align="end" class="mr-2 mt-2 mb-4">
-        <button mat-raised-button matStepperPrevious class="mr-2">Regresar</button>
-        <button mat-raised-button matStepperNext (click)="validFormAcademica()">Siguiente</button>
-      </div>
-    </form>
-  </mat-step>
-  <mat-step>
-    <form [formGroup]="formFiles" method="post">
-      <ng-template matStepLabel>Adjuntar archivos</ng-template>
-      <div class="pl-1 pr-1 mt-2">
-        <div>
-          <p-messages [(value)]="messages" [enableService]="false" [closable]="false"></p-messages>
-        </div>
-        <p-accordion [activeIndex]="0">
-          <p-progressBar *ngIf="loadingDocumentoMatricula" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
-          <p-accordionTab header="Cargue los documentos como requisitos para su matricula">
-            <div class="col-12 md:col-12 flex justify-content-between justify-content-center align-items-center file-content">
-              <label class="block">Documentos de requisitos para su matricula</label>
-              <div class="text-center">
-                <div (click)="uploadFile.click()">
-                  <button mat-raised-button
-                          [disabled]="loadingDocumentoMatricula"
-                          class="custom-btn-file">
-                    <mat-icon>{{(fileDocumentoMatricula.value && !loadingDocumentoMatricula)?'check':'attach_file'}}</mat-icon> Elija el archivo</button>
-                  <input #uploadFile
-                         formControlName="fileDocumentoMatricula"
-                         (change)="onDocumentoMatriculaChange($event)"
-                         type='file' style="display:none"/>
-                </div>
-                <small *ngIf="fileDocumentoMatricula.hasError('required') && fileDocumentoMatricula.dirty"
-                        class="p-error">El documento de requisitos es <strong>requerido</strong></small>
               </div>
             </div>
-          </p-accordionTab>
-          <p-progressBar *ngIf="loadingFilePagoMatricula" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
-          <p-accordionTab *ngIf="selecGrupo && selecGrupo.RequeridoPPago" header="Cargue su voucher del pago de matrícula">
-            <div class="grid">
-              <div class="col-12 md:col-3">
-                <label for="MontoPagoMatricula" class="block mb-2">Monto de pago S/.</label>
-                  <p-inputNumber inputId="minmaxfraction"
-                                 mode="decimal"
-                                 class="p-fluid p-grid p-formgrid full-width"
-                                 formControlName="MontoPagoMatricula"
-                                 [min]="0"
-                                 [max]="1000"
-                                 [minFractionDigits]="2"
-                                 [maxFractionDigits]="5"></p-inputNumber>
-                <small *ngIf="MontoPagoMatricula.hasError('pattern') && !MontoPagoMatricula.hasError('required')"
-                        class="p-error">Digite un monto de pago <strong>válido</strong></small>
-                <small *ngIf="MontoPagoMatricula.hasError('required') && MontoPagoMatricula.dirty"
-                        class="p-error">El campo monto de pago es <strong>requerido</strong></small>
-              </div>
-              <div class="col-12 md:col-3">
-                <label for="NumOperacionMatricula" class="block mb-2">N° de operación <a class="tag-a" (click)="showFileExample()">Ver ejemplo</a></label>
-                <input id="NumOperacionMatricula"
-                       class="p-fluid p-grid p-formgrid full-width"
-                       type="text"
-                       placeholder="Número de operación"
-                       formControlName="NumOperacionMatricula"
-                       autocomplete="off"
-                       pInputText/>
-                <small *ngIf="NumOperacionMatricula.hasError('pattern') && !NumOperacionMatricula.hasError('required')"
-                        class="p-error">Digite un número de operación <strong>válido</strong></small>
-                <small *ngIf="NumOperacionMatricula.hasError('required') && NumOperacionMatricula.dirty"
-                        class="p-error">El campo número de operación es <strong>requerido</strong></small>
-              </div>
-              <div class="col-12 md:col-3">
-                <label for="FechaPagoMatricula" class="block mb-2">Fecha de pago</label>
-                <p-inputMask mask="99/99/9999"
-                              formControlName="FechaPagoMatricula"
-                              placeholder="DD/MM/AAAA"></p-inputMask>
-                <small *ngIf="FechaPagoMatricula.hasError('pattern') && !FechaPagoMatricula.hasError('required')"
-                        class="p-error">Digite una fecha de pago <strong>válida</strong></small>
-                <small *ngIf="FechaPagoMatricula.hasError('required') && FechaPagoMatricula.dirty"
-                        class="p-error">El campo fecha de pago es <strong>requerido</strong></small>
-              </div>
-              <div class="col-12 md:col-3">
+          </div>
+        </div>
+        <br>
+        <div align="end" class="mr-2 mt-2 mb-4">
+          <button mat-raised-button matStepperPrevious class="mr-2">Regresar</button>
+          <button mat-raised-button matStepperNext (click)="validformGrupo()">Siguiente</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="formAcademica">
+      <form [formGroup]="formAcademica">
+        <ng-template matStepLabel>Formación</ng-template>
+        <div class="grid content">
+          <div class="col-12">
+            <label for="Poblacion" class="block mb-2">Población a la que pertenece</label>
+            <p-dropdown class="p-fluid p-grid p-formgrid"
+                        formControlName="Poblacion"
+                        [options]="listDenominServicio"
+                        (ngModelChange)="selectServicio($event)"
+                        placeholder="Selececionea la población que pertenece"
+                        optionLabel="Descripcion"></p-dropdown>
+            <small *ngIf="Poblacion.hasError('required') && Poblacion.dirty"
+                    class="p-error">El campo de población de edad <strong>requerido</strong></small>
+          </div>
+          <div class="col-12">
+            <label for="NombreInstitucion" class="block mb-2">¿Eres estudiante de la UNAJMA?</label>
+            <p-dropdown class="p-fluid p-grid p-formgrid"
+                        formControlName="NombreInstitucion"
+                        [options]="optionInstitucion"
+                        (ngModelChange)="selecOptionInstitucion($event)"
+                        placeholder="Selececione"
+                        optionValue="value"
+                        optionLabel="name">
+            </p-dropdown>
+            <small *ngIf="NombreInstitucion.hasError('required') && NombreInstitucion.dirty"
+                    class="p-error">El campo institución es <strong>requerido</strong></small>
+          </div>
+          <div *ngIf="isUNAJMA" class="col-12">
+            <label for="EscuelaProfe" class="block mb-2">Escuela profesional</label>
+            <p-dropdown class="p-fluid p-grid p-formgrid"
+                        formControlName="EscuelaProfe"
+                        [options]="optionEscuelas"
+                        placeholder="Selececione"
+                        optionValue="value"
+                        optionLabel="name"></p-dropdown>
+            <small *ngIf="EscuelaProfe.hasError('required') && EscuelaProfe.dirty"
+                    class="p-error">El campo escuela profesional <strong>requerido</strong></small>
+          </div>
+          <div class="col-12">
+            <label for="DJ" class="block mb-2">Declaración jurada</label>
+            <div class="field-checkbox">
+              <p-checkbox [binary]="true" inputId="DJ" formControlName="DeclaraJurada"></p-checkbox>
+              <label for="DJ">Tengo pleno conocimiento de los requisitos estipulados en el reglamento del CEID para ser considerado como estudiante.</label>
+            </div>
+            <small *ngIf="DeclaraJurada.hasError('required') && DeclaraJurada.dirty"
+                        class="p-error">Este campo es <strong>requerido</strong></small>
+          </div>
+          <div class="col-12">
+            <label for="RT" class="block mb-2">Requisitos tecnológicos</label>
+            <div class="field-checkbox">
+              <p-checkbox [binary]="true" inputId="RT" formControlName="RequiTecnologico"></p-checkbox>
+              <label for="RT">Cuento con una laptop o computadora con acceso a internet, con cámara y micrófino.</label>
+            </div>
+            <small *ngIf="RequiTecnologico.hasError('required') && RequiTecnologico.dirty"
+                        class="p-error">Este campo es <strong>requerido</strong></small>
+          </div>
+          <div class="col-12">
+            <label for="CP" class="block mb-2">Carta de compromiso</label>
+            <div class="field-checkbox">
+              <p-checkbox [binary]="true" inputId="CP" formControlName="CarCompromiso"></p-checkbox>
+              <label for="CP">Me comprometo a realizar los pagos correspondientes según cronograma ceid,
+                              enviar los recibos de pago al correo institucional, entregar los recibos originales a la oficina del ceid,
+                              en caso de estar fuera de la provincia coordinar con la asistente administrativa del ceid y enviar al correo
+                              institucional todos los requisitos solicitados por el CEID.</label>
+            </div>
+            <small *ngIf="CarCompromiso.hasError('required') && CarCompromiso.dirty"
+                        class="p-error">Este campo es <strong>requerido</strong></small>
+          </div>
+        </div>
+        <br>
+        <div align="end" class="mr-2 mt-2 mb-4">
+          <button mat-raised-button matStepperPrevious class="mr-2">Regresar</button>
+          <button mat-raised-button matStepperNext (click)="validFormAcademica()">Siguiente</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="formFiles">
+      <form [formGroup]="formFiles" method="post">
+        <ng-template matStepLabel>Adjuntar archivos</ng-template>
+        <div class="pl-1 pr-1 mt-2">
+          <div>
+            <p-messages [(value)]="messages" [enableService]="false" [closable]="false"></p-messages>
+          </div>
+          <p-accordion [activeIndex]="0">
+            <p-progressBar *ngIf="loadingDocumentoMatricula" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+            <p-accordionTab header="Cargue los documentos como requisitos para su matricula">
+              <div class="col-12 md:col-12 flex justify-content-between justify-content-center align-items-center file-content">
+                <label class="block">Documentos de requisitos para su matricula</label>
                 <div class="text-center">
-                  <label class="block label-file">Voucher pago matrícula</label>
-                  <div>
+                  <div (click)="uploadFile.click()">
                     <button mat-raised-button
-                            [disabled]="loadingFilePagoMatricula"
-                            (click)="uploadFile.click()"
+                            [disabled]="loadingDocumentoMatricula"
                             class="custom-btn-file">
-                            <mat-icon>{{(filePagoMatricula.value && !loadingFilePagoMatricula)?'check':'attach_file'}}</mat-icon> Elija el archivo</button>
+                      <mat-icon>{{(fileDocumentoMatricula.value && !loadingDocumentoMatricula)?'check':'attach_file'}}</mat-icon> Elija el archivo</button>
                     <input #uploadFile
-                            formControlName="filePagoMatricula"
-                            (change)="onFilePagoMatriculaChange($event)"
-                            type='file' style="display:none"/>
+                           formControlName="fileDocumentoMatricula"
+                           (change)="onDocumentoMatriculaChange($event)"
+                           type='file' style="display:none"/>
                   </div>
-                  <small *ngIf="filePagoMatricula.hasError('required') && filePagoMatricula.dirty"
-                          class="p-error">El voucher de pago matrícula es <strong>requerido</strong></small>
+                  <small *ngIf="fileDocumentoMatricula.hasError('required') && fileDocumentoMatricula.dirty"
+                          class="p-error">El documento de requisitos es <strong>requerido</strong></small>
                 </div>
               </div>
-            </div>
-          </p-accordionTab>
-          <p-progressBar *ngIf="loadingFilePagoLibro" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
-          <p-accordionTab *ngIf="selecGrupo && selecGrupo.RequeridoPPago && countLibros(selecGrupo.curso.libros)!=0" header="Cargue su voucher del pago del libro">
-            <div class="grid">
-              <div class="col-12 md:col-3">
-                <label for="MontoPagoLibro" class="block mb-2">Monto de pago S/.</label>
-                  <p-inputNumber inputId="minmaxfraction"
-                                 mode="decimal"
-                                 class="p-fluid p-grid p-formgrid full-width"
-                                 formControlName="MontoPagoLibro"
-                                 [min]="0"
-                                 [max]="1000"
-                                 [minFractionDigits]="2"
-                                 [maxFractionDigits]="5"></p-inputNumber>
-                  <small *ngIf="MontoPagoLibro.hasError('pattern') && !MontoPagoLibro.hasError('required')"
+            </p-accordionTab>
+            <p-progressBar *ngIf="loadingFilePagoMatricula" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+            <p-accordionTab *ngIf="selecGrupo && selecGrupo.RequeridoPPago" header="Cargue su voucher del pago de matrícula">
+              <div class="grid">
+                <div class="col-12 md:col-3">
+                  <label for="MontoPagoMatricula" class="block mb-2">Monto de pago S/.</label>
+                    <p-inputNumber inputId="minmaxfraction"
+                                   mode="decimal"
+                                   class="p-fluid p-grid p-formgrid full-width"
+                                   formControlName="MontoPagoMatricula"
+                                   [min]="0"
+                                   [max]="1000"
+                                   [minFractionDigits]="2"
+                                   [maxFractionDigits]="5"></p-inputNumber>
+                  <small *ngIf="MontoPagoMatricula.hasError('pattern') && !MontoPagoMatricula.hasError('required')"
                           class="p-error">Digite un monto de pago <strong>válido</strong></small>
-                  <small *ngIf="MontoPagoLibro.hasError('required') && MontoPagoLibro.dirty"
+                  <small *ngIf="MontoPagoMatricula.hasError('required') && MontoPagoMatricula.dirty"
                           class="p-error">El campo monto de pago es <strong>requerido</strong></small>
-              </div>
-              <div class="col-12 md:col-3">
-                <div class="">
-                  <label for="NumOperacionLibro" class="block mb-2">Número de operación</label>
-                  <input id="NumOperacionLibro"
-                        class="p-fluid p-grid p-formgrid full-width"
-                        type="text"
-                        placeholder="Número de operación"
-                        formControlName="NumOperacionLibro"
-                        autocomplete="off"
-                        pInputText/>
-                  <small *ngIf="NumOperacionLibro.hasError('pattern') && !NumOperacionLibro.hasError('required')"
-                  class="p-error">Digite un número de operación <strong>válido</strong></small>
-                  <small *ngIf="NumOperacionLibro.hasError('required') && NumOperacionLibro.dirty"
-                          class="p-error">El campo número de operación es <strong>requerido</strong></small>
                 </div>
-              </div>
-              <div class="col-12 md:col-3">
-                <div class="">
-                  <label for="FechaPagoLibro" class="block mb-2">Fecha de pago</label>
-                  <p-inputMask mask="99/99/9999"
-                               formControlName="FechaPagoLibro"
-                               placeholder="DD/MM/AAAA"></p-inputMask>
-                  <small *ngIf="FechaPagoLibro.hasError('pattern') && !FechaPagoLibro.hasError('required')"
-                          class="p-error">Digite una fecha de pago <strong>válida</strong></small>
-                  <small *ngIf="FechaPagoLibro.hasError('required') && FechaPagoLibro.dirty"
-                          class="p-error">El campo fecha de pago es <strong>requerido</strong></small>
-                </div>
-              </div>
-              <div class="col-12 md:col-3">
-                <div class="text-center">
-                  <label class="block label-file">Voucher pago libro</label>
-                  <div>
-                    <button mat-raised-button
-                            [disabled]="loadingFilePagoLibro"
-                            (click)="uploadFile.click()"
-                            class="custom-btn-file">
-                            <mat-icon>{{(filePagoLibro.value && !loadingFilePagoLibro)?'check':'attach_file'}}</mat-icon> Elija el archivo</button>
-                    <input #uploadFile
-                            formControlName="filePagoLibro"
-                            (change)="onFilePagoLibroChange($event)"
-                            type='file' style="display:none"/>
-                  </div>
-                  <small *ngIf="filePagoLibro.hasError('required') && filePagoLibro.dirty"
-                          class="p-error">El voucher del pago del libro es <strong>requerido</strong></small>
-                </div>
-              </div>
-            </div>
-          </p-accordionTab>
-          <p-progressBar *ngIf="loadingFilePagoMensualidad" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
-          <p-accordionTab *ngIf="selecGrupo && selecGrupo.RequeridoPPago" header="Cargue su voucher del pago de su primera mensualidad">
-            <div class="grid">
-              <div class="col-12 md:col-3">
-                <label for="MontoPagoMensualidad" class="block mb-2">Monto de pago S/.</label>
-                  <p-inputNumber inputId="minmaxfraction"
-                                 mode="decimal"
-                                 class="p-fluid p-grid p-formgrid full-width"
-                                 formControlName="MontoPagoMensualidad"
-                                 [min]="0"
-                                 [max]="1000"
-                                 [minFractionDigits]="2"
-                                 [maxFractionDigits]="5"></p-inputNumber>
-                  <small *ngIf="MontoPagoMensualidad.hasError('pattern') && !MontoPagoMensualidad.hasError('required')"
-                          class="p-error">Digite un monto de pago <strong>válido</strong></small>
-                  <small *ngIf="MontoPagoMensualidad.hasError('required') && MontoPagoMensualidad.dirty"
-                          class="p-error">El campo monto de pago es <strong>requerido</strong></small>
-              </div>
-              <div class="col-12 md:col-3">
-                <div class="">
-                  <label for="NumOperacionMensualidad" class="block mb-2">Número de operación</label>
-                  <input id="NumOperacionMensualidad"
+                <div class="col-12 md:col-3">
+                  <label for="NumOperacionMatricula" class="block mb-2">N° de operación <a class="tag-a" (click)="showFileExample()">Ver ejemplo</a></label>
+                  <input id="NumOperacionMatricula"
                          class="p-fluid p-grid p-formgrid full-width"
                          type="text"
                          placeholder="Número de operación"
-                         formControlName="NumOperacionMensualidad"
+                         formControlName="NumOperacionMatricula"
                          autocomplete="off"
                          pInputText/>
-                  <small *ngIf="NumOperacionMensualidad.hasError('pattern') && !NumOperacionMensualidad.hasError('required')"
+                  <small *ngIf="NumOperacionMatricula.hasError('pattern') && !NumOperacionMatricula.hasError('required')"
                           class="p-error">Digite un número de operación <strong>válido</strong></small>
-                  <small *ngIf="NumOperacionMensualidad.hasError('required') && NumOperacionMensualidad.dirty"
+                  <small *ngIf="NumOperacionMatricula.hasError('required') && NumOperacionMatricula.dirty"
                           class="p-error">El campo número de operación es <strong>requerido</strong></small>
                 </div>
-              </div>
-              <div class="col-12 md:col-3">
-                <div class="">
-                  <label for="FechaPagoMensualidad" class="block mb-2">Fecha de pago</label>
+                <div class="col-12 md:col-3">
+                  <label for="FechaPagoMatricula" class="block mb-2">Fecha de pago</label>
                   <p-inputMask mask="99/99/9999"
-                               formControlName="FechaPagoMensualidad"
-                               placeholder="DD/MM/AAAA"></p-inputMask>
-                  <small *ngIf="FechaPagoMensualidad.hasError('pattern') && !FechaPagoMensualidad.hasError('required')"
+                                formControlName="FechaPagoMatricula"
+                                placeholder="DD/MM/AAAA"></p-inputMask>
+                  <small *ngIf="FechaPagoMatricula.hasError('pattern') && !FechaPagoMatricula.hasError('required')"
                           class="p-error">Digite una fecha de pago <strong>válida</strong></small>
-                  <small *ngIf="FechaPagoMensualidad.hasError('required') && FechaPagoMensualidad.dirty"
+                  <small *ngIf="FechaPagoMatricula.hasError('required') && FechaPagoMatricula.dirty"
                           class="p-error">El campo fecha de pago es <strong>requerido</strong></small>
                 </div>
-              </div>
-              <div class="col-12 md:col-3">
-                <div class="text-center">
-                  <label class="block label-file">Voucher pago mensualidad</label>
-                  <div>
-                    <button mat-raised-button
-                            [disabled]="loadingFilePagoMensualidad"
-                            (click)="uploadFile.click()"
-                            class="custom-btn-file">
-                            <mat-icon>{{(filePagoMensualidad.value && !loadingFilePagoMensualidad)?'check':'attach_file'}}</mat-icon> Elija el archivo</button>
-                    <input #uploadFile
-                            formControlName="filePagoMensualidad"
-                            (change)="onFilePagoMensualidadChange($event)"
-                            type='file' style="display:none"/>
+                <div class="col-12 md:col-3">
+                  <div class="text-center">
+                    <label class="block label-file">Voucher pago matrícula</label>
+                    <div>
+                      <button mat-raised-button
+                              [disabled]="loadingFilePagoMatricula"
+                              (click)="uploadFile.click()"
+                              class="custom-btn-file">
+                              <mat-icon>{{(filePagoMatricula.value && !loadingFilePagoMatricula)?'check':'attach_file'}}</mat-icon> Elija el archivo</button>
+                      <input #uploadFile
+                              formControlName="filePagoMatricula"
+                              (change)="onFilePagoMatriculaChange($event)"
+                              type='file' style="display:none"/>
+                    </div>
+                    <small *ngIf="filePagoMatricula.hasError('required') && filePagoMatricula.dirty"
+                            class="p-error">El voucher de pago matrícula es <strong>requerido</strong></small>
                   </div>
-                  <small *ngIf="filePagoMensualidad.hasError('required') && filePagoMensualidad.dirty"
-                          class="p-error">El voucher del pago de mensualidad es <strong>requerido</strong></small>
                 </div>
               </div>
-            </div>
-          </p-accordionTab>
-        </p-accordion>
-      </div>
-      <br>
-      <div align="end" class="mr-2 mt-2 mb-4">
-        <button mat-raised-button matStepperPrevious class="mr-2">Regresar</button>
-        <button mat-raised-button
-                (click)="ready()"
-                [disabled]="loadingDocumentoMatricula  ||
-                            loadingFilePagoLibro       ||
-                            loadingFilePagoMatricula   ||
-                            loadingFilePagoMensualidad ||
-                            loadingSave">guardar</button>
-      </div>
-    </form>
-  </mat-step>
-</mat-stepper>
+            </p-accordionTab>
+            <p-progressBar *ngIf="loadingFilePagoLibro" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+            <p-accordionTab *ngIf="selecGrupo && selecGrupo.RequeridoPPago && countLibros(selecGrupo.curso.libros)!=0" header="Cargue su voucher del pago del libro">
+              <div class="grid">
+                <div class="col-12 md:col-3">
+                  <label for="MontoPagoLibro" class="block mb-2">Monto de pago S/.</label>
+                    <p-inputNumber inputId="minmaxfraction"
+                                   mode="decimal"
+                                   class="p-fluid p-grid p-formgrid full-width"
+                                   formControlName="MontoPagoLibro"
+                                   [min]="0"
+                                   [max]="1000"
+                                   [minFractionDigits]="2"
+                                   [maxFractionDigits]="5"></p-inputNumber>
+                    <small *ngIf="MontoPagoLibro.hasError('pattern') && !MontoPagoLibro.hasError('required')"
+                            class="p-error">Digite un monto de pago <strong>válido</strong></small>
+                    <small *ngIf="MontoPagoLibro.hasError('required') && MontoPagoLibro.dirty"
+                            class="p-error">El campo monto de pago es <strong>requerido</strong></small>
+                </div>
+                <div class="col-12 md:col-3">
+                  <div class="">
+                    <label for="NumOperacionLibro" class="block mb-2">Número de operación</label>
+                    <input id="NumOperacionLibro"
+                          class="p-fluid p-grid p-formgrid full-width"
+                          type="text"
+                          placeholder="Número de operación"
+                          formControlName="NumOperacionLibro"
+                          autocomplete="off"
+                          pInputText/>
+                    <small *ngIf="NumOperacionLibro.hasError('pattern') && !NumOperacionLibro.hasError('required')"
+                    class="p-error">Digite un número de operación <strong>válido</strong></small>
+                    <small *ngIf="NumOperacionLibro.hasError('required') && NumOperacionLibro.dirty"
+                            class="p-error">El campo número de operación es <strong>requerido</strong></small>
+                  </div>
+                </div>
+                <div class="col-12 md:col-3">
+                  <div class="">
+                    <label for="FechaPagoLibro" class="block mb-2">Fecha de pago</label>
+                    <p-inputMask mask="99/99/9999"
+                                 formControlName="FechaPagoLibro"
+                                 placeholder="DD/MM/AAAA"></p-inputMask>
+                    <small *ngIf="FechaPagoLibro.hasError('pattern') && !FechaPagoLibro.hasError('required')"
+                            class="p-error">Digite una fecha de pago <strong>válida</strong></small>
+                    <small *ngIf="FechaPagoLibro.hasError('required') && FechaPagoLibro.dirty"
+                            class="p-error">El campo fecha de pago es <strong>requerido</strong></small>
+                  </div>
+                </div>
+                <div class="col-12 md:col-3">
+                  <div class="text-center">
+                    <label class="block label-file">Voucher pago libro</label>
+                    <div>
+                      <button mat-raised-button
+                              [disabled]="loadingFilePagoLibro"
+                              (click)="uploadFile.click()"
+                              class="custom-btn-file">
+                              <mat-icon>{{(filePagoLibro.value && !loadingFilePagoLibro)?'check':'attach_file'}}</mat-icon> Elija el archivo</button>
+                      <input #uploadFile
+                              formControlName="filePagoLibro"
+                              (change)="onFilePagoLibroChange($event)"
+                              type='file' style="display:none"/>
+                    </div>
+                    <small *ngIf="filePagoLibro.hasError('required') && filePagoLibro.dirty"
+                            class="p-error">El voucher del pago del libro es <strong>requerido</strong></small>
+                  </div>
+                </div>
+              </div>
+            </p-accordionTab>
+            <p-progressBar *ngIf="loadingFilePagoMensualidad" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+            <p-accordionTab *ngIf="selecGrupo && selecGrupo.RequeridoPPago" header="Cargue su voucher del pago de su primera mensualidad">
+              <div class="grid">
+                <div class="col-12 md:col-3">
+                  <label for="MontoPagoMensualidad" class="block mb-2">Monto de pago S/.</label>
+                    <p-inputNumber inputId="minmaxfraction"
+                                   mode="decimal"
+                                   class="p-fluid p-grid p-formgrid full-width"
+                                   formControlName="MontoPagoMensualidad"
+                                   [min]="0"
+                                   [max]="1000"
+                                   [minFractionDigits]="2"
+                                   [maxFractionDigits]="5"></p-inputNumber>
+                    <small *ngIf="MontoPagoMensualidad.hasError('pattern') && !MontoPagoMensualidad.hasError('required')"
+                            class="p-error">Digite un monto de pago <strong>válido</strong></small>
+                    <small *ngIf="MontoPagoMensualidad.hasError('required') && MontoPagoMensualidad.dirty"
+                            class="p-error">El campo monto de pago es <strong>requerido</strong></small>
+                </div>
+                <div class="col-12 md:col-3">
+                  <div class="">
+                    <label for="NumOperacionMensualidad" class="block mb-2">Número de operación</label>
+                    <input id="NumOperacionMensualidad"
+                           class="p-fluid p-grid p-formgrid full-width"
+                           type="text"
+                           placeholder="Número de operación"
+                           formControlName="NumOperacionMensualidad"
+                           autocomplete="off"
+                           pInputText/>
+                    <small *ngIf="NumOperacionMensualidad.hasError('pattern') && !NumOperacionMensualidad.hasError('required')"
+                            class="p-error">Digite un número de operación <strong>válido</strong></small>
+                    <small *ngIf="NumOperacionMensualidad.hasError('required') && NumOperacionMensualidad.dirty"
+                            class="p-error">El campo número de operación es <strong>requerido</strong></small>
+                  </div>
+                </div>
+                <div class="col-12 md:col-3">
+                  <div class="">
+                    <label for="FechaPagoMensualidad" class="block mb-2">Fecha de pago</label>
+                    <p-inputMask mask="99/99/9999"
+                                 formControlName="FechaPagoMensualidad"
+                                 placeholder="DD/MM/AAAA"></p-inputMask>
+                    <small *ngIf="FechaPagoMensualidad.hasError('pattern') && !FechaPagoMensualidad.hasError('required')"
+                            class="p-error">Digite una fecha de pago <strong>válida</strong></small>
+                    <small *ngIf="FechaPagoMensualidad.hasError('required') && FechaPagoMensualidad.dirty"
+                            class="p-error">El campo fecha de pago es <strong>requerido</strong></small>
+                  </div>
+                </div>
+                <div class="col-12 md:col-3">
+                  <div class="text-center">
+                    <label class="block label-file">Voucher pago mensualidad</label>
+                    <div>
+                      <button mat-raised-button
+                              [disabled]="loadingFilePagoMensualidad"
+                              (click)="uploadFile.click()"
+                              class="custom-btn-file">
+                              <mat-icon>{{(filePagoMensualidad.value && !loadingFilePagoMensualidad)?'check':'attach_file'}}</mat-icon> Elija el archivo</button>
+                      <input #uploadFile
+                              formControlName="filePagoMensualidad"
+                              (change)="onFilePagoMensualidadChange($event)"
+                              type='file' style="display:none"/>
+                    </div>
+                    <small *ngIf="filePagoMensualidad.hasError('required') && filePagoMensualidad.dirty"
+                            class="p-error">El voucher del pago de mensualidad es <strong>requerido</strong></small>
+                  </div>
+                </div>
+              </div>
+            </p-accordionTab>
+          </p-accordion>
+        </div>
+        <br>
+        <div align="end" class="mr-2 mt-2 mb-4">
+          <button mat-raised-button matStepperPrevious class="mr-2">Regresar</button>
+          <button mat-raised-button
+                  (click)="ready()"
+                  [disabled]="loadingDocumentoMatricula  ||
+                              loadingFilePagoLibro       ||
+                              loadingFilePagoMatricula   ||
+                              loadingFilePagoMensualidad ||
+                              loadingSave">guardar</button>
+        </div>
+      </form>
+    </mat-step>
+  </mat-stepper>
+</ng-template>
+
 <!-- <app-show-file fileURL="https://drive.google.com/file/d/1A8mF2DQrgSPsVmgDzbWH03BmmNHhfAi1/view?usp=sharing"></app-show-file> -->

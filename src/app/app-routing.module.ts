@@ -4,6 +4,11 @@ import { UnauthorizedPageComponent } from './pages/unauthorized-page/unauthorize
 
 const routes: Routes = [
   {
+    path:'',
+    redirectTo:'main/home',
+    pathMatch:'full'
+  },
+  {
     path:'main',
     loadChildren: () => import('./landing-page/landing-page.module').then( mod => mod.LandingPageModule )
   },
@@ -12,10 +17,14 @@ const routes: Routes = [
     loadChildren: () => import('./main/main.module').then( mod => mod.MainModule )
   },
   {
+    path:'auth',
+    loadChildren: () => import('./auth/auth.module').then( mod => mod.AuthModule )
+  },
+  {
     path:'unauthorized-page', component:UnauthorizedPageComponent
   },
   {
-    path:'**', redirectTo:'main'
+    path:'**', redirectTo:'main/home'
   }
 ];
 

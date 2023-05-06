@@ -36,7 +36,9 @@
     class="p-error">La contraseña es <strong>requerida</strong></small>
   </div>
   <div class="mb-3">
-    <p-inputSwitch aria-checked="false" title="recordad usuario"></p-inputSwitch> <span class="m-2">Recordar usuario</span>
+    <p-inputSwitch aria-checked="false"
+                   formControlName="RememberUser"
+                   title="recordar usuario"></p-inputSwitch><span class="m-2">Recordar usuario</span>
   </div>
   <p-messages [(value)]="msg"></p-messages>
   <p-toast [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'"></p-toast>

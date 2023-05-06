@@ -6,7 +6,7 @@ import { HttpClient } from "@angular/common/http";
 import { Grupo, ResGrupo, ResTipoGrupo } from '../class/Grupo';
 import { SocketService } from 'src/app/services/socket.service';
 import { UnAuthorizedService } from 'src/app/services/unauthorized.service';
-import { ResEstudianteEnGrupo } from '../class/EstudianteGrupo';
+import { ResEstadoEstudEnGrupo, ResEstudianteEnGrupo } from '../class/EstudianteGrupo';
 import { Pago, ResPago } from '../class/Pago';
 import { ResEstadoGrupo } from '../class/EstadoGrupo';
 
@@ -74,8 +74,8 @@ export class GrupoService{
     return this.http.get<ResHorario>(`${this.BASE_URL}/horario/get-horarios`);
   }
 
-  getEstudiantesEnGrupoEspecifico(Id:number, limit:number = 5, offset:number = 0):Observable<ResEstudianteEnGrupo>{
-    return this.http.get<ResEstudianteEnGrupo>(`${this.BASE_URL}/estudiante-en-grupo/get-estudiantes-en-grupo-especifico/${Id}?limit=${limit}&offset=${offset}`);
+  getEstudiantesEnGrupoEspecifico(Id:string, limit:number = 5, offset:number = 0):Observable<ResEstadoEstudEnGrupo>{
+    return this.http.get<ResEstadoEstudEnGrupo>(`${this.BASE_URL}/estudiante-en-grupo/get-estudiantes-en-grupo-especifico/${Id}?limit=${limit}&offset=${offset}`);
   }
 
   updatePago(id:string, pago:Pago):Observable<ResPago>{
@@ -101,7 +101,6 @@ export class GrupoService{
     this.listGrupos$ = this.getAllGrupos(limit, offset).subscribe({
       next: (value) => {
         this.loadingLista = false;
-        console.log(value)
         if(!value.ok) return;
         this.respGrupo = value;
         this.listGrupos = value.data as Array<Grupo>;

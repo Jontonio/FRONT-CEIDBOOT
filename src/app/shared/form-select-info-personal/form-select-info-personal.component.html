@@ -1,0 +1,35 @@
+<form [formGroup]="formDocumento">
+  <div class="grid content">
+    <div class="grid content">
+      <div class="col-12 md:col-6">
+        <label for="usuario" class="block mb-2">Tipo documento</label>
+        <p-dropdown class="p-fluid p-grid p-formgrid"
+                    [options]="card"
+                    formControlName="TipoDocumento"
+                    (ngModelChange)="changeCard($event)"
+                    optionValue="code"
+                    optionLabel="name">
+                </p-dropdown>
+        <small *ngIf="TipoDocumento.hasError('required') && TipoDocumento.dirty"
+              class="p-error">El tipo de documento es <strong>requerido</strong></small>
+      </div>
+      <div class="col-12 md:col-6">
+        <label for="Documento" class="block mb-2">{{TipoDocumento.value}}</label>
+          <div class="p-inputgroup">
+          <span class="p-inputgroup-addon"><i [class]="loadGetData?'pi pi-spin pi-spinner':'pi pi-id-card'"></i></span>
+          <input id="Documento"
+                class="p-fluid p-grid p-formgrid input-form"
+                type="text"
+                autocomplete="off"
+                [maxlength]="(TipoDocumento.value=='DNI'?8:12)"
+                formControlName="Documento"
+                pInputText/>
+          </div>
+          <small *ngIf="Documento.hasError('pattern') && !Documento.hasError('required')"
+                  class="p-error">Digite un Documento <strong>válido</strong></small>
+          <small *ngIf="Documento.hasError('required') && Documento.dirty"
+                  class="p-error">El campo Documento es <strong>requerido</strong></small>
+      </div>
+    </div>
+  </div>
+</form>

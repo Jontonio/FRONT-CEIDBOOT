@@ -16,6 +16,11 @@ import { NgxSpinnerModule } from "ngx-spinner";
 import { SafeUrlPipe } from '../pipes/safe-url.pipe';
 import { IframeFileComponent } from './iframe-file/iframe-file.component';
 import { NoteMessageComponent } from './note-message/note-message.component';
+import { FormInfoPersonalComponent } from './form-info-personal/form-info-personal.component';
+import { FormSelectIdiomaComponent } from './form-select-idioma/form-select-idioma.component';
+import { FormAdjuntarArchivoComponent } from './form-adjuntar-archivo/form-adjuntar-archivo.component';
+import { FormTipoTramiteComponent } from './form-tipo-tramite/form-tipo-tramite.component';
+import { FormSelectInfoPersonalComponent } from './form-select-info-personal/form-select-info-personal.component';
 
 
 @NgModule({
@@ -32,6 +37,11 @@ import { NoteMessageComponent } from './note-message/note-message.component';
     ShowFileComponent,
     IframeFileComponent,
     NoteMessageComponent,
+    FormInfoPersonalComponent,
+    FormSelectIdiomaComponent,
+    FormAdjuntarArchivoComponent,
+    FormTipoTramiteComponent,
+    FormSelectInfoPersonalComponent
   ],
   imports: [
     CommonModule,
@@ -50,7 +60,12 @@ import { NoteMessageComponent } from './note-message/note-message.component';
     FormMatriculaComponent,
     ShowFileComponent,
     IframeFileComponent,
-    NoteMessageComponent
+    NoteMessageComponent,
+    FormInfoPersonalComponent,
+    FormSelectIdiomaComponent,
+    FormAdjuntarArchivoComponent,
+    FormTipoTramiteComponent,
+    FormSelectInfoPersonalComponent
   ]
 })
 export class SharedModule { }

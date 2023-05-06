@@ -15,15 +15,14 @@ export class SocketService {
     return this.socket.fromEvent(event);
   }
 
-  EmitEvent(nameEvent:string){
-    this.socket.emit(nameEvent);
+  EmitEvent(nameEvent:string, payload?:any){
+    this.socket.emit(nameEvent, payload);
   }
 
   Onconexion(){
      // verificar si se conecto al servidor el cliente
      this.socket.on('connect', () => {
       this.statusServer = true;
-      console.log("Connect from front");
     })
 
     // verificar si el cliente desconecto

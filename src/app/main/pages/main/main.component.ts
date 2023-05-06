@@ -29,9 +29,9 @@ export class MainComponent implements OnInit {
   /** representa la cuenta regresiva del modal */
   contador:number = 20;
   /** representa el tiempo en segundos de intervalo permitido de inactividad en el sistema
-  * 240s representa 10 min de holgura
+  * 1800s representa 30 min de holgura
   */
-  tiempo:number = 600;
+  tiempo:number = 1800;
   countdown?: number;
   lastPing?: Date;
 
@@ -114,7 +114,7 @@ export class MainComponent implements OnInit {
   }
 
   resetAuth(){
-    if(this._auth.readToken()) this._auth.deleteToken();
+    if(this._auth.readStorage('token')) this._auth.deleteStorage('token');
     this.modeTheme(false, false);
     this._unAuth.showModalAuth = false;
     this.route.navigate(['/main/auth/login']);

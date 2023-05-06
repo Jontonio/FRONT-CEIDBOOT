@@ -10,7 +10,7 @@ import { AuthService } from 'src/app/auth/services/auth.service';
   styleUrls: ['./form-login.component.scss'],
   providers:[MessageService]
 })
-export class FormLoginComponent {
+export class FormLoginComponent implements OnInit {
 
   formLogin:FormGroup;
   loading:boolean = false;
@@ -22,22 +22,45 @@ export class FormLoginComponent {
     this.createForm();
   }
 
+  ngOnInit(): void {
+    const storageEmail = this._auth.getStorage('user');
+    if(storageEmail){
+      this.Email.setValue( storageEmail )
+      this.RememberUser.setValue(true);
+    }
+  }
+
   createForm(){
     this.formLogin = this.fb.group({
-      Email:['joseantoniorojas999@gmail.com', [Validators.required, Validators.email ]],
-      Password:['6Jarcjose7@', Validators.required]
+      Email:[null, [Validators.required, Validators.email ]],
+      Password:[null, Validators.required],
+      RememberUser:[null]
     })
   }
 
+  /* A getters. It is a way to access the value of the form control. */
+  get Email(){
+    return this.formLogin.controls['Email'];
+  }
+  get Password(){
+    return this.formLogin.controls['Password'];
+  }
+  get RememberUser(){
+    return this.formLogin.controls['RememberUser'];
+  }
+
   login(){
-
+    /** verificamos los inputs del formulario */
     if(this.formLogin.invalid){
-      Object.keys(this.formLogin.controls).forEach( input =>{
-        this.formLogin.controls[input].markAsDirty()
-      })
+      Object.keys(this.formLogin.controls).forEach( input => this.formLogin.controls[input].markAsDirty())
       return
-    };
-
+    }
+    /** guardar usario si lo requiere */
+    if(this.RememberUser.value){
+      /** guardar localstorage user */
+      this._auth.saveStorage('user', this.Email.value)
+    }
+    /** consume la api para la authenticación */
     this.loading = true;
     this._auth.login(this.formLogin.value).subscribe({
       next: (res) => {
@@ -47,21 +70,16 @@ export class FormLoginComponent {
             this.message('error','',res.msg);
             return;
           }
-          this._auth.saveToken(res.token);
-          this.route.navigate(['/system/dashboard']);
+          this._auth.saveStorage('token',res.token);
+          this.route.navigate(['/system/welcome']);
         },300)
       },
-      error: (err) => console.log(err)
+      error: (e) => {
+        this.loading = false;
+        console.log(e)
+      }
     })
 
-  }
-
-  /* A getters. It is a way to access the value of the form control. */
-  get Email(){
-    return this.formLogin.controls['Email'];
-  }
-  get Password(){
-    return this.formLogin.controls['Password'];
   }
 
   message(type:string, summary:string='', message:string){

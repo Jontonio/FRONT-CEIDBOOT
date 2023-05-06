@@ -4,16 +4,16 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ResPerson } from '../class/Person';
 import { ResCurso } from '../main/curso/class/Curso';
-import { ResHorario } from '../main/grupo/class/Horario';
 import { ResDenominServicio } from '../denomin-servicio/class/Denomin-servicio';
-import { Matricula, ResMatricula } from '../main/matricula/class/Matricula';
+import { Matricula } from '../main/matricula/class/Matricula';
 import { ResApoderado } from '../main/matricula/class/Apoderado';
-import { EmailDocumento, ResEmailDocEstudiante, ResEstudiante } from '../main/matricula/class/Estudiante';
+import { EmailDocumento, RequestDocumento, ResEmailDocEstudiante, ResEstudiante } from '../main/matricula/class/Estudiante';
 import { ResGrupo } from '../main/grupo/class/Grupo';
 import { EstudianteEnGrupo, ResEstudianteEnGrupo } from '../main/grupo/class/EstudianteGrupo';
 import { FileDrive } from '../main/class/global';
 import { Pago, ResPago } from '../main/grupo/class/Pago';
 import { ResCategoriaPago } from '../main/grupo/class/CategoriaPago';
+import { ResTipoTramite } from '../main/class/TipoTramite';
 
 @Injectable({
   providedIn: 'root'
@@ -56,12 +56,16 @@ export class GlobalService {
     return this.http.post<ResPerson>(`${environment.BASE_URL}/usuario/usuario-reniec`, { DNI } );
   }
 
-  getEstudiante(DNI:string):Observable<ResEstudiante>{
-    return this.http.get<ResEstudiante>(`${environment.BASE_URL}/estudiante/get-estudiante-by-documento/${DNI}`);
+  getEstudiante(data:RequestDocumento):Observable<ResEstudiante>{
+    return this.http.post<ResEstudiante>(`${environment.BASE_URL}/estudiante/get-estudiante-by-documento`, data);
   }
 
   getGruposMatricula():Observable<ResGrupo>{
     return this.http.get<ResGrupo>(`${environment.BASE_URL}/grupo/get-grupos-matricula`);
+  }
+
+  getCursosInscripcion():Observable<ResCurso>{
+    return this.http.get<ResCurso>(`${environment.BASE_URL}/curso/get-cursos-inscripcion`);
   }
 
   getDenominacionServicios():Observable<ResDenominServicio>{
@@ -80,6 +84,10 @@ export class GlobalService {
     return this.http.get<ResCategoriaPago>(`${environment.BASE_URL}/categoria-pago/get-all-categoria-pago`);
   }
 
+  getTiposTramites():Observable<ResTipoTramite>{
+    return this.http.get<ResTipoTramite>(`${environment.BASE_URL}/tipo-tramite/get-list-register`);
+  }
+
   consultaEstudianteGrupo(data:any):Observable<ResEstudianteEnGrupo>{
     return this.http.post<ResEstudianteEnGrupo>(`${environment.BASE_URL}/estudiante-en-grupo/consulta-estudiante-en-grupo`, data);
   }
@@ -89,7 +97,7 @@ export class GlobalService {
   }
 
   registerPrematricula(data:Matricula):Observable<ResEstudianteEnGrupo>{
-    return this.http.post<ResEstudianteEnGrupo>(`${environment.BASE_URL}/matricula/matricular-estudiante`, data);
+    return this.http.post<ResEstudianteEnGrupo>(`${environment.BASE_URL}/matricula/prematricula-estudiante`, data);
   }
 
   uploadFile(data:FormData):Observable<FileDrive>{

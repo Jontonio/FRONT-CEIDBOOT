@@ -202,7 +202,6 @@ export class PagosComponent {
     this._global.consultaEstudianteGrupo(this.formBusqueda.value).subscribe({
       next: (value) => {
         this.loading = false;
-        console.log(value)
         if(value.ok){
           this.toast('success',value.msg);
           this.resEstudianteEnGrupo = value;

@@ -13,6 +13,7 @@ import { SharedModule } from '../shared/shared.module';
 import { MaterialModule } from '../material/material.module';
 import { ShowForRolesDirective } from './directive/show-for-roles.directive';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { WelcomeComponent } from './pages/welcome/welcome.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     MenuComponent,
     DescripcionPipe,
     ShowForRolesDirective,
+    WelcomeComponent,
   ],
   imports: [
     CommonModule,

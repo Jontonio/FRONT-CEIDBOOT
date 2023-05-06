@@ -1,0 +1,125 @@
+<form [formGroup]="formFiles">
+  <div class="">
+    <p-messages key="message-file-examen-suf"></p-messages>
+    <div>
+      <p-messages [(value)]="messages"
+      [enableService]="false"
+      [closable]="true"></p-messages>
+    </div>
+    <p-accordion>
+      <p-progressBar *ngIf="loadingDocumento"
+                      mode="indeterminate"
+                      [style]="{'height': '6px'}"></p-progressBar>
+      <p-accordionTab header="Cargue los requisitos de su trámite" [disabled]="disableOption">
+        <div class="col-12 md:col-12 flex justify-content-between justify-content-center align-items-center file-content">
+          <label class="block">Requisitos del trámite</label>
+          <div class="text-center">
+            <div (click)="uploadFileDoc.click()">
+              <button mat-raised-button
+                      [disabled]="loadingDocumento"
+                      class="custom-btn-file">
+                <mat-icon>{{(FileDocumento.value && !loadingDocumento)?'check':'attach_file'}}</mat-icon> Elija el archivo</button>
+              <input #uploadFileDoc
+                      formControlName="FileDocumento"
+                      (change)="onDocumentoChange($event)"
+                      type='file' style="display:none"/>
+            </div>
+            <small *ngIf="FileDocumento.hasError('required') && FileDocumento.dirty"
+                    class="p-error">El documento de requisitos es <strong>requerido</strong></small>
+          </div>
+        </div>
+      </p-accordionTab>
+      <div *ngIf="InputUploadExtra">
+        <p-progressBar *ngIf="loadingFileExtra"
+                        mode="indeterminate"
+                        [style]="{'height': '6px'}"></p-progressBar>
+        <p-accordionTab header="Cargue la fotografía tamaño carnet" [disabled]="disableOption">
+          <div class="col-12 md:col-12 flex justify-content-between justify-content-center align-items-center file-content">
+          <label class="block">Fotografía tamaño carnet</label>
+            <div class="text-center">
+            <div (click)="uploadFileDocExtra.click()">
+            <button mat-raised-button
+                  [disabled]="loadingFileExtra"
+                  class="custom-btn-file">
+            <mat-icon>{{(FileDocumentoExtra.value && !loadingFileExtra)?'check':'attach_file'}}</mat-icon> Elija el archivo</button>
+            <input #uploadFileDocExtra
+                  formControlName="FileDocumentoExtra"
+                  (change)="onFileDocumentoExtraChange($event)"
+                  type='file' style="display:none"/>
+            </div>
+            <small *ngIf="FileDocumentoExtra.hasError('required') && FileDocumentoExtra.dirty"
+                class="p-error">La fotográfia es <strong>requerida</strong></small>
+            </div>
+          </div>
+        </p-accordionTab>
+      </div>
+      <p-progressBar *ngIf="loadingFilePago"
+                    mode="indeterminate"
+                     [style]="{'height': '6px'}"></p-progressBar>
+      <p-accordionTab header="Cargue su voucher de pago" [disabled]="disableOption">
+        <div class="mb-3 content-info-operacion">
+          <p>El número o folio de la boleta en el voucher corresponde al número de operación que se imprime en el voucher <a class="tag-a">Ver ejemplo</a></p>
+        </div>
+        <div class="grid">
+          <div class="col-12 md:col-3">
+            <label for="MontoPago" class="block mb-2">Monto de pago S/.</label>
+              <p-inputNumber inputId="minmaxfraction"
+                             mode="decimal"
+                             class="p-fluid p-grid p-formgrid full-width"
+                             formControlName="MontoPago"
+                             [min]="0"
+                             [max]="1000"
+                             [minFractionDigits]="2"
+                             [maxFractionDigits]="5"></p-inputNumber>
+            <small *ngIf="MontoPago.hasError('pattern') && !MontoPago.hasError('required')"
+                    class="p-error">Digite un monto de pago <strong>válido</strong></small>
+            <small *ngIf="MontoPago.hasError('required') && MontoPago.dirty"
+                    class="p-error">El campo monto de pago es <strong>requerido</strong></small>
+          </div>
+          <div class="col-12 md:col-3">
+            <label for="NumOperacion" class="block mb-2">N° de operación</label>
+            <input id="NumOperacion"
+                   class="p-fluid p-grid p-formgrid full-width"
+                   type="text"
+                   placeholder="Número de operación"
+                   formControlName="NumOperacion"
+                   autocomplete="off"
+                   pInputText/>
+            <small *ngIf="NumOperacion.hasError('pattern') && !NumOperacion.hasError('required')"
+                    class="p-error">Digite un número de operación <strong>válido</strong></small>
+            <small *ngIf="NumOperacion.hasError('required') && NumOperacion.dirty"
+                    class="p-error">El campo número de operación es <strong>requerido</strong></small>
+          </div>
+          <div class="col-12 md:col-3">
+            <label for="FechaPago" class="block mb-2">Fecha de pago</label>
+            <p-inputMask mask="99/99/9999"
+                          formControlName="FechaPago"
+                          placeholder="DD/MM/AAAA"></p-inputMask>
+            <small *ngIf="FechaPago.hasError('pattern') && !FechaPago.hasError('required')"
+                    class="p-error">Digite una fecha de pago <strong>válida</strong></small>
+            <small *ngIf="FechaPago.hasError('required') && FechaPago.dirty"
+                    class="p-error">El campo fecha de pago es <strong>requerido</strong></small>
+          </div>
+          <div class="col-12 md:col-3">
+            <div class="text-center">
+              <label class="block label-file">Voucher pago</label>
+              <div class="mt-2">
+                <button mat-raised-button
+                        [disabled]="loadingFilePago"
+                        (click)="uploadFilePago.click()"
+                        class="custom-btn-file">
+                        <mat-icon>{{(FilePago.value && !loadingFilePago)?'check':'attach_file'}}</mat-icon> Elija el archivo</button>
+                <input #uploadFilePago
+                        formControlName="FilePago"
+                        (change)="onFilePagoChange($event)"
+                        type='file' style="display:none"/>
+              </div>
+              <small *ngIf="FilePago.hasError('required') && FilePago.dirty"
+                      class="p-error">El voucher de pago es <strong>requerido</strong></small>
+            </div>
+          </div>
+        </div>
+      </p-accordionTab>
+    </p-accordion>
+  </div>
+</form>

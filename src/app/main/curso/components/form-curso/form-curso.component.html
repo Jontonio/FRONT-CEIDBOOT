@@ -84,18 +84,24 @@
         </div>
       </div>
       <div class="col-12 mt-1">
-        <label for="LinkRequisitos" class="block mb-2">Link de requisitos del curso (opcional)</label>
+        <label for="LinkRequisitos" class="block mb-2">Link de descripción de los cursos (opcional)</label>
         <div class="p-inputgroup">
           <span class="p-inputgroup-addon"><i class="fa-solid fa-link"></i></span>
           <input id="LinkRequisitos"
                 class="p-fluid p-grid p-formgrid"
                 type="text"
+                (click)="op.toggle($event)"
                 autocomplete="off"
                 formControlName="LinkRequisitos"
                 pInputText/>
         </div>
         <small *ngIf="LinkRequisitos.hasError('pattern') && !LinkRequisitos.hasError('required')"
               class="p-error">Digite un link <strong>válido</strong></small>
+        <p-overlayPanel #op>
+          <h3>Nota</h3>
+          <p>Aquí pude pegar el url de alguna infografía, descripción, información, etc. alusiva al curso</p>
+          <!-- <img src="https://primefaces.org/cdn/primeng/images/demo/product/bamboo-watch.jpg" alt="product" /> -->
+        </p-overlayPanel>
       </div>
     </div>
     <div class="col-12 md:col-6">

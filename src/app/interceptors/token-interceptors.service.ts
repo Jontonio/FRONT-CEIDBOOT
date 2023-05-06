@@ -32,7 +32,7 @@ export class TokeInterceptorsService implements HttpInterceptor {
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${this._auth.getToken()}`
+      'Authorization': `Bearer ${this._auth.getStorage('token')}`
     });
 
     const reqClone = req.clone({

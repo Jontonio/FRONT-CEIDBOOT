@@ -21,6 +21,8 @@ export class ListCursoComponent {
   /** Variables de clase */
   startPage   :number = 0;
   position    :string;
+  numRows     :number = 5;
+  numFirst    :number = 0;
 
   constructor(public  readonly _curso:CursoService,
               private readonly route:Router,
@@ -39,7 +41,9 @@ export class ListCursoComponent {
     //event.page = Index of the new page
     //event.pageCount = Total number of pages
     this.startPage = event.first;
-    this._curso.getListaCursos(event.rows, event.first);
+    this.numRows = event.rows;
+    this.numFirst = event.first;
+    this._curso.getListaCursos(this.numRows, this.numFirst);
   }
 
   dialogDelete({ NombreCurso, Id}:Curso) {
@@ -79,11 +83,11 @@ export class ListCursoComponent {
   }
 
   updateCurso(curso:Curso, Id:number){
-    this._curso.updateCurso(Id, {EstadoApertura:curso.EstadoApertura} as Curso).subscribe({
+    this._curso.updateCurso(Id, { EstadoApertura:curso.EstadoApertura } as Curso).subscribe({
       next: (value) => {
         if(!value.ok){ return; }
         this.toast('success', value.msg);
-        this._socket.EmitEvent('updated_list_curso');
+        this._socket.EmitEvent('updated_list_curso', { limit: this.numRows, offset: this.numFirst });
       },
       error: (e) => {
         console.log(e)

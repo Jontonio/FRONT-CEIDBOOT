@@ -43,6 +43,8 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputMaskModule } from 'primeng/inputmask';
 import { AccordionModule } from 'primeng/accordion';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { EditorModule } from 'primeng/editor';
+import { TimelineModule } from 'primeng/timeline';
 
 /**
  * array of modules
@@ -86,7 +88,9 @@ const listModules:any[] = [
   RadioButtonModule,
   InputMaskModule,
   AccordionModule,
-  OverlayPanelModule
+  OverlayPanelModule,
+  EditorModule,
+  TimelineModule
 ]
 
 @NgModule({

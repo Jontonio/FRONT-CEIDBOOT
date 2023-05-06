@@ -1,16 +1,36 @@
 <div class="animate__animated animate__fadeIn">
   <p-card header="Lista de grupos">
-    <div class="flex justify-content-center justify-content-between">
-      <div class="col-6">
-        <span class="p-input-icon-left">
+    <div class="grid justify-content-center justify-content-between">
+      <div class="col-12 md:col-3">
+        <span class="p-input-icon-left full-width"
+              [ngClass]="{'p-input-icon-right':terminoBusqueda}">
           <i class="pi pi-search"></i>
           <input type="text"
+                 [(ngModel)]="terminoBusqueda"
+                 name="terminoBusqueda"
+                 autocomplete="off"
                  pInputText
-                 placeholder="Buscar grupo" />
-      </span>
+                 placeholder="Buscar idioma/grupo"/>
+          <i *ngIf="terminoBusqueda"
+              class="pi pi-times"
+              style="cursor: pointer;"
+              (click)="terminoBusqueda=''"></i>
+        </span>
       </div>
-      <div class="col-6 flex justify-content-end">
+      <div class="col-12 md:col-9 flex justify-content-end">
         <div>
+          <button mat-raised-button
+                  [matMenuTriggerFor]="menuFilter"
+                  class="button-custom-round mr-2">{{selectEstadoGrupo | titlecase}} <i class="pi pi-filter-fill ml-2"></i></button>
+          <mat-menu #menuFilter="matMenu">
+            <button mat-menu-item
+                    *ngFor="let item of listEstadosGrupo"
+                    (click)="selectForFiltro(item)">
+                    <i class="pi"
+                       [ngClass]="{'pi-filter-fill':item.CodeEstado==selectCodeEstado,
+                                   'pi-filter':item.CodeEstado!=selectCodeEstado}"></i> {{item.EstadoGrupo | titlecase}}
+            </button>
+          </mat-menu>
           <button mat-raised-button
                   type="button"
                   class="button-custom-round"
@@ -21,7 +41,7 @@
       </div>
     </div>
     <div class="col table-responsive content-tables">
-      <p-table [value]="_grupo.listGrupos" responsiveLayout="scroll" [rowHover]="true" [resizableColumns]="true" columnResizeMode="expand">
+      <p-table [value]="_grupo.listGrupos | statusGrupo:selectCodeEstado | filterGrupo:terminoBusqueda" responsiveLayout="scroll" [rowHover]="true" [resizableColumns]="true" columnResizeMode="expand">
         <ng-template pTemplate="header">
             <tr>
               <th>Cód.</th>
@@ -94,6 +114,13 @@
               </td>
             </tr>
         </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="10">
+              <app-lista-vacia [msg]="'No se encontraron registros'"></app-lista-vacia>
+            </td>
+          </tr>
+        </ng-template>
       </p-table>
     </div>
     <div>
@@ -113,6 +140,6 @@
       </div>
     </div>
     <app-loadding *ngIf="_grupo.loadingLista && _grupo.listGrupos.length==0" msg="Lista de grupos"></app-loadding>
-    <app-lista-vacia *ngIf="_grupo.listGrupos.length==0 && !_grupo.loadingLista" msg="No se encontraron grupos registrados"></app-lista-vacia>
+    <!-- <app-lista-vacia *ngIf="_grupo.listGrupos.length==0 && !_grupo.loadingLista" msg="No se encontraron grupos registrados"></app-lista-vacia> -->
   </p-card>
 </div>

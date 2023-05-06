@@ -1,10 +1,15 @@
 import { Estudiante } from "../../matricula/class/Estudiante";
 import { Matricula } from "../../matricula/class/Matricula";
+import { EstadoGrupoEstudiante } from "./EstadoGrupoEstudiante";
 import { Grupo } from "./Grupo";
 import { Pago } from "./Pago";
 
 class ResEstudianteEnGrupo {
   constructor(public msg: string, public ok: boolean, public data: EstudianteEnGrupo | EstudianteEnGrupo[], public count?:number){}
+}
+
+class ResEstadoEstudEnGrupo {
+  constructor(public msg: string, public ok: boolean, public data: EstadoGrupoEstudiante, public count?:number){}
 }
 
 class EstudianteEnGrupo {
@@ -28,4 +33,5 @@ class EstudianteEnGrupo {
 export {
   EstudianteEnGrupo,
   ResEstudianteEnGrupo,
+  ResEstadoEstudEnGrupo
 }

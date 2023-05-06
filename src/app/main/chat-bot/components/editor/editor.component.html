@@ -1,0 +1,24 @@
+<p class="p-2">Plantillas definidas</p>
+<div class="grid p-1 pb-2">
+  <div *ngFor="let plantilla of listPlantillas" class="col">
+    <p-chip [label]="plantilla.label"
+            [icon]="plantilla.icon"
+            class="pointer full-width"
+            (click)="setPlantilla(plantilla)"></p-chip>
+  </div>
+</div>
+<p-editor [(ngModel)]="text"
+          [style]="{ height: '320px' }">
+  <ng-template pTemplate="header">
+      <span class="ql-formats">
+          <button type="button" class="ql-bold" aria-label="Bold"></button>
+          <button type="button" class="ql-strike" aria-label="strike"></button>
+          <button type="button" class="ql-link" aria-label="link"></button>
+      </span>
+  </ng-template>
+</p-editor>
+<div class="mt-3">
+  <button mat-raised-button (click)="ready()" [disabled]="loading">
+    <i class="pi" [ngClass]="{'pi-send': !loading,'pi-spin pi-spinner':loading}"></i> enviar
+  </button>
+</div>

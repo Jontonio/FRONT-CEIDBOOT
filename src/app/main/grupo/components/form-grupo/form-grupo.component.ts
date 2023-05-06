@@ -71,18 +71,14 @@ export class FormGrupoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.urlLista = '/system/grupos/lista-grupos';
     this.getListDocentes();
     this.getListCursos();
     this.getListTiposGrupos();
     this.getListHorarios();
     this.getListaEstadosGrupo();
-
     this.OnListTNombreGrupos();
     this.OnListHorarios();
-
-    this.urlLista = '/system/grupos/lista-grupos';
-
     this.getIdUpdate(this.activeRoute);
   }
 
@@ -221,7 +217,7 @@ export class FormGrupoComponent implements OnInit {
     return this.FormGrupo.controls['estadoGrupo'];
   }
 
-  toast(type:string, msg:string, detail:string='', key:string=''){
+  toast(type:string, msg:string, detail:string='', key?:string){
     this._msg.add({severity:type, summary:msg, detail, key});
   }
 
@@ -254,7 +250,6 @@ export class FormGrupoComponent implements OnInit {
   }
 
   ready(){
-
     /** validate data */
     if(this.FormGrupo.invalid){
       Object.keys( this.FormGrupo.controls ).forEach( input => this.FormGrupo.controls[input].markAsDirty() );
@@ -262,12 +257,12 @@ export class FormGrupoComponent implements OnInit {
     }
     /** emit data */
     this.formData.emit({data:this.FormGrupo.value, option: this.isUpdate, Id:this.Id });
-
   }
 
   completeDataUpdate(grupo:Grupo){
     const fechaIniselect = moment(grupo.FechaInicioGrupo);
     const fechaFinselect = moment(grupo.FechaFinalGrupo);
+    console.log(grupo)
     this.tipoGrupo.setValue(grupo.tipoGrupo);
     this.docente.setValue(grupo.docente);
     this.curso.setValue(grupo.curso);

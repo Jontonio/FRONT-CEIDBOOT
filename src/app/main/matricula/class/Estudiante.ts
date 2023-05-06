@@ -14,6 +14,11 @@ interface EmailDocumento {
   Email: string;
 }
 
+interface RequestDocumento {
+  Documento: string;
+  TipoDocumento: string;
+}
+
 class Estudiante {
   Id:number;
   TipoDocumento:string;
@@ -73,4 +78,4 @@ class Estudiante {
 }
 
 
-export { Estudiante, ResEstudiante, ResEmailDocEstudiante, EmailDocumento }
+export { Estudiante, ResEstudiante, ResEmailDocEstudiante, EmailDocumento, RequestDocumento }

@@ -6,7 +6,7 @@ class ResCurso {
 }
 
 class Curso {
-  Id?: number;
+  Id: number;
   NombrePais: string;
   UrlBandera: string;
   NombreCurso: string;
@@ -16,6 +16,7 @@ class Curso {
   NumModulos: number;
   Estado?: boolean;
   EstadoApertura:boolean;
+  PrecioExamSuficiencia:number;
   LinkRequisitos?:string;
   createdAt?: string;
   updatedAt?: string;
@@ -27,12 +28,10 @@ class Curso {
     nivel: Nivel,
     DescripcionCurso: string,
     NumModulos: number,
-    Id?: number,
     Estado?: boolean,
     createdAt?: string,
     updatedAt?: string){
 
-      this.Id = Id;
       this.NombrePais = NombrePais;
       this.UrlBandera = UrlBandera;
       this.NombreCurso = NombreCurso;

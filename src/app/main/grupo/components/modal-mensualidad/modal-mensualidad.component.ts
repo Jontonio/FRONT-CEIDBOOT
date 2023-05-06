@@ -7,6 +7,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 
 import * as moment from 'moment';
+import { SocketService } from 'src/app/services/socket.service';
+import { PayloadSocket } from 'src/app/class/PayloadSocket';
 moment.locale("es");
 
 @Component({
@@ -20,11 +22,13 @@ export class ModalMensualidadComponent implements OnInit {
   mensualidad:Pago;
   formMensualidad:FormGroup;
   loading:boolean = false;
+  payload:PayloadSocket;
 
   constructor(private readonly spinner: NgxSpinnerService,
+              private readonly _socketService:SocketService,
               private readonly _grupo:GrupoService,
-              private _msg:MessageService,
-              private readonly fb: FormBuilder) {
+              private readonly fb: FormBuilder,
+              private _msg:MessageService) {
     this.createFormMensualidad();
   }
 
@@ -36,6 +40,7 @@ export class ModalMensualidadComponent implements OnInit {
       Id:[null, Validators.required],
       FechaPago:[null, [Validators.required, Validators.pattern(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[012])\/\d{4}$/)]],
       CodigoVoucher:[null, [Validators.required, Validators.pattern(/^([0-9])*$/)]],
+      MontoPago:[null, [ Validators.required, Validators.pattern(/^([0-9])*$/)]],
       Verificado:[null, Validators.required]
     })
   }
@@ -49,11 +54,15 @@ export class ModalMensualidadComponent implements OnInit {
   get CodigoVoucher(){
     return this.formMensualidad.controls['CodigoVoucher'];
   }
+  get MontoPago(){
+    return this.formMensualidad.controls['MontoPago'];
+  }
   get Verificado(){
     return this.formMensualidad.controls['Verificado'];
   }
 
-  openModal(mensualidad:Pago){
+  openModal(mensualidad:Pago, payload?:PayloadSocket){
+    this.payload = payload!;
     this.spinner.show();
     this.ValidateFile = true;
     this.mensualidad = mensualidad;
@@ -77,7 +86,7 @@ export class ModalMensualidadComponent implements OnInit {
 
     /** Parse fecha pago to Date */
     const fechaPago = moment(this.FechaPago.value,'DD/MM/YYYY').toDate();
-    const data = { FechaPago:fechaPago, CodigoVoucher: this.CodigoVoucher.value, Verificado: this.Verificado.value };
+    const data = { FechaPago:fechaPago, CodigoVoucher: this.CodigoVoucher.value, Verificado: this.Verificado.value, MontoPago:this.MontoPago.value };
 
     this.loading = true;
 
@@ -89,6 +98,7 @@ export class ModalMensualidadComponent implements OnInit {
             this.toast('success',value.msg);
             this.reset();
             this.closeModal();
+            this._socketService.EmitEvent('updated_list_estudiante_grupo', this.payload );
             return;
           }
           this.toast('warn',value.msg);
@@ -109,6 +119,7 @@ export class ModalMensualidadComponent implements OnInit {
       this.FechaPago.setValue(newFechaPAgo);
     }
     this.CodigoVoucher.setValue(mensualidad.CodigoVoucher);
+    this.MontoPago.setValue(mensualidad.MontoPago);
     this.Verificado.setValue(mensualidad.Verificado);
   }
 

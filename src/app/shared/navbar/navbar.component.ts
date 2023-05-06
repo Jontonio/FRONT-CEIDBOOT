@@ -38,6 +38,11 @@ export class NavbarComponent implements OnInit {
             label:'Pagos',
             icon:'fa-solid fa-bag-shopping',
             routerLink:'/main/pagos'
+          },
+          {
+            label:'Otros trámites',
+            icon:'fa-solid fa-file-pen',
+            routerLink:'/main/otros-tramites',
           }
         ]
       }

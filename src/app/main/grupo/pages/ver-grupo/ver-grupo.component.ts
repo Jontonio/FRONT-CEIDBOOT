@@ -47,6 +47,7 @@ export class VerGrupoComponent implements OnInit {
     const { id } = routerActive.snapshot.params;
     this.grupo$ = this._grupo.getOneGrupo(id).subscribe({
       next: (value) => {
+        console.log(value)
         if(!value.ok) return;
         this.grupo = value.data as Grupo;
         this.getEstadosGrupo();

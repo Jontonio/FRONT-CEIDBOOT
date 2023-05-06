@@ -1,114 +1,112 @@
-<div class="main p-4">
-  <p-card>
-    <div class="mb-2">
-      <h2 class="ml-1">Lista cursos</h2>
+<p-card>
+  <div class="mb-2">
+    <h2 class="ml-1">Lista cursos</h2>
+  </div>
+  <div class="flex justify-content-center justify-content-between">
+    <div class="col-6">
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input type="text"
+                pInputText
+                placeholder="Buscar curso" />
+    </span>
     </div>
-    <div class="flex justify-content-center justify-content-between">
-      <div class="col-6">
-        <span class="p-input-icon-left">
-          <i class="pi pi-search"></i>
-          <input type="text"
-                 pInputText
-                 placeholder="Buscar curso" />
-      </span>
-      </div>
-      <div class="col-6 flex justify-content-end">
-        <div>
-          <button mat-raised-button
-                  type="button"
-                  class="button-custom-round"
-                  routerLink="/system/cursos/add-curso">
-                  <i class="fa-solid fa-plus"></i> Nuevo curso
-          </button>
-        </div>
-      </div>
-    </div>
-      <div class="col table-responsive">
-        <p-table [value]="_curso.listCursos" [resizableColumns]="true" columnResizeMode="expand" responsiveLayout="scroll">
-          <ng-template pTemplate="header">
-              <tr>
-                <th>ID</th>
-                <th>Bandera</th>
-                <th pSortableColumn="NombreCurso">Curso <p-sortIcon field="NombreCurso"></p-sortIcon></th>
-                <th pSortableColumn="NivelCurso">Nivel <p-sortIcon field="NivelCurso"></p-sortIcon></th>
-                <th>Cant. Módulos</th>
-                <th>Cuenta con libros</th>
-                <th>Descripción del curso</th>
-                <th>Estado curso</th>
-                <th>Operación</th>
-              </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-curso let-rowIndex="rowIndex">
-              <tr>
-                <td>{{startPage  + (rowIndex+1)}}</td>
-                <td><img class="img-flag" [src]="curso.UrlBandera" alt="" srcset=""></td>
-                <td>{{curso.NombreCurso | titlecase}}</td>
-                <td>{{curso.nivel.Nivel | titlecase}}</td>
-                <td>{{curso.NumModulos}} Módulos</td>
-                <td>
-                  <p-tag styleClass="mr-2"
-                         [pTooltip]="countLibros(curso.libros)==0?'El curso no incluye pago del libro en la matrícula':'El curso incluye pago del libro en la matrícula'"
-                         tooltipPosition="bottom"
-                         [severity]="countLibros(curso.libros)==0?'info':'success'">{{countLibros(curso.libros)==0?'No cuenta libros':'Cuenta con libros'}}</p-tag></td>
-                <td>{{curso.DescripcionCurso | slice:0:40}}...</td>
-                <td>
-                  <div *ngIf="curso.EstadoApertura else disable">
-                    <button mat-raised-button
-                            (click)="cursoApertura(curso)">
-                            <i class="fa-solid fa-lock-open"></i> Aperturado
-                    </button>
-                  </div>
-                  <ng-template #disable>
-                    <button mat-raised-button
-                            (click)="cursoApertura(curso)"
-                            color="warn">
-                            <i class="fa-solid fa-lock"></i> Cerrado
-                    </button>
-                  </ng-template>
-                </td>
-                <td class="text-center">
-                  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-                    <mat-icon><i class="fa-solid fa-circle-chevron-down"></i></mat-icon>
-                  </button>
-                  <mat-menu #menu="matMenu">
-                    <button mat-menu-item [routerLink]="['/system/cursos/ver-curso', curso.Id]">
-                      <mat-icon><i class="fa-solid fa-circle-info"></i></mat-icon>
-                      <span>Ver más</span>
-                    </button>
-                    <button mat-menu-item [routerLink]="['/system/cursos/editar-curso', curso.Id]">
-                      <mat-icon><i class="fa-solid fa-pen-to-square"></i></mat-icon>
-                      <span>Editar curso</span>
-                    </button>
-                    <button mat-menu-item (click)="dialogDelete(curso)">
-                      <mat-icon><i class="fa-solid fa-trash-can"></i></mat-icon>
-                      <span>Dar de baja al curso</span>
-                    </button>
-                  </mat-menu>
-                </td>
-              </tr>
-          </ng-template>
-        </p-table>
-      </div>
+    <div class="col-6 flex justify-content-end">
       <div>
-        <div class="mt-4" *ngIf="_curso.respCurso && _curso.respCurso.count">
-          <div class="grid content">
-            <div class="col-12 md:col-3">
-                <p class="text-muted">Total de cursos: {{_curso.respCurso.count}}</p>
-            </div>
-            <div class="col-12 md:col-6">
-              <p-paginator [rows]="5"
-                            [totalRecords]="_curso.respCurso.count!"
-                            [rowsPerPageOptions]="[5,10,15,20]"
-                            (onPageChange)="paginate($event)"></p-paginator>
-            </div>
-            <div class="col-12 md:col-3"></div>
-          </div>
-        </div>
-        <app-loadding *ngIf="_curso.loadingLista && _curso.listCursos.length==0" msg="Lista de cursos"></app-loadding>
-        <app-lista-vacia *ngIf="_curso.listCursos.length==0 && !_curso.loadingLista" msg="No se encontraron cursos registrados"></app-lista-vacia>
+        <button mat-raised-button
+                type="button"
+                class="button-custom-round"
+                routerLink="/system/cursos/add-curso">
+                <i class="fa-solid fa-plus"></i> Nuevo curso
+        </button>
       </div>
-  </p-card>
-</div>
+    </div>
+  </div>
+    <div class="col table-responsive">
+      <p-table [value]="_curso.listCursos" [resizableColumns]="true" columnResizeMode="expand" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+            <tr>
+              <th>ID</th>
+              <th>Bandera</th>
+              <th pSortableColumn="NombreCurso">Curso <p-sortIcon field="NombreCurso"></p-sortIcon></th>
+              <th pSortableColumn="NivelCurso">Nivel <p-sortIcon field="NivelCurso"></p-sortIcon></th>
+              <th>Cant. Módulos</th>
+              <th>Cuenta con libros</th>
+              <th>Descripción del curso</th>
+              <th>Estado curso</th>
+              <th>Operación</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-curso let-rowIndex="rowIndex">
+            <tr>
+              <td>{{startPage  + (rowIndex+1)}}</td>
+              <td><img class="img-flag" [src]="curso.UrlBandera" alt="" srcset=""></td>
+              <td>{{curso.NombreCurso | titlecase}}</td>
+              <td>{{curso.nivel.Nivel | titlecase}}</td>
+              <td>{{curso.NumModulos}} Módulos</td>
+              <td>
+                <p-tag styleClass="mr-2"
+                        [pTooltip]="countLibros(curso.libros)==0?'El curso no incluye pago del libro en la matrícula':'El curso incluye pago del libro en la matrícula'"
+                        tooltipPosition="bottom"
+                        [severity]="countLibros(curso.libros)==0?'info':'success'">{{countLibros(curso.libros)==0?'No cuenta libros':'Cuenta con libros'}}</p-tag></td>
+              <td>{{curso.DescripcionCurso | slice:0:40}}...</td>
+              <td>
+                <div *ngIf="curso.EstadoApertura else disable">
+                  <button mat-raised-button
+                          (click)="cursoApertura(curso)">
+                          <i class="fa-solid fa-lock-open"></i> Aperturado
+                  </button>
+                </div>
+                <ng-template #disable>
+                  <button mat-raised-button
+                          (click)="cursoApertura(curso)"
+                          color="warn">
+                          <i class="fa-solid fa-lock"></i> Cerrado
+                  </button>
+                </ng-template>
+              </td>
+              <td class="text-center">
+                <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                  <mat-icon><i class="fa-solid fa-circle-chevron-down"></i></mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item [routerLink]="['/system/cursos/ver-curso', curso.Id]">
+                    <mat-icon><i class="fa-solid fa-circle-info"></i></mat-icon>
+                    <span>Ver más</span>
+                  </button>
+                  <button mat-menu-item [routerLink]="['/system/cursos/editar-curso', curso.Id]">
+                    <mat-icon><i class="fa-solid fa-pen-to-square"></i></mat-icon>
+                    <span>Editar curso</span>
+                  </button>
+                  <button mat-menu-item (click)="dialogDelete(curso)">
+                    <mat-icon><i class="fa-solid fa-trash-can"></i></mat-icon>
+                    <span>Dar de baja al curso</span>
+                  </button>
+                </mat-menu>
+              </td>
+            </tr>
+        </ng-template>
+      </p-table>
+    </div>
+    <div>
+      <div class="mt-4" *ngIf="_curso.respCurso && _curso.respCurso.count">
+        <div class="grid content">
+          <div class="col-12 md:col-3">
+              <p class="text-muted">Total de cursos: {{_curso.respCurso.count}}</p>
+          </div>
+          <div class="col-12 md:col-6">
+            <p-paginator [rows]="5"
+                          [totalRecords]="_curso.respCurso.count!"
+                          [rowsPerPageOptions]="[5,10,15,20]"
+                          (onPageChange)="paginate($event)"></p-paginator>
+          </div>
+          <div class="col-12 md:col-3"></div>
+        </div>
+      </div>
+      <app-loadding *ngIf="_curso.loadingLista && _curso.listCursos.length==0" msg="Lista de cursos"></app-loadding>
+      <app-lista-vacia *ngIf="_curso.listCursos.length==0 && !_curso.loadingLista" msg="No se encontraron cursos registrados"></app-lista-vacia>
+    </div>
+</p-card>
 
 <!-- Disable and enable dialog  -->
 <p-confirmDialog [style]="{width: '50vw'}"

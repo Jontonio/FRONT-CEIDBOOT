@@ -29,6 +29,21 @@
                   <small *ngIf="CodigoVoucher.hasError('required') && CodigoVoucher.dirty"
                           class="p-error">El campo código de voucher es <strong>requerido</strong></small>
                 </div>
+                <div class="col">
+                  <label for="MontoPago" class="block mb-2">Monto de pago S/.</label>
+                  <p-inputNumber inputId="minmaxfraction"
+                                  mode="decimal"
+                                  class="p-fluid p-grid p-formgrid full-width"
+                                  formControlName="MontoPago"
+                                  [min]="0"
+                                  [max]="1000"
+                                  [minFractionDigits]="2"
+                                  [maxFractionDigits]="5"></p-inputNumber>
+                  <small *ngIf="MontoPago.hasError('pattern') && !MontoPago.hasError('required')"
+                          class="p-error">Digite un monto de pago <strong>válido</strong></small>
+                  <small *ngIf="MontoPago.hasError('required') && MontoPago.dirty"
+                          class="p-error">El campo monto de pago es <strong>requerido</strong></small>
+                </div>
                 <div class="col-12">
                   <label for="FechaPago" class="block mb-2">Fecha de pago</label>
                   <p-inputMask mask="99/99/9999"

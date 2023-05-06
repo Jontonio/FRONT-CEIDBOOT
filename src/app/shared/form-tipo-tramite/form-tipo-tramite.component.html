@@ -1,0 +1,15 @@
+<form [formGroup]="formTramite">
+  <div class="col-12">
+    <label for="usuario" class="block mb-2">Tipo de trámite</label>
+    <p-dropdown class="p-fluid p-grid p-formgrid"
+                placeholder="Selecione el tipo de trámite"
+                appendTo="body"
+                [options]="listTiposTramites"
+                formControlName="TipoTramite"
+                (ngModelChange)="selectedTipoTramite($event)"
+                optionLabel="TipoTramite">
+            </p-dropdown>
+    <small *ngIf="TipoTramite.hasError('required') && TipoTramite.dirty"
+          class="p-error">El tipo de trámite es <strong>requerido</strong></small>
+  </div>
+</form>

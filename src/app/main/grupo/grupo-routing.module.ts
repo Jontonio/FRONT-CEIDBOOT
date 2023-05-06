@@ -5,6 +5,7 @@ import { GrupoComponent } from './pages/grupo/grupo.component';
 import { ListGrupoComponent } from './pages/list-grupo/list-grupo.component';
 import { EstudiantesGrupoComponent } from './pages/estudiantes-grupo/estudiantes-grupo.component';
 import { VerGrupoComponent } from './pages/ver-grupo/ver-grupo.component';
+import { InfoEstudianteComponent } from './pages/info-estudiante/info-estudiante.component';
 
 const routes: Routes = [
   {
@@ -15,7 +16,8 @@ const routes: Routes = [
       { path:'edit-grupo/:id', component: AddGrupoComponent },
       { path:'lista-grupos', component: ListGrupoComponent },
       { path:'ver-grupo/:id', component: VerGrupoComponent },
-      { path:'estudiantes-grupo/:id', component: EstudiantesGrupoComponent },
+      { path:'estudiantes-grupo/:idGrupo', component: EstudiantesGrupoComponent },
+      { path:'estudiantes-grupo/:idGrupo/estudiante/:idEstudiante', component: InfoEstudianteComponent },
     ]
   }
 ];

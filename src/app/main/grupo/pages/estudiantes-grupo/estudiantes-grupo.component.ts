@@ -2,21 +2,25 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Grupo } from '../../class/Grupo';
 import { GrupoService } from '../../services/grupo.service';
-import { map, tap } from 'rxjs';
+import { Subscription, tap } from 'rxjs';
 import { Curso } from 'src/app/main/curso/class/Curso';
 import { Docente } from 'src/app/main/docente/class/Docente';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { ShowFileComponent } from 'src/app/shared/show-file/show-file.component';
 import { UnAuthorizedService } from 'src/app/services/unauthorized.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
-import { EstudianteEnGrupo, ResEstudianteEnGrupo } from '../../class/EstudianteGrupo';
+import { EstudianteEnGrupo, ResEstadoEstudEnGrupo } from '../../class/EstudianteGrupo';
 import { ModalMensualidadComponent } from '../../components/modal-mensualidad/modal-mensualidad.component';
 import { Pago } from '../../class/Pago'
-import { EstadoGrupo } from '../../class/EstadoGrupo';
 import { GlobalService } from 'src/app/services/global.service';
 import { CategoriaPago } from '../../class/CategoriaPago';
-
+import { ChabotService } from 'src/app/main/chat-bot/services/chatbot.service';
+import { Message } from 'src/app/main/chat-bot/class/Message';
+import { Estudiante } from 'src/app/main/matricula/class/Estudiante';
+import { SocketService } from 'src/app/services/socket.service';
+import { PayloadSocket } from 'src/app/class/PayloadSocket';
+import * as moment from 'moment';
+import { EstadoDataPago, EstadoGrupoEstudiante } from '../../class/EstadoGrupoEstudiante';
 
 @Component({
   selector: 'app-estudiantes-grupo',
@@ -29,8 +33,9 @@ export class EstudiantesGrupoComponent implements OnInit {
   @ViewChild(ShowFileComponent) showFileComponent:ShowFileComponent;
   @ViewChild(ModalMensualidadComponent) modalMensualidad:ModalMensualidadComponent;
 
+  listaEstudiantes$:Subscription;
   listaEstudiantes:EstudianteEnGrupo[] = [];
-  resAlumnoEnGrupo:ResEstudianteEnGrupo;
+  resAlumnoEnGrupo:ResEstadoEstudEnGrupo;
   listCategoriaPago:CategoriaPago[];
   selectCategoria:string = 'Sin filtro';
   loadingLista:boolean = false;
@@ -40,48 +45,42 @@ export class EstudiantesGrupoComponent implements OnInit {
   curso:Curso;
   expanded:boolean = false;
   displayFile:boolean = false;
+  sidebarMessage:boolean = false;
   fileURL:string;
   terminoBusqueda:string = '';
+  numeroCelular:string;
+  destino:string = 'e1';
+  existsApodera:boolean = false;
+  loadingSend:boolean = false;
+  selectEstudiante:Estudiante;
+  estadoDataPagoGrupo:EstadoDataPago;
+
+  idGrupo:string;
+  limit:number  = 5;
+  offset:number = 0;
 
   constructor(private readonly _grupo:GrupoService,
               private readonly activeRoute:ActivatedRoute,
+              private readonly _socket:SocketService,
               private readonly _unAuth:UnAuthorizedService,
-              private readonly spinner: NgxSpinnerService,
+              private readonly _chatboot:ChabotService,
               private readonly _global: GlobalService,
               private _msg:MessageService) {
                 this.getIdGrupo(this.activeRoute);
+                this.onListaEstudiantesCurso();
    }
 
   ngOnInit(): void { }
 
+  ngOnDestroy(): void {
+    if(this.listaEstudiantes$) this.listaEstudiantes$.unsubscribe();
+  }
+
   getIdGrupo(activeRoute:ActivatedRoute){
-    const { id } = activeRoute.snapshot.params;
+    const { idGrupo } = activeRoute.snapshot.params;
     this.loadingLista = true;
-    this._grupo.getEstudiantesEnGrupoEspecifico(id).pipe(
-      tap((res:any) => {
-        if(res.data.length >= 1){
-          this.grupo = res.data[0].grupo;
-          this.curso = res.data[0].grupo.curso;
-          this.docente = res.data[0].grupo.docente;
-        }
-        return res;
-      })
-    ).subscribe({
-      next: (value) => {
-        console.log(value)
-        this.loadingLista = false;
-        if(value.ok){
-          this.resAlumnoEnGrupo = value;
-          this.listaEstudiantes = this.resAlumnoEnGrupo.data as Array<EstudianteEnGrupo>;
-          this.getCategoriaPagos();
-        }
-      },
-      error: (e) => {
-        this.loadingLista = false;
-        this.messageError(e);
-        this._unAuth.unAuthResponse(e);
-      }
-    })
+    this.idGrupo = idGrupo;
+    this.getListaEstudiantesEnGrupo( this.idGrupo );
   }
 
   getCategoriaPagos(){
@@ -110,8 +109,35 @@ export class EstudiantesGrupoComponent implements OnInit {
 
   paginate(event:any) {
     this.startPage = event.first;
-    // this._grupo.getListaGrupos(event.rows, event.first);
-    //TODO: falta listar
+    this.limit = event.rows;
+    this.offset = event.first;
+    this.getListaEstudiantesEnGrupo( this.idGrupo, this.limit, this.offset);
+  }
+
+  getListaEstudiantesEnGrupo(Id:string, limit:number = 5, offset:number = 0){
+    this.listaEstudiantes$ = this._grupo.getEstudiantesEnGrupoEspecifico( Id, limit, offset)
+    .subscribe({
+      next: (value) => {
+        this.loadingLista = false;
+        console.log(value.data)
+        if(value.ok){
+          this.resAlumnoEnGrupo = value;
+          this.grupo = value.data.grupo;
+          console.log(value)
+          this.curso = value.data.grupo.curso;
+          this.docente = value.data.grupo.docente;
+          this.listaEstudiantes = value.data.estudiantesEnGrupo;
+          this.estadoDataPagoGrupo = value.data.estadoDataPago;
+          console.log(this.estadoDataPagoGrupo)
+          this.getCategoriaPagos();
+        }
+      },
+      error: (e) => {
+        this.loadingLista = false;
+        this.messageError(e);
+        this._unAuth.unAuthResponse(e);
+      }
+    })
   }
 
   showFile(fileURL:string){
@@ -129,7 +155,54 @@ export class EstudiantesGrupoComponent implements OnInit {
   }
 
   openModalMensualidad(pago:Pago){
-    this.modalMensualidad.openModal(pago);
+    this.modalMensualidad.openModal(pago, new PayloadSocket(this.limit, this.offset, this.idGrupo));
+  }
+
+  openModalSidebarMessage({ estudiante }:EstudianteEnGrupo){
+    this.sidebarMessage = true;
+    this.selectEstudiante = estudiante;
+    this.existsApodera = estudiante.apoderado?true:false;
+
+  }
+
+  sendMessage(event:string){
+    this.numeroCelular = this.destinoSend( this.selectEstudiante );
+    const message = new Message(this.numeroCelular, event );
+    this.loadingSend = true;
+    this._chatboot.sendMessage( message ).subscribe({
+      next:(value) => {
+        console.log(value)
+        if(value.ok){
+          this.toast('success', value.msg);
+          this.loadingSend = false;
+        }
+      },
+      error:(e) => {
+        this.loadingSend = false;
+        console.log(e)
+      }
+    })
+  }
+
+  destinoSend(estudiante: Estudiante){
+    if(estudiante.apoderado && this.destino=='a1'){
+      this.existsApodera = true;
+      const {CodePhone, CelApoderado} = estudiante.apoderado;
+      return `${CodePhone}${CelApoderado}`.replace('+','').concat('@c.us').trim();
+    }
+    const { CodePhone, Celular} = estudiante;
+    return `${CodePhone}${Celular}`.replace('+','').concat('@c.us').trim();
+  }
+
+  onListaEstudiantesCurso(){
+    this._socket.OnEvent('list_estudian_en_grupo').subscribe({
+      next:(value) => {
+        this.listaEstudiantes = value.data.estudiantesEnGrupo;
+      },
+      error:(e) => {
+        console.log(e)
+      }
+    })
   }
 
   messageError(e:HttpErrorResponse){

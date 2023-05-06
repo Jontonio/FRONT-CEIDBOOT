@@ -70,8 +70,7 @@
                       [options]="ListCursos"
                       placeholder="Seleciona el curso"
                       formControlName="curso"
-                      (ngModelChange)="selectedCurso($event)"
-                      optionLabel="NombreCurso">
+                      (ngModelChange)="selectedCurso($event)">
             <ng-template pTemplate="selectedItem">
               <div class="country-item country-item-value" *ngIf="selecCurso">
                 <span class="ml-1">

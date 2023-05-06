@@ -1,0 +1,29 @@
+<form [formGroup]="formCurso">
+  <div class="content-select-curso">
+    <label for="grupo" class="block mb-2">Selecione el idioma de suficiencia</label>
+    <p-dropdown class="p-fluid p-grid p-formgrid"
+                appendTo="body"
+                [options]="listCursos"
+                formControlName="curso"
+                placeholder="Selecione el curso"
+                (ngModelChange)="selectedCurso($event)">
+      <ng-template pTemplate="selectedItem">
+        <div class="grupo-item grupo-item-value" *ngIf="selectCurso">
+          <span class="ml-1">
+            <img class="flag-code-country" [src]="selectCurso.UrlBandera" alt="">
+            <span class="ml-1">{{selectCurso.NombreCurso | titlecase }} {{selectCurso.nivel.Nivel}}</span>
+          </span>
+        </div>
+      </ng-template>
+      <ng-template let-curso pTemplate="item">
+        <div>
+          <img class="flag-code-country" [src]="curso.UrlBandera" alt="">
+          <span class="ml-1 mr-1">{{curso.NombreCurso | titlecase }} {{curso.nivel.Nivel}}</span>
+        </div>
+      </ng-template>
+    </p-dropdown>
+    <small *ngIf="curso.hasError('required') && curso.dirty"
+            class="p-error">El campo curso es <strong>requerido</strong></small>
+  </div>
+  <br>
+</form>

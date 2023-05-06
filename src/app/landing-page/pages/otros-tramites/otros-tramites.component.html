@@ -1,0 +1,74 @@
+
+<div class="header-container-otros"></div>
+<div class="container-otros">
+  <div class="content-card-otros animate__animated animate__fadeIn">
+    <p-card header="Otros trámites">
+      <mat-stepper orientation="vertical" linear="isLinear" #stepper>
+        <p-messages key="message-examen-suf"></p-messages>
+        <mat-step [stepControl]="formTramite">
+          <ng-template matStepLabel>Tipo de trámite</ng-template>
+          <app-form-tipo-tramite [formTramite]="formTramite"
+                                 (formData)="tipoTramiteSelected($event)"></app-form-tipo-tramite>
+          <div class="col">
+            <div class="mt-2">
+              <button mat-raised-button (click)="readyTipoTramite()">Siguiente</button>
+            </div>
+          </div>
+        </mat-step>
+        <mat-step [stepControl]="existsEstudiante?formEstudiante:formDocumento">
+          <ng-template matStepLabel>Información personal</ng-template>
+          <div *ngIf="!existsEstudiante">
+            <app-form-select-info-personal [formDocumento]="formDocumento" (dataDocumento)="dataDocumento($event)"></app-form-select-info-personal>
+          </div>
+          <div class="animate__animated animate__fadeInLeft" *ngIf="existsEstudiante">
+            <app-form-info-personal [formEstudiante]="formEstudiante"></app-form-info-personal>
+          </div>
+          <div class="col">
+            <div class="mt-2">
+              <div *ngIf="!existsEstudiante">
+                <button mat-raised-button
+                        (click)="readyDocumento()"
+                        [disabled]="loadingGetData">Siguiente doc</button>
+              </div>
+              <div *ngIf="existsEstudiante">
+                <button
+                        mat-raised-button
+                        (click)="readyEstudent()"
+                        [disabled]="loadingGetData">Siguiente est</button>
+              </div>
+            </div>
+          </div>
+        </mat-step>
+        <mat-step [stepControl]="needSelectCurso?formCurso:formFiles">
+          <ng-template matStepLabel>Adjuntar archivos</ng-template>
+          <div *ngIf="needSelectCurso">
+            <app-form-select-idioma [formCurso]="formCurso"
+                                    (formData)="selectedCurso($event)"></app-form-select-idioma>
+          </div>
+          <app-form-adjuntar-archivo [formFiles]="formFiles"
+                                     [montoPago]="montoPago"
+                                     [disableOption]="needSelectCurso"
+                                     [InputUploadExtra]="needOtherfileUpload"
+                                     (emiterloadingDocument)="stateLoadingDocumento($event)"
+                                     (emiterloadingFileExtra)="stateLoadingDocumentoExtra($event)"
+                                     (emiterloadingFilePago)="stateLoadingFilePago($event)"></app-form-adjuntar-archivo>
+         <div>
+          <div class="mt-3">
+            <div *ngIf="needSelectCurso">
+              <button mat-raised-button
+                      [disabled]="loadingDocumento || loadingFilePago || loadingDocumentoExtra"
+                      (click)="readyCurso()">Registrar c</button>
+            </div>
+            <div *ngIf="!needSelectCurso">
+              <button mat-raised-button
+                      [disabled]="loadingDocumento || loadingFilePago || loadingDocumentoExtra"
+                      (click)="registrar()">Registrar r</button>
+            </div>
+
+          </div>
+        </div>
+        </mat-step>
+      </mat-stepper>
+    </p-card>
+  </div>
+</div>

@@ -138,7 +138,7 @@
                 type="text"
                 autocomplete="off"
                 formControlName="Celular"
-                [maxLength]="15"
+                [maxLength]="country.code=='PE'?9:15"
                 pInputText/>
           <small *ngIf="Celular.hasError('pattern') && !Celular.hasError('required')"
                 class="p-error">Digite un Celular <strong>válido</strong></small>

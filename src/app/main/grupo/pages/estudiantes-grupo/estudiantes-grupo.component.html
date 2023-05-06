@@ -1,33 +1,103 @@
 <div class="animate__animated animate__fadeIn">
-  <!-- <div class="mb-3">
-    <div class="col-12 md:col-12">
-      <p-fieldset legend="Datos del grupo">
-        <div class="p-2" *ngIf="grupo && curso">
-          <div class="flex justify-content-between">
-            <h2><p>{{curso.NombreCurso | titlecase}} - {{curso.nivel.Nivel }}</p></h2>
-            <p-tag>Cód: G-{{grupo.Id}}</p-tag>
-          </div>
-          <div class="grid content content-info-grupo">
-            <div class="col-12 md:col-7">
-              <p class="mt-2"><b>Número de módulos</b></p>
-              <p class="mt-1">{{curso.NumModulos}} Módulos</p>
-              <p class="mt-2"><b>Grupo asignado</b></p>
-              <p class="mt-1">{{grupo.tipoGrupo.NombreGrupo | titlecase}}</p>
+  <div class="mb-2">
+    <div class="grid">
+      <div class="col-12 md:col-5">
+        <p-card *ngIf="curso && grupo">
+          <div class="p-2">
+            <div class="flex justify-content-between">
+              <div class="flex">
+                <figure class="pr-2">
+                  <img class="img-flag" [src]="curso.UrlBandera" alt="bandera">
+                </figure>
+                <h2>
+                  <p>{{curso.NombreCurso | titlecase}} - {{curso.nivel.Nivel}}</p>
+                </h2>
+              </div>
+              <div><p-tag>Cód: G-{{grupo.Id}}</p-tag></div>
             </div>
-            <div class="col-12 md:col-5">
-              <p class="mt-2"><b>Fecha inicio</b> - <b>Fecha finalización</b></p>
-              <p class="mt-1">
-                <p-tag class="mr-2" severity="success">{{ grupo.FechaInicioGrupo | date:'mediumDate'}} <i class="fa-regular fa-calendar ml-2"></i></p-tag>
-                <p-tag severity="success">{{ grupo.FechaFinalGrupo | date:'mediumDate'}} <i class="fa-regular fa-calendar ml-2"></i></p-tag>
-              </p>
-              <p class="mt-2"><b>Docente asignado</b></p>
-              <p class="mt-1">{{docente.Nombres | titlecase}} {{grupo.docente.ApellidoPaterno | titlecase}}</p>
+            <p class="mt-2"><b>Docente asignado</b></p>
+            <p class="mt-1" *ngIf="docente">{{docente.Nombres | titlecase}} {{grupo.docente.ApellidoPaterno | titlecase}}</p>
+            <p class="mt-2"><b>Número de módulos</b></p>
+            <p class="mt-1">{{curso.NumModulos}} Módulos</p>
+            <p class="mt-2"><b>Grupo asignado</b></p>
+            <p class="mt-1">{{grupo.tipoGrupo.NombreGrupo | titlecase}}</p>
+          </div>
+        </p-card>
+      </div>
+      <div class="col-12 md:col-7">
+        <p-card *ngIf="estadoDataPagoGrupo">
+          <div class="p-1">
+            <div class="flex justify-content-between">
+              <h2>Estado del grupo</h2>
+              <div>
+                <p-tag>
+                  <p>{{estadoDataPagoGrupo.FechaActual | date:'fullDate'}}</p>
+                </p-tag>
+              </div>
+            </div>
+            <div class="grid">
+              <div class="col-12 md:col-6">
+                <p class="mt-2">
+                  <b>Fecha de inicio y final del grupo</b>
+                </p>
+                <p class="mt-1">
+                  <p-tag severity="success">{{estadoDataPagoGrupo.FechaInicioGrupo | date}}</p-tag> al <p-tag severity="success">{{estadoDataPagoGrupo.FechaFinalGrupo | date}}</p-tag>
+                </p>
+                <p class="mt-2">
+                  <b>Número total de dias en el curso</b>
+                </p>
+                <p class="mt-1">
+                  {{estadoDataPagoGrupo.NumDiasCurso}} dias
+                </p>
+                <p class="mt-2">
+                  <b>Dias por módulo</b>
+                </p>
+                <p class="mt-1">
+                  {{estadoDataPagoGrupo.DiasPorModulo}} dias
+                </p>
+              </div>
+              <div class="col-12 md:col-6">
+                <p class="mt-2">
+                  <b>Dias transcurridos</b>
+                </p>
+                <div class="mt-1">
+                  <p *ngIf="estadoDataPagoGrupo.DiasPasados>0">
+                    {{estadoDataPagoGrupo.DiasPasados}} dias
+                  </p>
+                  <p *ngIf="estadoDataPagoGrupo.DiasPasados<0">
+                    Faltan {{(-1)*estadoDataPagoGrupo.DiasPasados}} dias para el inicio del grupo
+                  </p>
+                </div>
+                <p class="mt-2">
+                  <b>Módulo actual</b>
+                </p>
+                <p class="mt-1">
+                  {{(estadoDataPagoGrupo.ModuloActual>0)?estadoDataPagoGrupo.ModuloActual:0}}
+                </p>
+                <p class="mt-2">
+                  <b>Módulos cumplidos</b>
+                </p>
+                <p class="mt-1">
+                  {{(estadoDataPagoGrupo.ModulosCumplidos>0)?estadoDataPagoGrupo.ModulosCumplidos:0}}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-      </p-fieldset>
+        </p-card>
+      </div>
     </div>
-  </div> -->
+    <div>
+      <p-card header="Fechas de pago" *ngIf="estadoDataPagoGrupo">
+        <div class="p-1">
+          <p-timeline [value]="estadoDataPagoGrupo.FechasDePago" layout="horizontal" align="alternate">
+            <ng-template pTemplate="content" let-event>
+                {{ event | date:'fullDate' | titlecase}}
+            </ng-template>
+          </p-timeline>
+        </div>
+      </p-card>
+    </div>
+  </div>
   <p-card header="Lista de estudiantes en el grupo">
     <div class="col table-responsive">
       <p-toolbar>
@@ -71,7 +141,7 @@
                 <th>Estado</th>
                 <th>Tipo población</th>
                 <th>Req. matricula</th>
-                <th>Módulos pagados</th>
+                <th>Pagos recibidos</th>
                 <th>Matricula</th>
                 <th>Mensualidad</th>
                 <th>Más</th>
@@ -95,7 +165,7 @@
             <td><p-tag severity="success">{{grupo.matricula.EstadoMatricula}}</p-tag></td>
             <td>{{grupo.matricula.denomiServicio.Descripcion | slice:0:45}}...</td>
             <td><button mat-button (click)="showFile(grupo.matricula.FileMatriculaURL)"><i class="pi pi-file-pdf icon-size"></i> ver</button></td>
-            <td>{{grupo.pagos.length}} de {{grupo.grupo.curso.NumModulos}}</td>
+            <td>{{grupo.pagos.length}} pagos</td>
             <td>{{grupo.matricula.denomiServicio.MontoMatricula | currency: 'PEN': 'symbol': '': 'es-PE'}}</td>
             <td>{{grupo.matricula.denomiServicio.MontoPension | currency: 'PEN': 'symbol': '': 'es-PE'}}</td>
             <td>
@@ -103,25 +173,22 @@
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #menu="matMenu">
-                <button mat-menu-item>
+                <button mat-menu-item
+                        [routerLink]="['/system/grupos/estudiantes-grupo', grupo.Id, 'estudiante', grupo.estudiante.Id]">
                   <mat-icon><i class="fa-solid fa-circle-info"></i></mat-icon>
                   <span>ver más</span>
                 </button>
-                <button mat-menu-item>
+                <button mat-menu-item (click)="openModalSidebarMessage( grupo )">
                   <mat-icon><i class="fa-brands fa-whatsapp"></i></mat-icon>
-                  <span>Notificar primer pago</span>
-                </button>
-                <button mat-menu-item>
-                  <mat-icon><i class="fa-solid fa-envelope"></i></mat-icon>
-                  <span>Notificar primer pago</span>
+                  <span>Notificar estudiante</span>
                 </button>
                 <button mat-menu-item>
                   <mat-icon><i class="fa-solid fa-pen-to-square"></i></mat-icon>
-                  <span>Editar grupo</span>
+                  <span>Editar datos estudiante</span>
                 </button>
                 <button mat-menu-item>
                   <mat-icon><i class="fa-solid fa-trash-can"></i></mat-icon>
-                  <span>Eliminar</span>
+                  <span>Eliminar del grupo</span>
                 </button>
               </mat-menu>
             </td>
@@ -130,7 +197,7 @@
         <ng-template pTemplate="rowexpansion" let-grupo>
           <tr>
             <td colspan="11">
-              <h3 class="pb-3">Lista de pagos</h3>
+              <h2 class="pb-3">Lista de pagos</h2>
               <div class="p-p-3">
                 <p-table [value]="grupo.pagos | filterPago:selectCategoria" responsiveLayout="scroll" dataKey="Id">
                   <ng-template pTemplate="header">
@@ -164,7 +231,7 @@
                           <p-tag icon="pi pi-times" severity="danger" value="No verificado"></p-tag>
                         </ng-template>
                       </td>
-                      <td><button mat-raised-button (click)="openModalMensualidad(pago)"> Validar pago </button></td>
+                      <td><button mat-stroked-button (click)="openModalMensualidad(pago)"><i class="fa-regular fa-pen-to-square p-1"></i> Validar pago </button></td>
                       <td>
                         <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
                           <mat-icon>more_vert</mat-icon>
@@ -176,7 +243,7 @@
                           </button>
                           <button mat-menu-item>
                             <mat-icon><i class="fa-brands fa-whatsapp"></i></mat-icon>
-                            <span>Notificar primer pago</span>
+                            <span>Notificar estudiante</span>
                           </button>
                           <button mat-menu-item>
                             <mat-icon><i class="fa-solid fa-envelope"></i></mat-icon>
@@ -223,16 +290,44 @@
             <p-paginator [rows]="5"
                          [totalRecords]="resAlumnoEnGrupo.count!"
                          [rowsPerPageOptions]="[5,10,15,20]"
-                          (onPageChange)="paginate($event)"></p-paginator>
+                        (onPageChange)="paginate($event)"></p-paginator>
           </div>
           <div></div>
         </div>
       </div>
       <app-loadding *ngIf="loadingLista && listaEstudiantes.length==0" msg="Lista de usuarios"></app-loadding>
-      <app-lista-vacia *ngIf="listaEstudiantes.length==0 && !loadingLista" msg="No se encontraron usuarios registrados"></app-lista-vacia>
     </div>
   </p-card>
 </div>
-
+<!-- componente para la visualización de documentos -->
 <app-show-file [fileURL]="fileURL"></app-show-file>
+<!-- componente para visualizar el modal del mensualidad -->
 <app-modal-mensualidad></app-modal-mensualidad>
+<!-- side bar para enviar los chats -->
+<p-sidebar [(visible)]="sidebarMessage">
+  <h2 class="mb-2" *ngIf="selectEstudiante">
+    <i class="fa-solid fa-message"></i> Notificar a {{selectEstudiante.Nombres | titlecase}}
+  </h2>
+  <div *ngIf="existsApodera">
+    <p class="p-2">Mensaje para</p>
+    <div class="grid" >
+      <div class="col-6">
+        <label for="Apoderado" class="ml-2 content-radio">
+          <p-chip label="Apoderado" icon="" class="chip">
+            <input type="radio" name="destino" [(ngModel)]="destino" value="a1" id="Apoderado">
+            <span class="select-radio"><i class="fa-solid fa-check pr-2"></i></span>
+          </p-chip>
+        </label>
+      </div>
+      <div class="col-6">
+        <label for="estudiante" class="ml-2 content-radio">
+          <p-chip label="Estudiante" icon="" class="chip">
+            <input type="radio" name="estudiante" [(ngModel)]="destino" value="e1" id="estudiante">
+            <span class="select-radio"><i class="fa-solid fa-check pr-2"></i></span>
+          </p-chip>
+        </label>
+      </div>
+    </div>
+  </div>
+  <app-editor [loading]="loadingSend"  (textMsg)="sendMessage($event)"></app-editor>
+</p-sidebar>

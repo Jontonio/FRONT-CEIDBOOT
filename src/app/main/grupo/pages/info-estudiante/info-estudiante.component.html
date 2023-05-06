@@ -1,0 +1,35 @@
+<p-card>
+  <h3 class="p-3"><i class="fa-solid fa-chart-column"></i> Historial de pagos del estudiante</h3>
+  <div class="content-chart line-chart">
+    <ngx-charts-line-chart
+    scheme="nightLights"
+    [legend]="legend"
+    [showXAxisLabel]="showXAxisLabel"
+    [showYAxisLabel]="showYAxisLabel"
+    [xAxis]="xAxis"
+    [yAxis]="yAxis"
+    [xAxisLabel]="xAxisLabel"
+    [yAxisLabel]="yAxisLabel"
+    [timeline]="timeline"
+    [results]="multi"
+    [showGridLines]="false"
+    (select)="onSelect($event)"
+    (activate)="onActivate($event)"
+    (deactivate)="onDeactivate($event)"
+    >
+  </ngx-charts-line-chart>
+  </div>
+</p-card>
+<br>
+<div class="grid">
+  <div class="col-12 md:col-6">
+    <p-card>
+
+    </p-card>
+  </div>
+  <div class="col-12 md:col-6">
+    <p-card>
+
+    </p-card>
+  </div>
+</div>
