@@ -25,6 +25,7 @@ import { ShowFileComponent } from '../show-file/show-file.component';
 import { Libro } from 'src/app/main/curso/class/Libro';
 import { CategoriaPago } from 'src/app/main/grupo/class/CategoriaPago';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { MedioPago } from 'src/app/class/MedioDePago';
 
 interface Card {
   name: string,
@@ -44,7 +45,7 @@ export class FormMatriculaComponent implements OnInit {
   isUpdate:boolean       = false;
   loadGetData:boolean    = false;
   displayMayoria:boolean = false;
-  estudiaUnajma:boolean = false;
+  estudiaUnajma:boolean  = false;
   isUNAJMA:boolean = false;
   loadGetApoderado:boolean = false;
   loadingDocumentoMatricula:boolean = false;
@@ -86,6 +87,7 @@ export class FormMatriculaComponent implements OnInit {
   listDepartamentos:Departamento[];
   listProvincias:Provincia[] = [];
   listDistritos:Distrito[] = [];
+  listMedioPago:MedioPago[] = [];
   msgTooltipEmail:string;
   msgTooltipCel:string;
 
@@ -160,6 +162,7 @@ export class FormMatriculaComponent implements OnInit {
     this.today = new Date();
     this.getListDenominServicio();
     this.getListGrupos();
+    this.getMediosPagos();
     this.inicializateCodes();
   }
 
@@ -235,10 +238,13 @@ export class FormMatriculaComponent implements OnInit {
       filePagoMensualidad:[null, Validators.required],
       NumOperacionMensualidad:[null, [Validators.required, Validators.pattern(/^([0-9])*$/)]],
       FechaPagoMensualidad:[null, [Validators.required, Validators.pattern(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[012])\/\d{4}$/)]],
+      medioPagoMensualidad:[null, Validators.required],
+      medioPagoLibro:[null, Validators.required],
+      medioPagoMatricula:[null, Validators.required],
       idCatMensualidad:[1, Validators.required],
       idCatMatricula:[2, Validators.required],
       idCatLibro:[3, Validators.required],
-      idCatCertificado:[4, Validators.required]
+      // idCatCertificado:[4, Validators.required]
     })
   }
 
@@ -368,6 +374,15 @@ export class FormMatriculaComponent implements OnInit {
   get FechaPagoMensualidad(){
     return this.formFiles.controls['FechaPagoMensualidad'];
   }
+  get medioPagoMensualidad(){
+    return this.formFiles.controls['medioPagoMensualidad'];
+  }
+  get medioPagoLibro(){
+    return this.formFiles.controls['medioPagoLibro'];
+  }
+  get medioPagoMatricula(){
+    return this.formFiles.controls['medioPagoMatricula'];
+  }
 
   get MontoPagoMatricula(){
     return this.formFiles.controls['MontoPagoMatricula'];
@@ -387,8 +402,21 @@ export class FormMatriculaComponent implements OnInit {
   get idCatLibro(){
     return this.formFiles.controls['idCatLibro'];
   }
-  get idCatCertificado(){
-    return this.formFiles.controls['idCatCertificado'];
+  // get idCatCertificado(){
+  //   return this.formFiles.controls['idCatCertificado'];
+  // }
+
+  getMediosPagos() {
+    this._global.getMediosDePago().subscribe({
+      next:(res) => {
+        if(res.ok){
+          this.listMedioPago = res.data as Array<MedioPago>;
+        }
+      },
+      error:(e) => {
+        console.log(e)
+      }
+    })
   }
 
   getListDenominServicio(){
@@ -453,29 +481,6 @@ export class FormMatriculaComponent implements OnInit {
     (this.TipoDocumento.value=='DNI' && documento.length==8 && this.Documento.valid)?this.getDataReniec(documento, true):''
   }
 
-  // getEstudiante(documento:string, isPeru:boolean = true){
-
-  //   this.loadGetData = true;
-  //   this._global.getEstudiante(documento).subscribe({
-  //     next: (value) => {
-  //       if(value.ok){
-  //         //TODO: estudiante existe
-  //         this.toast('info', value.msg);
-  //         this.completeDataEstudiante(value.data as Estudiante);
-  //       }else{
-  //         //TODO: estudinate no existe
-  //         this.getDataReniec(documento, isPeru);
-  //       }
-  //       this.loadGetData = false;
-  //     },
-  //     error: (e) => {
-  //       this.loadGetData = false;
-  //       console.log(e)
-  //       this.messageError(e);
-  //     }
-  //   })
-  // }
-
   getDataReniec(documento:string, isPeru:boolean = true){
     /** verificar si el documento es de perú o del extranjero */
     if(!isPeru) return;
@@ -486,7 +491,6 @@ export class FormMatriculaComponent implements OnInit {
         this.loadGetData = false;
         if(value.ok){
           this.completeData(value.data);
-          this.toast('success',value.msg,'Datos consultados a RENIEC');
           return;
         }
         this.toast('warn',value.msg,'Datos consultados a RENIEC')
@@ -679,6 +683,7 @@ export class FormMatriculaComponent implements OnInit {
                                        moment(this.FechaPagoMatricula.value,'DD/MM/YYYY').toDate(),
                                        this.NumOperacionMatricula.value,
                                        this.MontoPagoMatricula.value,
+                                       this.medioPagoMatricula.value,
                                        catMatricula as CategoriaPago);
         listPagos.push(pagoMatricula);
       }
@@ -688,6 +693,7 @@ export class FormMatriculaComponent implements OnInit {
                                    moment(this.FechaPagoLibro.value,'DD/MM/YYYY').toDate(),
                                    this.NumOperacionLibro.value,
                                    this.MontoPagoLibro.value,
+                                   this.medioPagoLibro.value,
                                    catLibro as CategoriaPago);
         listPagos.push(pagoLibro);
       }
@@ -697,6 +703,7 @@ export class FormMatriculaComponent implements OnInit {
                                          moment(this.FechaPagoMensualidad.value,'DD/MM/YYYY').toDate(),
                                          this.NumOperacionMensualidad.value,
                                          this.MontoPagoMensualidad.value,
+                                         this.medioPagoMensualidad.value,
                                          catMensualidad as CategoriaPago);
         listPagos.push(pagoMensualidad);
       }
@@ -854,12 +861,18 @@ export class FormMatriculaComponent implements OnInit {
     this.FechaPagoLibro.clearValidators();
     this.FechaPagoLibro.updateValueAndValidity();
     this.FechaPagoLibro.markAsPristine();
+    /** clear validator medio pago */
+    this.medioPagoLibro.clearValidators();
+    this.medioPagoLibro.updateValueAndValidity();
+    this.medioPagoLibro.markAsPristine();
   }
 
   addValidatorsLibro(){
     this.filePagoLibro.addValidators([Validators.required]);
     this.NumOperacionLibro.addValidators([Validators.required, Validators.pattern(/^([0-9])*$/)]);
     this.FechaPagoLibro.addValidators([Validators.required, Validators.pattern(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[012])\/\d{4}$/)]);
+    /** add validator medio pago */
+    this.medioPagoLibro.addValidators([Validators.required]);
   }
 
   clearValidatorsMensualidad(){
@@ -877,12 +890,18 @@ export class FormMatriculaComponent implements OnInit {
     this.FechaPagoMensualidad.clearValidators();
     this.FechaPagoMensualidad.updateValueAndValidity();
     this.FechaPagoMensualidad.markAsPristine();
+    /** clear validator medio pago */
+    this.medioPagoMensualidad.clearValidators();
+    this.medioPagoMensualidad.updateValueAndValidity();
+    this.medioPagoMensualidad.markAsPristine();
   }
 
   addValidatorsMensualidad(){
     this.filePagoMensualidad.addValidators([Validators.required]);
     this.NumOperacionMensualidad.addValidators([Validators.required, Validators.pattern(/^([0-9])*$/)]);
     this.FechaPagoMensualidad.addValidators([Validators.required, Validators.pattern(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[012])\/\d{4}$/)]);
+    /** add validator medio pago */
+    this.medioPagoMensualidad.addValidators([Validators.required]);
   }
 
   clearValidatorsMatricula(){
@@ -900,12 +919,18 @@ export class FormMatriculaComponent implements OnInit {
     this.FechaPagoMatricula.clearValidators();
     this.FechaPagoMatricula.updateValueAndValidity();
     this.FechaPagoMatricula.markAsPristine();
+     /** clear validator medio pago */
+     this.medioPagoMatricula.clearValidators();
+     this.medioPagoMatricula.updateValueAndValidity();
+     this.medioPagoMatricula.markAsPristine();
   }
 
   addValidatorsMatricula(){
     this.filePagoMatricula.addValidators([Validators.required]);
     this.NumOperacionMatricula.addValidators([Validators.required, Validators.pattern(/^([0-9])*$/)]);
     this.FechaPagoMatricula.addValidators([Validators.required, Validators.pattern(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[012])\/\d{4}$/)]);
+     /** add validator medio pago */
+     this.medioPagoMatricula.addValidators([Validators.required]);
   }
 
   clearRequierePago(){

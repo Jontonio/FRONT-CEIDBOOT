@@ -107,14 +107,14 @@ export class FormInfoPersonalComponent implements OnInit {
   get Email(){
     return this.formEstudiante.controls['Email'];
   }
-  get Departamento(){
-    return this.formEstudiante.controls['Departamento'];
+  get departamento(){
+    return this.formEstudiante.controls['departamento'];
   }
-  get Provincia(){
-    return this.formEstudiante.controls['Provincia'];
+  get provincia(){
+    return this.formEstudiante.controls['provincia'];
   }
-  get Distrito(){
-    return this.formEstudiante.controls['Distrito'];
+  get distrito(){
+    return this.formEstudiante.controls['distrito'];
   }
 
   changeCard(event:string){
@@ -172,7 +172,6 @@ export class FormInfoPersonalComponent implements OnInit {
         console.log(e);
       }
     })
-
   }
 
   searchEstudiante(documento:string=''){
@@ -187,29 +186,29 @@ export class FormInfoPersonalComponent implements OnInit {
   }
 
   completeData(estudiante:Person){
-    this.formEstudiante.controls['Nombres'].setValue(estudiante.nombres);
-    this.formEstudiante.controls['ApellidoPaterno'].setValue(estudiante.apellidoPaterno);
-    this.formEstudiante.controls['ApellidoMaterno'].setValue(estudiante.apellidoMaterno);
+    this.Nombres.setValue(estudiante.nombres);
+    this.ApellidoPaterno.setValue(estudiante.apellidoPaterno);
+    this.ApellidoMaterno.setValue(estudiante.apellidoMaterno);
   }
 
   requiredCountry(){
-    this.Departamento.addValidators([Validators.required]);
-    this.Provincia.addValidators([Validators.required]);
-    this.Distrito.addValidators([Validators.required]);
+    this.departamento.addValidators([Validators.required]);
+    this.provincia.addValidators([Validators.required]);
+    this.distrito.addValidators([Validators.required]);
   }
 
   notRequiredCountry(){
-      this.Departamento.clearValidators();
-      this.Provincia.clearValidators();
-      this.Distrito.clearValidators();
+      this.departamento.clearValidators();
+      this.provincia.clearValidators();
+      this.distrito.clearValidators();
 
-      this.Departamento.updateValueAndValidity();
-      this.Provincia.updateValueAndValidity();
-      this.Distrito.updateValueAndValidity();
+      this.departamento.updateValueAndValidity();
+      this.provincia.updateValueAndValidity();
+      this.distrito.updateValueAndValidity();
 
-      this.Departamento.markAsPristine();
-      this.Provincia.markAsPristine();
-      this.Distrito.markAsPristine();
+      this.departamento.markAsPristine();
+      this.provincia.markAsPristine();
+      this.distrito.markAsPristine();
   }
 
   selectedCountry(country:Code){

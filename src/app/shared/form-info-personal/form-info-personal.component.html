@@ -160,38 +160,38 @@
       </div>
       <div *ngIf="isPeru">
         <div class="col-12">
-          <label for="Departamento" class="block mb-2">Departamento</label>
+          <label for="departamento" class="block mb-2">Departamento</label>
           <p-dropdown class="p-fluid p-grid p-formgrid"
                       appendTo="body"
-                      formControlName="Departamento"
+                      formControlName="departamento"
                       [options]="listDepartamentos"
                       (ngModelChange)="selectedDepartamento($event)"
-                      placeholder="Departamento"
+                      placeholder="departamento"
                       optionLabel="NombreDepartamento"></p-dropdown>
-          <small *ngIf="Departamento.hasError('required') && Departamento.dirty"
+          <small *ngIf="departamento.hasError('required') && departamento.dirty"
                   class="p-error">El departamento es <strong>requerido</strong></small>
         </div>
         <div class="col-12">
           <label for="IdProvincia" class="block mb-2">Provincia</label>
           <p-dropdown class="p-fluid p-grid p-formgrid"
                       appendTo="body"
-                      formControlName="Provincia"
+                      formControlName="provincia"
                       [options]="listProvincias"
-                      placeholder="Provincia"
+                      placeholder="provincia"
                       (ngModelChange)="selectedProvincia($event)"
                       optionLabel="NombreProvincia"></p-dropdown>
-          <small *ngIf="Provincia.hasError('required') && Provincia.dirty"
+          <small *ngIf="provincia.hasError('required') && provincia.dirty"
                   class="p-error">La pronvincia es <strong>requerida</strong></small>
         </div>
         <div class="col-12">
-          <label for="Distrito" class="block mb-2">Distrito</label>
+          <label for="distrito" class="block mb-2">Distrito</label>
           <p-dropdown class="p-fluid p-grid p-formgrid"
                       appendTo="body"
-                      formControlName="Distrito"
+                      formControlName="distrito"
                       [options]="listDistritos"
-                      placeholder="Distrito"
+                      placeholder="distrito"
                       optionLabel="NombreDistrito"></p-dropdown>
-          <small *ngIf="Distrito.hasError('required') && Distrito.dirty"
+          <small *ngIf="distrito.hasError('required') && distrito.dirty"
                   class="p-error">El distrito es <strong>requerido</strong></small>
         </div>
       </div>

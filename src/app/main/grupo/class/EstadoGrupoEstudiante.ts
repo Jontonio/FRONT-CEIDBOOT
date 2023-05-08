@@ -1,22 +1,15 @@
 import { EstudianteEnGrupo } from "./EstudianteGrupo";
 import { Grupo } from "./Grupo";
 
+interface InfoDateGrupo{
+  diasTranscurridos:string,
+  fechaActual:Date;
+}
+
 class EstadoGrupoEstudiante {
-  estadoDataPago:EstadoDataPago;
+  infoDateGrupo:InfoDateGrupo;
   estudiantesEnGrupo:EstudianteEnGrupo[];
   grupo:Grupo;
 }
 
-class EstadoDataPago {
-  DiasPasados:number;
-  DiasPorModulo:number;
-  FechaActual:Date;
-  FechaFinalGrupo:Date;
-  FechaInicioGrupo:Date;
-  FechasDePago:Date[];
-  ModuloActual: number;
-  ModulosCumplidos: number;
-  NumDiasCurso: number;
-}
-
-export { EstadoGrupoEstudiante, EstadoDataPago}
+export { EstadoGrupoEstudiante, InfoDateGrupo }

@@ -2,9 +2,10 @@
 <div class="header-container-otros"></div>
 <div class="container-otros">
   <div class="content-card-otros animate__animated animate__fadeIn">
-    <p-card header="Otros trámites">
+    <p-card>
+      <h2 class="p-2"><i class="fa-solid fa-file-pen"></i> Otros trámites</h2>
+      <p-messages key="otros-tramites"></p-messages>
       <mat-stepper orientation="vertical" linear="isLinear" #stepper>
-        <p-messages key="message-examen-suf"></p-messages>
         <mat-step [stepControl]="formTramite">
           <ng-template matStepLabel>Tipo de trámite</ng-template>
           <app-form-tipo-tramite [formTramite]="formTramite"
@@ -18,7 +19,7 @@
         <mat-step [stepControl]="existsEstudiante?formEstudiante:formDocumento">
           <ng-template matStepLabel>Información personal</ng-template>
           <div *ngIf="!existsEstudiante">
-            <app-form-select-info-personal [formDocumento]="formDocumento" (dataDocumento)="dataDocumento($event)"></app-form-select-info-personal>
+            <app-form-select-info-personal [formDocumento]="formDocumento"></app-form-select-info-personal>
           </div>
           <div class="animate__animated animate__fadeInLeft" *ngIf="existsEstudiante">
             <app-form-info-personal [formEstudiante]="formEstudiante"></app-form-info-personal>
@@ -28,13 +29,13 @@
               <div *ngIf="!existsEstudiante">
                 <button mat-raised-button
                         (click)="readyDocumento()"
-                        [disabled]="loadingGetData">Siguiente doc</button>
+                        [disabled]="loadingGetData">Siguiente</button>
               </div>
               <div *ngIf="existsEstudiante">
                 <button
                         mat-raised-button
                         (click)="readyEstudent()"
-                        [disabled]="loadingGetData">Siguiente est</button>
+                        [disabled]="loadingGetData">Siguiente</button>
               </div>
             </div>
           </div>
@@ -57,12 +58,14 @@
             <div *ngIf="needSelectCurso">
               <button mat-raised-button
                       [disabled]="loadingDocumento || loadingFilePago || loadingDocumentoExtra"
-                      (click)="readyCurso()">Registrar c</button>
+                      (click)="readyCurso()"><i class="pi pi-save"></i> Registrar</button>
             </div>
             <div *ngIf="!needSelectCurso">
               <button mat-raised-button
-                      [disabled]="loadingDocumento || loadingFilePago || loadingDocumentoExtra"
-                      (click)="registrar()">Registrar r</button>
+                      [disabled]="loadingDocumento || loadingFilePago || loadingDocumentoExtra || loadingSave"
+                      (click)="registrar()">
+                      <i class="pi" [ngClass]="{'pi-save': !loadingSave,'pi-spin pi-spinner': loadingSave}"></i> Registrar
+              </button>
             </div>
 
           </div>

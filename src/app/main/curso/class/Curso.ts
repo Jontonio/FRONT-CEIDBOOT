@@ -1,4 +1,5 @@
 import { Libro } from "./Libro";
+import { Modulo } from "./Modulo";
 import { Nivel } from "./Nivel";
 
 class ResCurso {
@@ -13,7 +14,7 @@ class Curso {
   nivel: Nivel;
   libros:Libro[];
   DescripcionCurso: string;
-  NumModulos: number;
+  modulo: Modulo;
   Estado?: boolean;
   EstadoApertura:boolean;
   PrecioExamSuficiencia:number;
@@ -27,7 +28,7 @@ class Curso {
     NombreCurso: string,
     nivel: Nivel,
     DescripcionCurso: string,
-    NumModulos: number,
+    modulo: Modulo,
     Estado?: boolean,
     createdAt?: string,
     updatedAt?: string){
@@ -37,7 +38,7 @@ class Curso {
       this.NombreCurso = NombreCurso;
       this.nivel = nivel;
       this.DescripcionCurso = DescripcionCurso;
-      this.NumModulos = NumModulos;
+      this.modulo = modulo;
       this.Estado = Estado;
       this.createdAt = createdAt;
       this.updatedAt = updatedAt;

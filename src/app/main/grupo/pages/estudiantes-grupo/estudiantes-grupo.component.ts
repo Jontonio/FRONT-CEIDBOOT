@@ -20,7 +20,9 @@ import { Estudiante } from 'src/app/main/matricula/class/Estudiante';
 import { SocketService } from 'src/app/services/socket.service';
 import { PayloadSocket } from 'src/app/class/PayloadSocket';
 import * as moment from 'moment';
-import { EstadoDataPago, EstadoGrupoEstudiante } from '../../class/EstadoGrupoEstudiante';
+import {EstadoGrupoEstudiante, InfoDateGrupo } from '../../class/EstadoGrupoEstudiante';
+import { GrupoModulo } from '../../class/GrupoModulo';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-estudiantes-grupo',
@@ -53,13 +55,16 @@ export class EstudiantesGrupoComponent implements OnInit {
   existsApodera:boolean = false;
   loadingSend:boolean = false;
   selectEstudiante:Estudiante;
-  estadoDataPagoGrupo:EstadoDataPago;
-
+  infoDateGrupo:InfoDateGrupo;
+  nameEventSocket:string;
   idGrupo:string;
   limit:number  = 5;
   offset:number = 0;
+  visibleModalFecha:boolean;
+  formFecha:FormGroup;
 
   constructor(private readonly _grupo:GrupoService,
+              private readonly fb:FormBuilder,
               private readonly activeRoute:ActivatedRoute,
               private readonly _socket:SocketService,
               private readonly _unAuth:UnAuthorizedService,
@@ -68,9 +73,23 @@ export class EstudiantesGrupoComponent implements OnInit {
               private _msg:MessageService) {
                 this.getIdGrupo(this.activeRoute);
                 this.onListaEstudiantesCurso();
+                this.createFormFecha();
    }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.nameEventSocket = 'updated_list_estudiante_grupo';
+    this.visibleModalFecha = false;
+  }
+
+  createFormFecha(){
+    this.formFecha = this.fb.group({
+      Id:[null, Validators.required],
+      CurrentModulo:[null, Validators.required],
+      FechaPago:[null, Validators.required],
+      modulo:[null, Validators.required],
+      grupo:[null, Validators.required],
+    })
+  }
 
   ngOnDestroy(): void {
     if(this.listaEstudiantes$) this.listaEstudiantes$.unsubscribe();
@@ -123,12 +142,10 @@ export class EstudiantesGrupoComponent implements OnInit {
         if(value.ok){
           this.resAlumnoEnGrupo = value;
           this.grupo = value.data.grupo;
-          console.log(value)
           this.curso = value.data.grupo.curso;
           this.docente = value.data.grupo.docente;
           this.listaEstudiantes = value.data.estudiantesEnGrupo;
-          this.estadoDataPagoGrupo = value.data.estadoDataPago;
-          console.log(this.estadoDataPagoGrupo)
+          this.infoDateGrupo = value.data.infoDateGrupo;
           this.getCategoriaPagos();
         }
       },
@@ -154,7 +171,7 @@ export class EstudiantesGrupoComponent implements OnInit {
     this.selectCategoria = categoriaPago.TipoCategoriaPago;
   }
 
-  openModalMensualidad(pago:Pago){
+  openModalValidarPago(pago:Pago){
     this.modalMensualidad.openModal(pago, new PayloadSocket(this.limit, this.offset, this.idGrupo));
   }
 
@@ -162,7 +179,6 @@ export class EstudiantesGrupoComponent implements OnInit {
     this.sidebarMessage = true;
     this.selectEstudiante = estudiante;
     this.existsApodera = estudiante.apoderado?true:false;
-
   }
 
   sendMessage(event:string){
@@ -194,9 +210,21 @@ export class EstudiantesGrupoComponent implements OnInit {
     return `${CodePhone}${Celular}`.replace('+','').concat('@c.us').trim();
   }
 
+  opendModalEdit(data:GrupoModulo, Id:number){
+    data.FechaPago = (moment(data.FechaPago)).toDate()
+    data.grupo = { Id } as Grupo;
+    this.formFecha.patchValue(data);
+    this.visibleModalFecha = true;
+  }
+
+  estadoModalFecha(estado:boolean){
+    this.visibleModalFecha = estado;
+  }
+
   onListaEstudiantesCurso(){
     this._socket.OnEvent('list_estudian_en_grupo').subscribe({
       next:(value) => {
+        this.grupo = value.data.grupo;
         this.listaEstudiantes = value.data.estudiantesEnGrupo;
       },
       error:(e) => {

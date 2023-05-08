@@ -1,6 +1,7 @@
 import { Curso } from "../../curso/class/Curso";
 import { Docente } from "../../docente/class/Docente";
 import { EstadoGrupo } from "./EstadoGrupo";
+import { GrupoModulo } from "./GrupoModulo";
 import { Horario } from "./Horario";
 
 class ResGrupo {
@@ -28,6 +29,7 @@ class Grupo {
   horario:Horario;
   tipoGrupo:TipoGrupo;
   curso:Curso;
+  grupoModulo:GrupoModulo[];
 }
 
 class TipoGrupo {

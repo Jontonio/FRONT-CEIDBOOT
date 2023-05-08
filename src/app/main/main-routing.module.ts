@@ -68,6 +68,14 @@ const routes: Routes = [
         loadChildren: () => import('./matricula/matricula.module').then( mod => mod.MatriculaModule )
       },
       {
+        path:'tramite',
+        canActivate:[HasRoleGuard],
+        data:{
+          rolesPermitidos:['admin_role','user_role']
+        },
+        loadChildren: () => import('./tramites/tramites.module').then( mod => mod.TramitesModule )
+      },
+      {
         path:'chat-bot',
         canActivate:[HasRoleGuard],
         data:{

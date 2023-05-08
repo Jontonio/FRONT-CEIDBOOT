@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Message, MessageService } from 'primeng/api';
-import { Curso } from 'src/app/main/curso/class/Curso';
+import { MedioPago } from 'src/app/class/MedioDePago';
 import { GlobalService } from 'src/app/services/global.service';
 
 @Component({
@@ -25,6 +25,7 @@ export class FormAdjuntarArchivoComponent implements OnInit {
   loadingFileExtra :boolean = false;
 
   messages: Message[];
+  listMedioPago:MedioPago[] = [];
 
   constructor( private readonly _global:GlobalService,
                private _msg:MessageService ) {}
@@ -32,6 +33,20 @@ export class FormAdjuntarArchivoComponent implements OnInit {
   ngOnInit(): void {
     this.messages = [{ severity: 'warn', summary: 'Formatos permitidos', detail: '(PDF - PNG - JPG)' }];
     this.MontoPago.disable();
+    this.getMediosPagos();
+  }
+
+  getMediosPagos() {
+    this._global.getMediosDePago().subscribe({
+      next:(res) => {
+        if(res.ok){
+          this.listMedioPago = res.data as Array<MedioPago>;
+        }
+      },
+      error:(e) => {
+        console.log(e)
+      }
+    })
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -69,6 +84,9 @@ export class FormAdjuntarArchivoComponent implements OnInit {
   }
   get FileDataDocumentoExtra(){
     return this.formFiles.controls['FileDataDocumentoExtra'];
+  }
+  get MedioDePago(){
+    return this.formFiles.controls['MedioDePago'];
   }
 
   onDocumentoChange(fileChangeEvent:any) {
@@ -134,7 +152,7 @@ export class FormAdjuntarArchivoComponent implements OnInit {
     this.loadingFileExtra = true;
     this.emiterloadingFileExtra.emit(true);
     this.FileDocumentoExtra.disable();
-    const direccion = 'doc-tramites-extras'; //! *********
+    const direccion = 'doc-tramites-extras';
     let formData = new FormData();
     formData.append('file', file, file.name);
     formData.append('id_grupo','');

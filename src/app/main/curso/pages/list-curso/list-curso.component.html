@@ -43,7 +43,7 @@
               <td><img class="img-flag" [src]="curso.UrlBandera" alt="" srcset=""></td>
               <td>{{curso.NombreCurso | titlecase}}</td>
               <td>{{curso.nivel.Nivel | titlecase}}</td>
-              <td>{{curso.NumModulos}} Módulos</td>
+              <td>{{curso.modulo.Modulo}} Módulos</td>
               <td>
                 <p-tag styleClass="mr-2"
                         [pTooltip]="countLibros(curso.libros)==0?'El curso no incluye pago del libro en la matrícula':'El curso incluye pago del libro en la matrícula'"

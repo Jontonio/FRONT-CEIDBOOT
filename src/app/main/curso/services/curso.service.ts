@@ -8,6 +8,7 @@ import { ResNivel } from "../class/Nivel";
 import { UnAuthorizedService } from "src/app/services/unauthorized.service";
 import { Libro, ResLibro } from "../class/Libro";
 import { LintResult } from "tslint";
+import { ResModulo } from "../class/Modulo";
 
 @Injectable({
   providedIn:'root'
@@ -41,6 +42,10 @@ export class CursoService{
 
   getAllCursos(limit:number = 5, offset:number = 0):Observable<ResCurso>{
     return this.http.get<ResCurso>(`${this.BASE_URL}/curso/get-cursos?limit=${limit}&offset=${offset}`);
+  }
+
+  getAllModulos():Observable<ResModulo>{
+    return this.http.get<ResModulo>(`${this.BASE_URL}/curso/get-modulos`);
   }
 
   getAllNiveles(limit:number = 10, offset:number = 0):Observable<ResNivel>{

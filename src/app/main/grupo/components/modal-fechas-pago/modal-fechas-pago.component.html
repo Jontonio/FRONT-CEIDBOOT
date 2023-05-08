@@ -1,0 +1,24 @@
+<p-dialog header="Actualizar fecha"
+          [(visible)]="visibleModal"
+          [modal]="true"
+          [closable]="false"
+          [style]="{ width: '40vw'}">
+          <form [formGroup]="formFecha">
+            <p-calendar inputId="FechaNacimiento"
+                        formControlName="FechaPago"
+                        placeholder="DD-MM-AAAA"
+                        dateFormat="dd-mm-yy"
+                        [inline]="true"
+                        class="p-fluid p-grid p-formgrid">
+                        <ng-template pTemplate="header">
+                          <div class="content-selected-date">
+                            <b>Fecha | </b>{{FechaPago.value | date:'fullDate'}}
+                          </div>
+                        </ng-template>
+            </p-calendar>
+          </form>
+          <ng-template pTemplate="footer">
+            <button mat-raised-button (click)="saveChanges()">Guardar cambios</button>
+            <button mat-raised-button (click)="closeModal()">Cancelar</button>
+          </ng-template>
+</p-dialog>

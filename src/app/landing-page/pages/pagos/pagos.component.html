@@ -10,11 +10,8 @@
       <div class="progressBar">
         <p-progressBar *ngIf="loading" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
       </div>
-      <p-card header="Formulario de consulta">
+      <p-card header="Registro de pago">
         <p-messages key="message-pagos"></p-messages>
-        <!-- <p-toast key="message-pagos"
-                 [breakpoints]="{'920px': {width: '100%', right: '0', left: '0'}}"
-                 [baseZIndex]="999999"></p-toast> -->
         <mat-vertical-stepper [linear]="true" #stepper >
           <mat-step [stepControl]="formBusqueda">
             <form [formGroup]="formBusqueda">
@@ -107,10 +104,20 @@
           </mat-step>
           <mat-step [stepControl]="formFile">
             <ng-template matStepLabel>Subir vocuher</ng-template>
-            <p class="mb-3 mt-2">Complete el siguiente formulario para registrar su pago</p>
+            <!-- <p class="mb-3 mt-2">Complete el siguiente formulario para registrar su pago</p> -->
             <form [formGroup]="formFile">
-              <div class="grid">
-                <div class="col">
+              <div class="grid mt-3">
+                <div class="col-12 md:col-6">
+                  <label for="MedioDePago" class="block mb-2">Medios de pago</label>
+                  <p-dropdown class="p-fluid p-grid p-formgrid"
+                              [options]="listMedioPago"
+                              placeholder="Selecione el medio de pago realizado"
+                              formControlName="MedioDePago"
+                              optionLabel="MedioDePago"></p-dropdown>
+                  <small *ngIf="MedioDePago.hasError('required') && MedioDePago.dirty"
+                        class="p-error">El medio de pago es <strong>requerido</strong></small>
+                </div>
+                <div class="col-12 md:col-6">
                   <label for="MontoPago" class="block mb-2">Monto de pago S/.</label>
                   <p-inputNumber inputId="minmaxfraction"
                                   mode="decimal"
@@ -126,33 +133,29 @@
                           class="p-error">El campo monto de pago es <strong>requerido</strong></small>
                 </div>
                 <div class="col-12 md:col-12">
-                  <div class="">
-                    <label for="NumOperacionLibro" class="block mb-2">Número de operación</label>
-                    <input id="NumOperacionLibro"
-                          class="p-fluid p-grid p-formgrid full-width"
-                          type="text"
-                          placeholder="Digite el número de operación"
-                          maxlength="20"
-                          formControlName="NumOperacion"
-                          autocomplete="off"
-                          pInputText/>
-                    <small *ngIf="NumOperacion.hasError('pattern') && !NumOperacion.hasError('required')"
-                    class="p-error">Digite un número de operación <strong>válido</strong></small>
-                    <small *ngIf="NumOperacion.hasError('required') && NumOperacion.dirty"
-                            class="p-error">El campo número de operación es <strong>requerido</strong></small>
-                  </div>
+                  <label for="NumOperacionLibro" class="block mb-2">Número de operación</label>
+                  <input id="NumOperacionLibro"
+                        class="p-fluid p-grid p-formgrid full-width"
+                        type="text"
+                        placeholder="Digite el número de operación"
+                        maxlength="20"
+                        formControlName="NumOperacion"
+                        autocomplete="off"
+                        pInputText/>
+                  <small *ngIf="NumOperacion.hasError('pattern') && !NumOperacion.hasError('required')"
+                  class="p-error">Digite un número de operación <strong>válido</strong></small>
+                  <small *ngIf="NumOperacion.hasError('required') && NumOperacion.dirty"
+                          class="p-error">El campo número de operación es <strong>requerido</strong></small>
                 </div>
                 <div class="col-12 md:col-12">
-                  <div class="">
-                    <label for="FechaPagoLibro" class="block mb-2">Fecha de pago</label>
-                    <p-inputMask mask="99/99/9999"
-                                 formControlName="FechaPago"
-                                 placeholder="DD/MM/AAAA"></p-inputMask>
-                    <small *ngIf="FechaPago.hasError('pattern') && !FechaPago.hasError('required')"
-                            class="p-error">Digite una fecha de pago <strong>válida</strong></small>
-                    <small *ngIf="FechaPago.hasError('required') && FechaPago.dirty"
-                            class="p-error">El campo fecha de pago es <strong>requerido</strong></small>
-                  </div>
+                  <label for="FechaPagoLibro" class="block mb-2">Fecha de pago</label>
+                  <p-inputMask mask="99/99/9999"
+                                formControlName="FechaPago"
+                                placeholder="DD/MM/AAAA"></p-inputMask>
+                  <small *ngIf="FechaPago.hasError('pattern') && !FechaPago.hasError('required')"
+                          class="p-error">Digite una fecha de pago <strong>válida</strong></small>
+                  <small *ngIf="FechaPago.hasError('required') && FechaPago.dirty"
+                          class="p-error">El campo fecha de pago es <strong>requerido</strong></small>
                 </div>
                 <div class="col-12 md:col-12">
                   <div class="flex justify-content-between justify-content-center align-items-center content-file">

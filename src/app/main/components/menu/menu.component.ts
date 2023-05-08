@@ -97,6 +97,12 @@ export class MenuComponent implements OnInit {
         role:['admin_role','user_role','viewer_role']
       },
       {
+        label: 'Trámites',
+        icon: 'fa-solid fa-file-pen',
+        routerLink:'/system/tramite/lista-tramites',
+        role:['admin_role','user_role','viewer_role']
+      },
+      {
         label: 'ChatBot',
         icon: 'pi pi-qrcode',
         routerLink:'/system/chat-bot/estado-bot',

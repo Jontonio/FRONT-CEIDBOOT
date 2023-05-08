@@ -14,6 +14,8 @@ import { FileDrive } from '../main/class/global';
 import { Pago, ResPago } from '../main/grupo/class/Pago';
 import { ResCategoriaPago } from '../main/grupo/class/CategoriaPago';
 import { ResTipoTramite } from '../main/class/TipoTramite';
+import { ResMedioDePago } from '../class/MedioDePago';
+import { ResTramite, Tramite } from '../class/Tramite';
 
 @Injectable({
   providedIn: 'root'
@@ -88,6 +90,10 @@ export class GlobalService {
     return this.http.get<ResTipoTramite>(`${environment.BASE_URL}/tipo-tramite/get-list-register`);
   }
 
+  getMediosDePago():Observable<ResMedioDePago>{
+    return this.http.get<ResMedioDePago>(`${environment.BASE_URL}/medio-de-pago/get-all-medios-pago`);
+  }
+
   consultaEstudianteGrupo(data:any):Observable<ResEstudianteEnGrupo>{
     return this.http.post<ResEstudianteEnGrupo>(`${environment.BASE_URL}/estudiante-en-grupo/consulta-estudiante-en-grupo`, data);
   }
@@ -98,6 +104,10 @@ export class GlobalService {
 
   registerPrematricula(data:Matricula):Observable<ResEstudianteEnGrupo>{
     return this.http.post<ResEstudianteEnGrupo>(`${environment.BASE_URL}/matricula/prematricula-estudiante`, data);
+  }
+
+  registerTramite(data:Tramite):Observable<ResTramite>{
+    return this.http.post<ResTramite>(`${environment.BASE_URL}/tramite/register-new-tramite`, data);
   }
 
   uploadFile(data:FormData):Observable<FileDrive>{

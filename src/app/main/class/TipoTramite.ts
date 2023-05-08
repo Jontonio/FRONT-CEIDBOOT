@@ -9,6 +9,12 @@ class TipoTramite {
   DescripcionTramite: string;
   createdAt: string;
   updatedAt: string;
+
+  constructor(DerechoPagoTramite:number, TipoTramite:string, DescripcionTramite:string){
+    this.DerechoPagoTramite = DerechoPagoTramite;
+    this.TipoTramite = TipoTramite;
+    this.DescripcionTramite = DescripcionTramite;
+  }
 }
 
 

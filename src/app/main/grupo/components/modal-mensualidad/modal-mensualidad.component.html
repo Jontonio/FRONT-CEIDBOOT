@@ -11,7 +11,17 @@
             </div>
             <div class="col-12 md:col-4">
               <form [formGroup]="formMensualidad">
-                <h2 class="mb-3">Formulario de verificación</h2>
+                <div class="col">
+                  <label for="usuario" class="block mb-2">Medios de pago</label>
+                  <p-dropdown class="p-fluid p-grid p-formgrid"
+                              [options]="listMedioPago"
+                              placeholder="Selecione el medio de pago realizado"
+                              formControlName="MedioDePago"
+                              optionLabel="MedioDePago">
+                          </p-dropdown>
+                  <small *ngIf="MedioDePago.hasError('required') && MedioDePago.dirty"
+                        class="p-error">El medio de pago es <strong>requerido</strong></small>
+                </div>
                 <div class="col">
                   <label for="CodigoVoucher" class="block mb-2">Código del voucher</label>
                   <div class="p-inputgroup">

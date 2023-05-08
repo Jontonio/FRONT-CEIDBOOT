@@ -24,6 +24,7 @@ import { FilterGrupoPipe } from './pipes/filter-grupo.pipe';
 import { InfoEstudianteComponent } from './pages/info-estudiante/info-estudiante.component';
 import { ChatBotModule } from '../chat-bot/chat-bot.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { ModalFechasPagoComponent } from './components/modal-fechas-pago/modal-fechas-pago.component';
 
 
 @NgModule({
@@ -43,6 +44,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     FilterStatusGrupoPipe,
     FilterGrupoPipe,
     InfoEstudianteComponent,
+    ModalFechasPagoComponent,
   ],
   imports: [
     CommonModule,
@@ -54,6 +56,9 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     NgxSpinnerModule,
     ChatBotModule,
     NgxChartsModule
+  ],
+  exports:[
+    ModalMensualidadComponent
   ]
 })
 export class GrupoModule { }

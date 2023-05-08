@@ -13,6 +13,7 @@ import { Pago } from 'src/app/main/grupo/class/Pago';
 import { CategoriaPago } from 'src/app/main/grupo/class/CategoriaPago';
 import { Grupo } from 'src/app/main/grupo/class/Grupo';
 import * as moment from 'moment';
+import { MedioPago } from 'src/app/class/MedioDePago';
 
 interface Card {
   name: string,
@@ -27,7 +28,6 @@ interface Card {
 export class PagosComponent {
 
   @ViewChild('stepper') stepper:MatStepper;
-
   /** Variables de clase */
   card:Card[];
   TipoDocumentoSelected:string;
@@ -41,6 +41,7 @@ export class PagosComponent {
   resEstudianteEnGrupo:ResEstudianteEnGrupo;
   cursosMatriculados:Curso;
   listCategoriaPago:CategoriaPago[];
+  listMedioPago:MedioPago[] = [];
   msg: Message[] = [];
   file:File;
   formData:FormData;
@@ -56,6 +57,7 @@ export class PagosComponent {
     this.createFormularioCategoriaPago();
     this.inicializateVariables();
     this.getCategoriasPago();
+    this.getMediosPagos();
   }
 
   inicializateVariables(){
@@ -93,7 +95,8 @@ export class PagosComponent {
       FileURL:[null, Validators.required ],
       MontoPago:[null, [Validators.required, Validators.pattern(/^([0-9])*$/)]],
       NumOperacion:[null, [Validators.required, Validators.pattern(/^([0-9])*$/)]],
-      FechaPago:[null, [Validators.required, Validators.pattern(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[012])\/\d{4}$/)]]
+      FechaPago:[null, [Validators.required, Validators.pattern(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[012])\/\d{4}$/)]],
+      MedioDePago:[null, Validators.required]
     })
   }
 
@@ -136,6 +139,9 @@ export class PagosComponent {
   get FechaPago(){
     return this.formFile.controls['FechaPago'];
   }
+  get MedioDePago(){
+    return this.formFile.controls['MedioDePago'];
+  }
 
   getCategoriasPago(){
     this._global.getCategoriaPago().subscribe({
@@ -146,6 +152,19 @@ export class PagosComponent {
         }
       },
       error: (e) => {
+        console.log(e)
+      }
+    })
+  }
+
+  getMediosPagos() {
+    this._global.getMediosDePago().subscribe({
+      next:(res) => {
+        if(res.ok){
+          this.listMedioPago = res.data as Array<MedioPago>;
+        }
+      },
+      error:(e) => {
         console.log(e)
       }
     })
@@ -312,7 +331,7 @@ export class PagosComponent {
       this.stepper.next();
   }
 
-  toast(severity:string, summary:string, detail:string=''){
+  toast(severity:string, summary:string, detail?:string){
     this._msg.add({severity, summary, detail, key:'message-pagos'});
   }
 

@@ -22,6 +22,22 @@
   display: block;
   color: #F9A826;
 }
+.content-title-modulo, .content-date{
+  display: inline-block;
+  white-space: nowrap;
+}
+.current-modulo{
+  background: #F9A826;
+  color: #fff;
+  padding: 1px;
+  border-radius: 4px;
+}
+.content-time-line{
+  overflow-x: scroll;
+}
+.content-time-line::-webkit-scrollbar{
+  display: none;
+}
 @media only screen and (min-width: 1200px) {
   /* Estilos para escritorio grande aquí */
   .iframe{

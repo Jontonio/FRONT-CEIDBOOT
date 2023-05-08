@@ -18,68 +18,41 @@
             <p class="mt-2"><b>Docente asignado</b></p>
             <p class="mt-1" *ngIf="docente">{{docente.Nombres | titlecase}} {{grupo.docente.ApellidoPaterno | titlecase}}</p>
             <p class="mt-2"><b>Número de módulos</b></p>
-            <p class="mt-1">{{curso.NumModulos}} Módulos</p>
+            <p class="mt-1">{{curso.modulo.Modulo}} Módulos</p>
             <p class="mt-2"><b>Grupo asignado</b></p>
             <p class="mt-1">{{grupo.tipoGrupo.NombreGrupo | titlecase}}</p>
           </div>
         </p-card>
       </div>
       <div class="col-12 md:col-7">
-        <p-card *ngIf="estadoDataPagoGrupo">
+        <p-card *ngIf="grupo && infoDateGrupo">
           <div class="p-1">
             <div class="flex justify-content-between">
               <h2>Estado del grupo</h2>
-              <div>
-                <p-tag>
-                  <p>{{estadoDataPagoGrupo.FechaActual | date:'fullDate'}}</p>
-                </p-tag>
-              </div>
+              <p>{{infoDateGrupo.fechaActual | date:'fullDate'}}</p>
             </div>
             <div class="grid">
               <div class="col-12 md:col-6">
                 <p class="mt-2">
-                  <b>Fecha de inicio y final del grupo</b>
+                  <b>Fecha de inicio</b>
                 </p>
                 <p class="mt-1">
-                  <p-tag severity="success">{{estadoDataPagoGrupo.FechaInicioGrupo | date}}</p-tag> al <p-tag severity="success">{{estadoDataPagoGrupo.FechaFinalGrupo | date}}</p-tag>
+                  {{grupo.FechaInicioGrupo | date}}
                 </p>
                 <p class="mt-2">
-                  <b>Número total de dias en el curso</b>
+                  <b>Fecha final del grupo</b>
                 </p>
                 <p class="mt-1">
-                  {{estadoDataPagoGrupo.NumDiasCurso}} dias
+                 {{grupo.FechaFinalGrupo | date}}
                 </p>
-                <p class="mt-2">
-                  <b>Dias por módulo</b>
-                </p>
-                <p class="mt-1">
-                  {{estadoDataPagoGrupo.DiasPorModulo}} dias
-                </p>
-              </div>
-              <div class="col-12 md:col-6">
                 <p class="mt-2">
                   <b>Dias transcurridos</b>
                 </p>
                 <div class="mt-1">
-                  <p *ngIf="estadoDataPagoGrupo.DiasPasados>0">
-                    {{estadoDataPagoGrupo.DiasPasados}} dias
-                  </p>
-                  <p *ngIf="estadoDataPagoGrupo.DiasPasados<0">
-                    Faltan {{(-1)*estadoDataPagoGrupo.DiasPasados}} dias para el inicio del grupo
+                  <p>
+                    {{infoDateGrupo.diasTranscurridos}}
                   </p>
                 </div>
-                <p class="mt-2">
-                  <b>Módulo actual</b>
-                </p>
-                <p class="mt-1">
-                  {{(estadoDataPagoGrupo.ModuloActual>0)?estadoDataPagoGrupo.ModuloActual:0}}
-                </p>
-                <p class="mt-2">
-                  <b>Módulos cumplidos</b>
-                </p>
-                <p class="mt-1">
-                  {{(estadoDataPagoGrupo.ModulosCumplidos>0)?estadoDataPagoGrupo.ModulosCumplidos:0}}
-                </p>
               </div>
             </div>
           </div>
@@ -87,11 +60,18 @@
       </div>
     </div>
     <div>
-      <p-card header="Fechas de pago" *ngIf="estadoDataPagoGrupo">
-        <div class="p-1">
-          <p-timeline [value]="estadoDataPagoGrupo.FechasDePago" layout="horizontal" align="alternate">
-            <ng-template pTemplate="content" let-event>
-                {{ event | date:'fullDate' | titlecase}}
+      <p-card header="Fechas de pago" *ngIf="grupo">
+        <div class="p-1 content-time-line">
+          <p-timeline [value]="grupo.grupoModulo" layout="horizontal" align="top">
+            <ng-template pTemplate="content" let-data>
+              <div class="p-1 tag-a content-date" (click)="opendModalEdit(data, grupo.Id)">
+                <p-tag>{{ data.FechaPago | date:'mediumDate' | titlecase }} <i class="fa-solid fa-pen ml-2"></i></p-tag>
+              </div>
+            </ng-template>
+            <ng-template pTemplate="opposite" let-event>
+              <div class="p-1 content-title-modulo" [ngClass]="{'current-modulo':event.CurrentModulo}">
+                {{ event.modulo?('Fin módulo '+event.modulo.Modulo):('Inicio')}}
+              </div>
             </ng-template>
           </p-timeline>
         </div>
@@ -231,7 +211,7 @@
                           <p-tag icon="pi pi-times" severity="danger" value="No verificado"></p-tag>
                         </ng-template>
                       </td>
-                      <td><button mat-stroked-button (click)="openModalMensualidad(pago)"><i class="fa-regular fa-pen-to-square p-1"></i> Validar pago </button></td>
+                      <td><button mat-stroked-button (click)="openModalValidarPago(pago)"><i class="fa-regular fa-pen-to-square p-1"></i> Validar pago </button></td>
                       <td>
                         <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
                           <mat-icon>more_vert</mat-icon>
@@ -302,7 +282,11 @@
 <!-- componente para la visualización de documentos -->
 <app-show-file [fileURL]="fileURL"></app-show-file>
 <!-- componente para visualizar el modal del mensualidad -->
-<app-modal-mensualidad></app-modal-mensualidad>
+<app-modal-mensualidad [nameEventUpdate]="nameEventSocket"></app-modal-mensualidad>
+<!-- componente modal para las fechas de pago -->
+<app-modal-fechas-pago [formFecha]="formFecha"
+                       [visibleModal]="visibleModalFecha"
+                       (estadoModal)="estadoModalFecha($event)"></app-modal-fechas-pago>
 <!-- side bar para enviar los chats -->
 <p-sidebar [(visible)]="sidebarMessage">
   <h2 class="mb-2" *ngIf="selectEstudiante">

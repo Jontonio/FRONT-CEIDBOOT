@@ -10,11 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CursoService } from '../../services/curso.service';
 import { optionOperation } from '../../../class/global';
 import { Nivel } from '../../class/Nivel';
-
-export interface Modulo {
-  name:string,
-  cantidad:number;
-}
+import { Modulo } from '../../class/Modulo';
 
 @Component({
   selector: 'app-form-curso',
@@ -31,8 +27,8 @@ export class FormCursoComponent implements OnInit {
   debouncer = new Subject();
   formCurso:FormGroup;
   paisesSugeridos:Pais  [] = [];
-  niveles        :Nivel [];
-  modulo         :Modulo[] = [];
+  niveles        :Nivel [] = [];
+  listModulos    :Modulo[] = [];
 
   urlSelectedFlag:string | undefined;
   hayError       :boolean = false;
@@ -48,12 +44,10 @@ export class FormCursoComponent implements OnInit {
               private readonly _msg:MessageService,
               private readonly _curso:CursoService,
               private readonly _main:MainService) {
-    this.niveles = [];
     this.createFormCurso();
-    this.createModulos();
+    this.getListModulos();
     this.urlLista = '/system/cursos/lista-cursos';
     this.defaultFlag = './assets/images/default-flag.png';
-
   }
 
   ngOnInit(): void {
@@ -74,11 +68,17 @@ export class FormCursoComponent implements OnInit {
 
   }
 
-  createModulos(){
-    for (let index = 1; index <= 15; index++) {
-      index==1?this.modulo.push({name:`${index} Módulo`, cantidad: index}):
-               this.modulo.push({name:`${index} Módulos`, cantidad: index})
-    }
+  getListModulos(){
+    this._curso.getAllModulos().subscribe({
+      next:(res) => {
+        if(res.ok){
+          this.listModulos = res.data as Array<Modulo>;
+        }
+      },
+      error:(e) => {
+        console.log(e)
+      }
+    })
   }
 
   getNiveles(){
@@ -101,7 +101,7 @@ export class FormCursoComponent implements OnInit {
       NombrePais:[null,[Validators.required, Validators.pattern(/^([a-z ñáéíóú]{2,60})$/i)]],
       NombreCurso:[null,[Validators.required, Validators.pattern(/^([a-z ñáéíóú]{2,60})$/i)]],
       DescripcionCurso:[null, Validators.required],
-      NumModulos:[null, Validators.required],
+      modulo:[null, Validators.required],
       nivel:[null, Validators.required],
       LinkRequisitos:[null, [Validators.pattern(/^(http:\/\/|https:\/\/|ftp:\/\/)?([a-zA-Z0-9]+([\-\.]{1}[a-zA-Z0-9]+)*\.[a-zA-Z]{2,63}(:[0-9]{1,5})?(\/.*)?)$/)]],
       UrlBandera:[null]
@@ -124,8 +124,8 @@ export class FormCursoComponent implements OnInit {
   get nivel(){
     return this.formCurso.controls['nivel'];
   }
-  get NumModulos(){
-    return this.formCurso.controls['NumModulos'];
+  get modulo(){
+    return this.formCurso.controls['modulo'];
   }
   get LinkRequisitos(){
     return this.formCurso.controls['LinkRequisitos'];
@@ -187,7 +187,7 @@ export class FormCursoComponent implements OnInit {
     this.NombrePais.setValue(curso.NombrePais);
     this.NombreCurso.setValue(curso.NombreCurso);
     this.nivel.setValue(curso.nivel);
-    this.NumModulos.setValue(curso.NumModulos);
+    this.modulo.setValue(curso.modulo);
     this.UrlBandera.setValue(curso.UrlBandera);
     this.DescripcionCurso.setValue(curso.DescripcionCurso);
     this.LinkRequisitos.setValue(curso.LinkRequisitos);

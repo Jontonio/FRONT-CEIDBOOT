@@ -2,15 +2,18 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
 import { MessageService } from 'primeng/api';
+import { Person } from 'src/app/class/Person';
+import { Tramite } from 'src/app/class/Tramite';
 import { TipoTramite } from 'src/app/main/class/TipoTramite';
 import { Curso } from 'src/app/main/curso/class/Curso';
-import { Estudiante, RequestDocumento } from 'src/app/main/matricula/class/Estudiante';
+import { Docente } from 'src/app/main/docente/class/Docente';
+import { Pago } from 'src/app/main/grupo/class/Pago';
 import { GlobalService } from 'src/app/services/global.service';
 
 @Component({
   selector: 'app-otros-tramites',
   templateUrl: './otros-tramites.component.html',
-  styleUrls: ['./otros-tramites.component.scss']
+  styleUrls: ['./otros-tramites.component.scss'],
 })
 export class OtrosTramitesComponent implements OnInit {
 
@@ -24,6 +27,7 @@ export class OtrosTramitesComponent implements OnInit {
 
   hayError:boolean;
   loadingGetData:boolean;
+  loadingSave:boolean;
   existsEstudiante:boolean;
   loadingDocumento:boolean;
   loadingDocumentoExtra:boolean;
@@ -32,7 +36,6 @@ export class OtrosTramitesComponent implements OnInit {
   needOtherfileUpload:boolean;
 
   selectTipoTramite:TipoTramite;
-  estudiante:Estudiante;
   montoPago:number = 0;
 
   constructor( private fb:FormBuilder,
@@ -54,6 +57,7 @@ export class OtrosTramitesComponent implements OnInit {
     this.loadingFilePago       = false;
     this.needSelectCurso       = false;
     this.needOtherfileUpload   = false;
+    this.loadingSave           = false;
   }
 
   createFormTramite(){
@@ -76,9 +80,9 @@ export class OtrosTramitesComponent implements OnInit {
       Direccion:[null, Validators.required],
       Celular:[null, [Validators.pattern(/^([0-9])*$/), Validators.required]],
       Email:[null, [Validators.required,Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
-      Departamento:[null, Validators.required],
-      Provincia:[null, Validators.required],
-      Distrito:[null, Validators.required]
+      departamento:[null, Validators.required],
+      provincia:[null, Validators.required],
+      distrito:[null, Validators.required]
     })
   }
 
@@ -93,6 +97,7 @@ export class OtrosTramitesComponent implements OnInit {
       FechaPago:[null, [Validators.required, Validators.pattern(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[012])\/\d{4}$/)]],
       FilePago:[null, Validators.required ],
       FileDataPago:[null, Validators.required ],
+      MedioDePago:[null, Validators.required]
     })
   }
 
@@ -104,11 +109,59 @@ export class OtrosTramitesComponent implements OnInit {
     })
   }
 
+  //form files
+  get FileDocumento(){
+    return this.formFiles.controls['FileDocumento'];
+  }
+  get FileDataDocumento(){
+    return this.formFiles.controls['FileDataDocumento'];
+  }
+  get FileDocumentoExtra(){
+    return this.formFiles.controls['FileDocumentoExtra'];
+  }
+  get FileDataDocumentoExtra(){
+    return this.formFiles.controls['FileDataDocumentoExtra'];
+  }
+  get MontoPago(){
+    return this.formFiles.controls['MontoPago'];
+  }
+  get NumOperacion(){
+    return this.formFiles.controls['NumOperacion'];
+  }
+  get FechaPago(){
+    return this.formFiles.controls['FechaPago'];
+  }
+  get FilePago(){
+    return this.formFiles.controls['FilePago'];
+  }
+  get FileDataPago(){
+    return this.formFiles.controls['FileDataPago'];
+  }
+  get MedioDePago(){
+    return this.formFiles.controls['MedioDePago'];
+  }
+
+  get curso(){
+    return this.formCurso.controls['curso'];
+  }
+
   get TipoTramite(){
     return this.formTramite.controls['TipoTramite'];
   }
+  get TipoDocumento(){
+    return this.formEstudiante.controls['TipoDocumento'];
+  }
   get Documento(){
     return this.formEstudiante.controls['Documento'];
+  }
+  get Nombres(){
+    return this.formEstudiante.controls['Nombres'];
+  }
+  get ApellidPaterno(){
+    return this.formEstudiante.controls['ApellidoPaterno'];
+  }
+  get ApellidoMaterno(){
+    return this.formEstudiante.controls['ApellidoMaterno'];
   }
   get IsVerify(){
     return this.formDocumento.controls['IsVerify'];
@@ -133,17 +186,38 @@ export class OtrosTramitesComponent implements OnInit {
       Object.keys( this.formTramite.controls ).forEach( label => this.formTramite.controls[label].markAsDirty())
       return;
     }
-
-
     this.selectTipoTramite = this.TipoTramite.value;
     //! Este comparación se da en función al id registrado en la base de datos
     this.needSelectCurso    = this.selectTipoTramite.Id === 1?true:false;
+    this.selectTipoTramite.Id === 1?this.addValidatorsCurso():this.clearValidatorsCurso();
     //! Este comparación se da en función al id registrado en la base de datos
     this.needOtherfileUpload = this.selectTipoTramite.Id == 4?true:false;
+    this.selectTipoTramite.Id == 4?this.addValidatorsFileDocumentoExtra():this.clearValidatorsFileDocumentoExtra();
     // asignamos el precio del derecho de pago
     this.montoPago = this.selectTipoTramite.DerechoPagoTramite;
     // Avanzamos al siguiente formulario
     this.goForward();
+  }
+
+  clearValidatorsCurso(){
+    this.curso.clearValidators();
+    this.curso.updateValueAndValidity();
+    this.curso.markAsPristine();
+  }
+  clearValidatorsFileDocumentoExtra(){
+    this.FileDataDocumentoExtra.clearValidators();
+    this.FileDataDocumentoExtra.updateValueAndValidity();
+    this.FileDataDocumentoExtra.markAsPristine();
+    this.FileDocumentoExtra.clearValidators();
+    this.FileDocumentoExtra.updateValueAndValidity();
+    this.FileDocumentoExtra.markAsPristine();
+  }
+  addValidatorsFileDocumentoExtra(){
+    this.FileDataDocumentoExtra.addValidators([Validators.required]);
+    this.FileDocumentoExtra.addValidators([Validators.required]);
+  }
+  addValidatorsCurso(){
+    this.curso.addValidators([Validators.required]);
   }
 
   /** Valid forms */
@@ -152,21 +226,25 @@ export class OtrosTramitesComponent implements OnInit {
     this.IsVerify.setValue(true);
     // Verificamos los campos del formulario
     if(this.formDocumento.invalid){
-      Object.keys(this.formDocumento.controls).forEach( inputName => this.formDocumento.controls[inputName].markAsDirty() )
+      Object.keys(this.formDocumento.controls)
+            .forEach( inputName => this.formDocumento.controls[inputName].markAsDirty() )
       return;
     }
     //verificar si existe el estudiante
     this.loadingGetData = true;
-    this._global.getEstudiante( this.formDocumento.value ).subscribe({
+    const dataQuery = this.formDocumento.value;
+    this._global.getEstudiante( dataQuery ).subscribe({
       next: (value) => {
         this.loadingGetData = false;
         if(value.data){
           this.existsEstudiante = false;
-          //TODO: obtener al estudiante
-          this.estudiante = value.data as Estudiante;
+          this.formEstudiante.patchValue(value.data);
+          this.toast('success',`👋 Estudiante ${this.Nombres.value} estás en la sección donde podrás adjuntar tus archivos.`, 'otros-tramites')
           this.goForward();
         }else{
+          this.toast('success',`👋 Estudiante completa el siguiente formulario para continuar con la siguiente sección del trámite`, 'otros-tramites')
           this.existsEstudiante = true;
+          this.getDataReniec( dataQuery.Documento, true);
         }
       },
       error: (e) => {
@@ -180,16 +258,17 @@ export class OtrosTramitesComponent implements OnInit {
   readyCurso(){
     // Verificamos los campos del formulario
     if(this.formCurso.invalid){
-      Object.keys(this.formCurso.controls).forEach( inputName => this.formCurso.controls[inputName].markAsDirty() )
+      Object.keys(this.formCurso.controls)
+            .forEach( inputName => this.formCurso.controls[inputName].markAsDirty() )
       return;
     }
-    console.log("pasa")
   }
 
   readyEstudent(){
     // Verificamos los campos del formulario
     if(this.formEstudiante.invalid){
-      Object.keys(this.formEstudiante.controls).forEach( inputName => this.formEstudiante.controls[inputName].markAsDirty() )
+      Object.keys(this.formEstudiante.controls)
+            .forEach( inputName => this.formEstudiante.controls[inputName].markAsDirty() )
       return;
     }
 
@@ -198,13 +277,13 @@ export class OtrosTramitesComponent implements OnInit {
       .subscribe({
         next: (res) => {
           if(!res.ok){
-            this.toast('error', res.msg);
+            this.toast('error', res.msg, 'otros-tramites');
             this.Email.setErrors({notUnique:true});
             this.hayError = true;
             return;
           }else{
             this.hayError = false;
-            this._msg.clear('message-matricula');
+            this._msg.clear('otros-tramites');
           }
         },
         error: (e) => this.messageError(e)
@@ -222,21 +301,85 @@ export class OtrosTramitesComponent implements OnInit {
   tipoTramiteSelected(tipoTramite:TipoTramite){}
 
   registrar(){
+    // limpiar mensajes
+    this._msg.clear('otros-tramites');
     // Verificamos los campos del formulario
-    console.log(this.formTramite.value);
-    console.log(this.formEstudiante.value);
-    console.log(this.formFiles.value);
-    console.log(this.estudiante)
-
     if(this.formFiles.invalid){
-      Object.keys(this.formFiles.controls).forEach( inputName => this.formFiles.controls[inputName].markAsDirty() )
+      Object.keys(this.formFiles.controls)
+            .forEach( inputName => this.formFiles.controls[inputName].markAsDirty() )
       return;
     }
 
+    const pago = new Pago(this.FileDataPago.value.webViewLink,
+                          this.FechaPago.value,
+                          this.NumOperacion.value,
+                          this.MontoPago.value,
+                          this.MedioDePago.value);
+    const tramite = new Tramite(this.FileDataDocumento.value.webViewLink,
+                                this.FileDataDocumentoExtra.value?
+                                this.FileDataDocumentoExtra.value.webViewLink:null,
+                                this.TipoTramite.value,
+                                pago,
+                                this.formEstudiante.value);
+    this._global.registerTramite( tramite ).subscribe({
+      next:(res) => {
+        if(res.ok){
+          this.resetForms();
+          this.toast('success', res.msg, 'otros-tramites');
+          return;
+        }
+      },
+      error:(e) => {
+        console.log(e)
+        this.messageError(e);
+      }
+    })
   }
 
-  dataDocumento(data:RequestDocumento){
+  completeDataPersona(persona:Person){
+    this.Documento.setValue(persona.dni);
+    this.Nombres.setValue(persona.nombres);
+    this.ApellidPaterno.setValue(persona.apellidoPaterno);
+    this.ApellidoMaterno.setValue(persona.apellidoMaterno);
+  }
 
+  getDataReniec(documento:string, isPeru:boolean = true){
+    /** verificar si el documento es de perú o del extranjero */
+    if(!isPeru) return;
+    /** realiza la petición de los datos mediante el enpoint */
+    this._global.apiReniec(documento).subscribe({
+      next: (value) => {
+        if(value.ok){
+          console.log(value)
+          this.completeDataPersona(value.data);
+          this.toast('success',value.msg,'Datos consultados a RENIEC');
+          return;
+        }
+      },
+      error: (e) => {
+        console.log(e);
+      }
+    })
+  }
+
+  searchEstudiante(documento:string=''){
+    /** verificar si el documento no este vacia*/
+    if(!documento) return;
+    /** validar para hacer la busqueda del documento en RENIEC */
+    (this.TipoDocumento.value=='DNI' && documento.length==8 && this.Documento.valid)?this.getDataReniec(documento, true):''
+  }
+
+  resetForms(){
+    this.existsEstudiante    = false;
+    this.needSelectCurso     = false;
+    this.needOtherfileUpload = false;
+    this.montoPago = 0.0;
+    this.formEstudiante.reset();
+    this.formCurso.reset();
+    this.formDocumento.reset();
+    this.formFiles.reset();
+    this.stepper.reset();
+    this.TipoDocumento.setValue('DNI');
   }
 
   stateLoadingDocumento(event:boolean){
@@ -251,18 +394,18 @@ export class OtrosTramitesComponent implements OnInit {
     this.loadingFilePago = event;
   }
 
-  toast(severity:string, summary:string, detail:string=''){
-    this._msg.add({severity, summary, detail, key:'message-examen-suf'});
+  toast(severity:string, summary:string, key?:string, detail?:string){
+    this._msg.add({severity, summary, detail, key });
   }
 
   messageError(e:any, detail:string = 'Error de validación de datos'){
     if(Array.isArray(e.error.message)){
       e.error.message.forEach( (e:string) => {
-        this.toast('error', e, detail)
+        this.toast('error', e, 'otros-tramites',detail)
       })
     }else{
       console.log()
-      this.toast('error',e.error.message, detail);
+      this.toast('error',e.error.message, 'otros-tramites', detail);
     }
   }
 

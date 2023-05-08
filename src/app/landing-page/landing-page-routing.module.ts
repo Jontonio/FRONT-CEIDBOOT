@@ -6,9 +6,7 @@ import { MatriculaComponent } from './pages/matricula/matricula.component';
 import { WeComponent } from './pages/we/we.component';
 import { PagosComponent } from './pages/pagos/pagos.component';
 import { ExampleNumOperacionComponent } from './pages/example-num-operacion/example-num-operacion.component';
-import { ExamenSuficienciaComponent } from './pages/examen-suficiencia/examen-suficiencia.component';
 import { OtrosTramitesComponent } from './pages/otros-tramites/otros-tramites.component';
-import { CertificadoEstudiosComponent } from './pages/certificado-estudios/certificado-estudios.component';
 
 const routes: Routes = [
   {
@@ -20,8 +18,6 @@ const routes: Routes = [
       { path:'matricula', component:MatriculaComponent },
       { path:'pagos', component:PagosComponent },
       { path:'otros-tramites', component:OtrosTramitesComponent },
-      { path:'examen-suficiencia', component:ExamenSuficienciaComponent },
-      { path:'certificado-de-estudios', component:CertificadoEstudiosComponent },
       { path:'example/numero-operacion', component:ExampleNumOperacionComponent },
     ]
   },

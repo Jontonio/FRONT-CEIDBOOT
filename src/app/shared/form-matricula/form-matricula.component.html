@@ -11,9 +11,9 @@
 <ng-template #formMatricula>
   <p-messages key="message-matricula"></p-messages>
   <mat-stepper linear="true" #stepper>
-    <mat-step [stepControl]="formEstudiante">
+    <mat-step>
       <p-messages key="message-error-code"></p-messages>
-      <form [formGroup]="formEstudiante">
+      <form [formGroup]="formEstudiante" method="post">
         <ng-template matStepLabel>Información personal</ng-template>
           <div class="grid content">
             <div class="col-12 md:col-6">
@@ -219,8 +219,8 @@
           </div>
       </form>
     </mat-step>
-    <mat-step [stepControl]="formMayorEdad">
-      <form [formGroup]="formMayorEdad">
+    <mat-step>
+      <form [formGroup]="formMayorEdad" method="post">
         <ng-template matStepLabel>Mayoria de edad</ng-template>
         <div class="grid content">
           <div class="col-12">
@@ -327,8 +327,8 @@
         </div>
       </form>
     </mat-step>
-    <mat-step [stepControl]="formGrupo">
-      <form [formGroup]="formGrupo">
+    <mat-step>
+      <form [formGroup]="formGrupo" method="post">
         <ng-template matStepLabel>Grupo y curso</ng-template>
         <div class="grid content">
           <div class="col-12">
@@ -371,7 +371,7 @@
                     </div>
                     <div class="col-12 md:col-6">
                       <p class="mt-2"><b>Número de módulos</b></p>
-                      <p class="mt-1">{{selecGrupo.curso.NumModulos}} Módulos</p>
+                      <p class="mt-1">{{selecGrupo.curso.modulo.Modulo}} Módulos</p>
                       <p class="mt-2"><b>Inicio del grupo</b></p>
                       <p class="mt-1"><i class="fa-regular fa-calendar mr-2"></i> {{selecGrupo.FechaInicioGrupo | date:'mediumDate'}}</p>
                       <p class="mt-2"><b>Finalización del grupo</b></p>
@@ -391,8 +391,8 @@
         </div>
       </form>
     </mat-step>
-    <mat-step [stepControl]="formAcademica">
-      <form [formGroup]="formAcademica">
+    <mat-step>
+      <form [formGroup]="formAcademica" method="post">
         <ng-template matStepLabel>Formación</ng-template>
         <div class="grid content">
           <div class="col-12">
@@ -468,7 +468,7 @@
         </div>
       </form>
     </mat-step>
-    <mat-step [stepControl]="formFiles">
+    <mat-step>
       <form [formGroup]="formFiles" method="post">
         <ng-template matStepLabel>Adjuntar archivos</ng-template>
         <div class="pl-1 pr-1 mt-2">
@@ -499,6 +499,18 @@
             <p-progressBar *ngIf="loadingFilePagoMatricula" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
             <p-accordionTab *ngIf="selecGrupo && selecGrupo.RequeridoPPago" header="Cargue su voucher del pago de matrícula">
               <div class="grid">
+                <div class="col mb-3">
+                  <label for="medioPagoMatricula" class="block mb-2">Medios de pago</label>
+                  <p-dropdown class="p-fluid p-grid p-formgrid"
+                              [options]="listMedioPago"
+                              placeholder="Selecione el medio de pago realizado"
+                              formControlName="medioPagoMatricula"
+                              optionLabel="MedioDePago"></p-dropdown>
+                  <small *ngIf="medioPagoMatricula.hasError('required') && medioPagoMatricula.dirty"
+                        class="p-error">El medio de pago es <strong>requerido</strong></small>
+                </div>
+              </div>
+              <div class="grid">
                 <div class="col-12 md:col-3">
                   <label for="MontoPagoMatricula" class="block mb-2">Monto de pago S/.</label>
                     <p-inputNumber inputId="minmaxfraction"
@@ -512,7 +524,7 @@
                   <small *ngIf="MontoPagoMatricula.hasError('pattern') && !MontoPagoMatricula.hasError('required')"
                           class="p-error">Digite un monto de pago <strong>válido</strong></small>
                   <small *ngIf="MontoPagoMatricula.hasError('required') && MontoPagoMatricula.dirty"
-                          class="p-error">El campo monto de pago es <strong>requerido</strong></small>
+                          class="p-error">El monto de pago es <strong>requerido</strong></small>
                 </div>
                 <div class="col-12 md:col-3">
                   <label for="NumOperacionMatricula" class="block mb-2">N° de operación <a class="tag-a" (click)="showFileExample()">Ver ejemplo</a></label>
@@ -526,7 +538,7 @@
                   <small *ngIf="NumOperacionMatricula.hasError('pattern') && !NumOperacionMatricula.hasError('required')"
                           class="p-error">Digite un número de operación <strong>válido</strong></small>
                   <small *ngIf="NumOperacionMatricula.hasError('required') && NumOperacionMatricula.dirty"
-                          class="p-error">El campo número de operación es <strong>requerido</strong></small>
+                          class="p-error">El número de operación es <strong>requerido</strong></small>
                 </div>
                 <div class="col-12 md:col-3">
                   <label for="FechaPagoMatricula" class="block mb-2">Fecha de pago</label>
@@ -536,7 +548,7 @@
                   <small *ngIf="FechaPagoMatricula.hasError('pattern') && !FechaPagoMatricula.hasError('required')"
                           class="p-error">Digite una fecha de pago <strong>válida</strong></small>
                   <small *ngIf="FechaPagoMatricula.hasError('required') && FechaPagoMatricula.dirty"
-                          class="p-error">El campo fecha de pago es <strong>requerido</strong></small>
+                          class="p-error">El fecha de pago es <strong>requerido</strong></small>
                 </div>
                 <div class="col-12 md:col-3">
                   <div class="text-center">
@@ -561,6 +573,18 @@
             <p-progressBar *ngIf="loadingFilePagoLibro" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
             <p-accordionTab *ngIf="selecGrupo && selecGrupo.RequeridoPPago && countLibros(selecGrupo.curso.libros)!=0" header="Cargue su voucher del pago del libro">
               <div class="grid">
+                <div class="col mb-3">
+                  <label for="medioPagoLibro" class="block mb-2">Medios de pago</label>
+                  <p-dropdown class="p-fluid p-grid p-formgrid"
+                              [options]="listMedioPago"
+                              placeholder="Selecione el medio de pago realizado"
+                              formControlName="medioPagoLibro"
+                              optionLabel="MedioDePago"></p-dropdown>
+                  <small *ngIf="medioPagoLibro.hasError('required') && medioPagoLibro.dirty"
+                        class="p-error">El medio de pago es <strong>requerido</strong></small>
+                </div>
+              </div>
+              <div class="grid">
                 <div class="col-12 md:col-3">
                   <label for="MontoPagoLibro" class="block mb-2">Monto de pago S/.</label>
                     <p-inputNumber inputId="minmaxfraction"
@@ -574,7 +598,7 @@
                     <small *ngIf="MontoPagoLibro.hasError('pattern') && !MontoPagoLibro.hasError('required')"
                             class="p-error">Digite un monto de pago <strong>válido</strong></small>
                     <small *ngIf="MontoPagoLibro.hasError('required') && MontoPagoLibro.dirty"
-                            class="p-error">El campo monto de pago es <strong>requerido</strong></small>
+                            class="p-error">El monto de pago es <strong>requerido</strong></small>
                 </div>
                 <div class="col-12 md:col-3">
                   <div class="">
@@ -589,7 +613,7 @@
                     <small *ngIf="NumOperacionLibro.hasError('pattern') && !NumOperacionLibro.hasError('required')"
                     class="p-error">Digite un número de operación <strong>válido</strong></small>
                     <small *ngIf="NumOperacionLibro.hasError('required') && NumOperacionLibro.dirty"
-                            class="p-error">El campo número de operación es <strong>requerido</strong></small>
+                            class="p-error">El número de operación es <strong>requerido</strong></small>
                   </div>
                 </div>
                 <div class="col-12 md:col-3">
@@ -601,7 +625,7 @@
                     <small *ngIf="FechaPagoLibro.hasError('pattern') && !FechaPagoLibro.hasError('required')"
                             class="p-error">Digite una fecha de pago <strong>válida</strong></small>
                     <small *ngIf="FechaPagoLibro.hasError('required') && FechaPagoLibro.dirty"
-                            class="p-error">El campo fecha de pago es <strong>requerido</strong></small>
+                            class="p-error">La fecha de pago es <strong>requerido</strong></small>
                   </div>
                 </div>
                 <div class="col-12 md:col-3">
@@ -627,6 +651,18 @@
             <p-progressBar *ngIf="loadingFilePagoMensualidad" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
             <p-accordionTab *ngIf="selecGrupo && selecGrupo.RequeridoPPago" header="Cargue su voucher del pago de su primera mensualidad">
               <div class="grid">
+                <div class="col mb-3">
+                  <label for="medioPagoMensualidad" class="block mb-2">Medios de pago</label>
+                  <p-dropdown class="p-fluid p-grid p-formgrid"
+                              [options]="listMedioPago"
+                              placeholder="Selecione el medio de pago realizado"
+                              formControlName="medioPagoMensualidad"
+                              optionLabel="MedioDePago"></p-dropdown>
+                  <small *ngIf="medioPagoMensualidad.hasError('required') && medioPagoMensualidad.dirty"
+                        class="p-error">El medio de pago es <strong>requerido</strong></small>
+                </div>
+              </div>
+              <div class="grid">
                 <div class="col-12 md:col-3">
                   <label for="MontoPagoMensualidad" class="block mb-2">Monto de pago S/.</label>
                     <p-inputNumber inputId="minmaxfraction"
@@ -640,7 +676,7 @@
                     <small *ngIf="MontoPagoMensualidad.hasError('pattern') && !MontoPagoMensualidad.hasError('required')"
                             class="p-error">Digite un monto de pago <strong>válido</strong></small>
                     <small *ngIf="MontoPagoMensualidad.hasError('required') && MontoPagoMensualidad.dirty"
-                            class="p-error">El campo monto de pago es <strong>requerido</strong></small>
+                            class="p-error">El monto de pago es <strong>requerido</strong></small>
                 </div>
                 <div class="col-12 md:col-3">
                   <div class="">
@@ -655,7 +691,7 @@
                     <small *ngIf="NumOperacionMensualidad.hasError('pattern') && !NumOperacionMensualidad.hasError('required')"
                             class="p-error">Digite un número de operación <strong>válido</strong></small>
                     <small *ngIf="NumOperacionMensualidad.hasError('required') && NumOperacionMensualidad.dirty"
-                            class="p-error">El campo número de operación es <strong>requerido</strong></small>
+                            class="p-error">Número de operación es <strong>requerido</strong></small>
                   </div>
                 </div>
                 <div class="col-12 md:col-3">
@@ -667,7 +703,7 @@
                     <small *ngIf="FechaPagoMensualidad.hasError('pattern') && !FechaPagoMensualidad.hasError('required')"
                             class="p-error">Digite una fecha de pago <strong>válida</strong></small>
                     <small *ngIf="FechaPagoMensualidad.hasError('required') && FechaPagoMensualidad.dirty"
-                            class="p-error">El campo fecha de pago es <strong>requerido</strong></small>
+                            class="p-error">La fecha de pago es <strong>requerido</strong></small>
                   </div>
                 </div>
                 <div class="col-12 md:col-3">

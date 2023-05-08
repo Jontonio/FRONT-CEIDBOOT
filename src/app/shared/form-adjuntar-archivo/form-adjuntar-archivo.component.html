@@ -22,6 +22,7 @@
               <input #uploadFileDoc
                       formControlName="FileDocumento"
                       (change)="onDocumentoChange($event)"
+                      accept=".pdf"
                       type='file' style="display:none"/>
             </div>
             <small *ngIf="FileDocumento.hasError('required') && FileDocumento.dirty"
@@ -44,6 +45,7 @@
             <mat-icon>{{(FileDocumentoExtra.value && !loadingFileExtra)?'check':'attach_file'}}</mat-icon> Elija el archivo</button>
             <input #uploadFileDocExtra
                   formControlName="FileDocumentoExtra"
+                  accept=".jpg,.jpeg"
                   (change)="onFileDocumentoExtraChange($event)"
                   type='file' style="display:none"/>
             </div>
@@ -58,7 +60,21 @@
                      [style]="{'height': '6px'}"></p-progressBar>
       <p-accordionTab header="Cargue su voucher de pago" [disabled]="disableOption">
         <div class="mb-3 content-info-operacion">
-          <p>El número o folio de la boleta en el voucher corresponde al número de operación que se imprime en el voucher <a class="tag-a">Ver ejemplo</a></p>
+          <p>El número o folio de la boleta en el voucher corresponde al número de operación que se imprime en el voucher.
+             para más información <a class="tag-a" routerLink="/main/example/numero-operacion" target="_blank">Ver ejemplo</a></p>
+        </div>
+        <div class="grid">
+          <div class="col mb-3">
+            <label for="usuario" class="block mb-2">Medios de pago</label>
+            <p-dropdown class="p-fluid p-grid p-formgrid"
+                        [options]="listMedioPago"
+                        placeholder="Selecione el medio de pago realizado"
+                        formControlName="MedioDePago"
+                        optionLabel="MedioDePago">
+                    </p-dropdown>
+            <small *ngIf="MedioDePago.hasError('required') && MedioDePago.dirty"
+                  class="p-error">El medio de pago es <strong>requerido</strong></small>
+          </div>
         </div>
         <div class="grid">
           <div class="col-12 md:col-3">
@@ -112,6 +128,7 @@
                 <input #uploadFilePago
                         formControlName="FilePago"
                         (change)="onFilePagoChange($event)"
+                        accept=".pdf,.png,.jpg,.jpeg"
                         type='file' style="display:none"/>
               </div>
               <small *ngIf="FilePago.hasError('required') && FilePago.dirty"

@@ -16,9 +16,7 @@ import { MaterialModule } from '../material/material.module';
 import { PagosComponent } from './pages/pagos/pagos.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ExampleNumOperacionComponent } from './pages/example-num-operacion/example-num-operacion.component';
-import { ExamenSuficienciaComponent } from './pages/examen-suficiencia/examen-suficiencia.component';
 import { OtrosTramitesComponent } from './pages/otros-tramites/otros-tramites.component';
-import { CertificadoEstudiosComponent } from './pages/certificado-estudios/certificado-estudios.component';
 
 
 @NgModule({
@@ -30,9 +28,7 @@ import { CertificadoEstudiosComponent } from './pages/certificado-estudios/certi
     MatriculaComponent,
     PagosComponent,
     ExampleNumOperacionComponent,
-    ExamenSuficienciaComponent,
     OtrosTramitesComponent,
-    CertificadoEstudiosComponent
   ],
   imports: [
     CommonModule,

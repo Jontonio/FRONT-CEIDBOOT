@@ -303,7 +303,7 @@ export class FormGrupoComponent implements OnInit {
   selecFechaInicio(date:Date){
     if(this.selecCurso && this.FechaInicioGrupo.valid && date){
       const fechaselect = moment(date);
-      const fechaFin = fechaselect.add(this.selecCurso.NumModulos, 'months');
+      const fechaFin = fechaselect.add(this.selecCurso.modulo.Modulo, 'months');
       this.FechaFinalGrupo.setValue(fechaFin.toDate());
       this.toast('info',`La fecha final del grupo es calculada en base a la cantidad de módulos del curso`);
     }

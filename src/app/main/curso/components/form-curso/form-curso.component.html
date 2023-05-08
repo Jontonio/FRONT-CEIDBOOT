@@ -74,13 +74,12 @@
         <div class="col-12 md:col-6">
           <label for="usuario" class="block mb-2">Módulos del curso</label>
           <p-dropdown class="p-fluid p-grid p-formgrid"
-          [options]="modulo"
+          [options]="listModulos"
           placeholder="Módulos del curso"
-          optionValue="cantidad"
-          formControlName="NumModulos"
-          optionLabel="name"></p-dropdown>
-          <small *ngIf="NumModulos.hasError('required') && NumModulos.dirty"
-          class="p-error">El campo módulos del curso es <strong>requerido</strong></small>
+          formControlName="modulo"
+          optionLabel="Modulo"></p-dropdown>
+          <small *ngIf="modulo.hasError('required') && modulo.dirty"
+          class="p-error">El campo módulo del curso es <strong>requerido</strong></small>
         </div>
       </div>
       <div class="col-12 mt-1">
