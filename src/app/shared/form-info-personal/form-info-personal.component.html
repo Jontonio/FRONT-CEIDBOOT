@@ -17,8 +17,8 @@
         </div>
         <div class="col-12 md:col-6">
           <label for="Documento" class="block mb-2">{{TipoDocumento.value}}</label>
-            <div class="p-inputgroup">
-            <span class="p-inputgroup-addon"><i [class]="loadGetData?'pi pi-spin pi-spinner':'pi pi-id-card'"></i></span>
+          <span class="p-input-icon-left full-width">
+            <i [class]="loadGetData?'pi pi-spin pi-spinner':'pi pi-id-card'"></i>
             <input id="Documento"
                   class="p-fluid p-grid p-formgrid input-form"
                   type="text"
@@ -27,11 +27,11 @@
                   (ngModelChange)="searchEstudiante($event)"
                   formControlName="Documento"
                   pInputText/>
-            </div>
-            <small *ngIf="Documento.hasError('pattern') && !Documento.hasError('required')"
-                    class="p-error">Digite un Documento <strong>válido</strong></small>
-            <small *ngIf="Documento.hasError('required') && Documento.dirty"
-                    class="p-error">El campo Documento es <strong>requerido</strong></small>
+          </span>
+          <small *ngIf="Documento.hasError('pattern') && !Documento.hasError('required')"
+                  class="p-error">Digite un Documento <strong>válido</strong></small>
+          <small *ngIf="Documento.hasError('required') && Documento.dirty"
+                  class="p-error">El campo Documento es <strong>requerido</strong></small>
         </div>
       </div>
       <div class="col-12">
@@ -89,15 +89,12 @@
       </div>
       <div class="col-12">
         <label for="FechaNacimiento" class="block mb-2">Fecha de nacimiento</label>
-        <div class="p-inputgroup">
-          <span class="p-inputgroup-addon"><i class="pi pi-calendar"></i></span>
-          <p-calendar inputId="FechaNacimiento"
-                      placeholder="DD-MM-AAAA"
-                      dateFormat="dd-mm-yy"
-                      [maxDate]="today"
-                      class="p-fluid p-grid p-formgrid"
-                      formControlName="FechaNacimiento"></p-calendar>
-        </div>
+        <p-calendar inputId="FechaNacimiento"
+                    placeholder="DD-MM-AAAA"
+                    dateFormat="dd-mm-yy"
+                    [maxDate]="today"
+                    class="p-fluid p-grid p-formgrid"
+                    formControlName="FechaNacimiento"></p-calendar>
         <small *ngIf="FechaNacimiento.hasError('required') && FechaNacimiento.dirty"
                 class="p-error">La fecha de nacimiento del estudiante <strong>requerido</strong></small>
       </div>
@@ -105,8 +102,8 @@
     <div class="col-12 md:col-6">
       <div class="col-12">
         <label for="Direccion" class="block mb-2">Dirección actual</label>
-        <div class="p-inputgroup">
-          <span class="p-inputgroup-addon"><i class="fa-solid fa-location-dot"></i></span>
+        <span class="p-input-icon-left full-width">
+          <i class="fa-solid fa-location-dot"></i>
           <input id="Direccion"
                 class="p-fluid p-grid p-formgrid input-form"
                 type="text"
@@ -114,7 +111,7 @@
                 [maxlength]="50"
                 formControlName="Direccion"
                 pInputText/>
-        </div>
+        </span>
         <small *ngIf="Direccion.hasError('required') && Direccion.dirty"
                 class="p-error">El campo dirección del estudiante es <strong>requerido</strong></small>
       </div>
@@ -133,7 +130,7 @@
                   type="text"
                   autocomplete="off"
                   formControlName="Celular"
-                  [maxLength]="isPeru?9:15"
+                  [maxLength]="country.code=='PE'?9:15"
                   pInputText/>
           </div>
           <small *ngIf="Celular.hasError('pattern') && !Celular.hasError('required')"
@@ -144,15 +141,15 @@
       </div>
       <div class="col-12">
         <label for="Email" class="block mb-2">Email</label>
-        <div class="p-inputgroup">
-          <span class="p-inputgroup-addon"><i class="fa-regular fa-envelope"></i></span>
+        <span class="p-input-icon-left full-width">
+          <i class="fa-regular fa-envelope"></i>
           <input id="Email"
                 class="p-fluid p-grid p-formgrid"
                 type="text"
                 autocomplete="off"
                 formControlName="Email"
                 pInputText/>
-        </div>
+        </span>
         <small *ngIf="Email.hasError('pattern') && !Email.hasError('required')"
             class="p-error">Digite un email <strong>válido</strong></small>
         <small *ngIf="Email.hasError('required') && Email.dirty"

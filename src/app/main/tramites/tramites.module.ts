@@ -10,12 +10,15 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { GrupoModule } from '../grupo/grupo.module';
+import { MainModule } from '../main.module';
+import { BusquedaEstudianteTramitePipe } from './pipes/busqueda-estudiante-tramite.pipe';
 
 
 @NgModule({
   declarations: [
     TramitesMainComponent,
-    ListTramitesComponent
+    ListTramitesComponent,
+    BusquedaEstudianteTramitePipe
   ],
   imports: [
     CommonModule,
@@ -25,7 +28,8 @@ import { GrupoModule } from '../grupo/grupo.module';
     ReactiveFormsModule,
     TramitesRoutingModule,
     SharedModule,
-    GrupoModule
+    GrupoModule,
+    MainModule
   ]
 })
 export class TramitesModule { }

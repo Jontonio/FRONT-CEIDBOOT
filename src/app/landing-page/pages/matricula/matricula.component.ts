@@ -17,7 +17,7 @@ export class MatriculaComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.msg = 'Ten en cuenta que algunos cursos requiren los vouchers de pago. Los pagos están en base a al tipo de estudiante que se encuentra.'
+    this.msg = 'Ten en cuenta que algunos cursos requiren los vouchers de pago. Consulta los precios en los requisitos de los cursos.'
   }
 
   folders: Section[] = [

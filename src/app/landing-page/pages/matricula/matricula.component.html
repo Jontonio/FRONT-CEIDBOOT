@@ -1,9 +1,11 @@
 <div class="header-form-matricula"></div>
 <div class="content-matricula">
-  <div class="grid content animate__animated animate__fadeIn p-1 pb-5">
+  <div class="grid animate__animated animate__fadeIn content-form">
     <div class="col-12 md:col-3">
       <div class="mb-2">
-        <app-note-message [msg]="msg"></app-note-message>
+        <p-card>
+          <b><i class="fa-solid fa-message"></i> Nota</b> {{msg}}
+        </p-card>
       </div>
       <p-card>
         <h3><i class="fa-solid fa-circle-info"></i> Requisitos para matrícula</h3>

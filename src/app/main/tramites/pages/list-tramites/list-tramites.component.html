@@ -2,20 +2,8 @@
   <p-card header="Lista de tramites">
     <div class="grid justify-content-center justify-content-between">
       <div class="col-12 md:col-3">
-        <span class="p-input-icon-left full-width"
-              [ngClass]="{'p-input-icon-right':terminoBusqueda}">
-          <i class="pi pi-search"></i>
-          <input type="text"
-                 [(ngModel)]="terminoBusqueda"
-                 name="terminoBusqueda"
-                 autocomplete="off"
-                 pInputText
-                 placeholder="Buscar idioma/grupo"/>
-          <i *ngIf="terminoBusqueda"
-              class="pi pi-times"
-              style="cursor: pointer;"
-              (click)="terminoBusqueda=''"></i>
-        </span>
+        <app-input-search (busqueda)="busquedaTermino($event)"
+                          placeholder="Buscar nombres/DNI"></app-input-search>
       </div>
       <div class="col-12 md:col-9 flex justify-content-end">
         <div>
@@ -35,13 +23,13 @@
                   type="button"
                   class="button-custom-round"
                   routerLink="/system/grupos/add-grupo">
-                  <i class="fa-solid fa-plus"></i> Nuevo grupo
+                  <i class="fa-solid fa-plus"></i> Filtrar
           </button>
         </div>
       </div>
     </div>
     <div class="col table-responsive content-tables">
-      <p-table [value]="_tramite.listTramites"
+      <p-table [value]="_tramite.listTramites | busdTramite:termino"
                responsiveLayout="scroll"
                [rowHover]="true"
                [resizableColumns]="true"
@@ -100,11 +88,11 @@
                   <mat-icon><i class="fa-solid fa-ellipsis-vertical"></i></mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">
-                  <button mat-menu-item [routerLink]="['/system/grupos/estudiantes-grupo', 1]">
+                  <button mat-menu-item>
                     <mat-icon><i class="fa-solid fa-circle-info"></i></mat-icon>
                     <span>Ver más</span>
                   </button>
-                  <button mat-menu-item [routerLink]="['/system/grupos/estudiantes-grupo', 1]">
+                  <button mat-menu-item (click)="notificarEstudiante(tramite.estudiante)">
                     <mat-icon><i class="fa-brands fa-whatsapp"></i></mat-icon>
                     <span>Notificar estudiante</span>
                   </button>
@@ -156,3 +144,7 @@
                  acceptLabel="Confirmar"
                  [breakpoints]="{'960px': '75vw', '640px': '100vw'}"
                  rejectButtonStyleClass="p-button-outlined"></p-confirmDialog>
+<!-- side bar message whatsapp -->
+<app-sidebar-message [sidebarMessage]="openSidebar"
+                     [dataEstudiante]="dataEstudianteMessage"
+                     (estadoModal)="estadoModalMessage($event)"></app-sidebar-message>

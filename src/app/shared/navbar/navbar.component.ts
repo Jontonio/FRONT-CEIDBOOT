@@ -35,7 +35,7 @@ export class NavbarComponent implements OnInit {
             routerLink:'/main/matricula'
           },
           {
-            label:'Pagos',
+            label:'Registro de pagos',
             icon:'fa-solid fa-bag-shopping',
             routerLink:'/main/pagos'
           },

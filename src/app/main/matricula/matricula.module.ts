@@ -10,6 +10,8 @@ import { AddMatriculaComponent } from './pages/add-matricula/add-matricula.compo
 import { SharedModule } from 'src/app/shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from 'src/app/material/material.module';
+import { MainModule } from '../main.module';
+import { BuscarMatriculaPipe } from './pipes/buscar-matricula.pipe';
 
 
 @NgModule({
@@ -17,6 +19,7 @@ import { MaterialModule } from 'src/app/material/material.module';
     MatriculaComponent,
     ListMatriculaComponent,
     AddMatriculaComponent,
+    BuscarMatriculaPipe,
   ],
   imports: [
     CommonModule,
@@ -26,7 +29,8 @@ import { MaterialModule } from 'src/app/material/material.module';
     PrimengModule,
     SharedModule,
     HttpClientModule,
-    MaterialModule
+    MaterialModule,
+    MainModule
   ]
 })
 export class MatriculaModule { }

@@ -25,8 +25,8 @@
         </div>
         <div class="col-12 md:col-6">
           <label for="Documento" class="block mb-2">{{TipoDocumento.value}}</label>
-            <div class="p-inputgroup">
-            <span class="p-inputgroup-addon"><i [class]="loadGetData?'pi pi-spin pi-spinner':'pi pi-id-card'"></i></span>
+          <span class="p-input-icon-left full-width">
+            <i [class]="loadGetData?'pi pi-spin pi-spinner':'pi pi-id-card'"></i>
             <input id="Documento"
                   class="p-fluid p-grid p-formgrid input-form"
                   type="text"
@@ -35,17 +35,17 @@
                   (ngModelChange)="Reniec($event)"
                   formControlName="Documento"
                   pInputText/>
-            </div>
-            <small *ngIf="Documento.hasError('pattern') && !Documento.hasError('required')"
-                    class="p-error">Digite un Documento <strong>válido</strong></small>
-            <small *ngIf="Documento.hasError('required') && Documento.dirty"
-                    class="p-error">El campo Documento es <strong>requerido</strong></small>
+          </span>
+          <small *ngIf="Documento.hasError('pattern') && !Documento.hasError('required')"
+                  class="p-error">Digite un Documento <strong>válido</strong></small>
+          <small *ngIf="Documento.hasError('required') && Documento.dirty"
+                  class="p-error">El campo Documento es <strong>requerido</strong></small>
         </div>
       </div>
       <div class="col">
         <label for="Nombres" class="block mb-2">Nombres</label>
-        <div class="p-inputgroup">
-          <span class="p-inputgroup-addon"><i class="fa-regular fa-user"></i></span>
+        <span class="p-input-icon-left full-width">
+          <i class="fa-regular fa-user"></i>
           <input id="Nombres"
                 class="p-fluid p-grid p-formgrid input-form"
                 type="text"
@@ -53,7 +53,7 @@
                 maxlength="45"
                 formControlName="Nombres"
                 pInputText/>
-        </div>
+        </span>
         <small *ngIf="Nombres.hasError('pattern') && !Nombres.hasError('required')"
               class="p-error">Digite un Nombre <strong>válido</strong></small>
         <small *ngIf="Nombres.hasError('required') && Nombres.dirty"
@@ -93,8 +93,8 @@
     <div class="col-12 md:col-6">
       <div class="col">
         <label for="Direccion" class="block mb-2">Dirección</label>
-        <div class="p-inputgroup">
-          <span class="p-inputgroup-addon"><i class="fa-solid fa-location-dot"></i></span>
+        <span class="p-input-icon-left full-width">
+          <i class="fa-solid fa-location-dot"></i>
           <input id="Direccion"
                 class="p-fluid p-grid p-formgrid input-form"
                 type="text"
@@ -102,7 +102,7 @@
                 formControlName="Direccion"
                 maxlength="100"
                 pInputText/>
-        </div>
+        </span>
         <small *ngIf="Direccion.hasError('pattern') && !Direccion.hasError('required')"
               class="p-error">Digite un Dirección <strong>válido</strong></small>
         <small *ngIf="Direccion.hasError('required') && Direccion.dirty"
@@ -110,8 +110,8 @@
       </div>
       <div class="col">
         <label for="Email" class="block mb-2">Email</label>
-        <div class="p-inputgroup">
-          <span class="p-inputgroup-addon"><i class="fa-solid fa-envelope"></i></span>
+        <span class="p-input-icon-left full-width">
+          <i class="fa-solid fa-envelope"></i>
           <input id="Email"
                 class="p-fluid p-grid p-formgrid"
                 type="email"
@@ -119,7 +119,7 @@
                 formControlName="Email"
                 maxlength="50"
                 pInputText/>
-        </div>
+        </span>
         <small *ngIf="Email.hasError('pattern') && !Email.hasError('required')"
               class="p-error">Digite un Email <strong>válido</strong></small>
         <small *ngIf="Email.hasError('required') && Email.dirty"
@@ -133,13 +133,16 @@
         </div>
         <div class="col-7 md:col-9">
           <label for="Celular" class="block mb-2">Celular</label>
-          <input id="Celular"
-                class="p-fluid p-grid p-formgrid input-form"
-                type="text"
-                autocomplete="off"
-                formControlName="Celular"
-                [maxLength]="country.code=='PE'?9:15"
-                pInputText/>
+          <span class="p-input-icon-left full-width">
+            <i class="pi pi-phone"></i>
+            <input id="Celular"
+                  class="p-fluid p-grid p-formgrid input-form"
+                  type="text"
+                  autocomplete="off"
+                  formControlName="Celular"
+                  [maxLength]="country.code=='PE'?9:15"
+                  pInputText/>
+          </span>
           <small *ngIf="Celular.hasError('pattern') && !Celular.hasError('required')"
                 class="p-error">Digite un Celular <strong>válido</strong></small>
           <small *ngIf="Celular.hasError('required') && Celular.dirty"

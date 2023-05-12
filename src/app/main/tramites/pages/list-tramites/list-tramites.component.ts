@@ -8,6 +8,7 @@ import { SocketService } from 'src/app/services/socket.service';
 import { ModalMensualidadComponent } from 'src/app/main/grupo/components/modal-mensualidad/modal-mensualidad.component';
 import { Pago } from 'src/app/main/grupo/class/Pago';
 import { PayloadSocket } from 'src/app/class/PayloadSocket';
+import { Estudiante } from 'src/app/main/matricula/class/Estudiante';
 
 @Component({
   selector: 'app-list-tramites',
@@ -18,11 +19,13 @@ export class ListTramitesComponent implements OnInit {
 
   @ViewChild(ModalMensualidadComponent) modalValidarPago:ModalMensualidadComponent;
 
-  terminoBusqueda:string;
+  termino:string;
   startPage:number = 0;
   fileURL:string;
   deleteTramite$:Subscription;
   nameEventSocketUpdate:string;
+  openSidebar:boolean;
+  dataEstudianteMessage:Estudiante;
 
   limit:number = 5;
   offset:number = 0;
@@ -36,6 +39,7 @@ export class ListTramitesComponent implements OnInit {
 
   ngOnInit(): void {
     this.nameEventSocketUpdate = 'updated_list_tramites';
+    this.openSidebar = false;
   }
 
   ngOnDestroy(): void {
@@ -89,8 +93,22 @@ export class ListTramitesComponent implements OnInit {
     })
   }
 
+  notificarEstudiante(estudiante:Estudiante){
+    this.openSidebar = true;
+    this.dataEstudianteMessage = estudiante;
+  }
+
   openModalValidarPago(pago:Pago){
     this.modalValidarPago.openModal(pago, new PayloadSocket(this.limit, this.offset));
+  }
+
+  estadoModalMessage(estado:boolean){
+    this.openSidebar = estado;
+    console.log(estado)
+  }
+
+  busquedaTermino(termino:string){
+    this.termino = termino;
   }
 
   toast(severity:string, summary:string, detail?:string){

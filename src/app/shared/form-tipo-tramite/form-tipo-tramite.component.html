@@ -8,7 +8,7 @@
                 formControlName="TipoTramite"
                 (ngModelChange)="selectedTipoTramite($event)"
                 optionLabel="TipoTramite">
-            </p-dropdown>
+              </p-dropdown>
     <small *ngIf="TipoTramite.hasError('required') && TipoTramite.dirty"
           class="p-error">El tipo de trámite es <strong>requerido</strong></small>
   </div>

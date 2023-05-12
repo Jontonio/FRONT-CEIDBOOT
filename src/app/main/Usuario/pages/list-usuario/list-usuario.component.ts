@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { UserLogin } from 'src/app/auth/interfaces/ResLogin';
 import { AuthService } from 'src/app/auth/services/auth.service';
@@ -7,6 +6,7 @@ import { Usuario } from 'src/app/main/usuario/class/Usuario';
 import { SocketService } from 'src/app/services/socket.service';
 import { Subscription } from "rxjs";
 import { UsuarioService } from '../../services/usuario.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-list-usuario',
@@ -15,26 +15,32 @@ import { UsuarioService } from '../../services/usuario.service';
 })
 export class ListUsuarioComponent {
 
-  // private listUsuarios$  :Subscription;
-  private enableUser$    :Subscription;
-  private deleteUser$    :Subscription;
+  /* These lines are declaring two private variables `enableUser$` and `deleteUser$` of type
+  `Subscription`. These variables are used to store the subscription objects returned by the
+  `subscribe()` method when subscribing to observables in the component. They are later used in the
+  `ngOnDestroy()` method to unsubscribe from the observables and prevent memory leaks. */
+  private enableUser$:Subscription;
+  private deleteUser$:Subscription;
 
-  startPage   :number = 0;
-  position    :string;
-  imAuth      :UserLogin | undefined;
-
+  /* These lines are declaring three variables `startPage`, `position`, and `imAuth`. */
+  startPage:number = 0;
+  position :string;
+  imAuth   :UserLogin | undefined;
+  terminoBusqueda:string;
 
   constructor(public _usuario:UsuarioService,
               private _socket:SocketService,
               private confirService: ConfirmationService,
               private _msg:MessageService,
-              private _auth:AuthService,
-              private route:Router){
-
+              private _auth:AuthService){
                 this.imAuth = this._auth.userAuth;
               }
 
 
+ /**
+  * The function is used to unsubscribe from observables in order to prevent memory leaks in a
+  * TypeScript component.
+  */
   ngOnDestroy(): void {
     if(this.deleteUser$) this.deleteUser$.unsubscribe();
     if(this.enableUser$) this.enableUser$.unsubscribe();
@@ -86,6 +92,12 @@ export class ListUsuarioComponent {
     });
   }
 
+ /**
+  * This function enables or disables a user and emits an event to update the user list.
+  * @param {Usuario} usuario - The parameter "usuario" is an object of type "Usuario". It is likely
+  * that this function is part of a larger codebase that deals with user management, and "Usuario" is a
+  * custom class or interface that defines the properties and methods of a user object.
+  */
   enableUsuario(usuario:Usuario){
     this.enableUser$ = this._usuario.enableUsuario(usuario.Id!,!usuario.Habilitado).subscribe({
       next: (value) => {
@@ -101,6 +113,7 @@ export class ListUsuarioComponent {
       }
     })
   }
+
   /**
    * It's a function that receives a user object and displays a confirmation dialog to the user
    * @param {Usuario} usuario - Usuario
@@ -125,12 +138,15 @@ export class ListUsuarioComponent {
     });
   }
 
+/**
+ * This function deletes a user by their ID and emits an event to update the user list.
+ * @param {number} Id - The parameter "Id" is a number that represents the unique identifier of a user
+ * that needs to be deleted.
+ */
   deleteUsuario(Id:number){
     this.deleteUser$ = this._usuario.deleteUsuario(Id!).subscribe({
       next: (value) => {
-        if(!value.ok){
-          return;
-        }
+        if(!value.ok) return;
         this.toast('success','Eliminación',value.msg);
         this._socket.EmitEvent('updated_list_usuario');
       },
@@ -141,7 +157,16 @@ export class ListUsuarioComponent {
     })
   }
 
-  messageError(e:any){
+  buscarTermino(termino:string){
+    this.terminoBusqueda = termino;
+  }
+
+  /**
+   * The function handles error messages from HTTP responses and displays them as toasts.
+   * @param {HttpErrorResponse} e - The parameter "e" is an object of type HttpErrorResponse, which is an
+   * Angular class that represents an HTTP response that includes an error status code.
+   */
+  messageError(e:HttpErrorResponse){
     if(Array.isArray(e.error.message)){
       e.error.message.forEach( (e:string) => {
         this.toast('error',e,'Error de validación de datos')
@@ -151,11 +176,18 @@ export class ListUsuarioComponent {
     }
   }
 
-  /* A function that receives three parameters, the first is the type of message, the second is the
-  message and the third is the detail of the message. The function toast() calls the function add()
-  of the class MessageService. The function add() is responsible for displaying the message to the
-  user. */
-  toast(type:string, msg:string, detail:string=''){
+ /**
+  * The function adds a message with a specified type, summary, and optional detail to a message list.
+  * @param {string} type - The type of the message, which can be one of the following values:
+  * "success", "info", "warn", or "error". This determines the color and icon of the message displayed
+  * to the user.
+  * @param {string} msg - The `msg` parameter is a string that represents the main message or summary
+  * of the toast notification. It is used to provide a brief and informative message to the user.
+  * @param {string} [detail] - The `detail` parameter is an optional string parameter that provides
+  * additional information or context related to the message being displayed. If provided, it will be
+  * displayed along with the `summary` message.
+  */
+  toast(type:string, msg:string, detail?:string){
     this._msg.add({severity:type, summary:msg, detail});
   }
 

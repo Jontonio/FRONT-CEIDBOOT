@@ -2,16 +2,12 @@
   <div class="mb-2">
     <h2 class="ml-1">Lista cursos</h2>
   </div>
-  <div class="flex justify-content-center justify-content-between">
-    <div class="col-6">
-      <span class="p-input-icon-left">
-        <i class="pi pi-search"></i>
-        <input type="text"
-                pInputText
-                placeholder="Buscar curso" />
-    </span>
+  <div class="grid flex justify-content-center justify-content-between">
+    <div class="col-12 md:col-3">
+      <app-input-search (busqueda)="busquedaTermino($event)"
+                        placeholder="Buscar nombre curso"></app-input-search>
     </div>
-    <div class="col-6 flex justify-content-end">
+    <div class="col-12 md:col-9 flex justify-content-end">
       <div>
         <button mat-raised-button
                 type="button"
@@ -23,7 +19,7 @@
     </div>
   </div>
     <div class="col table-responsive">
-      <p-table [value]="_curso.listCursos" [resizableColumns]="true" columnResizeMode="expand" responsiveLayout="scroll">
+      <p-table [value]="_curso.listCursos | buscarCurso:termino" [resizableColumns]="true" columnResizeMode="expand" responsiveLayout="scroll">
         <ng-template pTemplate="header">
             <tr>
               <th>ID</th>
@@ -86,6 +82,13 @@
               </td>
             </tr>
         </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="9">
+              <app-lista-vacia [msg]="'No se encontraron registros de cursos'"></app-lista-vacia>
+            </td>
+          </tr>
+        </ng-template>
       </p-table>
     </div>
     <div>
@@ -104,7 +107,6 @@
         </div>
       </div>
       <app-loadding *ngIf="_curso.loadingLista && _curso.listCursos.length==0" msg="Lista de cursos"></app-loadding>
-      <app-lista-vacia *ngIf="_curso.listCursos.length==0 && !_curso.loadingLista" msg="No se encontraron cursos registrados"></app-lista-vacia>
     </div>
 </p-card>
 

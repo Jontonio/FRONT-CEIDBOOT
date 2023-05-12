@@ -1,14 +1,261 @@
-<div class="grid">
-  <div class="col-12 md:col-6">
-    <p-card>
-      <button mat-raised-button (click)="showSideBar()">nuevo estado grupo</button>
-    </p-card>
+<div class="col">
+  <div class="content-warning">
+    <h2><i class="fa-solid fa-triangle-exclamation"></i> Advertencia</h2>
+    <p class="pt-1">Se recomienda actualizar los datos en esta seción bajo supervisión técnica.
+      La manipulación de los datos de manera irresponsable queda <b>bajo responsabilidad del usuario</b>.
+    </p>
   </div>
-  <div class="col-12 md:col-6">
-    <p-card></p-card>
-  </div>
+  <p-card header="Estados de grupo">
+    <div class="p-2">
+      <div class="grid flex justify-content-between pb-2">
+        <div></div>
+        <div>
+          <button class="button-custom-round" mat-raised-button (click)="showSideBar()"><i class="fa-solid fa-plus"></i> estado grupo</button>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <p-table [value]="listEstadosGrupo"
+                 [resizableColumns]="true"
+                 responsiveLayout="scroll">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Id</th>
+              <th>Código</th>
+              <th>Estado</th>
+              <th>Descripción</th>
+              <th>Fecha de actualización</th>
+              <th>Operación</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-estadoGrupo>
+            <tr>
+              <td>{{ estadoGrupo.Id }}</td>
+              <td>{{ estadoGrupo.CodeEstado }}</td>
+              <td>{{ estadoGrupo.EstadoGrupo }}</td>
+              <td>
+                {{ estadoGrupo.DescripcionEstadoGrupo | slice:0:40 }}... <p-tag class="cursor" severity="info" (click)="opDescrip.toggle($event)">Ver mas</p-tag>
+                <p-overlayPanel #opDescrip [style]="{'width': '50%'}">
+                  {{ estadoGrupo.DescripcionEstadoGrupo }}
+                </p-overlayPanel>
+              </td>
+              <td>{{ estadoGrupo.updatedAt | date:'medium'}}</td>
+              <td>
+                <span class="p-buttonset">
+                  <button mat-icon-button><i class="fa-solid fa-pen-to-square"></i></button>
+                  <button mat-icon-button><i class="fa-solid fa-trash"></i></button>
+                </span>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </p-card>
+</div>
+<div class="col">
+  <p-card header="Categorias de pago">
+    <div class="p-2">
+      <div class="grid flex justify-content-between pb-2">
+        <div></div>
+        <div>
+          <button class="button-custom-round" mat-raised-button (click)="showSideBar()"><i class="fa-solid fa-plus"></i> tipo pago</button>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <p-table [value]="listCategoriaspago" [resizableColumns]="true" columnResizeMode="expand" responsiveLayout="scroll">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Id</th>
+              <th>Tipo</th>
+              <th>Código</th>
+              <th>Fecha de actualización</th>
+              <th>Operación</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-categoriaPago>
+            <tr>
+              <td>{{ categoriaPago.Id }}</td>
+              <td>{{ categoriaPago.TipoCategoriaPago }}</td>
+              <td>{{ categoriaPago.CodeCategoriaPago }}</td>
+              <td>{{ categoriaPago.updatedAt | date:'medium'}}</td>
+              <td>
+                <span class="p-buttonset">
+                  <button mat-icon-button><i class="fa-solid fa-pen-to-square"></i></button>
+                  <button mat-icon-button><i class="fa-solid fa-trash"></i></button>
+                </span>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </p-card>
+</div>
+<div class="col">
+  <p-card header="Tipos de trámite">
+    <div class="p-2">
+      <div class="grid flex justify-content-between pb-2">
+        <div></div>
+        <div>
+          <button class="button-custom-round" mat-raised-button (click)="showSideBar()"><i class="fa-solid fa-plus"></i> estado grupo</button>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <p-table [value]="listTiposTramite" [resizableColumns]="true" columnResizeMode="expand" responsiveLayout="scroll">
+          <ng-template pTemplate="header">
+              <tr>
+                  <th>Id</th>
+                  <th>Derecho de pago</th>
+                  <th>Tipo</th>
+                  <th>Descripción</th>
+                  <th>Fecha de actualización</th>
+                  <th>Operación</th>
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-tipoTramite>
+              <tr>
+                  <td>{{ tipoTramite.Id }}</td>
+                  <td>{{ tipoTramite.DerechoPagoTramite | currency: 'PEN': 'symbol': '': 'es-PE' }}</td>
+                  <td>{{ tipoTramite.TipoTramite }}</td>
+                  <td>{{ tipoTramite.DescripcionTramite }}</td>
+                  <td>{{ tipoTramite.updatedAt | date:'medium'}}</td>
+                  <td>
+                    <span class="p-buttonset">
+                      <button mat-icon-button><i class="fa-solid fa-pen-to-square"></i></button>
+                      <button mat-icon-button><i class="fa-solid fa-trash"></i></button>
+                    </span>
+                  </td>
+              </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </p-card>
+</div>
+<div class="col">
+  <p-card header="Categorias de pago">
+    <div class="p-2">
+      <div class="grid flex justify-content-between pb-2">
+        <div></div>
+        <div>
+          <button class="button-custom-round" mat-raised-button (click)="showSideBar()"><i class="fa-solid fa-plus"></i> tipo pago</button>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <p-table [value]="listCategoriaspago" [resizableColumns]="true" columnResizeMode="expand" responsiveLayout="scroll">
+          <ng-template pTemplate="header">
+              <tr>
+                  <th>Id</th>
+                  <th>Tipo</th>
+                  <th>Código</th>
+                  <th>Fecha de actualización</th>
+                  <th>Operación</th>
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-categoriaPago>
+              <tr>
+                  <td>{{ categoriaPago.Id }}</td>
+                  <td>{{ categoriaPago.TipoCategoriaPago }}</td>
+                  <td>{{ categoriaPago.CodeCategoriaPago }}</td>
+                  <td>{{ categoriaPago.updatedAt | date:'medium'}}</td>
+                  <td>
+                    <span class="p-buttonset">
+                      <button mat-icon-button><i class="fa-solid fa-pen-to-square"></i></button>
+                      <button mat-icon-button><i class="fa-solid fa-trash"></i></button>
+                    </span>
+                  </td>
+              </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </p-card>
+</div>
+<div class="col">
+  <p-card header="Medios de pago">
+    <div class="p-2">
+      <div class="grid flex justify-content-between pb-2">
+        <div></div>
+        <div>
+          <button class="button-custom-round" mat-raised-button (click)="showSideBar()"><i class="fa-solid fa-plus"></i> tipo pago</button>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <p-table [value]="listMediosPago" [resizableColumns]="true" columnResizeMode="expand" responsiveLayout="scroll">
+          <ng-template pTemplate="header">
+              <tr>
+                  <th>Id</th>
+                  <th>Medio de pago</th>
+                  <th>Fecha de actualización</th>
+                  <th>Operación</th>
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-medioPago>
+              <tr>
+                  <td>{{ medioPago.Id }}</td>
+                  <td>{{ medioPago.MedioDePago }}</td>
+                  <td>{{ medioPago.updatedAt | date:'medium'}}</td>
+                  <td>
+                    <span class="p-buttonset">
+                      <button mat-icon-button><i class="fa-solid fa-pen-to-square"></i></button>
+                      <button mat-icon-button><i class="fa-solid fa-trash"></i></button>
+                    </span>
+                  </td>
+              </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </p-card>
+</div>
+<div class="col">
+  <p-card header="Denominación de servicio">
+    <div class="p-2">
+      <div class="grid flex justify-content-between pb-2">
+        <div></div>
+        <div>
+          <button class="button-custom-round" mat-raised-button (click)="showSideBar()"><i class="fa-solid fa-plus"></i> tipo pago</button>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <p-table [value]="listDenominacionServicios" [resizableColumns]="true" columnResizeMode="expand" responsiveLayout="scroll">
+          <ng-template pTemplate="header">
+              <tr>
+                  <th>Id</th>
+                  <th>Monto pensión</th>
+                  <th>Monto matricula</th>
+                  <th>Descripción</th>
+                  <th>Fecha actualización</th>
+                  <th>Operación</th>
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-denominServicio>
+              <tr>
+                  <td>{{ denominServicio.Id }}</td>
+                  <td>{{ denominServicio.MontoPension | currency: 'PEN': 'symbol': '': 'es-PE' }}</td>
+                  <td>{{ denominServicio.MontoMatricula | currency: 'PEN': 'symbol': '': 'es-PE' }}</td>
+                  <td>
+                    {{ denominServicio.Descripcion | slice:0:30 }}... <p-tag class="cursor" severity="info" (click)="opDenomin.toggle($event)">Ver mas</p-tag>
+                    <p-overlayPanel #opDenomin>
+                      {{denominServicio.Descripcion}}
+                    </p-overlayPanel>
+                  </td>
+                  <td>{{ denominServicio.updatedAt | date:'medium' }}</td>
+                  <td>
+                    <span class="p-buttonset">
+                      <button mat-icon-button><i class="fa-solid fa-pen-to-square"></i></button>
+                      <button mat-icon-button><i class="fa-solid fa-trash"></i></button>
+                    </span>
+                  </td>
+              </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </p-card>
 </div>
 
+<!-- formulario add grupo módulo -->
 <p-sidebar [(visible)]="sidebarVisible" position="right">
   <form [formGroup]="formEstadoGrupo">
     <div class="p-2">

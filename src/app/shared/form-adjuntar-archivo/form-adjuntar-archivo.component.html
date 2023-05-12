@@ -11,7 +11,7 @@
                       mode="indeterminate"
                       [style]="{'height': '6px'}"></p-progressBar>
       <p-accordionTab header="Cargue los requisitos de su trámite" [disabled]="disableOption">
-        <div class="col-12 md:col-12 flex justify-content-between justify-content-center align-items-center file-content">
+        <div class="col-12 md:col-12 flex justify-content-between justify-content-center align-items-center content-file">
           <label class="block">Requisitos del trámite</label>
           <div class="text-center">
             <div (click)="uploadFileDoc.click()">
@@ -35,7 +35,7 @@
                         mode="indeterminate"
                         [style]="{'height': '6px'}"></p-progressBar>
         <p-accordionTab header="Cargue la fotografía tamaño carnet" [disabled]="disableOption">
-          <div class="col-12 md:col-12 flex justify-content-between justify-content-center align-items-center file-content">
+          <div class="col-12 md:col-12 flex justify-content-between justify-content-center align-items-center content-file">
           <label class="block">Fotografía tamaño carnet</label>
             <div class="text-center">
             <div (click)="uploadFileDocExtra.click()">
@@ -59,12 +59,8 @@
                     mode="indeterminate"
                      [style]="{'height': '6px'}"></p-progressBar>
       <p-accordionTab header="Cargue su voucher de pago" [disabled]="disableOption">
-        <div class="mb-3 content-info-operacion">
-          <p>El número o folio de la boleta en el voucher corresponde al número de operación que se imprime en el voucher.
-             para más información <a class="tag-a" routerLink="/main/example/numero-operacion" target="_blank">Ver ejemplo</a></p>
-        </div>
         <div class="grid">
-          <div class="col mb-3">
+          <div class="col-12 md:col-4">
             <label for="usuario" class="block mb-2">Medios de pago</label>
             <p-dropdown class="p-fluid p-grid p-formgrid"
                         [options]="listMedioPago"
@@ -75,24 +71,7 @@
             <small *ngIf="MedioDePago.hasError('required') && MedioDePago.dirty"
                   class="p-error">El medio de pago es <strong>requerido</strong></small>
           </div>
-        </div>
-        <div class="grid">
-          <div class="col-12 md:col-3">
-            <label for="MontoPago" class="block mb-2">Monto de pago S/.</label>
-              <p-inputNumber inputId="minmaxfraction"
-                             mode="decimal"
-                             class="p-fluid p-grid p-formgrid full-width"
-                             formControlName="MontoPago"
-                             [min]="0"
-                             [max]="1000"
-                             [minFractionDigits]="2"
-                             [maxFractionDigits]="5"></p-inputNumber>
-            <small *ngIf="MontoPago.hasError('pattern') && !MontoPago.hasError('required')"
-                    class="p-error">Digite un monto de pago <strong>válido</strong></small>
-            <small *ngIf="MontoPago.hasError('required') && MontoPago.dirty"
-                    class="p-error">El campo monto de pago es <strong>requerido</strong></small>
-          </div>
-          <div class="col-12 md:col-3">
+          <div class="col-12 md:col-4">
             <label for="NumOperacion" class="block mb-2">N° de operación</label>
             <input id="NumOperacion"
                    class="p-fluid p-grid p-formgrid full-width"
@@ -100,13 +79,19 @@
                    placeholder="Número de operación"
                    formControlName="NumOperacion"
                    autocomplete="off"
+                   (click)="op.toggle($event)"
                    pInputText/>
             <small *ngIf="NumOperacion.hasError('pattern') && !NumOperacion.hasError('required')"
                     class="p-error">Digite un número de operación <strong>válido</strong></small>
             <small *ngIf="NumOperacion.hasError('required') && NumOperacion.dirty"
                     class="p-error">El campo número de operación es <strong>requerido</strong></small>
           </div>
-          <div class="col-12 md:col-3">
+          <p-overlayPanel #op>
+            <p><i class="fa-solid fa-message"></i><b> Nota </b>El número de operación corresponde al número o folio de la boleta <br> que se imprime en el voucher.
+              para más información <a class="tag-a" routerLink="/main/example/numero-operacion" target="_blank">Ver ejemplo</a></p>
+          </p-overlayPanel>
+
+          <div class="col-12 md:col-4">
             <label for="FechaPago" class="block mb-2">Fecha de pago</label>
             <p-inputMask mask="99/99/9999"
                           formControlName="FechaPago"
@@ -116,10 +101,14 @@
             <small *ngIf="FechaPago.hasError('required') && FechaPago.dirty"
                     class="p-error">El campo fecha de pago es <strong>requerido</strong></small>
           </div>
-          <div class="col-12 md:col-3">
-            <div class="text-center">
-              <label class="block label-file">Voucher pago</label>
-              <div class="mt-2">
+        </div>
+        <div class="col">
+          <div class="grid flex justify-content-between justify-content-center align-items-center content-file mt-1">
+            <div class="col-12 md:col-8">
+              <i class="fa-regular fa-hand-point-right mr-1"></i>cargue su voucher de pago monto<b class="ml-1">{{this.MontoPago.value | currency: 'PEN': 'symbol': '': 'es-PE'}}</b>
+            </div>
+            <div class="col-12 md:col-4 text-center">
+              <div class="text-center flex flex-column">
                 <button mat-raised-button
                         [disabled]="loadingFilePago"
                         (click)="uploadFilePago.click()"
@@ -130,9 +119,9 @@
                         (change)="onFilePagoChange($event)"
                         accept=".pdf,.png,.jpg,.jpeg"
                         type='file' style="display:none"/>
+                <small *ngIf="FilePago.hasError('required') && FilePago.dirty"
+                        class="p-error">El voucher de pago es <strong>requerido</strong></small>
               </div>
-              <small *ngIf="FilePago.hasError('required') && FilePago.dirty"
-                      class="p-error">El voucher de pago es <strong>requerido</strong></small>
             </div>
           </div>
         </div>

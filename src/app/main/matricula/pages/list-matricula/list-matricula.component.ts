@@ -1,9 +1,7 @@
-import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
-import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
+import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { Dropdown } from 'primeng/dropdown';
-import { elementAt } from 'rxjs/internal/operators/elementAt';
-import { Grupo } from 'src/app/main/grupo/class/Grupo';
 import { GrupoService } from 'src/app/main/grupo/services/grupo.service';
 import { SocketService } from 'src/app/services/socket.service';
 import { Matricula } from '../../class/Matricula';
@@ -11,6 +9,7 @@ import { Servicio } from '../../class/Servicio';
 import { MatriculaService } from '../../services/matricula.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ShowFileComponent } from 'src/app/shared/show-file/show-file.component';
+import { Estudiante } from '../../class/Estudiante';
 
 @Component({
   selector: 'app-list-matricula',
@@ -34,6 +33,9 @@ export class ListMatriculaComponent implements OnInit {
   visibleAsignarGrupo:boolean = false;
   formSelectGrupo:FormGroup;
   FileMatriculaURL:string;
+  openSidebarMessage:boolean = false;
+  dataEstudianteMessage:Estudiante;
+  termino:string;
 
   constructor(private readonly _msg:MessageService,
               public readonly _matricula:MatriculaService,
@@ -143,6 +145,19 @@ export class ListMatriculaComponent implements OnInit {
       this.loadingSave = false;
     }
 
+  }
+
+  busquedaTermino(termino:string){
+    this.termino = termino;
+  }
+
+  notificarEstudiante(estudiante:Estudiante): void {
+    this.openSidebarMessage = true;
+    this.dataEstudianteMessage = estudiante;
+  }
+
+  estadoModalMessage(estado:boolean){
+    this.openSidebarMessage = estado;
   }
 
   toast(severity:string, summary:string, detail:string=''){

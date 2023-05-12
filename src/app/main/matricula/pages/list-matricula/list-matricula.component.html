@@ -1,146 +1,141 @@
-<div class="main p-4">
-  <p-card>
-    <div class="mb-2">
-      <h2 class="ml-1">Lista de prematriculados</h2>
+<p-card>
+  <div class="mb-2">
+    <h2 class="ml-1">Lista de prematriculados</h2>
+  </div>
+  <div class="grid justify-content-center justify-content-between">
+    <div class="col-12 md:col-3">
+      <app-input-search (busqueda)="busquedaTermino($event)"
+                        placeholder="Bsucar nombres/DNI"></app-input-search>
     </div>
-    <div class="grid justify-content-center justify-content-between">
-      <div class="col-12 md:col-6">
-        <span class="p-input-icon-left">
-          <i class="pi pi-search"></i>
-          <input type="text"
-                 pInputText
-                 class="full-width"
-                 placeholder="Buscar inscritos" />
-        </span>
-      </div>
-      <div class="col-12 md:col-6 flex justify-content-end">
-        <div>
-          <button mat-raised-button
-                  type="button"
-                  class="button-custom-round"
-                  routerLink="/system/matricula/nueva-matricula">
-                  <i class="fa-solid fa-user-plus"></i> Matricula
-          </button>
-        </div>
-      </div>
-    </div>
-    <div class="col table-responsive">
-      <p-table [value]="_matricula.listMatriculados"
-               dataKey="listaMatriculados"
-               responsiveLayout="scroll"
-               [rowHover]="true"
-               styleClass="p-datatable-sm">
-        <ng-template pTemplate="header">
-            <tr>
-              <th>ID</th>
-              <th>Nombres</th>
-              <th>Curso inscrito</th>
-              <th>Horario inscrito</th>
-              <th>Requisitos</th>
-              <th>Fecha. Inscripción</th>
-              <th>Grupos</th>
-              <th>Asignar</th>
-              <th>Mas</th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-matriculado let-rowIndex="rowIndex" let-expanded="expanded">
-          <tr>
-            <td>{{startPage  + (rowIndex+1)}}</td>
-            <td>{{matriculado.estudiante.Nombres | titlecase}} {{matriculado.estudiante.ApellidoPaterno | titlecase}}</td>
-            <!-- <td><p-tag severity="success">{{matriculado.estudiante.CodePhone}} {{matriculado.estudiante.Celular}}</p-tag>
-                <div *ngIf="matriculado.estudiante.apoderado" class="mt-1">
-                  <p-tag severity="danger">+51 {{matriculado.estudiante.apoderado.CelApoderado}}</p-tag>
-                </div>
-            </td> -->
-            <td><b>{{matriculado.curso.NombreCurso | uppercase}}</b><br>{{matriculado.curso.nivel.Nivel | titlecase}}</td>
-            <td class="td-1"><p-tag severity="warning">{{matriculado.horario.HoraInicio | date:'h:mm a'}} - {{matriculado.horario.HoraFinal | date:'h:mm a'}}</p-tag></td>
-            <td>
-              <button mat-button (click)="showFile(matriculado)"><i class="pi pi-file-pdf icon-size"></i> ver</button>
-            </td>
-            <td><p-tag>{{matriculado.createdAt | date:'short'}}</p-tag> </td>
-            <td>
-              <p-dropdown class="p-fluid p-grid p-formgrid"
-                          [options]="_grupo.listGrupos"
-                          #elemento
-                          [name]="'elemento'+matriculado.Id"
-                          placeholder="Selecione el grupo"
-                          optionLabel="DescGrupo">
-                <ng-template pTemplate="selectedItem" let-selecGrupo>
-                  <div class="grupo-item grupo-item-value">
-                    <span class="ml-1">
-                      <span class="ml-1">{{selecGrupo.curso.NombreCurso | titlecase }} - {{selecGrupo.curso.NivelCurso}}
-                      <p-tag severity="warning">{{selecGrupo.horario.HoraInicio | date:'h:mm a'}} - {{selecGrupo.horario.HoraFinal | date:'h:mm a'}}</p-tag></span>
-                    </span>
-                  </div>
-                </ng-template>
-                <ng-template let-grupo pTemplate="item">
-                  <div>
-                    <span class="ml-1">{{grupo.curso.NombreCurso | titlecase }} - {{grupo.curso.nivel.Nivel}} <p-tag severity="success">{{grupo.horario.HoraInicio | date:'h:mm a'}} - {{grupo.horario.HoraFinal | date:'h:mm a'}}</p-tag></span>
-                  </div>
-                </ng-template>
-              </p-dropdown>
-            </td>
-            <td class="text-center">
-              <button mat-raised-button
-                      color="primary"
-                      class="button-custom"
-                      (click)="save(matriculado)"
-                      [disabled]="loadingSave">Asignar
-              </button>
-            </td>
-            <td>
-              <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-                <mat-icon>more_vert</mat-icon>
-              </button>
-              <mat-menu #menu="matMenu">
-                <button mat-menu-item (click)="moreInfoEstudiante(matriculado)">
-                  <mat-icon><i class="fa-solid fa-circle-info"></i></mat-icon>
-                  <span>ver más</span>
-                </button>
-                <button mat-menu-item (click)="moreInfoEstudiante(matriculado)">
-                  <mat-icon><i class="fa-brands fa-whatsapp"></i></mat-icon>
-                  <span>Notificar primer pago</span>
-                </button>
-                <button mat-menu-item (click)="moreInfoEstudiante(matriculado)">
-                  <mat-icon><i class="fa-solid fa-envelope"></i></mat-icon>
-                  <span>Notificar primer pago</span>
-                </button>
-                <button mat-menu-item>
-                  <mat-icon><i class="fa-solid fa-pen-to-square"></i></mat-icon>
-                  <span>Editar grupo</span>
-                </button>
-                <button mat-menu-item (click)="dialogDelete(matriculado)">
-                  <mat-icon><i class="fa-solid fa-trash-can"></i></mat-icon>
-                  <span>Eliminar</span>
-                </button>
-              </mat-menu>
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
+    <div class="col-12 md:col-9 flex justify-content-end">
       <div>
-        <div class="mt-4" *ngIf="_matricula.respMatricula && _matricula.respMatricula.count">
-          <div class="grid content">
-            <div class="col-12 md:col-3">
-                <p class="text-muted">Total de inscritos: {{_matricula.respMatricula.count}}</p>
-            </div>
-            <div class="col-12 md:col-6">
-              <p-paginator [rows]="5"
-                            [totalRecords]="_matricula.respMatricula.count!"
-                            [rowsPerPageOptions]="[5,10,15,20]"
-                            (onPageChange)="paginate($event)"></p-paginator>
-            </div>
-            <div class="col-12 md:col-3"></div>
-          </div>
-        </div>
-        <app-loadding *ngIf="_matricula.loadingLista && _matricula.listMatriculados.length==0" msg="Lista de cursos"></app-loadding>
-        <app-lista-vacia *ngIf="_matricula.listMatriculados.length==0 && !_matricula.loadingLista" msg="No se encontraron cursos registrados"></app-lista-vacia>
+        <button mat-raised-button
+                type="button"
+                class="button-custom-round"
+                routerLink="/system/matricula/nueva-matricula">
+                <i class="fa-solid fa-user-plus"></i> Matricula
+        </button>
       </div>
     </div>
-  </p-card>
-</div>
-
-
+  </div>
+  <div class="col table-responsive">
+    <p-table [value]="_matricula.listMatriculados | buscarMatricula:termino"
+              dataKey="listaMatriculados"
+              [resizableColumns]="true"
+              columnResizeMode="expand"
+              responsiveLayout="scroll">
+      <ng-template pTemplate="header">
+          <tr>
+            <th>ID</th>
+            <th>Nombres</th>
+            <th>Curso inscrito</th>
+            <th>Horario inscrito</th>
+            <th>Contacto</th>
+            <th>Requisitos</th>
+            <th>Fecha. Inscripción</th>
+            <th>Grupos</th>
+            <th>Asignar</th>
+            <th>Mas</th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-matriculado let-rowIndex="rowIndex" let-expanded="expanded">
+        <tr>
+          <td>{{startPage  + (rowIndex+1)}}</td>
+          <td>{{matriculado.estudiante.Nombres | titlecase}} {{matriculado.estudiante.ApellidoPaterno | titlecase}}</td>
+          <td><b>{{matriculado.curso.NombreCurso | uppercase}}</b><br>{{matriculado.curso.nivel.Nivel | titlecase}}</td>
+          <td class="td-1"><p-tag severity="warning">{{matriculado.horario.HoraInicio | date:'h:mm a'}} - {{matriculado.horario.HoraFinal | date:'h:mm a'}}</p-tag></td>
+          <td><p-tag severity="success">{{matriculado.estudiante.CodePhone}} {{matriculado.estudiante.Celular}}</p-tag>
+            <div *ngIf="matriculado.estudiante.apoderado" class="mt-1">
+              <p-tag severity="danger">+51 {{matriculado.estudiante.apoderado.CelApoderado}}</p-tag>
+            </div>
+          </td>
+          <td>
+            <button mat-button (click)="showFile(matriculado)"><i class="pi pi-file-pdf icon-size"></i> ver</button>
+          </td>
+          <td><p-tag>{{matriculado.createdAt | date:'short'}}</p-tag> </td>
+          <td>
+            <p-dropdown class="p-fluid p-grid p-formgrid"
+                        appendTo="body"
+                        [options]="_grupo.listGrupos"
+                        #elemento
+                        [name]="'elemento'+matriculado.Id"
+                        placeholder="Selecione el grupo"
+                        optionLabel="DescGrupo">
+              <ng-template pTemplate="selectedItem" let-selecGrupo>
+                <div class="grupo-item grupo-item-value">
+                  <span class="ml-1">
+                    <span class="ml-1">{{selecGrupo.curso.NombreCurso | titlecase }} - {{selecGrupo.curso.NivelCurso}}
+                    <p-tag severity="warning">{{selecGrupo.horario.HoraInicio | date:'h:mm a'}} - {{selecGrupo.horario.HoraFinal | date:'h:mm a'}}</p-tag></span>
+                  </span>
+                </div>
+              </ng-template>
+              <ng-template let-grupo pTemplate="item">
+                <div>
+                  <span class="ml-1">{{grupo.curso.NombreCurso | titlecase }} - {{grupo.curso.nivel.Nivel}} <p-tag severity="success">{{grupo.horario.HoraInicio | date:'h:mm a'}} - {{grupo.horario.HoraFinal | date:'h:mm a'}}</p-tag></span>
+                </div>
+              </ng-template>
+            </p-dropdown>
+          </td>
+          <td class="text-center">
+            <button mat-raised-button
+                    color="primary"
+                    class="button-custom"
+                    (click)="save(matriculado)"
+                    [disabled]="loadingSave">Asignar
+            </button>
+          </td>
+          <td>
+            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="moreInfoEstudiante(matriculado)">
+                <mat-icon><i class="fa-solid fa-circle-info"></i></mat-icon>
+                <span>ver más</span>
+              </button>
+              <button mat-menu-item (click)="notificarEstudiante(matriculado.estudiante)">
+                <mat-icon><i class="fa-brands fa-whatsapp"></i></mat-icon>
+                <span>Notificar estudiante</span>
+              </button>
+              <button mat-menu-item>
+                <mat-icon><i class="fa-solid fa-pen-to-square"></i></mat-icon>
+                <span>Editar estudiante</span>
+              </button>
+              <button mat-menu-item (click)="dialogDelete(matriculado)">
+                <mat-icon><i class="fa-solid fa-trash-can"></i></mat-icon>
+                <span>Eliminar</span>
+              </button>
+            </mat-menu>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="10">
+            <app-lista-vacia [msg]="'No se encontraron registros de prematriculas'"></app-lista-vacia>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <div>
+      <div class="mt-4" *ngIf="_matricula.respMatricula && _matricula.respMatricula.count">
+        <div class="grid content">
+          <div class="col-12 md:col-3">
+              <p class="text-muted">Total de inscritos: {{_matricula.respMatricula.count}}</p>
+          </div>
+          <div class="col-12 md:col-6">
+            <p-paginator [rows]="5"
+                          [totalRecords]="_matricula.respMatricula.count!"
+                          [rowsPerPageOptions]="[5,10,15,20]"
+                          (onPageChange)="paginate($event)"></p-paginator>
+          </div>
+          <div class="col-12 md:col-3"></div>
+        </div>
+      </div>
+      <app-loadding *ngIf="_matricula.loadingLista && _matricula.listMatriculados.length==0" msg="Lista de cursos"></app-loadding>
+    </div>
+  </div>
+</p-card>
 <!-- Delete message dialog -->
 <p-confirmDialog [style]="{width: '50vw'}"
                  key="deleteMatriculadoDialog"
@@ -149,7 +144,6 @@
                  acceptLabel="Confirmar"
                  [breakpoints]="{'960px': '75vw', '640px': '100vw'}"
                  rejectButtonStyleClass="p-button-outlined"></p-confirmDialog>
-
 <!-- Tipo población dialog -->
 <p-dialog header="Tipo de población inscrito"
           [(visible)]="moreInfo"
@@ -158,7 +152,6 @@
           [breakpoints]="{ '960px': '75vw' }"
           [style]="{ width: '50vw' }" [draggable]="true" [resizable]="false"><p>{{description}}</p>
 </p-dialog>
-
 <!-- Información general dialog -->
 <p-dialog header="Información general"
           [(visible)]="moreInfoMatricula"
@@ -221,5 +214,9 @@
             </div>
           </div>
 </p-dialog>
-
+<!-- mostrar el archivo cargado -->
 <app-show-file [fileURL]="FileMatriculaURL"></app-show-file>
+<!-- side bar message whatsapp -->
+<app-sidebar-message [sidebarMessage]="openSidebarMessage"
+                     [dataEstudiante]="dataEstudianteMessage"
+                     (estadoModal)="estadoModalMessage($event)"></app-sidebar-message>

@@ -70,7 +70,7 @@
             </ng-template>
             <ng-template pTemplate="opposite" let-event>
               <div class="p-1 content-title-modulo" [ngClass]="{'current-modulo':event.CurrentModulo}">
-                {{ event.modulo?('Fin módulo '+event.modulo.Modulo):('Inicio')}}
+                {{ 'Inicio módulo '+event.modulo.Modulo}}
               </div>
             </ng-template>
           </p-timeline>
@@ -158,7 +158,7 @@
                   <mat-icon><i class="fa-solid fa-circle-info"></i></mat-icon>
                   <span>ver más</span>
                 </button>
-                <button mat-menu-item (click)="openModalSidebarMessage( grupo )">
+                <button mat-menu-item (click)="openModalSidebarMessage( grupo.estudiante )">
                   <mat-icon><i class="fa-brands fa-whatsapp"></i></mat-icon>
                   <span>Notificar estudiante</span>
                 </button>
@@ -199,7 +199,7 @@
                       <td>{{pago.CodigoVoucher | empty:'código'}}</td>
                       <td>{{pago.FechaPago | date:'longDate' | empty:'fecha' }}</td>
                       <td>{{pago.MontoPago | currency: 'PEN': 'symbol': '': 'es-PE' }}</td>
-                      <td>{{pago.categoriaPago.TipoCategoriaPago | titlecase}}</td>
+                      <td>{{pago.categoriaPago.TipoCategoriaPago | titlecase}} {{pago.grupoModulo?pago.grupoModulo.modulo.Modulo:''}}</td>
                       <td>
                         <button mat-button (click)="showFile(pago.VoucherUrl)"><i class="pi pi-link"></i> ver</button>
                       </td>
@@ -279,6 +279,7 @@
     </div>
   </p-card>
 </div>
+
 <!-- componente para la visualización de documentos -->
 <app-show-file [fileURL]="fileURL"></app-show-file>
 <!-- componente para visualizar el modal del mensualidad -->
@@ -288,30 +289,7 @@
                        [visibleModal]="visibleModalFecha"
                        (estadoModal)="estadoModalFecha($event)"></app-modal-fechas-pago>
 <!-- side bar para enviar los chats -->
-<p-sidebar [(visible)]="sidebarMessage">
-  <h2 class="mb-2" *ngIf="selectEstudiante">
-    <i class="fa-solid fa-message"></i> Notificar a {{selectEstudiante.Nombres | titlecase}}
-  </h2>
-  <div *ngIf="existsApodera">
-    <p class="p-2">Mensaje para</p>
-    <div class="grid" >
-      <div class="col-6">
-        <label for="Apoderado" class="ml-2 content-radio">
-          <p-chip label="Apoderado" icon="" class="chip">
-            <input type="radio" name="destino" [(ngModel)]="destino" value="a1" id="Apoderado">
-            <span class="select-radio"><i class="fa-solid fa-check pr-2"></i></span>
-          </p-chip>
-        </label>
-      </div>
-      <div class="col-6">
-        <label for="estudiante" class="ml-2 content-radio">
-          <p-chip label="Estudiante" icon="" class="chip">
-            <input type="radio" name="estudiante" [(ngModel)]="destino" value="e1" id="estudiante">
-            <span class="select-radio"><i class="fa-solid fa-check pr-2"></i></span>
-          </p-chip>
-        </label>
-      </div>
-    </div>
-  </div>
-  <app-editor [loading]="loadingSend"  (textMsg)="sendMessage($event)"></app-editor>
-</p-sidebar>
+<!-- side bar message whatsapp -->
+<app-sidebar-message [sidebarMessage]="openSidebarMessage"
+                     [dataEstudiante]="dataEstudianteMessage"
+                     (estadoModal)="estadoModalMessage($event)"></app-sidebar-message>

@@ -104,6 +104,12 @@ export class FormInfoPersonalComponent implements OnInit {
   get Celular(){
     return this.formEstudiante.controls['Celular'];
   }
+  get Code(){
+    return this.formEstudiante.controls['Code'];
+  }
+  get CodePhone(){
+    return this.formEstudiante.controls['CodePhone'];
+  }
   get Email(){
     return this.formEstudiante.controls['Email'];
   }
@@ -215,11 +221,15 @@ export class FormInfoPersonalComponent implements OnInit {
     this.country = country;
     this.isPeru = (this.country.code!='PE')?false:true;
     this.isPeru?this.requiredCountry():this.notRequiredCountry();
+    this.Code.setValue( this.country.code );
+    this.CodePhone.setValue( this.country.codePhone );
   }
 
   inicializateCodes(){
     this.country = { name:'Peru', codePhone:'+51', flag:'https://flagcdn.com/pe.svg', code:'PE'};
     this.isPeru = true;
+    this.Code.setValue( this.country.code );
+    this.CodePhone.setValue( this.country.codePhone );
   }
 
   messageError(e:any, detail:string = 'Error de validación de datos'){

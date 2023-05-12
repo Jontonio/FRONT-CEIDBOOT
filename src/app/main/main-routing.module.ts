@@ -98,7 +98,7 @@ const routes: Routes = [
         data:{
           rolesPermitidos:['admin_role']
         },
-        loadChildren: () => import('./usuario/usuario.module').then( mod => mod.UsuarioModule )
+        loadChildren: () => import('./usuario/usuario.module').then( mod => mod.usuarioModule )
       },
       {
         path:'perfil',

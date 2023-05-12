@@ -79,6 +79,8 @@ export class OtrosTramitesComponent implements OnInit {
       Sexo:[null, [Validators.required]],
       Direccion:[null, Validators.required],
       Celular:[null, [Validators.pattern(/^([0-9])*$/), Validators.required]],
+      Code:[null, Validators.required],
+      CodePhone:[null, Validators.required],
       Email:[null, [Validators.required,Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
       departamento:[null, Validators.required],
       provincia:[null, Validators.required],
@@ -150,6 +152,9 @@ export class OtrosTramitesComponent implements OnInit {
   }
   get TipoDocumento(){
     return this.formEstudiante.controls['TipoDocumento'];
+  }
+  get TipoDocumentoTramite(){
+    return this.formDocumento.controls['TipoDocumento'];
   }
   get Documento(){
     return this.formEstudiante.controls['Documento'];
@@ -236,6 +241,7 @@ export class OtrosTramitesComponent implements OnInit {
     this._global.getEstudiante( dataQuery ).subscribe({
       next: (value) => {
         this.loadingGetData = false;
+        this._msg.clear();
         if(value.data){
           this.existsEstudiante = false;
           this.formEstudiante.patchValue(value.data);
@@ -292,13 +298,13 @@ export class OtrosTramitesComponent implements OnInit {
     this.goForward();
   }
 
-  selectedCurso(curso:Curso){
+  selectedCurso({ PrecioExamSuficiencia, NombreCurso, nivel }:Curso){
+    this._msg.clear();
     this.needSelectCurso = false;
     // asignar un nuevo monto de pago si existe un curso por elegir
-    this.montoPago = curso.PrecioExamSuficiencia;
+    this.montoPago = PrecioExamSuficiencia;
+    this.toast('info',`Se ha selecionado el curso ${NombreCurso} ${nivel.Nivel}`,'otros-tramites')
   }
-
-  tipoTramiteSelected(tipoTramite:TipoTramite){}
 
   registrar(){
     // limpiar mensajes
@@ -379,7 +385,7 @@ export class OtrosTramitesComponent implements OnInit {
     this.formDocumento.reset();
     this.formFiles.reset();
     this.stepper.reset();
-    this.TipoDocumento.setValue('DNI');
+    this.TipoDocumentoTramite.setValue('DNI');
   }
 
   stateLoadingDocumento(event:boolean){

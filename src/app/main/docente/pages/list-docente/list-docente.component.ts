@@ -16,6 +16,7 @@ export class ListDocenteComponent {
   private deleteDocente$:Subscription;
   position :string;
   startPage:number = 0;
+  termino:string;
 
   constructor(public _docente:DocenteService,
               private _msg:MessageService,
@@ -34,6 +35,10 @@ export class ListDocenteComponent {
 
   sendEditDocente({Id}:Docente){
     this.route.navigate(['/system/docentes/editar-docente', Id])
+  }
+
+  terminoBusqueda(termino:string){
+    this.termino = termino;
   }
 
   dialogDelete({ Nombres, Id}:Docente) {

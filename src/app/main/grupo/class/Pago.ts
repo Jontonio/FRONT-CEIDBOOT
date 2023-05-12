@@ -1,6 +1,7 @@
 import { MedioPago } from "src/app/class/MedioDePago";
 import { CategoriaPago } from "./CategoriaPago";
 import { EstudianteEnGrupo } from "./EstudianteGrupo";
+import { GrupoModulo } from "./GrupoModulo";
 
 class ResPago {
   constructor(public msg: string, public ok: boolean, public data: Pago | Pago[], public count?:number){}
@@ -18,7 +19,15 @@ class Pago{
     updatedAt:Date;
     medioDePago:MedioPago;
     estudianteEnGrupo?:EstudianteEnGrupo;
-    constructor(VoucherUrl:string, FechaPago:Date, CodigoVocuher:string, MontoPago:number, medioDePago:MedioPago, categoriaPago?:CategoriaPago, estudianteEnGrupo?:EstudianteEnGrupo){
+    grupoModulo?:GrupoModulo;
+    constructor(VoucherUrl:string,
+                FechaPago:Date,
+                CodigoVocuher:string,
+                MontoPago:number,
+                medioDePago:MedioPago,
+                categoriaPago?:CategoriaPago,
+                estudianteEnGrupo?:EstudianteEnGrupo,
+                grupoModulo?:GrupoModulo){
       this.VoucherUrl = VoucherUrl
       this.estudianteEnGrupo = estudianteEnGrupo;
       this.FechaPago = FechaPago;
@@ -26,6 +35,7 @@ class Pago{
       this.categoriaPago = categoriaPago;
       this.MontoPago = MontoPago;
       this.medioDePago = medioDePago;
+      this.grupoModulo = grupoModulo;
     }
 }
 

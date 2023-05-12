@@ -5,7 +5,7 @@ import { MatButton } from '@angular/material/button';
 import { Button } from 'primeng/button';
 import { MatStepper } from '@angular/material/stepper';
 import { Curso } from 'src/app/main/curso/class/Curso';
-import { EstudianteEnGrupo, ResEstudianteEnGrupo } from 'src/app/main/grupo/class/EstudianteGrupo';
+// import { EstudianteestudianteEnGrupo, ResEstudianteestudianteEnGrupo } from 'src/app/main/grupo/class/EstudianteGrupo';
 import { GlobalService } from 'src/app/services/global.service';
 import { Message, MessageService } from 'primeng/api';
 import { switchMap } from 'rxjs';
@@ -14,6 +14,9 @@ import { CategoriaPago } from 'src/app/main/grupo/class/CategoriaPago';
 import { Grupo } from 'src/app/main/grupo/class/Grupo';
 import * as moment from 'moment';
 import { MedioPago } from 'src/app/class/MedioDePago';
+import { Modulo } from 'src/app/main/curso/class/Modulo';
+import { GrupoModulo } from 'src/app/main/grupo/class/GrupoModulo';
+import { EstudianteEnGrupo, ResEstudianteEnGrupo } from 'src/app/main/grupo/class/EstudianteGrupo';
 
 interface Card {
   name: string,
@@ -32,11 +35,10 @@ export class PagosComponent {
   card:Card[];
   TipoDocumentoSelected:string;
   formBusqueda:FormGroup;
-  formSelectGrupo:FormGroup;
-  formCategoriaPago:FormGroup;
+  formSelectGrupoCategoria:FormGroup;
   formFile:FormGroup;
   loading:boolean;
-  estudianteEnGrupo:EstudianteEnGrupo[];
+  ListEstudianteEnGrupo:EstudianteEnGrupo[];
   selectEstudianteGrupo:EstudianteEnGrupo;
   resEstudianteEnGrupo:ResEstudianteEnGrupo;
   cursosMatriculados:Curso;
@@ -47,6 +49,11 @@ export class PagosComponent {
   formData:FormData;
   city:string;
   loadingFilePago:boolean;
+  selectedGrupo:EstudianteEnGrupo;
+  selectedModulo:GrupoModulo;
+  listModulogrupo:GrupoModulo[] = [];
+  selectedCategory:CategoriaPago;
+  isPagoMensualidad:boolean;
 
   constructor(private readonly fb:FormBuilder,
               private _msg:MessageService,
@@ -54,7 +61,6 @@ export class PagosComponent {
     this.createFormularioBusqueda();
     this.createFormularioSelectGrupo();
     this.createFormularioFile();
-    this.createFormularioCategoriaPago();
     this.inicializateVariables();
     this.getCategoriasPago();
     this.getMediosPagos();
@@ -66,6 +72,7 @@ export class PagosComponent {
     this.TipoDocumentoSelected = 'DNI';
     this.loading = false;
     this.loadingFilePago = false;
+    this.isPagoMensualidad = false;
   }
 
   createFormularioBusqueda(){
@@ -77,16 +84,11 @@ export class PagosComponent {
   }
 
   createFormularioSelectGrupo(){
-    this.formSelectGrupo = this.fb.group({
-      EnGrupo:[null, Validators.required ],
-      IsVerifySelectCurso:[null, Validators.required ]
-    })
-  }
-
-  createFormularioCategoriaPago(){
-    this.formCategoriaPago = this.fb.group({
+    this.formSelectGrupoCategoria = this.fb.group({
+      estudianteEnGrupo:[null, Validators.required ],
       categoriaPago:[null, Validators.required ],
-      IsVerifyCategoriaPago:[null, Validators.required ]
+      grupoModulo:[null, Validators.required],
+      IsVerifySelectCurso:[null, Validators.required ]
     })
   }
 
@@ -112,21 +114,20 @@ export class PagosComponent {
   }
 
   /** getters formulario select curso */
-  get EnGrupo(){
-    return this.formSelectGrupo.controls['EnGrupo']
+  get estudianteEnGrupo(){
+    return this.formSelectGrupoCategoria.controls['estudianteEnGrupo']
   }
   get IsVerifySelectCurso(){
-    return this.formSelectGrupo.controls['IsVerifySelectCurso']
+    return this.formSelectGrupoCategoria.controls['IsVerifySelectCurso']
+  }
+  get categoriaPago(){
+    return this.formSelectGrupoCategoria.controls['categoriaPago'];
+  }
+  get grupoModulo(){
+    return this.formSelectGrupoCategoria.controls['grupoModulo'];
   }
 
   /** Getters formulario categoria pago */
-  get categoriaPago(){
-    return this.formCategoriaPago.controls['categoriaPago'];
-  }
-  get IsVerifyCategoriaPago(){
-    return this.formCategoriaPago.controls['IsVerifyCategoriaPago'];
-  }
-
   get FileURL(){
     return this.formFile.controls['FileURL'];
   }
@@ -172,12 +173,15 @@ export class PagosComponent {
 
   changeCard(event:Event){
     this.TipoDocumentoSelected = this.TipoDocumento.value;
+    this.Documento.reset();
   }
 
-  validSelectCurso(){
+  validSelectCursoGrupo(){
     /** verificar los rdio butons de los cursos */
-    if(this.EnGrupo.invalid){
-      this.EnGrupo.markAsDirty();
+    if(this.estudianteEnGrupo.invalid || this.categoriaPago.invalid || this.grupoModulo.invalid){
+      this.estudianteEnGrupo.markAsDirty();
+      this.categoriaPago.markAsDirty();
+      this.grupoModulo.markAsDirty();
       return;
     }
     /** setear el valor de IsVerifySelectCurso en true el cual significa que eligió un grupo */
@@ -188,43 +192,29 @@ export class PagosComponent {
     this.goForward();
   }
 
-  validSelectCategoria(){
-    /** verificar el radio butons de categoria de pago */
-    if(this.categoriaPago.invalid){
-      this.categoriaPago.markAsDirty();
-      return;
-    }
-    /** setear el valor de IsVerifyCategoriaPago en true el cual significa que eligió una categoria de pago */
-    this.IsVerifyCategoriaPago.setValue(true);
-    /** mostramos valor dependiendo de el tipo de pago */
-    this.selectedCategoria(this.categoriaPago.value.CodeCategoriaPago);
-    console.log(this.categoriaPago.value)
-    console.log(this.formSelectGrupo.value)
-    /** continuar con el siguiente stepper */
-    this.goForward();
-  }
-
   search(){
     /** Validar solo el campo documento */
     if(this.Documento.invalid){
       this.Documento.markAsDirty();
       return;
     }
-
     /** arreglo para almacenar la lista de cursos del estudiante */
-    this.estudianteEnGrupo = [];
+    this.ListEstudianteEnGrupo = [];
+    /** limpiar mensajes anteriores */
+    this._msg.clear();
     /** Reseteamos los formularios siguientes por si el usuarios regresa y hace la busqueda */
-    this.formSelectGrupo.reset();
+    this.formSelectGrupoCategoria.reset();
     this.formFile.reset();
     this.loading = true;
     /** Realizar la consulta de la persona */
     this._global.consultaEstudianteGrupo(this.formBusqueda.value).subscribe({
       next: (value) => {
         this.loading = false;
+        console.log(value)
         if(value.ok){
           this.toast('success',value.msg);
           this.resEstudianteEnGrupo = value;
-          this.estudianteEnGrupo = value.data as Array<EstudianteEnGrupo>;
+          this.ListEstudianteEnGrupo = value.data as Array<EstudianteEnGrupo>;
           this.IsVerifyBusqueda.setValue(true);
           this.goForward();
           return;
@@ -239,22 +229,34 @@ export class PagosComponent {
 
   }
 
+  selectOneGrupo(data:EstudianteEnGrupo){
+    if(!data) return;
+    this.selectedGrupo = data;
+    this.listModulogrupo = this.selectedGrupo.grupo.grupoModulo;
+    this.listModulogrupo.pop();
+  }
+
+  selectModulo(data:GrupoModulo){
+    this.selectedModulo = data;
+  }
+
   selectedCategoria(categoria:string){
     /** validamos la categoria elegida */
-    const { matricula } = this.EnGrupo.value as EstudianteEnGrupo;
-    const { denomiServicio } = matricula;
-
-    if(categoria=='category_matricula'){
-      const monto = denomiServicio.MontoMatricula;
-      this.setValueMontoPago( monto );
-      return;
+    if(categoria=='category_mensualidad' || categoria=='category_extemporaneo'){
+      this.addValidatorsGrupoModulo();
+      this.isPagoMensualidad = true;
+    }else{
+      this.clearValidatorsGrupoModulo();
+      this.isPagoMensualidad = false;
     }
 
-    if(categoria=='category_mensualidad'){
-      const monto = denomiServicio.MontoPension;
-      this.setValueMontoPago( monto );
-      return;
-    }
+  }
+
+  selectedCategories(categoria:CategoriaPago){
+    if(!categoria) return;
+    console.log(categoria)
+    this.selectedCategory = categoria;
+    this.selectedCategoria(categoria.CodeCategoriaPago);
   }
 
   setValueMontoPago(monto:number){
@@ -263,26 +265,27 @@ export class PagosComponent {
     this.MontoPago.patchValue( monto );
   }
 
+  addValidatorsGrupoModulo(){
+    this.grupoModulo.addValidators([ Validators.required ]);
+  }
+
+  clearValidatorsGrupoModulo(){
+    this.grupoModulo.clearValidators();
+    this.grupoModulo.updateValueAndValidity();
+    this.grupoModulo.markAsPristine();
+  }
+
   selectFile(fileChangeEvent:any){
     this.file = fileChangeEvent.target.files[0];
     if(!this.file )return;
     this.formData = new FormData();
     this.formData.append('file', this.file, this.file.name);
-    this.formData.append('id_grupo', String(this.EnGrupo.value.grupo.Id));
+    this.formData.append('id_grupo', String(this.estudianteEnGrupo.value.grupo.Id));
     this.formData.append('tipo', this.categoriaPago.value.TipoCategoriaPago);
   }
 
   save(){
-
-    if(this.Documento.invalid){
-      this.Documento.markAsDirty();
-      return;
-    }
-
-    if(this.EnGrupo.invalid){
-      this.EnGrupo.markAsDirty();
-      return;
-    }
+    this.MontoPago.setValue(10);
 
     if(this.formFile.invalid){
       Object.keys( this.formFile.controls ).forEach(input => this.formFile.controls[input].markAsDirty())
@@ -291,21 +294,26 @@ export class PagosComponent {
 
     this.loading = true;
     this.FileURL.disable();
-    // console.log(new Pago("file.webViewLink",
-    //   moment(this.FechaPago.value,'DD/MM/YYYY').toDate(),
-    //   this.NumOperacion.value,
-    //   this.MontoPago.value,
-    //   this.categoriaPago.value,
-    //   this.EnGrupo.value.Id))
+    const pago = new Pago(this.FileURL.value,
+                          moment(this.FechaPago.value).toDate(),
+                          this.NumOperacion.value,
+                          this.MontoPago.value,
+                          {Id: this.MedioDePago.value.Id} as MedioPago,
+                          {Id: this.categoriaPago.value.Id} as CategoriaPago,
+                          {Id: this.estudianteEnGrupo.value.Id} as EstudianteEnGrupo,
+                          this.grupoModulo.value);
+
     //TODO:upload file and register data width switchMap
     this._global.uploadFile(this.formData)
     .pipe(
-      switchMap((file) => this._global.registerPago(new Pago(file.webViewLink,
-                                                             moment(this.FechaPago.value,'DD/MM/YYYY').toDate(),
-                                                             this.NumOperacion.value,
-                                                             this.MontoPago.value,
-                                                             this.categoriaPago.value,
-                                                             this.EnGrupo.value.Id))))
+      switchMap((file) => this._global.registerPago( new Pago(file.webViewLink,
+                                                              moment(this.FechaPago.value,'DD/MM/YYYY').toDate(),
+                                                              this.NumOperacion.value,
+                                                              this.MontoPago.value,
+                                                              {Id: this.MedioDePago.value.Id} as MedioPago,
+                                                              {Id: this.categoriaPago.value.Id} as CategoriaPago,
+                                                              {Id: this.estudianteEnGrupo.value.Id} as EstudianteEnGrupo,
+                                                              this.grupoModulo.value))))
       .subscribe({
         next:(value) => {
           if(value.ok){

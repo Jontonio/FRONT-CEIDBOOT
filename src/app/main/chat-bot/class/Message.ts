@@ -3,9 +3,11 @@ class ResMessage{
 }
 
 class Message {
+  Nombres:string;
   Numero: string;
   Message: string;
-  constructor( Numero:string, Message:string ){
+  constructor(Nombres:string, Numero:string, Message:string){
+    this.Nombres = Nombres;
     this.Numero = Numero;
     this.Message = Message;
   }

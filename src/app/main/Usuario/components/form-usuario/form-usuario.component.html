@@ -3,7 +3,7 @@
 </div>
 <ng-template #form>
   <form [formGroup]="FormUsuario">
-    <div class="mb-1">
+    <div class="mb-1">{{isUpdate}}
       <div *ngIf="isUpdate else notUpdate">
         <h2 class="ml-1"><i class="fa-solid fa-user-pen"></i> Editar usuario</h2>
       </div>
@@ -16,6 +16,8 @@
       <div class="col-12 md:col-6">
         <div class="col">
           <label for="DNI" class="block mb-2">DNI</label>
+          <span class="p-input-icon-left full-width">
+            <i class="fa-regular fa-address-card"></i>
             <input id="DNI"
                   class="p-fluid p-grid p-formgrid input-form"
                   type="text"
@@ -23,21 +25,25 @@
                   maxlength="8"
                   (ngModelChange)="Reniec($event)"
                   formControlName="DNI"
-                  pInputText/>
-            <small *ngIf="DNI.hasError('pattern') && !DNI.hasError('required')"
-                    class="p-error">Digite un DNI <strong>válido</strong></small>
-            <small *ngIf="DNI.hasError('required') && DNI.dirty"
-                    class="p-error">El campo DNI es <strong>requerido</strong></small>
+                   pInputText/>
+          </span>
+          <small *ngIf="DNI.hasError('pattern') && !DNI.hasError('required')"
+                  class="p-error">Digite un DNI <strong>válido</strong></small>
+          <small *ngIf="DNI.hasError('required') && DNI.dirty"
+                  class="p-error">El campo DNI es <strong>requerido</strong></small>
         </div>
         <div class="col">
           <label for="Nombres" class="block mb-2">Nombres</label>
-            <input id="Nombres"
-                  class="p-fluid p-grid p-formgrid input-form"
-                  type="text"
-                  autocomplete="off"
-                  formControlName="Nombres"
-                  maxlength="45"
-                  pInputText/>
+            <span class="p-input-icon-left full-width">
+              <i class="fa-solid fa-user"></i>
+              <input id="Nombres"
+                    class="p-fluid p-grid p-formgrid input-form"
+                    type="text"
+                    autocomplete="off"
+                    formControlName="Nombres"
+                    maxlength="45"
+                     pInputText/>
+            </span>
           <small *ngIf="Nombres.hasError('pattern') && !Nombres.hasError('required')"
                 class="p-error">Digite un Nombre <strong>válido</strong></small>
           <small *ngIf="Nombres.hasError('required') && Nombres.dirty"
@@ -74,7 +80,7 @@
           </div>
         </div>
         <div class="col">
-          <label for="rol" class="block mb-2"><i class="fa-solid fa-gears"></i> Rol del usuario</label>
+          <label for="rol" class="block mb-2">Rol del usuario</label>
           <p-dropdown class="p-fluid p-grid p-formgrid"
                       [options]="roles"
                       formControlName="rol"
@@ -97,8 +103,8 @@
       <div class="col-12 md:col-6">
         <div class="col mtop-inputs">
           <label for="Direccion" class="block mb-2">Dirección</label>
-          <div class="p-inputgroup">
-            <span class="p-inputgroup-addon"><i class="fa-solid fa-location-dot"></i></span>
+          <span class="p-input-icon-left full-width">
+            <i class="fa-solid fa-location-dot"></i>
             <input id="Direccion"
                   class="p-fluid p-grid p-formgrid input-form"
                   type="text"
@@ -106,7 +112,7 @@
                   maxlength="100"
                   formControlName="Direccion"
                   pInputText/>
-          </div>
+          </span>
           <small *ngIf="Direccion.hasError('pattern') && !Direccion.hasError('required')"
                 class="p-error">Digite un Dirección <strong>válido</strong></small>
           <small *ngIf="Direccion.hasError('required') && Direccion.dirty"
@@ -114,37 +120,37 @@
         </div>
         <div class="col-12">
           <label for="Email" class="block mb-2">Email</label>
-          <div class="p-inputgroup">
-            <span class="p-inputgroup-addon"><i class="fa-regular fa-envelope"></i></span>
+          <span class="p-input-icon-left full-width">
+            <i class="fa-solid fa-envelope"></i>
             <input id="Email"
                   class="p-fluid p-grid p-formgrid"
                   type="email"
                   autocomplete="off"
                   formControlName="Email"
                   maxlength="50"
-                  pInputText/>
-          </div>
+                   pInputText/>
+          </span>
           <small *ngIf="Email.hasError('pattern') && !Email.hasError('required')"
                 class="p-error">Digite un Email <strong>válido</strong></small>
           <small *ngIf="Email.hasError('required') && Email.dirty"
                 class="p-error">El campo Email es <strong>requerido</strong></small>
         </div>
         <div class="grid content">
-          <div class="col-5 md:col-3">
+          <div class="col-4 md:col-3">
             <app-input-code [country]="country" (selectedCountry)="selectedCountry($event)"></app-input-code>
           </div>
-          <div class="col-7 md:col-9">
+          <div class="col-8 md:col-9">
             <label for="Celular" class="block mb-2">Celular</label>
-            <div class="p-inputgroup">
-              <span class="p-inputgroup-addon"><i class="fa-solid fa-phone"></i></span>
+            <span class="p-input-icon-left full-width">
+              <i class="fa-solid fa-phone"></i>
               <input id="Celular"
-                    class="p-fluid p-grid p-formgrid input-form"
-                    type="text"
-                    autocomplete="off"
-                    maxlength="15"
-                    formControlName="Celular"
-                    pInputText/>
-            </div>
+                     class="p-fluid p-grid p-formgrid input-form"
+                     type="text"
+                     autocomplete="off"
+                     [maxlength]="country.code=='PE'?9:15"
+                     formControlName="Celular"
+                     pInputText/>
+            </span>
             <small *ngIf="Celular.hasError('pattern') && !Celular.hasError('required')"
                   class="p-error">Digite un Celular <strong>válido</strong></small>
             <small *ngIf="Celular.hasError('required') && Celular.dirty"

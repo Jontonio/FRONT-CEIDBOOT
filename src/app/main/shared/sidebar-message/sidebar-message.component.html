@@ -1,0 +1,30 @@
+<p-sidebar [(visible)]="sidebarMessage"
+            (onHide)="onCloseModal()">
+  <div *ngIf="dataEstudiante">
+    <h2 class="mb-2">
+      <i class="fa-solid fa-message"></i> Notificar a {{dataEstudiante.Nombres | titlecase}}
+    </h2>
+    <div *ngIf="dataEstudiante.apoderado">
+      <p class="p-2">Mensaje para</p>
+      <div class="grid" >
+        <div class="col-6">
+          <label for="Apoderado" class="ml-2 content-radio">
+            <p-chip label="Apoderado" icon="" class="chip full-width">
+              <input type="radio" name="destino" [(ngModel)]="destino" value="a1" id="Apoderado">
+              <span class="select-radio"><i class="fa-solid fa-check pr-2"></i></span>
+            </p-chip>
+          </label>
+        </div>
+        <div class="col-6">
+          <label for="estudiante" class="ml-2 content-radio">
+            <p-chip label="Estudiante" icon="" class="chip">
+              <input type="radio" name="estudiante" [(ngModel)]="destino" value="e1" id="estudiante" class="full-width">
+              <span class="select-radio"><i class="fa-solid fa-check pr-2"></i></span>
+            </p-chip>
+          </label>
+        </div>
+      </div>
+    </div>
+    <app-editor [loading]="loadingSend"  (textMsg)="sendMessage($event)"></app-editor>
+  </div>
+</p-sidebar>

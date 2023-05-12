@@ -8,7 +8,7 @@ import { Docente } from 'src/app/main/docente/class/Docente';
 import { ShowFileComponent } from 'src/app/shared/show-file/show-file.component';
 import { UnAuthorizedService } from 'src/app/services/unauthorized.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { EstudianteEnGrupo, ResEstadoEstudEnGrupo } from '../../class/EstudianteGrupo';
 import { ModalMensualidadComponent } from '../../components/modal-mensualidad/modal-mensualidad.component';
 import { Pago } from '../../class/Pago'
@@ -47,14 +47,9 @@ export class EstudiantesGrupoComponent implements OnInit {
   curso:Curso;
   expanded:boolean = false;
   displayFile:boolean = false;
-  sidebarMessage:boolean = false;
+  openSidebarMessage:boolean = false;
   fileURL:string;
   terminoBusqueda:string = '';
-  numeroCelular:string;
-  destino:string = 'e1';
-  existsApodera:boolean = false;
-  loadingSend:boolean = false;
-  selectEstudiante:Estudiante;
   infoDateGrupo:InfoDateGrupo;
   nameEventSocket:string;
   idGrupo:string;
@@ -62,6 +57,7 @@ export class EstudiantesGrupoComponent implements OnInit {
   offset:number = 0;
   visibleModalFecha:boolean;
   formFecha:FormGroup;
+  dataEstudianteMessage:Estudiante;
 
   constructor(private readonly _grupo:GrupoService,
               private readonly fb:FormBuilder,
@@ -70,6 +66,7 @@ export class EstudiantesGrupoComponent implements OnInit {
               private readonly _unAuth:UnAuthorizedService,
               private readonly _chatboot:ChabotService,
               private readonly _global: GlobalService,
+              private readonly confirService:ConfirmationService,
               private _msg:MessageService) {
                 this.getIdGrupo(this.activeRoute);
                 this.onListaEstudiantesCurso();
@@ -175,41 +172,6 @@ export class EstudiantesGrupoComponent implements OnInit {
     this.modalMensualidad.openModal(pago, new PayloadSocket(this.limit, this.offset, this.idGrupo));
   }
 
-  openModalSidebarMessage({ estudiante }:EstudianteEnGrupo){
-    this.sidebarMessage = true;
-    this.selectEstudiante = estudiante;
-    this.existsApodera = estudiante.apoderado?true:false;
-  }
-
-  sendMessage(event:string){
-    this.numeroCelular = this.destinoSend( this.selectEstudiante );
-    const message = new Message(this.numeroCelular, event );
-    this.loadingSend = true;
-    this._chatboot.sendMessage( message ).subscribe({
-      next:(value) => {
-        console.log(value)
-        if(value.ok){
-          this.toast('success', value.msg);
-          this.loadingSend = false;
-        }
-      },
-      error:(e) => {
-        this.loadingSend = false;
-        console.log(e)
-      }
-    })
-  }
-
-  destinoSend(estudiante: Estudiante){
-    if(estudiante.apoderado && this.destino=='a1'){
-      this.existsApodera = true;
-      const {CodePhone, CelApoderado} = estudiante.apoderado;
-      return `${CodePhone}${CelApoderado}`.replace('+','').concat('@c.us').trim();
-    }
-    const { CodePhone, Celular} = estudiante;
-    return `${CodePhone}${Celular}`.replace('+','').concat('@c.us').trim();
-  }
-
   opendModalEdit(data:GrupoModulo, Id:number){
     data.FechaPago = (moment(data.FechaPago)).toDate()
     data.grupo = { Id } as Grupo;
@@ -219,6 +181,16 @@ export class EstudiantesGrupoComponent implements OnInit {
 
   estadoModalFecha(estado:boolean){
     this.visibleModalFecha = estado;
+  }
+
+  openModalSidebarMessage(estudiante:Estudiante){
+    console.log(estudiante)
+    this.openSidebarMessage = true;
+    this.dataEstudianteMessage = estudiante;
+  }
+
+  estadoModalMessage(estado:boolean){
+    this.openSidebarMessage = estado;
   }
 
   onListaEstudiantesCurso(){
@@ -240,7 +212,7 @@ export class EstudiantesGrupoComponent implements OnInit {
                                                   this.toast('error',msg,`${e.error.error}:${e.error.statusCode}`)
   }
 
-  toast(type:string, msg:string, detail:string=''){
+  toast(type:string, msg:string, detail?:string){
     this._msg.add({severity:type, summary:msg, detail});
   }
 

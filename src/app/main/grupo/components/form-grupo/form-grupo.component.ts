@@ -11,7 +11,6 @@ import { DocenteService } from 'src/app/main/docente/services/docente.service';
 import { Grupo, TipoGrupo } from '../../class/Grupo';
 import { GrupoService } from '../../services/grupo.service';
 import { Horario } from '../../class/Horario';
-import { Modalidad } from 'src/app/main/matricula/interfaces/global';
 import { optionOperation } from 'src/app/main/class/global';
 import { SocketService } from 'src/app/services/socket.service';
 import { MainService } from 'src/app/main/services/main.service';
@@ -177,7 +176,7 @@ export class FormGrupoComponent implements OnInit {
       curso:[null, Validators.required],
       tipoGrupo:[null, Validators.required],
       horario:[null, Validators.required],
-      RequeridoPPago:[false, Validators.required ]
+      RequeridoPPago:[false]
     })
 
   }
@@ -250,6 +249,7 @@ export class FormGrupoComponent implements OnInit {
   }
 
   ready(){
+    console.log(this.FormGrupo)
     /** validate data */
     if(this.FormGrupo.invalid){
       Object.keys( this.FormGrupo.controls ).forEach( input => this.FormGrupo.controls[input].markAsDirty() );
@@ -280,6 +280,7 @@ export class FormGrupoComponent implements OnInit {
     this.FormGrupo.reset();
     this.selecCurso = undefined;
     this.selecDocente = undefined;
+    this.estadoGrupo.setValue(this.initialEstadoGrupo);
   }
 
   selectedDocente(docente:Docente){

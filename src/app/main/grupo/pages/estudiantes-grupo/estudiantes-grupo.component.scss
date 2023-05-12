@@ -9,19 +9,6 @@
   overflow: hidden !important;
   position: relative;
 }
-.content-radio{
-  cursor: pointer;
-}
-.select-radio{
-  display: none;
-}
-.chip input[type=radio]{
-  display: none;
-}
-.chip input[type=radio]:checked + span{
-  display: block;
-  color: #F9A826;
-}
 .content-title-modulo, .content-date{
   display: inline-block;
   white-space: nowrap;

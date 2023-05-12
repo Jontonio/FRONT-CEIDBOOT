@@ -10,7 +10,7 @@ import { ChatBotMainComponent } from './pages/chat-bot-main/chat-bot-main.compon
 import { EnviarMensajeComponent } from './pages/enviar-mensaje/enviar-mensaje.component';
 import { EstadoChatbotComponent } from './pages/estado-chatbot/estado-chatbot.component';
 import { EditorModule } from 'primeng/editor';
-import { EditorComponent } from './components/editor/editor.component';
+import { EditorComponent } from '../shared/editor/editor.component';
 
 
 @NgModule({

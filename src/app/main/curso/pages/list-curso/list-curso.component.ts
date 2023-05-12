@@ -23,6 +23,7 @@ export class ListCursoComponent {
   position    :string;
   numRows     :number = 5;
   numFirst    :number = 0;
+  termino:string;
 
   constructor(public  readonly _curso:CursoService,
               private readonly route:Router,
@@ -107,6 +108,10 @@ export class ListCursoComponent {
       },
       error: (e) => this.messageError(e)
     })
+  }
+
+  busquedaTermino(termino:string){
+    this.termino = termino;
   }
 
   toast(severity:string, summary:string, detail:string=''){

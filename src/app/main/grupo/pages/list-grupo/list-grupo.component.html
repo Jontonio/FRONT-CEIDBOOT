@@ -2,20 +2,8 @@
   <p-card header="Lista de grupos">
     <div class="grid justify-content-center justify-content-between">
       <div class="col-12 md:col-3">
-        <span class="p-input-icon-left full-width"
-              [ngClass]="{'p-input-icon-right':terminoBusqueda}">
-          <i class="pi pi-search"></i>
-          <input type="text"
-                 [(ngModel)]="terminoBusqueda"
-                 name="terminoBusqueda"
-                 autocomplete="off"
-                 pInputText
-                 placeholder="Buscar idioma/grupo"/>
-          <i *ngIf="terminoBusqueda"
-              class="pi pi-times"
-              style="cursor: pointer;"
-              (click)="terminoBusqueda=''"></i>
-        </span>
+        <app-input-search (busqueda)="buscarTermino($event)"
+                           placeholder="Buscar idioma/grupo/nivel"></app-input-search>
       </div>
       <div class="col-12 md:col-9 flex justify-content-end">
         <div>
@@ -106,7 +94,7 @@
                     <mat-icon><i class="fa-solid fa-pen-to-square"></i></mat-icon>
                     <span>Editar datos del grupo</span>
                   </button>
-                  <button mat-menu-item>
+                  <button mat-menu-item (click)="confirmarEliminarGrupo(grupo)">
                     <mat-icon><i class="fa-solid fa-trash-can"></i></mat-icon>
                     <span>Dar de baja al grupo</span>
                   </button>
@@ -143,3 +131,12 @@
     <!-- <app-lista-vacia *ngIf="_grupo.listGrupos.length==0 && !_grupo.loadingLista" msg="No se encontraron grupos registrados"></app-lista-vacia> -->
   </p-card>
 </div>
+
+<!-- Delete grupo message dialog -->
+<p-confirmDialog [style]="{width: '50vw'}"
+                 key="deleteGrupoDialog"
+                 position="top"
+                 [baseZIndex]="10000"
+                 acceptLabel="Confirmar"
+                 [breakpoints]="{'960px': '75vw', '640px': '100vw'}"
+                 rejectButtonStyleClass="p-button-outlined"></p-confirmDialog>

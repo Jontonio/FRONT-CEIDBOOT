@@ -4,6 +4,11 @@ import { ConfigService } from '../../services/config.service';
 import { MessageService } from 'primeng/api';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UnAuthorizedService } from 'src/app/services/unauthorized.service';
+import { EstadoGrupo } from 'src/app/main/grupo/class/EstadoGrupo';
+import { CategoriaPago } from 'src/app/main/grupo/class/CategoriaPago';
+import { TipoTramite } from 'src/app/main/class/TipoTramite';
+import { MedioPago } from 'src/app/class/MedioDePago';
+import { DenominServicio } from 'src/app/denomin-servicio/class/Denomin-servicio';
 
 @Component({
   selector: 'app-children-main',
@@ -16,6 +21,12 @@ export class ChildrenMainComponent {
   sidebarVisible:boolean;
   isUpdateEstadoGrupo:boolean;
   loadingEstadoGrupo:boolean;
+  products: any[];
+  listEstadosGrupo:EstadoGrupo[] = [];
+  listCategoriaspago:CategoriaPago[] = [];
+  listTiposTramite:TipoTramite[] = [];
+  listMediosPago:MedioPago[] = [];
+  listDenominacionServicios:DenominServicio[] = [];
 
   constructor(private readonly fb:FormBuilder,
               private _msg:MessageService,
@@ -23,6 +34,11 @@ export class ChildrenMainComponent {
               private readonly _config:ConfigService) {
     this.inicializedVariables();
     this.createFormEstadoGrupo();
+    this.getAllEstadosGrupos();
+    this.getAllCategoriasPago();
+    this.getAllTiposTramite();
+    this.getAllMediosPago();
+    this.getAllDenominServicio();
   }
 
   /** crear el formulario */
@@ -38,6 +54,8 @@ export class ChildrenMainComponent {
     this.sidebarVisible = false;
     this.isUpdateEstadoGrupo = false;
     this.loadingEstadoGrupo = false;
+    this.toast('succcess','OJO','no tocar','mensaje-advertencia');
+
   }
 
   /** getters */
@@ -80,6 +98,76 @@ export class ChildrenMainComponent {
 
   }
 
+  getAllEstadosGrupos(){
+    this._config.getEstadosGrupo().subscribe({
+      next:(value) => {
+        if(value.ok){
+          this.listEstadosGrupo = value.data as Array<EstadoGrupo>;
+        }
+      },
+      error:(e) => {
+        console.log(e)
+        this.messageError(e)
+      }
+    })
+  }
+
+  getAllCategoriasPago(){
+    this._config.getCategoriasPago().subscribe({
+      next:(value) => {
+        if(value.ok){
+          this.listCategoriaspago = value.data as Array<CategoriaPago>;
+        }
+      },
+      error:(e) => {
+        console.log(e)
+        this.messageError(e)
+      }
+    })
+  }
+
+  getAllTiposTramite(){
+    this._config.getTiposTramite().subscribe({
+      next:(value) => {
+        if(value.ok){
+          this.listTiposTramite = value.data as Array<TipoTramite>;
+        }
+      },
+      error:(e) => {
+        console.log(e)
+        this.messageError(e)
+      }
+    })
+  }
+
+  getAllMediosPago(){
+    this._config.getMediosPago().subscribe({
+      next:(value) => {
+        if(value.ok){
+          this.listMediosPago = value.data as Array<MedioPago>;
+        }
+      },
+      error:(e) => {
+        console.log(e)
+        this.messageError(e)
+      }
+    })
+  }
+
+  getAllDenominServicio(){
+    this._config.getDenominServicio().subscribe({
+      next:(value) => {
+        if(value.ok){
+          this.listDenominacionServicios = value.data as Array<DenominServicio>;
+        }
+      },
+      error:(e) => {
+        console.log(e)
+        this.messageError(e)
+      }
+    })
+  }
+
   /** funcion para abrir el sidebar */
   showSideBar(){
     this.sidebarVisible = true
@@ -99,8 +187,8 @@ export class ChildrenMainComponent {
                                           this.toast('error',msg,`${e.error.error}:${e.error.statusCode}`)
   }
 
-  toast(severity:string, summary:string, detail:string=''){
-    this._msg.add({severity, summary, detail});
+  toast(severity:string, summary:string, detail?:string, key?:string){
+    this._msg.add({severity, summary, detail, key});
   }
 
 

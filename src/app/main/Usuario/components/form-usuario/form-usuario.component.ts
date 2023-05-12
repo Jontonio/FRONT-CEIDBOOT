@@ -18,24 +18,27 @@ import { HttpErrorResponse } from '@angular/common/http';
   templateUrl: './form-usuario.component.html',
   styleUrls: ['./form-usuario.component.scss']
 })
-export class FormUsuarioComponent implements OnInit {
+export class FormUsuarioComponent {
 
-  /** Output and Input variables */
+  /* `@Output() formData = new EventEmitter<optionOperation>();` is creating an output property named
+  `formData` that emits an event of type `optionOperation` when its value changes. This output
+  property can be used to communicate data from the child component (`FormUsuarioComponent`) to its
+  parent component. */
   @Output() formData = new EventEmitter<optionOperation>();
-  @Input() loading:boolean;
+  @Input()  loading:boolean;
 
-  /** Variables de clase */
-  FormUsuario:FormGroup;
-  loadGetData:boolean = false;
-  isUpdate:boolean = false;
-  selecRol:Rol;
 
-  roles:Rol[] = [];
-  Id?:number;
+  /* These are properties of the `FormUsuarioComponent` class. */
   country:Code;
-  urlLista:string;
-  loadingGetUpdate:boolean;
+  FormUsuario:FormGroup;
+  Id:number;
+  isUpdate:boolean = false;
+  loadGetData:boolean = false;
+  loadingGetUpdate:boolean = false;
   showValidacion:boolean = false;
+  roles:Rol[] = [];
+  selecRol:Rol;
+  urlLista:string;
 
   constructor(private route:Router,
               private fb:FormBuilder,
@@ -48,16 +51,15 @@ export class FormUsuarioComponent implements OnInit {
 
     this.createFormUsuario();
     this.urlLista = '/system/usuarios/lista-usuarios';
-    this.loadingGetUpdate = false;
-  }
-
-  ngOnInit(): void {
     this.inicializateCodes();
     this.getRoles();
     this.getIdUpdate(this.activeRouter);
   }
 
-  createFormUsuario(){
+  /**
+   * This function creates a form for user input with various required fields and validation patterns.
+   */
+  createFormUsuario(): void {
     this.FormUsuario = this.fb.group({
       DNI:[null,[Validators.required,Validators.pattern(/^([0-9])*$/)]],
       Nombres:[null, [Validators.required,Validators.pattern(/^([a-z ñáéíóú]{2,60})$/i)]],
@@ -70,7 +72,11 @@ export class FormUsuarioComponent implements OnInit {
     })
   }
 
-  /** Getters */
+  /* These are getter methods that return the corresponding form control from the `FormUsuario` form
+  group. They provide a convenient way to access the form controls in the component's template and
+  code. For example, in the template, instead of writing `FormUsuario.controls['DNI'].value`, we can
+  write `DNI.value` to get the value of the `DNI` form control. This makes the code more readable and
+  easier to maintain. */
   get DNI(){
     return this.FormUsuario.controls['DNI'];
   }
@@ -99,7 +105,10 @@ export class FormUsuarioComponent implements OnInit {
     return this.FormUsuario.controls['rol'];
   }
 
-  getRoles(){
+/**
+ * This function retrieves roles for a user and handles errors.
+ */
+  getRoles(): void {
     this._usuario.getRoles().subscribe({
       next: (resp) => this.roles = resp.data,
       error: (e) => {
@@ -109,8 +118,18 @@ export class FormUsuarioComponent implements OnInit {
     })
   }
 
-  Reniec(documento:string=''){
-
+/**
+ * This function retrieves data from the RENIEC API based on a given document number and displays a
+ * success or warning message depending on the result.
+ * @param {string} [documento] - documento is a string parameter that represents a document number,
+ * specifically a DNI (Documento Nacional de Identidad) in this case. It is used as input to query the
+ * RENIEC (Registro Nacional de Identificación y Estado Civil) database to retrieve personal
+ * information associated with the DNI number.
+ * @returns If the `documento` parameter is not provided, nothing is returned. If the `documento`
+ * parameter has a length of 8 and `this.isUpdate` is false, then the function will make an API call to
+ * `apiReniec` and return an observable. Otherwise, nothing is returned.
+ */
+  Reniec(documento?:string): void {
     if(!documento) return;
     if(documento.length==8 && !this.isUpdate){
       this.loadGetData = true;
@@ -119,6 +138,7 @@ export class FormUsuarioComponent implements OnInit {
         next: (value) => {
           if(!value.ok){
             this.toast('warn',value.msg,'Datos consultados a RENIEC')
+            this.DNI.enable();
             return;
           }
           this.completeData(value.data);
@@ -136,23 +156,24 @@ export class FormUsuarioComponent implements OnInit {
     }
   }
 
-  completeData(person:Person){
+  /**
+   * The function "completeData" sets the values of "Nombres", "ApellidoPaterno", and "ApellidoMaterno"
+   * based on the properties of a given "Person" object.
+   * @param {Person} person - The parameter "person" is of type "Person", which is likely a custom class
+   * or interface that defines properties such as "nombres" (first names), "apellidoPaterno" (paternal
+   * last name), and "apellidoMaterno" (maternal last name). The "completeData"
+   */
+  completeData(person:Person): void {
     this.Nombres.setValue(person.nombres);
     this.ApellidoPaterno.setValue(person.apellidoPaterno);
     this.ApellidoMaterno.setValue(person.apellidoMaterno);
   }
 
-  formTest(){
-    console.log(this.FormUsuario)
-  }
-
-  ready(){
-
+  ready(): void {
     if(this.FormUsuario.invalid){
       Object.keys(this.FormUsuario.controls).forEach( input => this.FormUsuario.controls[input].markAsDirty())
       return;
     }
-
     this.loading = true;
     const usuario = new Usuario(this.DNI.value,
                                 this.Nombres.value,
@@ -167,7 +188,7 @@ export class FormUsuarioComponent implements OnInit {
     this.formData.emit({data:usuario, option: this.isUpdate, Id:this.Id });
   }
 
-  returnList(){
+  returnList(): void {
     this.FormUsuario.reset();
     this.route.navigate([this.urlLista])
   }
@@ -183,9 +204,11 @@ export class FormUsuarioComponent implements OnInit {
 
   getIdUpdate(activeRouter:ActivatedRoute){
     const { id } = activeRouter.snapshot.params;
+    console.log(id)
     if(!id) return;
     this.Id = id;
     this.isUpdate = true;
+    console.log(this.isUpdate)
     this.loadingGetUpdate = true;
     this._usuario.getUsuario(id).subscribe({
       next: (resp) => {

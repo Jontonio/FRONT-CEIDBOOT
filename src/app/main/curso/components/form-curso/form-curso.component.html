@@ -11,22 +11,20 @@
     <div class="col-12 md:col-6">
       <div class="col">
         <label for="Nombres" class="block mb-2">País del idioma</label>
-        <div class="p-inputgroup">
-          <span class="p-inputgroup-addon">
-            <span *ngIf="urlSelectedFlag else flag">
-              <img class="img-flag-recoment" [src]="urlSelectedFlag" alt="">
-            </span>
-            <ng-template #flag>
-              <span class="pi pi-flag-fill"></span>
-            </ng-template>
-          </span>
+        <span class="p-input-icon-left full-width">
+          <i *ngIf="urlSelectedFlag else flag">
+            <img class="img-flag-recoment" [src]="urlSelectedFlag" alt="">
+          </i>
+          <ng-template #flag>
+            <i class="pi pi-flag-fill"></i>
+          </ng-template>
           <input type="text"
                  pInputText
                  formControlName="NombrePais"
                  maxlength="40"
                  (input)="teclaPresionada()"
                  class="p-fluid p-grid p-formgrid input-form">
-        </div>
+        </span>
         <small *ngIf="NombrePais.hasError('pattern') && !NombrePais.hasError('required')"
               class="p-error">Digite un país <strong>válido</strong></small>
         <small *ngIf="NombrePais.hasError('required') && NombrePais.dirty"
@@ -45,8 +43,8 @@
       </div>
       <div class="col above-col">
         <label for="Nombres" class="block mb-2">Idioma</label>
-        <div class="p-inputgroup">
-          <span class="p-inputgroup-addon"><i class="fa-solid fa-book"></i></span>
+        <span class="p-input-icon-left full-width">
+          <i class="fa-solid fa-book"></i>
           <input id="Nombres"
                 class="p-fluid p-grid p-formgrid input-form"
                 type="text"
@@ -54,7 +52,7 @@
                 maxlength="40"
                 formControlName="NombreCurso"
                 pInputText/>
-        </div>
+        </span>
         <small *ngIf="NombreCurso.hasError('pattern') && !NombreCurso.hasError('required')"
               class="p-error">Digite un nombre del curso <strong>válido</strong></small>
         <small *ngIf="NombreCurso.hasError('required') && NombreCurso.dirty"
@@ -88,18 +86,18 @@
           <span class="p-inputgroup-addon"><i class="fa-solid fa-link"></i></span>
           <input id="LinkRequisitos"
                 class="p-fluid p-grid p-formgrid"
-                type="text"
-                (click)="op.toggle($event)"
+                type="url"
+                (click)="opLink.toggle($event)"
+                (keyup)="cerrarPanel($event)"
                 autocomplete="off"
                 formControlName="LinkRequisitos"
                 pInputText/>
         </div>
         <small *ngIf="LinkRequisitos.hasError('pattern') && !LinkRequisitos.hasError('required')"
               class="p-error">Digite un link <strong>válido</strong></small>
-        <p-overlayPanel #op>
+        <p-overlayPanel #opLink>
           <h3>Nota</h3>
-          <p>Aquí pude pegar el url de alguna infografía, descripción, información, etc. alusiva al curso</p>
-          <!-- <img src="https://primefaces.org/cdn/primeng/images/demo/product/bamboo-watch.jpg" alt="product" /> -->
+          <p>Aquí pude pegar el url de alguna infografía, descripción, información, etc. alusiva al curso.</p>
         </p-overlayPanel>
       </div>
     </div>

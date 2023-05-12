@@ -90,6 +90,7 @@ export class AddGrupoComponent {
 
   saveGrupo(opt:optionOperation){
     this.loading = true;
+    console.log(opt)
     opt.option?this.updateGrupo(opt):this.createGrupo(opt);
   }
 

@@ -9,8 +9,12 @@
   position: relative;
   height: 250px;
 }
-.content-requisitos{
-  color: var(--blue-800);
+.lock{
+  color: green;
+  margin-right: 5px;
+}
+ul li {
+  list-style: none;
 }
 @media only screen and (max-width: 767px) {
   .view-grupo{

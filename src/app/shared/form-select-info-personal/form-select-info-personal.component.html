@@ -15,8 +15,8 @@
       </div>
       <div class="col-12 md:col-6">
         <label for="Documento" class="block mb-2">{{TipoDocumento.value}}</label>
-          <div class="p-inputgroup">
-          <span class="p-inputgroup-addon"><i [class]="loadGetData?'pi pi-spin pi-spinner':'pi pi-id-card'"></i></span>
+        <span class="p-input-icon-left full-width">
+          <i [class]="loadGetData?'pi pi-spin pi-spinner':'pi pi-id-card'"></i>
           <input id="Documento"
                 class="p-fluid p-grid p-formgrid input-form"
                 type="text"
@@ -24,7 +24,7 @@
                 [maxlength]="(TipoDocumento.value=='DNI'?8:12)"
                 formControlName="Documento"
                 pInputText/>
-          </div>
+        </span>
           <small *ngIf="Documento.hasError('pattern') && !Documento.hasError('required')"
                   class="p-error">Digite un Documento <strong>válido</strong></small>
           <small *ngIf="Documento.hasError('required') && Documento.dirty"

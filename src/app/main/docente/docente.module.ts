@@ -10,6 +10,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { DocenteComponent } from './pages/docente/docente.component';
 import { MaterialModule } from 'src/app/material/material.module';
+import { MainModule } from '../main.module';
+import { BuscarDocentePipe } from './pipes/buscar-docente.pipe';
 
 
 @NgModule({
@@ -17,7 +19,8 @@ import { MaterialModule } from 'src/app/material/material.module';
     DocenteComponent,
     FormDocenteComponent,
     ListDocenteComponent,
-    AddDocenteComponent
+    AddDocenteComponent,
+    BuscarDocentePipe
   ],
   imports: [
     CommonModule,
@@ -25,7 +28,8 @@ import { MaterialModule } from 'src/app/material/material.module';
     SharedModule,
     ReactiveFormsModule,
     DocenteRoutingModule,
-    MaterialModule
+    MaterialModule,
+    MainModule
   ]
 })
 export class DocenteModule { }

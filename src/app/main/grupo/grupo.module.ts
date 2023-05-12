@@ -25,6 +25,7 @@ import { InfoEstudianteComponent } from './pages/info-estudiante/info-estudiante
 import { ChatBotModule } from '../chat-bot/chat-bot.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { ModalFechasPagoComponent } from './components/modal-fechas-pago/modal-fechas-pago.component';
+import { MainModule } from '../main.module';
 
 
 @NgModule({
@@ -55,7 +56,8 @@ import { ModalFechasPagoComponent } from './components/modal-fechas-pago/modal-f
     SharedModule,
     NgxSpinnerModule,
     ChatBotModule,
-    NgxChartsModule
+    NgxChartsModule,
+    MainModule
   ],
   exports:[
     ModalMensualidadComponent

@@ -73,7 +73,7 @@ export class MenuComponent implements OnInit {
         role:['admin_role','user_role','viewer_role']
       },
       {
-        label: 'Matriculas',
+        label: 'prematriculas',
         icon: 'fa-solid fa-landmark',
         routerLink:'/system/matricula/matriculados',
         role:['admin_role','user_role','viewer_role']

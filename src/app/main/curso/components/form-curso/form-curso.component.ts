@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, ViewChild} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, Subject } from 'rxjs';
 
@@ -11,6 +11,7 @@ import { CursoService } from '../../services/curso.service';
 import { optionOperation } from '../../../class/global';
 import { Nivel } from '../../class/Nivel';
 import { Modulo } from '../../class/Modulo';
+import { OverlayPanel } from 'primeng/overlaypanel';
 
 @Component({
   selector: 'app-form-curso',
@@ -21,6 +22,7 @@ export class FormCursoComponent implements OnInit {
 
   /** Output and Input variables */
   @Output() dataCurso = new EventEmitter<optionOperation>();
+  @ViewChild('opLink') opLink:OverlayPanel;
   @Input() loading:boolean;
 
   /** Variables de clase */
@@ -192,6 +194,10 @@ export class FormCursoComponent implements OnInit {
     this.DescripcionCurso.setValue(curso.DescripcionCurso);
     this.LinkRequisitos.setValue(curso.LinkRequisitos);
     this.urlSelectedFlag = curso.UrlBandera;
+  }
+
+  cerrarPanel(panel:KeyboardEvent){
+    this.opLink.hide();
   }
 
   ready(){

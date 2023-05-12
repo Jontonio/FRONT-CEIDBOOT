@@ -1,0 +1,16 @@
+<span class="p-input-icon-left full-width"
+      [ngClass]="{'p-input-icon-right':termino}">
+      <i class="pi pi-search"></i>
+      <input type="text"
+              [(ngModel)]="termino"
+              name="termino"
+              autocomplete="off"
+              (input)="teclaPresionada()"
+              maxLength="30"
+              pInputText
+              [placeholder]="placeholder"/>
+      <i *ngIf="termino"
+          class="pi pi-times"
+          style="cursor: pointer;"
+          (click)="clear()"></i>
+  </span>

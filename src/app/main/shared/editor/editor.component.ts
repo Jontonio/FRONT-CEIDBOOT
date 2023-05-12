@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import * as DOMPurify from 'dompurify';
 import { Editor } from 'primeng/editor';
-import { Plantilla } from '../../class/Plantilla';
+import { Plantilla } from '../../chat-bot/class/Plantilla';
 
 @Component({
   selector: 'app-editor',

@@ -30,13 +30,16 @@
               </div>
               <div class="field">
                 <label for="Documento" class="block">{{TipoDocumentoSelected}}</label>
-                <input id="Documento"
-                       type="text"
-                       formControlName="Documento"
-                       [maxLength]="TipoDocumentoSelected=='DNI'?8:15"
-                       minlength="8"
-                       [placeholder]="'Digite su '+TipoDocumentoSelected"
-                       pInputText/>
+                <span class="p-input-icon-left full-width">
+                  <i class="pi pi-id-card"></i>
+                  <input id="Documento"
+                         type="text"
+                         formControlName="Documento"
+                         [maxLength]="TipoDocumentoSelected=='DNI'?8:12"
+                         minlength="8"
+                         [placeholder]="'Digite su '+TipoDocumentoSelected"
+                         pInputText/>
+                </span>
                 <small *ngIf="Documento.hasError('pattern') && !Documento.hasError('required')"
                        class="p-error">Digite un número de {{TipoDocumentoSelected}} <strong>válido</strong></small>
                 <small *ngIf="Documento.hasError('required') && Documento.dirty"
@@ -47,67 +50,83 @@
               </div>
             </form>
           </mat-step>
-          <mat-step [stepControl]="formSelectGrupo">
-            <form [formGroup]="formSelectGrupo">
-              <ng-template matStepLabel>Mis cursos</ng-template>
-              <p class="mb-3 mt-2">Usted esta matriculado en los siguientes cursos de idiomas. <b>Selecione el curso para subir el voucher</b></p>
-                <div *ngIf="estudianteEnGrupo">
-                  <div class="field-radiobutton content-items"
-                       *ngFor="let item of estudianteEnGrupo, let i=index">
-                      <p-radioButton name="EnGrupo"
-                                     [value]="item"
-                                     formControlName="EnGrupo"
-                                     [inputId]="i+''"></p-radioButton>
-                      <label class="flex justify-content-center align-items-center label-item" [for]="i">
-                        <img class="img-flag" [src]="item.grupo.curso.UrlBandera" alt="">
-                        <b>
-                          <p class="ml-2">{{item.grupo.curso.NombreCurso | titlecase}} {{item.grupo.curso.nivel.Nivel | lowercase}}</p>
-                        </b>
-                      </label>
-                  </div>
-                  <div class="mb-3">
-                    <small *ngIf="EnGrupo.hasError('required') && EnGrupo.dirty"
-                         class="p-error">Selecione el curso para continuar*</small>
-                  </div>
+          <mat-step [stepControl]="formSelectGrupoCategoria">
+            <form [formGroup]="formSelectGrupoCategoria">
+              <ng-template matStepLabel>Cursos y tipo de registro</ng-template>
+                <div class="col">
+                  <label for="categoriaPago" class="block mb-2">Selecione el tipo de pago a registrar</label>
+                  <p-dropdown class="p-fluid p-grid p-formgrid"
+                              placeholder="Selecione el tipo de pago"
+                              appendTo="body"
+                              [options]="listCategoriaPago"
+                              (ngModelChange)="selectedCategories($event)"
+                              formControlName="categoriaPago"
+                              optionLabel="TipoCategoriaPago">
+                            </p-dropdown>
+                  <small *ngIf="categoriaPago.hasError('required') && categoriaPago.dirty"
+                        class="p-error">Selecione una categoría de pago para continuar</small>
                 </div>
-                <div>
+                <div class="col">
+                  <label for="EnGrupo" class="block mb-2">Selecione el curso</label>
+                  <p-dropdown class="p-fluid p-grid p-formgrid"
+                              appendTo="body"
+                              [options]="ListEstudianteEnGrupo"
+                              formControlName="estudianteEnGrupo"
+                              placeholder="Selecione el grupo"
+                              (ngModelChange)="selectOneGrupo($event)">
+                    <ng-template pTemplate="selectedItem">
+                      <div class="grupo-item grupo-item-value" *ngIf="selectedGrupo">
+                        <span class="ml-1">
+                          <img class="flag-code-country" [src]="selectedGrupo.grupo.curso.UrlBandera" alt="">
+                          <span class="ml-1">{{selectedGrupo.grupo.curso.NombreCurso | titlecase }} {{selectedGrupo.grupo.curso.nivel.Nivel}}</span>
+                        </span>
+                      </div>
+                    </ng-template>
+                    <ng-template let-enGrupo pTemplate="item">
+                      <div>
+                        <img class="flag-code-country" [src]="enGrupo.grupo.curso.UrlBandera" alt="">
+                        <span class="ml-1 mr-1">{{enGrupo.grupo.curso.NombreCurso | titlecase }} {{enGrupo.grupo.curso.nivel.Nivel}}</span>
+                      </div>
+                    </ng-template>
+                  </p-dropdown>
+                  <small *ngIf="estudianteEnGrupo.hasError('required') && estudianteEnGrupo.dirty"
+                      class="p-error">El tipo de documento es <strong>requerido</strong></small>
+                </div>
+                <div class="col" *ngIf="selectedCategory && isPagoMensualidad">
+                  <label for="grupoModulo" class="block mb-2">Selecione el módulo</label>
+                  <p-dropdown class="p-fluid p-grid p-formgrid"
+                              appendTo="body"
+                              [options]="listModulogrupo"
+                              formControlName="grupoModulo"
+                              placeholder="Selecione el grupo"
+                              (ngModelChange)="selectModulo($event)">
+                    <ng-template pTemplate="selectedItem">
+                      <div class="grupo-item grupo-item-value" *ngIf="selectedModulo">
+                        <span class="ml-1">
+                          Módulo {{selectedModulo.modulo.Modulo}}
+                        </span>
+                      </div>
+                    </ng-template>
+                    <ng-template let-GrupoModulo pTemplate="item">
+                      <div *ngIf="GrupoModulo.modulo">
+                        Módulo {{GrupoModulo.modulo.Modulo}}
+                      </div>
+                    </ng-template>
+                  </p-dropdown>
+                  <small *ngIf="grupoModulo.hasError('required') && grupoModulo.dirty"
+                      class="p-error">Selecione el módulo de pago</small>
+                </div>
+                <div class="col">
                   <button mat-raised-button matStepperPrevious class="mr-2">Regresar</button>
-                  <button mat-raised-button (click)="validSelectCurso()">Siguiente</button>
-                </div>
-            </form>
-          </mat-step>
-          <mat-step [stepControl]="formCategoriaPago">
-            <form [formGroup]="formCategoriaPago">
-              <ng-template matStepLabel>Tipo de pago</ng-template>
-              <p class="mb-3 mt-2">Selecione el tipo de pago que va a realizar</p>
-                <div>
-                  <div class="field-radiobutton content-items"
-                       *ngFor="let categoria of listCategoriaPago, let indice=index">
-                      <p-radioButton name="categoriaPago"
-                                     [value]="categoria"
-                                     formControlName="categoriaPago"
-                                     [inputId]="indice+''"></p-radioButton>
-                      <label class="flex justify-content-center align-items-center label-item"
-                             [for]="indice"><b><p class="ml-2">{{categoria.TipoCategoriaPago | titlecase}}</p></b>
-                      </label>
-                  </div>
-                  <div class="mb-3">
-                    <small *ngIf="categoriaPago.hasError('required') && categoriaPago.dirty"
-                         class="p-error">Selecione una categoría de pago para continuar*</small>
-                  </div>
-                </div>
-                <div>
-                  <button mat-raised-button matStepperPrevious class="mr-2">Regresar</button>
-                  <button mat-raised-button (click)="validSelectCategoria()">Siguiente</button>
+                  <button mat-raised-button (click)="validSelectCursoGrupo()">Siguiente</button>
                 </div>
             </form>
           </mat-step>
           <mat-step [stepControl]="formFile">
             <ng-template matStepLabel>Subir vocuher</ng-template>
-            <!-- <p class="mb-3 mt-2">Complete el siguiente formulario para registrar su pago</p> -->
             <form [formGroup]="formFile">
               <div class="grid mt-3">
-                <div class="col-12 md:col-6">
+                <div class="col-12">
                   <label for="MedioDePago" class="block mb-2">Medios de pago</label>
                   <p-dropdown class="p-fluid p-grid p-formgrid"
                               [options]="listMedioPago"
@@ -116,21 +135,6 @@
                               optionLabel="MedioDePago"></p-dropdown>
                   <small *ngIf="MedioDePago.hasError('required') && MedioDePago.dirty"
                         class="p-error">El medio de pago es <strong>requerido</strong></small>
-                </div>
-                <div class="col-12 md:col-6">
-                  <label for="MontoPago" class="block mb-2">Monto de pago S/.</label>
-                  <p-inputNumber inputId="minmaxfraction"
-                                  mode="decimal"
-                                  class="p-fluid p-grid p-formgrid full-width"
-                                  formControlName="MontoPago"
-                                  [min]="0"
-                                  [max]="1000"
-                                  [minFractionDigits]="2"
-                                  [maxFractionDigits]="5"></p-inputNumber>
-                  <small *ngIf="MontoPago.hasError('pattern') && !MontoPago.hasError('required')"
-                          class="p-error">Digite un monto de pago <strong>válido</strong></small>
-                  <small *ngIf="MontoPago.hasError('required') && MontoPago.dirty"
-                          class="p-error">El campo monto de pago es <strong>requerido</strong></small>
                 </div>
                 <div class="col-12 md:col-12">
                   <label for="NumOperacionLibro" class="block mb-2">Número de operación</label>

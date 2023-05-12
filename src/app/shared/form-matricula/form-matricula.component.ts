@@ -26,6 +26,7 @@ import { Libro } from 'src/app/main/curso/class/Libro';
 import { CategoriaPago } from 'src/app/main/grupo/class/CategoriaPago';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { MedioPago } from 'src/app/class/MedioDePago';
+import { OverlayPanel } from 'primeng/overlaypanel';
 
 interface Card {
   name: string,
@@ -41,6 +42,8 @@ export class FormMatriculaComponent implements OnInit {
 
   @ViewChild('stepper') stepper:MatStepper;
   @ViewChild(ShowFileComponent) showFile:ShowFileComponent;
+  @ViewChild('opEmail')   opEmail:OverlayPanel;
+  @ViewChild('opCelular') opCelular:OverlayPanel;
 
   isUpdate:boolean       = false;
   loadGetData:boolean    = false;
@@ -82,14 +85,12 @@ export class FormMatriculaComponent implements OnInit {
   listGrupos:Grupo[];
   listDenominServicio:DenominServicio[];
 
-  selecGrupo:Grupo;
+  selecGrupo:Grupo | undefined;
 
   listDepartamentos:Departamento[];
   listProvincias:Provincia[] = [];
   listDistritos:Distrito[] = [];
   listMedioPago:MedioPago[] = [];
-  msgTooltipEmail:string;
-  msgTooltipCel:string;
 
   TipoDocumentoSelected:string;
   selecInstitucion:Institucion;
@@ -156,9 +157,6 @@ export class FormMatriculaComponent implements OnInit {
 
 
     this.listDepartamentos = [];
-
-    this.msgTooltipEmail = 'Es de suma importancia que verifique que esté correctamente escrito, para el envío de información académica';
-    this.msgTooltipCel = 'Es de suma importancia que el número tenga una cuenta de WhatsApp'
     this.today = new Date();
     this.getListDenominServicio();
     this.getListGrupos();
@@ -672,10 +670,10 @@ export class FormMatriculaComponent implements OnInit {
                                     this.Poblacion.value,
                                     institucion,
                                     this.resDocumentoMatricula.webViewLink,
-                                    this.selecGrupo.curso,
-                                    this.selecGrupo.horario);
+                                    this.selecGrupo!.curso,
+                                    this.selecGrupo!.horario);
 
-    if(this.selecGrupo.RequeridoPPago){
+    if(this.selecGrupo!.RequeridoPPago){
       let listPagos:Pago[] = [];
       if(this.filePagoMatricula.value){
         const catMatricula = { Id: this.idCatMatricula.value };
@@ -707,7 +705,7 @@ export class FormMatriculaComponent implements OnInit {
                                          catMensualidad as CategoriaPago);
         listPagos.push(pagoMensualidad);
       }
-      const estudianteEnGrupo = new EstudianteEnGrupo(estudiante, this.selecGrupo, matricula, listPagos);
+      const estudianteEnGrupo = new EstudianteEnGrupo(estudiante, this.selecGrupo!, matricula, listPagos);
       this.registerMatricula(estudianteEnGrupo);
     }else{
       this.registerPrematricula(matricula);
@@ -721,7 +719,7 @@ export class FormMatriculaComponent implements OnInit {
       next:(value) => {
         if(value.ok){
           console.log(value)
-          this.stepper.reset();
+          this.resetFroms();
           this.toast('success', value.msg);
           this._socket.EmitEvent('updated_list_matriculados');
         }else{
@@ -737,14 +735,14 @@ export class FormMatriculaComponent implements OnInit {
   }
 
   registerPrematricula(matricula:Matricula){
-    matricula.setCurso(this.selecGrupo.curso);
-    matricula.setHorario(this.selecGrupo.horario);
+    matricula.setCurso(this.selecGrupo!.curso);
+    matricula.setHorario(this.selecGrupo!.horario);
     this.loadingSave = true;
     this._global.registerPrematricula(matricula).subscribe({
       next:(value) => {
         if(value.ok){
           console.log(value)
-          this.stepper.reset();
+          this.resetFroms();
           this.toast('success', value.msg);
           this._socket.EmitEvent('updated_list_matriculados');
         }else{
@@ -757,6 +755,11 @@ export class FormMatriculaComponent implements OnInit {
         this.messageError(e)
       }
     })
+  }
+
+  resetFroms(){
+    this.stepper.reset();
+    this.selecGrupo = undefined;
   }
 
   selecOptionEdad(value:boolean){
@@ -812,7 +815,7 @@ export class FormMatriculaComponent implements OnInit {
     this.CelApoderado.setValue(apoderado.CelApoderado)
   }
 
-  searchApoderado(DNI:string){
+  searchApoderado(DNI:string=''){
     if(DNI.length==8 && this.DocumentoApoderado.valid){
       this.loadGetApoderado = true;
       this._global.getApoderado(DNI).subscribe({
@@ -961,6 +964,7 @@ export class FormMatriculaComponent implements OnInit {
   }
 
   selectServicio(servicio:DenominServicio){
+    if(!servicio) return;
     this.MontoPagoMensualidad.setValue(servicio.MontoPension);
     this.MontoPagoMatricula.setValue(servicio.MontoMatricula);
     this.MontoPagoMatricula.disable();
@@ -1003,7 +1007,7 @@ export class FormMatriculaComponent implements OnInit {
     const direccion = 'requisitos';
     let formData = new FormData();
     formData.append('file', file, file.name);
-    formData.append('id_grupo', String(this.selecGrupo.Id));
+    formData.append('id_grupo', String(this.selecGrupo!.Id));
     formData.append('tipo', direccion);
     this._global.uploadFile(formData).subscribe({
       next: (value) => {
@@ -1028,7 +1032,7 @@ export class FormMatriculaComponent implements OnInit {
     const direccion = 'matricula';
     let formData = new FormData();
     formData.append('file', file, file.name);
-    formData.append('id_grupo', String(this.selecGrupo.Id));
+    formData.append('id_grupo', String(this.selecGrupo!.Id));
     formData.append('tipo', direccion);
     this._global.uploadFile(formData).subscribe({
       next: (value) => {
@@ -1053,7 +1057,7 @@ export class FormMatriculaComponent implements OnInit {
     const direccion = 'mensualidad';
     let formData = new FormData();
     formData.append('file', file, file.name);
-    formData.append('id_grupo', String(this.selecGrupo.Id));
+    formData.append('id_grupo', String(this.selecGrupo!.Id));
     formData.append('tipo', direccion);
 
     this._global.uploadFile(formData).subscribe({
@@ -1079,7 +1083,7 @@ export class FormMatriculaComponent implements OnInit {
     this.filePagoLibro.disable();
     let formData = new FormData();
     formData.append('file', file, file.name);
-    formData.append('id_grupo', String(this.selecGrupo.Id));
+    formData.append('id_grupo', String(this.selecGrupo!.Id));
     formData.append('tipo', direccion);
 
     this._global.uploadFile(formData).subscribe({
@@ -1097,9 +1101,12 @@ export class FormMatriculaComponent implements OnInit {
     })
   }
 
-  showFileExample(){
-    // this.showFile.showSpinner();
-    // this.showFile.showModal();
+  cerrarPanelEmail(evento: KeyboardEvent) {
+    this.opEmail.hide();
+  }
+
+  cerrarPanelCelular(evento: KeyboardEvent) {
+    this.opCelular.hide();
   }
 
   countLibros(libros:Libro[]){

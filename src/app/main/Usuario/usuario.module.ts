@@ -13,8 +13,8 @@ import { AvatarNamePipe } from './pipes/avatar-name.pipe';
 import { FechaAccesoPipe } from './pipes/fecha-acceso.pipe';
 import { MaterialModule } from 'src/app/material/material.module';
 import { SkeletonFormComponent } from './components/skeleton-form/skeleton-form.component';
-import { ConfirmationService, MessageService } from 'primeng/api';
-
+import { MainModule } from '../main.module';
+import { BuscarUsuarioPipe } from './pipes/buscar-usuario.pipe';
 
 @NgModule({
   declarations: [
@@ -24,7 +24,8 @@ import { ConfirmationService, MessageService } from 'primeng/api';
     FormUsuarioComponent,
     AvatarNamePipe,
     FechaAccesoPipe,
-    SkeletonFormComponent
+    SkeletonFormComponent,
+    BuscarUsuarioPipe
   ],
   imports: [
     CommonModule,
@@ -32,7 +33,8 @@ import { ConfirmationService, MessageService } from 'primeng/api';
     PrimengModule,
     SharedModule,
     UsuarioRoutingModule,
-    MaterialModule
+    MaterialModule,
+    MainModule
   ]
 })
-export class UsuarioModule { }
+export class usuarioModule { }

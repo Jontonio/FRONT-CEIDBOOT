@@ -9,9 +9,10 @@ import { FormCursoComponent } from './components/form-curso/form-curso.component
 import { ReactiveFormsModule } from '@angular/forms';
 import { PrimengModule } from 'src/app/primeng/primeng.module';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { materialize } from 'rxjs';
 import { MaterialModule } from 'src/app/material/material.module';
 import { VerCursoComponent } from './pages/ver-curso/ver-curso.component';
+import { MainModule } from '../main.module';
+import { BuscarCursoPipe } from './pipes/buscar-curso.pipe';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { VerCursoComponent } from './pages/ver-curso/ver-curso.component';
     CursoComponent,
     ListCursoComponent,
     FormCursoComponent,
-    VerCursoComponent
+    VerCursoComponent,
+    BuscarCursoPipe
   ],
   imports: [
     CommonModule,
@@ -28,7 +30,8 @@ import { VerCursoComponent } from './pages/ver-curso/ver-curso.component';
     ReactiveFormsModule,
     PrimengModule,
     SharedModule,
-    MaterialModule
+    MaterialModule,
+    MainModule
   ]
 })
 export class CursoModule { }

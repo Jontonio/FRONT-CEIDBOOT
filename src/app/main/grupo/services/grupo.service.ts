@@ -87,6 +87,10 @@ export class GrupoService{
     return this.http.patch<ResGrupoModulo>(`${this.BASE_URL}/grupo/update-grupo-modulo/${id}`, data);
   }
 
+  deleteGrupo(id:number){
+    return this.http.delete<ResGrupo>(`${this.BASE_URL}/grupo/delete-grupo/${id}`);
+  }
+
   /** Listen Sockets */
 
   OnGrupos(){
