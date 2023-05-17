@@ -1,3 +1,12 @@
 <div class="main p-">
-  <router-outlet></router-outlet>
+  <div class="grid">
+    <div class="col-12 md:col-4">
+      <app-estado-chatbot></app-estado-chatbot>
+    </div>
+    <div class="col-12 md:col-8">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
 </div>
+<!-- A component that is used to show messages to the user. -->
+<!-- <p-toast position="bottom-right" [breakpoints]="{'920px': {width: '100%', right: '0', left: '0', padding:'10px'}}"></p-toast> -->

@@ -36,14 +36,6 @@ const routes: Routes = [
         loadChildren: () => import('./docente/docente.module').then( mod => mod.DocenteModule )
       },
       {
-        path:'nuestros-servicios',
-        canActivate:[HasRoleGuard],
-        data:{
-          rolesPermitidos:['admin_role','user_role']
-        },
-        loadChildren: () => import('./servicios/servicios.module').then( mod => mod.ServiciosModule )
-      },
-      {
         path:'cursos',
         canActivate:[HasRoleGuard],
         data:{

@@ -34,7 +34,7 @@
             <div class="grid">
               <div class="col-12 md:col-6">
                 <p class="mt-2">
-                  <b>Fecha de inicio</b>
+                  <b>Fecha de inicio del grupo</b>
                 </p>
                 <p class="mt-1">
                   {{grupo.FechaInicioGrupo | date}}
@@ -121,7 +121,6 @@
                 <th>Estado</th>
                 <th>Tipo población</th>
                 <th>Req. matricula</th>
-                <th>Pagos recibidos</th>
                 <th>Matricula</th>
                 <th>Mensualidad</th>
                 <th>Más</th>
@@ -145,7 +144,6 @@
             <td><p-tag severity="success">{{grupo.matricula.EstadoMatricula}}</p-tag></td>
             <td>{{grupo.matricula.denomiServicio.Descripcion | slice:0:45}}...</td>
             <td><button mat-button (click)="showFile(grupo.matricula.FileMatriculaURL)"><i class="pi pi-file-pdf icon-size"></i> ver</button></td>
-            <td>{{grupo.pagos.length}} pagos</td>
             <td>{{grupo.matricula.denomiServicio.MontoMatricula | currency: 'PEN': 'symbol': '': 'es-PE'}}</td>
             <td>{{grupo.matricula.denomiServicio.MontoPension | currency: 'PEN': 'symbol': '': 'es-PE'}}</td>
             <td>
@@ -166,7 +164,7 @@
                   <mat-icon><i class="fa-solid fa-pen-to-square"></i></mat-icon>
                   <span>Editar datos estudiante</span>
                 </button>
-                <button mat-menu-item>
+                <button mat-menu-item (click)="confirmarEliminar(grupo)">
                   <mat-icon><i class="fa-solid fa-trash-can"></i></mat-icon>
                   <span>Eliminar del grupo</span>
                 </button>
@@ -199,7 +197,13 @@
                       <td>{{pago.CodigoVoucher | empty:'código'}}</td>
                       <td>{{pago.FechaPago | date:'longDate' | empty:'fecha' }}</td>
                       <td>{{pago.MontoPago | currency: 'PEN': 'symbol': '': 'es-PE' }}</td>
-                      <td>{{pago.categoriaPago.TipoCategoriaPago | titlecase}} {{pago.grupoModulo?pago.grupoModulo.modulo.Modulo:''}}</td>
+                      <td>{{pago.categoriaPago.TipoCategoriaPago | titlecase}}
+                        <span *ngIf="pago.grupoModulo">
+                          del <p-tag severity="success">módulo {{pago.grupoModulo.modulo.Modulo}}</p-tag>
+                        </span>
+                        <span *ngIf="pago.categoriaPago.CodeCategoriaPago=='category_mensualidad' && !pago.grupoModulo">
+                          <p-tag severity="danger">asigne módulo</p-tag>
+                        </span>
                       <td>
                         <button mat-button (click)="showFile(pago.VoucherUrl)"><i class="pi pi-link"></i> ver</button>
                       </td>
@@ -213,29 +217,17 @@
                       </td>
                       <td><button mat-stroked-button (click)="openModalValidarPago(pago)"><i class="fa-regular fa-pen-to-square p-1"></i> Validar pago </button></td>
                       <td>
-                        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                        <button mat-icon-button [matMenuTriggerFor]="menu">
                           <mat-icon>more_vert</mat-icon>
                         </button>
                         <mat-menu #menu="matMenu">
                           <button mat-menu-item>
                             <mat-icon><i class="fa-solid fa-circle-info"></i></mat-icon>
-                            <span>ver más</span>
+                            <span>Acerca del pago</span>
                           </button>
-                          <button mat-menu-item>
-                            <mat-icon><i class="fa-brands fa-whatsapp"></i></mat-icon>
-                            <span>Notificar estudiante</span>
-                          </button>
-                          <button mat-menu-item>
-                            <mat-icon><i class="fa-solid fa-envelope"></i></mat-icon>
-                            <span>Notificar primer pago</span>
-                          </button>
-                          <button mat-menu-item>
-                            <mat-icon><i class="fa-solid fa-pen-to-square"></i></mat-icon>
-                            <span>Editar grupo</span>
-                          </button>
-                          <button mat-menu-item>
+                          <button mat-menu-item (click)="confirmarEliminarPago(pago)">
                             <mat-icon><i class="fa-solid fa-trash-can"></i></mat-icon>
-                            <span>Eliminar</span>
+                            <span>Eliminar pago</span>
                           </button>
                         </mat-menu>
                       </td>
@@ -288,8 +280,23 @@
 <app-modal-fechas-pago [formFecha]="formFecha"
                        [visibleModal]="visibleModalFecha"
                        (estadoModal)="estadoModalFecha($event)"></app-modal-fechas-pago>
-<!-- side bar para enviar los chats -->
 <!-- side bar message whatsapp -->
 <app-sidebar-message [sidebarMessage]="openSidebarMessage"
                      [dataEstudiante]="dataEstudianteMessage"
                      (estadoModal)="estadoModalMessage($event)"></app-sidebar-message>
+<!-- Delete message dialog estududiante del grupo -->
+<p-confirmDialog [style]="{width: '50vw'}"
+                 key="deleteEstudentGrupoDialog"
+                 position="top"
+                 [baseZIndex]="10000"
+                 acceptLabel="Confirmar"
+                 [breakpoints]="{'960px': '75vw', '640px': '100vw'}"
+                 rejectButtonStyleClass="p-button-outlined"></p-confirmDialog>
+<!-- Delete message dialog eliminar pago -->
+<p-confirmDialog [style]="{width: '50vw'}"
+                 key="deletePagoDialog"
+                 position="top"
+                 [baseZIndex]="10000"
+                 acceptLabel="Confirmar"
+                 [breakpoints]="{'960px': '75vw', '640px': '100vw'}"
+                 rejectButtonStyleClass="p-button-outlined"></p-confirmDialog>

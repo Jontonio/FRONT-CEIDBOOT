@@ -4,8 +4,9 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { Router } from "@angular/router";
 import { SocketService } from 'src/app/services/socket.service';
-import { AuthBot } from '../class/AuthBot';
+import { EstadoWhatsApp } from '../class/AuthBot';
 import { Message, ResMessage } from '../class/Message';
+import { ResIntent } from '../class/Intent';
 
 
 @Injectable({
@@ -13,7 +14,7 @@ import { Message, ResMessage } from '../class/Message';
 })
 export class ChabotService {
 
-  authBot:AuthBot;
+  estadoWhatsApp:EstadoWhatsApp;
   loading:boolean;
   private BASE_URL:string;
 
@@ -26,8 +27,8 @@ export class ChabotService {
   OnQr(){
     this.loading = true;
     this._socket.OnEvent('boot').subscribe({
-      next: (value:AuthBot) => {
-        this.authBot = value;
+      next: (value:EstadoWhatsApp) => {
+        this.estadoWhatsApp = value;
         this.loading = false;
         console.log(value)
       },
@@ -38,8 +39,24 @@ export class ChabotService {
     })
   }
 
+  getIntents():Observable<ResIntent>{
+    return this.http.get<ResIntent>(`${this.BASE_URL}/dialogflow/get-all-intents`);
+  }
+
+  getOneIntent(uuid:string):Observable<ResIntent>{
+    return this.http.get<ResIntent>(`${this.BASE_URL}/dialogflow/get-one-intent/${uuid}`);
+  }
+
+  updateOneTxtIntent(uuid:string, data:any):Observable<ResIntent>{
+    return this.http.patch<ResIntent>(`${this.BASE_URL}/dialogflow/update-one-txt-intent/${uuid}`, data);
+  }
+
   sendMessage(data:Message):Observable<ResMessage>{
-    return this.http.post<ResMessage>(`${this.BASE_URL}/whatsapp/send-message`, data);
+    return this.http.post<ResMessage>(`${this.BASE_URL}/bot/send-message`, data);
+  }
+
+  generarQR(){
+    return this.http.get(`${this.BASE_URL}/bot/generate-qr-whatsapp`);
   }
 
 }

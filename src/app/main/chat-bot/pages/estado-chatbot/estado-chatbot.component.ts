@@ -15,4 +15,15 @@ export class EstadoChatbotComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  generateQR(){
+    this._bot.generarQR().subscribe({
+      next: (value) => {
+        console.log(value)
+      },
+      error: (e) => {
+        console.log(e)
+      }
+    })
+  }
+
 }

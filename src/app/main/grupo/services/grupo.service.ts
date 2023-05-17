@@ -79,6 +79,10 @@ export class GrupoService{
     return this.http.get<ResEstadoEstudEnGrupo>(`${this.BASE_URL}/estudiante-en-grupo/get-estudiantes-en-grupo-especifico/${Id}?limit=${limit}&offset=${offset}`);
   }
 
+  deleteEstudianteEnGrupoEspecifico(Id:number){
+    return this.http.delete<ResEstadoEstudEnGrupo>(`${this.BASE_URL}/estudiante-en-grupo/delete-estudiantes-en-grupo/${Id}`);
+  }
+
   updatePago(id:string, pago:Pago){
     return this.http.patch<ResPago>(`${this.BASE_URL}/pago/update-one-pago/${id}`, pago);
   }
@@ -89,6 +93,10 @@ export class GrupoService{
 
   deleteGrupo(id:number){
     return this.http.delete<ResGrupo>(`${this.BASE_URL}/grupo/delete-grupo/${id}`);
+  }
+
+  deletePago(id:number){
+    return this.http.delete<ResPago>(`${this.BASE_URL}/pago/delete-pago/${id}`);
   }
 
   /** Listen Sockets */

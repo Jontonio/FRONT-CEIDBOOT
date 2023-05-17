@@ -25,6 +25,10 @@
 .content-time-line::-webkit-scrollbar{
   display: none;
 }
+.select-tr{
+  background: var(--yellow-100) !important;
+  color: #000 !important;
+}
 @media only screen and (min-width: 1200px) {
   /* Estilos para escritorio grande aquí */
   .iframe{

@@ -22,6 +22,27 @@
                   <small *ngIf="MedioDePago.hasError('required') && MedioDePago.dirty"
                         class="p-error">El medio de pago es <strong>requerido</strong></small>
                 </div>
+                <div class="col" *ngIf="listModulosPago.length!=0">
+                  <label for="usuario" class="block mb-2">Módulo de pago (Solo para mensualidad)</label>
+                  <p-dropdown class="p-fluid p-grid p-formgrid"
+                              [options]="listModulosPago"
+                              placeholder="Selecione el medio de pago realizado"
+                              (ngModelChange)="selectedModuloGrupo($event)"
+                              formControlName="grupoModulo">
+                    <ng-template pTemplate="selectedItem">
+                      <div class="grupo-item grupo-item-value" *ngIf="selectGrupoModulo">
+                        <span class="ml-1">
+                          Módulo {{selectGrupoModulo.modulo.Modulo}}
+                        </span>
+                      </div>
+                    </ng-template>
+                    <ng-template let-grupoModulo pTemplate="item">
+                      <span class="ml-1">
+                        Módulo {{grupoModulo.modulo.Modulo}}
+                      </span>
+                    </ng-template>
+                  </p-dropdown>
+                </div>
                 <div class="col">
                   <label for="CodigoVoucher" class="block mb-2">Código del voucher</label>
                   <div class="p-inputgroup">

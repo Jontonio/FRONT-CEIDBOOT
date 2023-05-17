@@ -64,7 +64,7 @@ export class MenuComponent implements OnInit {
         label: 'Panel principal',
         icon: 'fa-solid fa-house',
         routerLink:'/system/dashboard',
-        role:['admin_role']
+        role:['admin_role'],
       },
       {
         label: 'Grupos',
@@ -91,12 +91,6 @@ export class MenuComponent implements OnInit {
         role:['admin_role','user_role','viewer_role']
       },
       {
-        label: 'Servicios',
-        icon: 'fa-solid fa-earth-europe',
-        routerLink:'/system/nuestros-servicios/tipo-poblacion',
-        role:['admin_role','user_role','viewer_role']
-      },
-      {
         label: 'Trámites',
         icon: 'fa-solid fa-file-pen',
         routerLink:'/system/tramite/lista-tramites',
@@ -105,7 +99,7 @@ export class MenuComponent implements OnInit {
       {
         label: 'ChatBot',
         icon: 'pi pi-qrcode',
-        routerLink:'/system/chat-bot/estado-bot',
+        routerLink:'/system/chat-bot/list-intents',
         role:['admin_role','user_role','viewer_role']
       },
       {

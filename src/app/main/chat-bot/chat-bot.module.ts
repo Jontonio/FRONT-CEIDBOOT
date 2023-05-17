@@ -11,6 +11,10 @@ import { EnviarMensajeComponent } from './pages/enviar-mensaje/enviar-mensaje.co
 import { EstadoChatbotComponent } from './pages/estado-chatbot/estado-chatbot.component';
 import { EditorModule } from 'primeng/editor';
 import { EditorComponent } from '../shared/editor/editor.component';
+import { ListIntentsComponent } from './pages/list-intents/list-intents.component';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { IntentComponent } from './pages/intent/intent.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -18,16 +22,20 @@ import { EditorComponent } from '../shared/editor/editor.component';
     ChatBotMainComponent,
     EnviarMensajeComponent,
     EstadoChatbotComponent,
-    EditorComponent
+    EditorComponent,
+    ListIntentsComponent,
+    IntentComponent
   ],
   imports: [
     CommonModule,
     MaterialModule,
     HttpClientModule,
     PrimengModule,
+    ReactiveFormsModule,
     EditorModule,
     ChatBotRoutingModule,
-    QRCodeModule
+    QRCodeModule,
+    SharedModule
   ],
   exports:[
     EditorComponent

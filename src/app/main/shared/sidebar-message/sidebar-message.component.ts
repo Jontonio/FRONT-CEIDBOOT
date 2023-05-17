@@ -55,10 +55,12 @@ export class SidebarMessageComponent implements OnInit {
     this.loadingSend = true;
     this._chatboot.sendMessage( message ).subscribe({
       next:(value) => {
+        this.loadingSend = false;
         if(value.ok){
           this.toast('success', value.msg);
-          this.loadingSend = false;
+          return;
         }
+        this.toast('warn', value.msg);
       },
       error:(e) => {
         this.loadingSend = false;

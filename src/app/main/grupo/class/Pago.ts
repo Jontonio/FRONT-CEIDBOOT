@@ -14,6 +14,7 @@ class Pago{
     MontoPago:number;
     CodigoVoucher:string;
     Verificado:boolean;
+    Estado:boolean;
     categoriaPago?:CategoriaPago;
     createdAt:Date;
     updatedAt:Date;

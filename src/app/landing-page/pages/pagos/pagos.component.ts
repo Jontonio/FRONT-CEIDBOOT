@@ -14,13 +14,18 @@ import { CategoriaPago } from 'src/app/main/grupo/class/CategoriaPago';
 import { Grupo } from 'src/app/main/grupo/class/Grupo';
 import * as moment from 'moment';
 import { MedioPago } from 'src/app/class/MedioDePago';
-import { Modulo } from 'src/app/main/curso/class/Modulo';
 import { GrupoModulo } from 'src/app/main/grupo/class/GrupoModulo';
 import { EstudianteEnGrupo, ResEstudianteEnGrupo } from 'src/app/main/grupo/class/EstudianteGrupo';
 
 interface Card {
   name: string,
   code: string
+}
+
+interface SetPrecio{
+  monto:number | null;
+  mensaje:string;
+  visibleInput:boolean;
 }
 
 @Component({
@@ -54,6 +59,8 @@ export class PagosComponent {
   listModulogrupo:GrupoModulo[] = [];
   selectedCategory:CategoriaPago;
   isPagoMensualidad:boolean;
+  setPrecio:SetPrecio;
+  currentModulo:GrupoModulo | null;
 
   constructor(private readonly fb:FormBuilder,
               private _msg:MessageService,
@@ -184,12 +191,78 @@ export class PagosComponent {
       this.grupoModulo.markAsDirty();
       return;
     }
+    /** setear precios */
+    this.setearPrecios(this.selectedCategory);
     /** setear el valor de IsVerifySelectCurso en true el cual significa que eligió un grupo */
     this.IsVerifySelectCurso.setValue(true);
     /** limpiar los mensajes en pantalla */
     this._msg.clear();
     /** Seguir con el siguiente stepper */
     this.goForward();
+  }
+
+  setearPrecios(categoria:CategoriaPago){
+    if(categoria.CodeCategoriaPago=='category_mensualidad'){
+      const monto = this.selectedGrupo.matricula.denomiServicio.MontoPension
+      this.MontoPago.setValue( monto );
+      this.setPrecio = {
+        mensaje:'cargue su voucher de monto ',
+        monto: monto,
+        visibleInput:false
+      }
+      return;
+    }
+    if(categoria.CodeCategoriaPago=='category_matricula'){
+      const monto = this.selectedGrupo.matricula.denomiServicio.MontoMatricula
+      this.MontoPago.setValue( monto );
+      this.setPrecio = {
+        mensaje:'cargue su voucher de monto ',
+        monto: monto,
+        visibleInput:false
+      }
+      return;
+    }
+
+    if(categoria.CodeCategoriaPago=='category_libro'){
+      this.MontoPago.setValue( null );
+      this.setPrecio = {
+        mensaje:'Para más información del precio del libro comuniquese con del CEID',
+        monto: null,
+        visibleInput:false
+      }
+      return;
+    }
+
+    if(categoria.CodeCategoriaPago=='category_extemporaneo'){
+      this.MontoPago.setValue(null); // va depender del grupo
+      // agregar validaciones
+      this.addValidatorsMontoPago();
+      this.setPrecio = {
+        mensaje:'Cargue su voucher de pago',
+        monto: null,
+        visibleInput:true
+      }
+      return;
+    }
+
+    this.MontoPago.setValue( 0.0 );
+      this.setPrecio = {
+        mensaje:'Para más información del precio comuniquese con del CEID',
+        monto: null,
+        visibleInput:false
+    }
+
+    this.clearValidatorsMontoPago();
+
+  }
+
+  clearValidatorsMontoPago(){
+    this.MontoPago.clearValidators();
+    this.MontoPago.updateValueAndValidity();
+    this.MontoPago.markAsPristine();
+  }
+  addValidatorsMontoPago(){
+    this.MontoPago.addValidators([Validators.required]);
   }
 
   search(){
@@ -210,7 +283,6 @@ export class PagosComponent {
     this._global.consultaEstudianteGrupo(this.formBusqueda.value).subscribe({
       next: (value) => {
         this.loading = false;
-        console.log(value)
         if(value.ok){
           this.toast('success',value.msg);
           this.resEstudianteEnGrupo = value;
@@ -232,8 +304,11 @@ export class PagosComponent {
   selectOneGrupo(data:EstudianteEnGrupo){
     if(!data) return;
     this.selectedGrupo = data;
+    console.log(this.selectedGrupo)
     this.listModulogrupo = this.selectedGrupo.grupo.grupoModulo;
     this.listModulogrupo.pop();
+    const current = this.listModulogrupo.filter( gModulo => gModulo.CurrentModulo == true )
+    this.currentModulo = current?current[0]:null;
   }
 
   selectModulo(data:GrupoModulo){
@@ -253,8 +328,8 @@ export class PagosComponent {
   }
 
   selectedCategories(categoria:CategoriaPago){
+    this.grupoModulo.reset();
     if(!categoria) return;
-    console.log(categoria)
     this.selectedCategory = categoria;
     this.selectedCategoria(categoria.CodeCategoriaPago);
   }
@@ -285,7 +360,6 @@ export class PagosComponent {
   }
 
   save(){
-    this.MontoPago.setValue(10);
 
     if(this.formFile.invalid){
       Object.keys( this.formFile.controls ).forEach(input => this.formFile.controls[input].markAsDirty())
@@ -302,7 +376,6 @@ export class PagosComponent {
                           {Id: this.categoriaPago.value.Id} as CategoriaPago,
                           {Id: this.estudianteEnGrupo.value.Id} as EstudianteEnGrupo,
                           this.grupoModulo.value);
-
     //TODO:upload file and register data width switchMap
     this._global.uploadFile(this.formData)
     .pipe(

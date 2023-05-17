@@ -169,7 +169,9 @@ export class EstudiantesGrupoComponent implements OnInit {
   }
 
   openModalValidarPago(pago:Pago){
-    this.modalMensualidad.openModal(pago, new PayloadSocket(this.limit, this.offset, this.idGrupo));
+    this.modalMensualidad.openModal(pago,
+                                    new PayloadSocket(this.limit, this.offset, this.idGrupo),
+                                    this.grupo.grupoModulo);
   }
 
   opendModalEdit(data:GrupoModulo, Id:number){
@@ -193,6 +195,65 @@ export class EstudiantesGrupoComponent implements OnInit {
     this.openSidebarMessage = estado;
   }
 
+  confirmarEliminar({ estudiante, Id}:EstudianteEnGrupo){
+
+    this.confirService.confirm({
+        message: `¿Está seguro de eliminar del grupo al estudiante <b>${estudiante.Nombres}</b>?<br>
+                  Una vez confirmado los registros del estudiante permanecerá pero no se mostrará`,
+        header: `Confirmación de la eliminación`,
+        icon: 'pi pi-info-circle',
+        accept: () => {
+          this._grupo.deleteEstudianteEnGrupoEspecifico(Id).subscribe({
+            next:(value) => {
+              if(value.ok){
+                this.toast('success', value.msg);
+                this._socket.EmitEvent('updated_list_estudiante_grupo', { Id:this.idGrupo, limit:this.limit, offset:this.offset });
+                return;
+              }
+              this.toast('warn', value.msg);
+            },
+            error:(e) => {
+              console.log(e)
+              this.messageError(e)
+            }
+          })
+        },
+        reject: (type:any) => {
+          console.log("No eliminar");
+        },
+        key: "deleteEstudentGrupoDialog"
+    });
+  }
+
+  confirmarEliminarPago({ Id }:Pago){
+    this.confirService.confirm({
+      message: `¿Está seguro de eliminar este pago con Id <b>${Id}</b>?<br>
+                Una vez confirmado, los registros permanecerán pero no se mostrará ni tomados en cuenta`,
+      header: `Confirmación de la eliminación`,
+      icon: 'pi pi-info-circle',
+      accept: () => {
+        this._grupo.deletePago(Id).subscribe({
+          next:(value) => {
+            if(value.ok){
+              this.toast('success', value.msg);
+              this._socket.EmitEvent('updated_list_estudiante_grupo', { Id:this.idGrupo, limit:this.limit, offset:this.offset });
+              return;
+            }
+            this.toast('warn', value.msg);
+          },
+          error:(e) => {
+            console.log(e)
+            this.messageError(e)
+          }
+        })
+      },
+      reject: (type:any) => {
+        console.log("No eliminar");
+      },
+      key: "deletePagoDialog"
+  });
+  }
+
   onListaEstudiantesCurso(){
     this._socket.OnEvent('list_estudian_en_grupo').subscribe({
       next:(value) => {
@@ -201,6 +262,7 @@ export class EstudiantesGrupoComponent implements OnInit {
       },
       error:(e) => {
         console.log(e)
+        this.messageError(e)
       }
     })
   }

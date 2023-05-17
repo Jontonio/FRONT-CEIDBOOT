@@ -20,7 +20,7 @@ const config: SocketIoConfig = { url: environment.BASE_URL, options: {} };
 @NgModule({
   declarations: [
     AppComponent,
-    UnauthorizedPageComponent
+    UnauthorizedPageComponent,
   ],
   imports: [
     BrowserModule,

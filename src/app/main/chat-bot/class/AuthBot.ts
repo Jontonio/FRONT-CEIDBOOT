@@ -1,7 +1,9 @@
-class AuthBot {
-  msg: string;
+class EstadoWhatsApp {
+  title:string;
+  description: string;
   qr: string;
-  authenticated: boolean;
+  isAuth: boolean;
+  showQr?:boolean;
 }
 
-export { AuthBot };
+export { EstadoWhatsApp };

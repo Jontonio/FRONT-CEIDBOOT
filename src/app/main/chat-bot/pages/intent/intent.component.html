@@ -1,0 +1,55 @@
+<div>
+  <p-card header="Posibles respuestas">
+    <div *ngIf="loadingData" class="text-center">
+      <div class="flex flex-column">
+        <i class="pi pi-spin pi-spinner m-2" style="font-size: 2rem"></i>
+        <p>Cargando...</p>
+      </div>
+    </div>
+    <div *ngIf="intent" class="mb-3 flex justify-content-between align-items-center">
+      <h3>Intent <p-tag severity="success" [rounded]="true">{{intent.displayName | uppercase}}</p-tag></h3>
+      <div class="mr-5">
+        <button mat-mini-fab color="primary" (click)="addResponse()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </div>
+      <form [formGroup]="responseForm">
+        <div formArrayName="text">
+          <div *ngFor="let item of text.controls; let i=index">
+            <div [formGroupName]="i">
+              <div class="mt-3 flex justify-content-between">
+                <div class="full-width">
+                  <input id="Celular"
+                         class="p-fluid p-grid p-formgrid"
+                         type="text"
+                         autocomplete="off"
+                         formControlName="response"
+                         pInputText/>
+                </div>
+                <div>
+                  <span class="p-buttonset">
+                    <button mat-icon-button (click)="deleteResponse(i)">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-3">
+        </div>
+        <div class="mt-3">
+          <button mat-raised-button (click)="saveResponse()" [disabled]="loadingSave || loadingData">
+            <i class="pi" [ngClass]="{'pi-save':!loadingSave,'pi-spin pi-spinner':loadingSave}"></i> Guardar
+          </button>
+        </div>
+      </form>
+  </p-card>
+</div>
+<div class="mt-3">
+  <p-card header="Payload de las respuestas">
+
+  </p-card>
+</div>

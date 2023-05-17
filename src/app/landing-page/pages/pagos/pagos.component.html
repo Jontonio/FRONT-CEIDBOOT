@@ -54,19 +54,6 @@
             <form [formGroup]="formSelectGrupoCategoria">
               <ng-template matStepLabel>Cursos y tipo de registro</ng-template>
                 <div class="col">
-                  <label for="categoriaPago" class="block mb-2">Selecione el tipo de pago a registrar</label>
-                  <p-dropdown class="p-fluid p-grid p-formgrid"
-                              placeholder="Selecione el tipo de pago"
-                              appendTo="body"
-                              [options]="listCategoriaPago"
-                              (ngModelChange)="selectedCategories($event)"
-                              formControlName="categoriaPago"
-                              optionLabel="TipoCategoriaPago">
-                            </p-dropdown>
-                  <small *ngIf="categoriaPago.hasError('required') && categoriaPago.dirty"
-                        class="p-error">Selecione una categoría de pago para continuar</small>
-                </div>
-                <div class="col">
                   <label for="EnGrupo" class="block mb-2">Selecione el curso</label>
                   <p-dropdown class="p-fluid p-grid p-formgrid"
                               appendTo="body"
@@ -91,6 +78,19 @@
                   </p-dropdown>
                   <small *ngIf="estudianteEnGrupo.hasError('required') && estudianteEnGrupo.dirty"
                       class="p-error">El tipo de documento es <strong>requerido</strong></small>
+                </div>
+                <div class="col">
+                  <label for="categoriaPago" class="block mb-2">Selecione el tipo de pago a registrar</label>
+                  <p-dropdown class="p-fluid p-grid p-formgrid"
+                              placeholder="Selecione el tipo de pago"
+                              appendTo="body"
+                              [options]="listCategoriaPago"
+                              (ngModelChange)="selectedCategories($event)"
+                              formControlName="categoriaPago"
+                              optionLabel="TipoCategoriaPago">
+                            </p-dropdown>
+                  <small *ngIf="categoriaPago.hasError('required') && categoriaPago.dirty"
+                        class="p-error">Selecione una categoría de pago para continuar</small>
                 </div>
                 <div class="col" *ngIf="selectedCategory && isPagoMensualidad">
                   <label for="grupoModulo" class="block mb-2">Selecione el módulo</label>
@@ -124,10 +124,18 @@
           </mat-step>
           <mat-step [stepControl]="formFile">
             <ng-template matStepLabel>Subir vocuher</ng-template>
+            <div *ngIf="currentModulo">
+              <p-messages severity="info">
+                <ng-template pTemplate>
+                    <img src="assets/icon/logo.png" height="40"/>
+                    <div class="ml-2">Estás en el <b>Módulo {{currentModulo.modulo.Modulo}}</b> del curso. Recuerda que debes registrar tu pago antes de avanzar al siguiente módulo para evitar pagos extemporaneos.</div>
+                </ng-template>
+              </p-messages>
+            </div>
             <form [formGroup]="formFile">
               <div class="grid mt-3">
                 <div class="col-12">
-                  <label for="MedioDePago" class="block mb-2">Medios de pago</label>
+                  <label for="MedioDePago" class="block mb-2">Medio de pago</label>
                   <p-dropdown class="p-fluid p-grid p-formgrid"
                               [options]="listMedioPago"
                               placeholder="Selecione el medio de pago realizado"
@@ -135,6 +143,22 @@
                               optionLabel="MedioDePago"></p-dropdown>
                   <small *ngIf="MedioDePago.hasError('required') && MedioDePago.dirty"
                         class="p-error">El medio de pago es <strong>requerido</strong></small>
+                </div>
+                <div class="col" *ngIf="setPrecio && setPrecio.visibleInput">
+                  <label for="MontoPago" class="block mb-2">Monto de pago S/.</label>
+                  <p-inputNumber inputId="minmaxfraction"
+                                  mode="decimal"
+                                  placeholder="Digite el monto de pago extemporaneo"
+                                  class="p-fluid p-grid p-formgrid full-width"
+                                  formControlName="MontoPago"
+                                  [min]="0"
+                                  [max]="1000"
+                                  [minFractionDigits]="2"
+                                  [maxFractionDigits]="5"></p-inputNumber>
+                  <small *ngIf="MontoPago.hasError('pattern') && !MontoPago.hasError('required')"
+                          class="p-error">Digite un monto de pago <strong>válido</strong></small>
+                  <small *ngIf="MontoPago.hasError('required') && MontoPago.dirty"
+                          class="p-error">El campo monto de pago es <strong>requerido</strong></small>
                 </div>
                 <div class="col-12 md:col-12">
                   <label for="NumOperacionLibro" class="block mb-2">Número de operación</label>
@@ -162,17 +186,22 @@
                           class="p-error">El campo fecha de pago es <strong>requerido</strong></small>
                 </div>
                 <div class="col-12 md:col-12">
-                  <div class="flex justify-content-between justify-content-center align-items-center content-file">
-                    <label class="block label-file">Voucher de pago</label>
+                  <div class="flex justify-content-between justify-content-center align-items-center file-content">
+                    <label class="block label-file">
+                      <p *ngIf="setPrecio">
+                        {{setPrecio.mensaje}} <strong>{{setPrecio.monto | currency: 'PEN': 'symbol': '': 'es-PE'}}</strong>
+                      </p>
+                    </label>
                     <div class="flex flex-column">
                       <button mat-raised-button
-                              [disabled]="loadingFilePago"
+                              [disabled]="loadingFilePago || loading"
                               (click)="uploadFile.click()"
                               class="custom-btn-file">
                               <mat-icon>{{(FileURL.value && !loadingFilePago)?'check':'attach_file'}}</mat-icon> Elija el archivo</button>
                       <input #uploadFile
                               (change)="selectFile($event)"
                               formControlName="FileURL"
+                              accept=".pdf,.png,.jpg,.jpeg"
                               type='file' style="display:none"/>
                       <small *ngIf="FileURL.hasError('required') && FileURL.dirty"
                               class="p-error">El voucher del pago es <strong>requerido</strong></small>

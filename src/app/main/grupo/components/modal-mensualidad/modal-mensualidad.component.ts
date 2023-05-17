@@ -11,6 +11,7 @@ import { SocketService } from 'src/app/services/socket.service';
 import { PayloadSocket } from 'src/app/class/PayloadSocket';
 import { MedioPago } from 'src/app/class/MedioDePago';
 import { GlobalService } from 'src/app/services/global.service';
+import { GrupoModulo } from '../../class/GrupoModulo';
 moment.locale("es");
 
 @Component({
@@ -23,9 +24,11 @@ export class ModalMensualidadComponent implements OnInit {
   @Input() nameEventUpdate:string;
 
   listMedioPago:MedioPago[] = [];
+  listModulosPago:GrupoModulo[] = [];
   ValidateFile:boolean = false;
   loading:boolean = false;
   formMensualidad:FormGroup;
+  selectGrupoModulo:GrupoModulo | undefined;
   mensualidad:Pago;
   payload:PayloadSocket;
 
@@ -49,7 +52,8 @@ export class ModalMensualidadComponent implements OnInit {
       CodigoVoucher:[null, [Validators.required, Validators.pattern(/^([0-9])*$/)]],
       MontoPago:[null, [ Validators.required, Validators.pattern(/^([0-9])*$/)]],
       MedioDePago:[null, Validators.required],
-      Verificado:[null, Validators.required]
+      Verificado:[null, Validators.required],
+      grupoModulo:[null]
     })
   }
 
@@ -71,12 +75,16 @@ export class ModalMensualidadComponent implements OnInit {
   get MedioDePago(){
     return this.formMensualidad.controls['MedioDePago'];
   }
+  get grupoModulo(){
+    return this.formMensualidad.controls['grupoModulo'];
+  }
 
-  openModal(mensualidad:Pago, payload?:PayloadSocket){
+  openModal(mensualidad:Pago, payload?:PayloadSocket, grupoModulos:GrupoModulo[] = []){
     this.payload = payload!;
     this.spinner.show();
     this.ValidateFile = true;
     this.mensualidad = mensualidad;
+    this.listModulosPago = grupoModulos!;
     this.completeValues(this.mensualidad);
   }
 
@@ -114,7 +122,8 @@ export class ModalMensualidadComponent implements OnInit {
       CodigoVoucher: this.CodigoVoucher.value,
       Verificado: this.Verificado.value,
       MontoPago:this.MontoPago.value,
-      medioDePago: this.MedioDePago.value
+      medioDePago: this.MedioDePago.value,
+      grupoModulo: this.grupoModulo.value
     };
     this.loading = true;
     console.log(data)
@@ -140,21 +149,28 @@ export class ModalMensualidadComponent implements OnInit {
     })
   }
 
-  completeValues(mensualidad:Pago){
-    if(mensualidad.FechaPago){
-      const fechaPago = moment(mensualidad.FechaPago,'YYYY-MM-DD');
-      const newFechaPAgo = fechaPago.format('DD/MM/YYYY');
-      this.FechaPago.setValue(newFechaPAgo);
+  completeValues(pago:Pago){
+    if(pago.FechaPago){
+      const fechaPago = moment(pago.FechaPago,'YYYY-MM-DD');
+      const newFechaPago = fechaPago.format('DD/MM/YYYY');
+      this.FechaPago.setValue(newFechaPago);
     }
-    this.CodigoVoucher.setValue(mensualidad.CodigoVoucher);
-    this.MontoPago.setValue(mensualidad.MontoPago);
-    this.Verificado.setValue(mensualidad.Verificado);
-    this.MedioDePago.setValue(mensualidad.medioDePago);
+    this.CodigoVoucher.setValue(pago.CodigoVoucher);
+    this.MontoPago.setValue(pago.MontoPago);
+    this.Verificado.setValue(pago.Verificado);
+    this.MedioDePago.setValue(pago.medioDePago);
+    console.log(pago.grupoModulo)
+    this.selectGrupoModulo = pago.grupoModulo;
+    this.grupoModulo.setValue(pago.grupoModulo);
   }
 
   reset(){
     this.ValidateFile = false;
     this.formMensualidad.reset();
+  }
+
+  selectedModuloGrupo(grupoModulo:GrupoModulo){
+    this.selectGrupoModulo = grupoModulo;
   }
 
   messageError(e:HttpErrorResponse){
