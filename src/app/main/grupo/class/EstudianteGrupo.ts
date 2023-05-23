@@ -5,7 +5,7 @@ import { Grupo } from "./Grupo";
 import { Pago } from "./Pago";
 
 class ResEstudianteEnGrupo {
-  constructor(public msg: string, public ok: boolean, public data: EstudianteEnGrupo | EstudianteEnGrupo[], public count?:number){}
+  constructor(public msg: string, public ok: boolean, public data: EstudianteEnGrupo | EstudianteEnGrupo[], public count?:number, public others?:any){}
 }
 
 class ResEstadoEstudEnGrupo {

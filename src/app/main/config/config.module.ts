@@ -9,12 +9,12 @@ import { MaterialModule } from 'src/app/material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
-
+import { MainModule } from '../main.module';
 
 @NgModule({
   declarations: [
     MainConfigComponent,
-    ChildrenMainComponent
+    ChildrenMainComponent,
   ],
   imports: [
     CommonModule,
@@ -23,7 +23,8 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     SharedModule,
     ReactiveFormsModule,
-    ConfigRoutingModule
+    ConfigRoutingModule,
+    MainModule
   ]
 })
 export class ConfigModule { }

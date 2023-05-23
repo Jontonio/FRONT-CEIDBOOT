@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { DataHorizontalBar } from 'src/app/class/Graphics';
+import { EstadoGrupo } from 'src/app/main/grupo/class/EstadoGrupo';
+import { DashboardService } from '../../services/dashboard.service';
+import { GrupoService } from 'src/app/main/grupo/services/grupo.service';
+import { LegendPosition } from '@swimlane/ngx-charts';
 
 @Component({
   selector: 'app-horizontal-bar-chart',
@@ -7,57 +12,36 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HorizontalBarChartComponent {
 
-  single: any[] = [
-    {
-      "name": "Germany",
-      "value": 8940000
-    },
-    {
-      "name": "USA",
-      "value": 5000000
-    },
-    {
-      "name": "France",
-      "value": 7200000
-    },
-    {
-      "name": "China",
-      "value": 8200000
-    },
-    {
-      "name": "Peru",
-      "value": 7200000
-    }
-  ];
-
-  view: any[] = [700, 400];
-
+  @Input() data: DataHorizontalBar[] = [];
   // options
   showXAxis: boolean = true;
   showYAxis: boolean = true;
-  gradient: boolean = true;
+  gradient: boolean = false;
   showLegend: boolean = true;
   showXAxisLabel: boolean = true;
-  yAxisLabel: string = 'Country';
+  yAxisLabel: string = 'Grupos';
   showYAxisLabel: boolean = true;
-  xAxisLabel: string = 'Population';
-
-  colorScheme = { color:['#6626ED', '#3228F7', '#2F54E0', '#288BF7','#26BAED'] };
+  xAxisLabel: string = 'Cantidad de estudiantes';
 
   constructor() {
-    Object.assign(this, { single:this.single });
-  }
 
-  onSelect(data:any): void {
-    console.log('Item clicked', JSON.parse(JSON.stringify(data)));
-  }
+              }
+              onSelect(data:any): void {
+                console.log('Item clicked', JSON.parse(JSON.stringify(data)));
+              }
 
-  onActivate(data:any): void {
-    console.log('Activate', JSON.parse(JSON.stringify(data)));
-  }
+              onActivate(data:any): void {
+                console.log('Activate', JSON.parse(JSON.stringify(data)));
+              }
 
-  onDeactivate(data:any): void {
-    console.log('Deactivate', JSON.parse(JSON.stringify(data)));
-  }
+              onDeactivate(data:any): void {
+                console.log('Deactivate', JSON.parse(JSON.stringify(data)));
+              }
+
+
+
+
+
+
 
 }

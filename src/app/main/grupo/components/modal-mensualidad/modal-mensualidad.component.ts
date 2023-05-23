@@ -126,7 +126,6 @@ export class ModalMensualidadComponent implements OnInit {
       grupoModulo: this.grupoModulo.value
     };
     this.loading = true;
-    console.log(data)
     this._grupo.updatePago( this.Id.value, data as Pago).subscribe({
       next: ( value ) => {
         setTimeout(() => {

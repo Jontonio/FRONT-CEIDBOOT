@@ -12,7 +12,7 @@
       <div class="grid flex justify-content-between pb-2">
         <div></div>
         <div>
-          <button class="button-custom-round" mat-raised-button (click)="showSideBar()"><i class="fa-solid fa-plus"></i> tipo pago</button>
+          <button class="button-custom-round" mat-raised-button (click)="openModalCreateServicio()"><i class="fa-solid fa-plus"></i> nuevo servicio</button>
         </div>
       </div>
       <div class="table-responsive">
@@ -41,8 +41,8 @@
                   <td>{{ denominServicio.updatedAt | date:'medium' }}</td>
                   <td>
                     <span class="p-buttonset">
-                      <button mat-icon-button><i class="fa-solid fa-pen-to-square"></i></button>
-                      <button mat-icon-button><i class="fa-solid fa-trash"></i></button>
+                      <button mat-icon-button><i class="fa-solid fa-pen-to-square" (click)="sendEditServicio(denominServicio)"></i></button>
+                      <button mat-icon-button><i class="fa-solid fa-trash" (click)="confirmDeleteServicio(denominServicio)"></i></button>
                     </span>
                   </td>
               </tr>
@@ -58,7 +58,7 @@
       <div class="grid flex justify-content-between pb-2">
         <div></div>
         <div>
-          <button class="button-custom-round" mat-raised-button (click)="showSideBar()"><i class="fa-solid fa-plus"></i> estado grupo</button>
+          <button class="button-custom-round" mat-raised-button (click)="openModalTipoTramite()"><i class="fa-solid fa-plus"></i> estado grupo</button>
         </div>
       </div>
       <div class="table-responsive">
@@ -82,8 +82,8 @@
                   <td>{{ tipoTramite.updatedAt | date:'medium'}}</td>
                   <td>
                     <span class="p-buttonset">
-                      <button mat-icon-button><i class="fa-solid fa-pen-to-square"></i></button>
-                      <button mat-icon-button><i class="fa-solid fa-trash"></i></button>
+                      <button mat-icon-button><i class="fa-solid fa-pen-to-square" (click)="sendEditTipoTramite(tipoTramite)"></i></button>
+                      <button mat-icon-button><i class="fa-solid fa-trash" (click)="confirmDeleteTipoTramite(tipoTramite)"></i></button>
                     </span>
                   </td>
               </tr>
@@ -99,7 +99,7 @@
       <div class="grid flex justify-content-between pb-2">
         <div></div>
         <div>
-          <button class="button-custom-round" mat-raised-button (click)="showSideBar()"><i class="fa-solid fa-plus"></i> tipo pago</button>
+          <button class="button-custom-round" mat-raised-button (click)="showSideBar('medioPago')"><i class="fa-solid fa-plus"></i> medio de pago</button>
         </div>
       </div>
       <div class="table-responsive">
@@ -119,8 +119,8 @@
                   <td>{{ medioPago.updatedAt | date:'medium'}}</td>
                   <td>
                     <span class="p-buttonset">
-                      <button mat-icon-button><i class="fa-solid fa-pen-to-square"></i></button>
-                      <button mat-icon-button><i class="fa-solid fa-trash"></i></button>
+                      <button mat-icon-button (click)="sendEditMedioPago(medioPago)"><i class="fa-solid fa-pen-to-square"></i></button>
+                      <button mat-icon-button (click)="confirmDeleteMedioPago(medioPago)"><i class="fa-solid fa-trash"></i></button>
                     </span>
                   </td>
               </tr>
@@ -130,13 +130,13 @@
     </div>
   </p-card>
 </div>
-<div class="col">
+<div class="col" *showForRoles="['admin_role']">
   <p-card header="Categorias de pago">
     <div class="p-2">
       <div class="grid flex justify-content-between pb-2">
         <div></div>
         <div>
-          <button class="button-custom-round" mat-raised-button (click)="showSideBar()"><i class="fa-solid fa-plus"></i> tipo pago</button>
+          <button class="button-custom-round" mat-raised-button (click)="showSideBar('categoriaPago')"><i class="fa-solid fa-plus"></i> categoria de pago</button>
         </div>
       </div>
       <div class="table-responsive">
@@ -158,8 +158,8 @@
               <td>{{ categoriaPago.updatedAt | date:'medium'}}</td>
               <td>
                 <span class="p-buttonset">
-                  <button mat-icon-button><i class="fa-solid fa-pen-to-square"></i></button>
-                  <button mat-icon-button><i class="fa-solid fa-trash"></i></button>
+                  <button mat-icon-button (click)="sendEditCategoriaPago(categoriaPago)"><i class="fa-solid fa-pen-to-square"></i></button>
+                  <button mat-icon-button (click)="confirmDeteteCategoriaPago(categoriaPago)"><i class="fa-solid fa-trash"></i></button>
                 </span>
               </td>
             </tr>
@@ -169,13 +169,13 @@
     </div>
   </p-card>
 </div>
-<div class="col">
+<div class="col" *showForRoles="['admin_role']">
   <p-card header="Estados de grupo">
     <div class="p-2">
       <div class="grid flex justify-content-between pb-2">
         <div></div>
         <div>
-          <button class="button-custom-round" mat-raised-button (click)="showSideBar()"><i class="fa-solid fa-plus"></i> estado grupo</button>
+          <button class="button-custom-round" mat-raised-button (click)="showSideBar('estadoGrupo')"><i class="fa-solid fa-plus"></i> estado grupo</button>
         </div>
       </div>
       <div class="table-responsive">
@@ -206,8 +206,8 @@
               <td>{{ estadoGrupo.updatedAt | date:'medium'}}</td>
               <td>
                 <span class="p-buttonset">
-                  <button mat-icon-button><i class="fa-solid fa-pen-to-square"></i></button>
-                  <button mat-icon-button><i class="fa-solid fa-trash"></i></button>
+                  <button mat-icon-button (click)="sendEditEstadoGrupo(estadoGrupo)"><i class="fa-solid fa-pen-to-square"></i></button>
+                  <button mat-icon-button (click)="confirmDeteleEstadoGrupo(estadoGrupo)"><i class="fa-solid fa-trash"></i></button>
                 </span>
               </td>
             </tr>
@@ -217,101 +217,327 @@
     </div>
   </p-card>
 </div>
-<div class="col">
-  <p-card header="Categorias de pago">
-    <div class="p-2">
-      <div class="grid flex justify-content-between pb-2">
-        <div></div>
-        <div>
-          <button class="button-custom-round" mat-raised-button (click)="showSideBar()"><i class="fa-solid fa-plus"></i> tipo pago</button>
-        </div>
-      </div>
-      <div class="table-responsive">
-        <p-table [value]="listCategoriaspago" [resizableColumns]="true" columnResizeMode="expand" responsiveLayout="scroll">
-          <ng-template pTemplate="header">
-              <tr>
-                  <th>Id</th>
-                  <th>Tipo</th>
-                  <th>Código</th>
-                  <th>Fecha de actualización</th>
-                  <th>Operación</th>
-              </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-categoriaPago>
-              <tr>
-                  <td>{{ categoriaPago.Id }}</td>
-                  <td>{{ categoriaPago.TipoCategoriaPago }}</td>
-                  <td>{{ categoriaPago.CodeCategoriaPago }}</td>
-                  <td>{{ categoriaPago.updatedAt | date:'medium'}}</td>
-                  <td>
-                    <span class="p-buttonset">
-                      <button mat-icon-button><i class="fa-solid fa-pen-to-square"></i></button>
-                      <button mat-icon-button><i class="fa-solid fa-trash"></i></button>
-                    </span>
-                  </td>
-              </tr>
-          </ng-template>
-        </p-table>
-      </div>
-    </div>
-  </p-card>
-</div>
+
 <!-- formulario add grupo módulo -->
 <p-sidebar [(visible)]="sidebarVisible" position="right">
-  <form [formGroup]="formEstadoGrupo">
-    <div class="p-2">
-      <h3 class="mb-2"><i class="fa-solid fa-layer-group"></i> {{isUpdateEstadoGrupo?'Editar':'Nuevo'}} estado</h3>
-      <app-note-message msg="Es importante describir los estados del grupo debido a que tienen el flujo del sistema."></app-note-message>
-      <div class="col">
-        <label for="EstadoGrupo" class="block mb-2">Nombre de estado</label>
-        <div class="p-inputgroup">
-          <span class="p-inputgroup-addon"><i class="fa-solid fa-book"></i></span>
-          <input id="EstadoGrupo"
-                class="p-fluid p-grid p-formgrid input-form"
-                type="text"
-                formControlName="EstadoGrupo"
-                (ngModelChange)="createCodeEstado($event)"
-                autocomplete="off"
-                maxlength="100"
-                pInputText/>
+  <div [ngSwitch]="optionSideBar">
+    <div *ngSwitchCase="'medioPago'">
+      <form [formGroup]="formMedioPago">
+        <div class="p-2">
+          <h3 class="mb-2"><i class="fa-solid fa-layer-group"></i> {{isUpdateMedioPago?'Editar':'Nuevo'}} medio de pago</h3>
+          <app-note-message msg="Los medios de pago facilitan el registro de pagos de los estudiantes."></app-note-message>
+          <div class="col">
+            <label for="MedioDePago" class="block mb-2">Medio de pago</label>
+            <span class="p-input-icon-left full-width">
+              <i class="fa-solid fa-bag-shopping"></i>
+              <input id="MedioDePago"
+                    class="p-fluid p-grid p-formgrid"
+                    type="text"
+                    formControlName="MedioDePago"
+                    autocomplete="off"
+                    maxlength="45"
+                    pInputText/>
+            </span>
+            <small *ngIf="MedioDePago.hasError('required') && MedioDePago.dirty"
+                  class="p-error">El campo medio de pago es <strong>requerido</strong></small>
+          </div>
+          <div class="col">
+            <button mat-raised-button
+                    class="button-custom"
+                    [disabled]="loadingMedioPago"
+                    (click)="saveMedioPago()"><i class="pi pi-save"></i> {{isUpdateMedioPago?'Guardar':'Registrar'}}</button>
+          </div>
         </div>
-        <small *ngIf="EstadoGrupo.hasError('required') && EstadoGrupo.dirty"
-              class="p-error">El campo nombre de estado es <strong>requerido</strong></small>
-      </div>
-      <div class="col">
-        <label for="codeEstado" class="block mb-2">Código de estado</label>
-        <div class="p-inputgroup">
-          <span class="p-inputgroup-addon"><i class="fa-solid fa-code"></i></span>
-          <input id="CodeEstado"
-                class="p-fluid p-grid p-formgrid input-form"
-                type="text"
-                formControlName="CodeEstado"
-                autocomplete="off"
-                maxlength="100"
-                pInputText/>
+      </form>
+    </div>
+    <div *ngSwitchCase="'categoriaPago'">
+      <form [formGroup]="formCategoriaPago">
+        <div class="p-2">
+          <h3 class="mb-2"><i class="fa-solid fa-layer-group"></i> {{isUpdateCategoriaPago?'Editar':'Nuevo'}} categoria</h3>
+          <app-note-message msg="Es importante describir la categoria de pago."></app-note-message>
+          <div class="col">
+            <label for="EstadoGrupo" class="block mb-2">Tipo de categoria</label>
+            <div class="p-inputgroup">
+              <span class="p-inputgroup-addon"><i class="fa-solid fa-book"></i></span>
+              <input id="EstadoGrupo"
+                    class="p-fluid p-grid p-formgrid"
+                    type="text"
+                    formControlName="TipoCategoriaPago"
+                    (ngModelChange)="createCodeCategory($event)"
+                    autocomplete="off"
+                    maxlength="100"
+                    pInputText/>
+            </div>
+            <small *ngIf="TipoCategoriaPago.hasError('required') && TipoCategoriaPago.dirty"
+                  class="p-error">El campo tipo categoria es <strong>requerido</strong></small>
+          </div>
+          <div class="col">
+            <label for="CodeCategoriaPago" class="block mb-2">Código de categoria</label>
+            <div class="p-inputgroup">
+              <span class="p-inputgroup-addon"><i class="fa-solid fa-code"></i></span>
+              <input id="CodeCategoriaPago"
+                    class="p-fluid p-grid p-formgrid"
+                    type="text"
+                    formControlName="CodeCategoriaPago"
+                    autocomplete="off"
+                    maxlength="100"
+                    pInputText/>
+            </div>
+            <small *ngIf="CodeCategoriaPago.hasError('required') && CodeCategoriaPago.dirty"
+                  class="p-error">El campo codigo de estado es <strong>requerido</strong></small>
+          </div>
+          <div class="col">
+            <button mat-raised-button
+                    class="button-custom"
+                    [disabled]="loadingEstadoGrupo"
+                    (click)="saveCategoriaPago()"><i class="pi pi-save"></i> {{isUpdateCategoriaPago?'Guardar':'Registrar'}}</button>
+          </div>
         </div>
-        <small *ngIf="CodeEstado.hasError('required') && CodeEstado.dirty"
-              class="p-error">El campo codigo de estado es <strong>requerido</strong></small>
+      </form>
+    </div>
+    <div *ngSwitchCase="'estadoGrupo'">
+      <form [formGroup]="formEstadoGrupo">
+        <div class="p-2">
+          <h3 class="mb-2"><i class="fa-solid fa-layer-group"></i> {{isUpdateEstadoGrupo?'Editar':'Nuevo'}} estado</h3>
+          <app-note-message msg="Es importante describir los estados del grupo debido a que tienen el flujo del sistema."></app-note-message>
+          <div class="col">
+            <label for="EstadoGrupo" class="block mb-2">Nombre de estado</label>
+            <div class="p-inputgroup">
+              <span class="p-inputgroup-addon"><i class="fa-solid fa-book"></i></span>
+              <input id="EstadoGrupo"
+                    class="p-fluid p-grid p-formgrid input-form"
+                    type="text"
+                    formControlName="EstadoGrupo"
+                    (ngModelChange)="createCodeEstado($event)"
+                    autocomplete="off"
+                    maxlength="100"
+                    pInputText/>
+            </div>
+            <small *ngIf="EstadoGrupo.hasError('required') && EstadoGrupo.dirty"
+                  class="p-error">El campo nombre de estado es <strong>requerido</strong></small>
+          </div>
+          <div class="col">
+            <label for="codeEstado" class="block mb-2">Código de estado</label>
+            <div class="p-inputgroup">
+              <span class="p-inputgroup-addon"><i class="fa-solid fa-code"></i></span>
+              <input id="CodeEstado"
+                    class="p-fluid p-grid p-formgrid input-form"
+                    type="text"
+                    formControlName="CodeEstado"
+                    autocomplete="off"
+                    maxlength="100"
+                    pInputText/>
+            </div>
+            <small *ngIf="CodeEstado.hasError('required') && CodeEstado.dirty"
+                  class="p-error">El campo codigo de estado es <strong>requerido</strong></small>
+          </div>
+          <div class="col">
+            <label for="DescripcionEstadoGrupo" class="block mb-2">Descripción del estado del grupo</label>
+            <textarea rows="10"
+                      cols="30"
+                      pInputTextarea
+                      formControlName="DescripcionEstadoGrupo"
+                      maxlength="350"
+                      class="p-fluid p-grid p-formgrid"></textarea>
+            <small *ngIf="DescripcionEstadoGrupo.hasError('pattern') && !DescripcionEstadoGrupo.hasError('required')"
+                    class="p-error">Digite una descripción del libro <strong>válida</strong></small>
+            <small *ngIf="DescripcionEstadoGrupo.hasError('required') && DescripcionEstadoGrupo.dirty"
+                  class="p-error">El campo descripción del estado es <strong>requerido</strong></small>
+          </div>
+          <div class="col">
+            <button mat-raised-button
+                    class="button-custom"
+                    [disabled]="loadingEstadoGrupo"
+                    (click)="saveEstadoGrupo()"><i class="pi pi-save"></i> {{isUpdateEstadoGrupo?'Guardar':'Registrar'}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</p-sidebar>
+
+<!-- Modal formulario denominación de servicios-->
+<p-dialog header="Denominación de servicio"
+          [(visible)]="modalVisibleServicio"
+          [breakpoints]="{ '960px': '80vw' }"
+          [style]="{ width: '60vw' }"
+          [modal]="true"
+          [draggable]="false"
+          [closable]="false"
+          [resizable]="false">
+  <div>
+    <form [formGroup]="formServicio">
+    <div class="grid">
+    <div class="col-12 md:col-6">
+      <div class="col">
+        <label for="MontoPensionServicio" class="block mb-2"><i class="fa-solid fa-money-bill"></i> Monto mensualidad S/.</label>
+        <p-inputNumber inputId="minmaxfraction"
+                        mode="decimal"
+                        class="p-fluid p-grid p-formgrid full-width"
+                        formControlName="MontoPensionServicio"
+                        [min]="0"
+                        [max]="1000"
+                        [minFractionDigits]="2"
+                        [maxFractionDigits]="5"></p-inputNumber>
+        <small *ngIf="MontoPensionServicio.hasError('pattern') && !MontoPensionServicio.hasError('required')"
+              class="p-error">Digite un monto de mensualidad <strong>válido</strong></small>
+        <small *ngIf="MontoPensionServicio.hasError('required') && MontoPensionServicio.dirty"
+              class="p-error">El campo de mensualidad es <strong>requerido</strong></small>
       </div>
       <div class="col">
-        <label for="DescripcionEstadoGrupo" class="block mb-2">Descripción del estado del grupo</label>
-        <textarea rows="10"
-                  cols="30"
-                  pInputTextarea
-                  formControlName="DescripcionEstadoGrupo"
-                  maxlength="350"
-                  class="p-fluid p-grid p-formgrid"></textarea>
-        <small *ngIf="DescripcionEstadoGrupo.hasError('pattern') && !DescripcionEstadoGrupo.hasError('required')"
-                class="p-error">Digite una descripción del libro <strong>válida</strong></small>
-        <small *ngIf="DescripcionEstadoGrupo.hasError('required') && DescripcionEstadoGrupo.dirty"
-              class="p-error">El campo descripción del estado es <strong>requerido</strong></small>
-      </div>
-      <div class="col">
-        <button mat-raised-button
-                class="button-custom"
-                [disabled]="loadingEstadoGrupo"
-                (click)="saveEstadoGrupo()"><i class="pi pi-save"></i> {{isUpdateEstadoGrupo?'Guardar':'Registrar'}}</button>
+        <label for="MontoMatriculaServicio" class="block mb-2"><i class="fa-solid fa-money-bill"></i> Monto matricula S/.</label>
+        <p-inputNumber inputId="minmaxfraction"
+                        mode="decimal"
+                        class="p-fluid p-grid p-formgrid full-width"
+                        formControlName="MontoMatriculaServicio"
+                        [min]="0"
+                        [max]="1000"
+                        [minFractionDigits]="2"
+                        [maxFractionDigits]="5"></p-inputNumber>
+        <small *ngIf="MontoMatriculaServicio.hasError('pattern') && !MontoMatriculaServicio.hasError('required')"
+              class="p-error">Digite un monto de matricula <strong>válido</strong></small>
+        <small *ngIf="MontoMatriculaServicio.hasError('required') && MontoMatriculaServicio.dirty"
+              class="p-error">El campo de matricula es <strong>requerido</strong></small>
       </div>
     </div>
-  </form>
-</p-sidebar>
+    <div class="col-12 md:col-6">
+      <div class="col">
+        <label for="Nombres" class="block mb-2">Descripción del servicio</label>
+        <textarea rows="6"
+                  cols="30"
+                  pInputTextarea
+                  formControlName="DescripcionServicio"
+                  maxlength="350"
+                  class="p-fluid p-grid p-formgrid"></textarea>
+        <small *ngIf="DescripcionServicio.hasError('pattern') && !DescripcionServicio.hasError('required')"
+              class="p-error">Digite una descripción del servicio <strong>válida</strong></small>
+        <small *ngIf="DescripcionServicio.hasError('required') && DescripcionServicio.dirty"
+              class="p-error">El campo descripción del servicio es <strong>requerido</strong></small>
+      </div>
+    </div>
+    </div>
+    <div class="col" align="end">
+    <button mat-raised-button
+            class="button-custom mr-2"
+            (click)="saveServicio()"
+            [disabled]="loadingServicio">
+            <i [ngClass]="{'pi-spin pi-spinner': loadingServicio,
+                          'pi-save':!loadingServicio}" class="pi mr-1"></i> {{isUpdateServicio?'Guardar':'Registrar'}}
+    </button>
+    <button mat-raised-button
+            (click)="cancelSaveServicio()"
+            class="button-custom"> Cancelar
+    </button>
+    </div>
+    </form>
+  </div>
+</p-dialog>
+
+<!-- Modal formulario tipo trámite-->
+<p-dialog header="Tipo de trámite"
+          [(visible)]="modalVisibleTipoTramite"
+          [breakpoints]="{ '960px': '80vw' }"
+          [style]="{ width: '60vw' }"
+          [modal]="true"
+          [draggable]="false"
+          [closable]="false"
+          [resizable]="false">
+  <div>
+    <form [formGroup]="formTipoTramite">
+    <div class="grid">
+    <div class="col-12 md:col-6">
+      <div class="col">
+        <label for="TipoTramite" class="block mb-2">Tipo de trámite</label>
+        <input type="text"
+               pInputText
+               class="p-fluid p-grid p-formgrid full-width"
+               formControlName="TipoTramite"/>
+        <small *ngIf="TipoTramite.hasError('pattern') && !TipoTramite.hasError('required')"
+              class="p-error">Digite un tipo de trámite <strong>válido</strong></small>
+        <small *ngIf="TipoTramite.hasError('required') && TipoTramite.dirty"
+              class="p-error">El campo tipo de trámite es <strong>requerido</strong></small>
+      </div>
+      <div class="col">
+        <label for="DerechoPagoTramite" class="block mb-2"><i class="fa-solid fa-money-bill"></i> Monto de derecho de pago S/.</label>
+        <p-inputNumber inputId="minmaxfraction"
+                        mode="decimal"
+                        class="p-fluid p-grid p-formgrid full-width"
+                        formControlName="DerechoPagoTramite"
+                        [min]="0"
+                        [max]="1000"
+                        [minFractionDigits]="2"
+                        [maxFractionDigits]="5"></p-inputNumber>
+        <small *ngIf="DerechoPagoTramite.hasError('pattern') && !DerechoPagoTramite.hasError('required')"
+              class="p-error">Digite un monto de derecho de pago <strong>válido</strong></small>
+        <small *ngIf="DerechoPagoTramite.hasError('required') && DerechoPagoTramite.dirty"
+              class="p-error">El campo de derecho de pago es <strong>requerido</strong></small>
+      </div>
+    </div>
+    <div class="col-12 md:col-6">
+      <div class="col">
+        <label for="DescripcionTramite" class="block mb-2">Descripción del tipo de trámite</label>
+        <textarea rows="6"
+                  cols="30"
+                  pInputTextarea
+                  formControlName="DescripcionTramite"
+                  maxlength="350"
+                  class="p-fluid p-grid p-formgrid"></textarea>
+        <small *ngIf="DescripcionTramite.hasError('pattern') && !DescripcionTramite.hasError('required')"
+              class="p-error">Digite una descripción de tipo de trámite <strong>válido</strong></small>
+        <small *ngIf="DescripcionTramite.hasError('required') && DescripcionTramite.dirty"
+              class="p-error">El campo descripción del tipo de trámite es <strong>requerido</strong></small>
+      </div>
+    </div>
+    </div>
+    <div class="col" align="end">
+    <button mat-raised-button
+            class="button-custom mr-2"
+            (click)="saveTipoTramite()"
+            [disabled]="loadingTipoTramite">
+            <i [ngClass]="{'pi-spin pi-spinner': loadingTipoTramite,
+                          'pi-save':!loadingTipoTramite}" class="pi mr-1"></i> {{isUpdateTipoTramite?'Guardar':'Registrar'}}
+    </button>
+    <button mat-raised-button
+            (click)="cancelSaveTipoTramite()"
+            class="button-custom"> Cancelar
+    </button>
+    </div>
+    </form>
+  </div>
+</p-dialog>
+
+<!-- Delete denomin servicio dialog  -->
+<p-confirmDialog [style]="{width: '50vw'}"
+        key="deleteServicioDialog"
+        position="top"
+        [baseZIndex]="10000"
+        acceptLabel="Confirmar"
+        [breakpoints]="{'960px': '75vw', '640px': '100vw'}"
+        rejectButtonStyleClass="p-button-outlined"></p-confirmDialog>
+
+<!-- Delete tipo de tramite dialog  -->
+<p-confirmDialog [style]="{width: '50vw'}"
+        key="deleteTipoTramiteDialog"
+        position="top"
+        [baseZIndex]="10000"
+        acceptLabel="Confirmar"
+        [breakpoints]="{'960px': '75vw', '640px': '100vw'}"
+        rejectButtonStyleClass="p-button-outlined"></p-confirmDialog>
+
+<!-- Delete tipo de tramite dialog  -->
+<p-confirmDialog [style]="{width: '50vw'}"
+        key="deleteMedioPagoDialog"
+        position="top"
+        [baseZIndex]="10000"
+        acceptLabel="Confirmar"
+        [breakpoints]="{'960px': '75vw', '640px': '100vw'}"
+        rejectButtonStyleClass="p-button-outlined"></p-confirmDialog>
+
+<!-- Delete estado grupo dialog  -->
+<p-confirmDialog [style]="{width: '50vw'}"
+        key="deleteEstadoGrupoDialog"
+        position="top"
+        [baseZIndex]="10000"
+        acceptLabel="Confirmar"
+        [breakpoints]="{'960px': '75vw', '640px': '100vw'}"
+        rejectButtonStyleClass="p-button-outlined"></p-confirmDialog>

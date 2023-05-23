@@ -1,19 +1,22 @@
-<div class="content-chart horizontal">
-  <ngx-charts-bar-horizontal
-  [results]="single"
-  scheme="nightLights"
-  [gradient]="gradient"
-  [xAxis]="showXAxis"
-  [yAxis]="showYAxis"
-  [showDataLabel]="true"
-  [legend]="showLegend"
-  [customColors]="colorScheme"
-  [showXAxisLabel]="showXAxisLabel"
-  [showYAxisLabel]="showYAxisLabel"
-  [showGridLines]="false"
-  [xAxisLabel]="xAxisLabel"
-  [yAxisLabel]="yAxisLabel"
-  (select)="onSelect($event)">
-  </ngx-charts-bar-horizontal>
+<div class="content-chart horizontal-chart">
+    <ngx-charts-bar-horizontal
+    scheme="flame"
+    [results]="data"
+    [gradient]="gradient"
+    [xAxis]="showXAxis"
+    [yAxis]="showYAxis"
+    [legend]="showLegend"
+    [showDataLabel]="true"
+    [showXAxisLabel]="showXAxisLabel"
+    [showYAxisLabel]="showYAxisLabel"
+    [gradient]="true"
+    [xAxisLabel]="xAxisLabel"
+    [yAxisLabel]="yAxisLabel"
+    (select)="onSelect($event)"
+    (activate)="onActivate($event)"
+    (deactivate)="onDeactivate($event)"
+    fitContainer>
+    </ngx-charts-bar-horizontal>
 </div>
+
 

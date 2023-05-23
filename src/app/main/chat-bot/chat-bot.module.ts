@@ -7,7 +7,6 @@ import { PrimengModule } from 'src/app/primeng/primeng.module';
 import { QRCodeModule } from 'angularx-qrcode';
 import { HttpClientModule } from '@angular/common/http';
 import { ChatBotMainComponent } from './pages/chat-bot-main/chat-bot-main.component';
-import { EnviarMensajeComponent } from './pages/enviar-mensaje/enviar-mensaje.component';
 import { EstadoChatbotComponent } from './pages/estado-chatbot/estado-chatbot.component';
 import { EditorModule } from 'primeng/editor';
 import { EditorComponent } from '../shared/editor/editor.component';
@@ -20,7 +19,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     ChatBotMainComponent,
-    EnviarMensajeComponent,
     EstadoChatbotComponent,
     EditorComponent,
     ListIntentsComponent,

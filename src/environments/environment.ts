@@ -5,8 +5,7 @@
 export const environment = {
   production: false,
   // theme
-  BASE_URL:'http://192.168.10.101:3000',
-  // "node_modules/primeng/resources/themes/mdc-light-deeppurple/theme.css",
+  BASE_URL:'http://192.168.10.103:3000',
   URL_SOCKET:'http://localhost:3000',
   URL_COUNTRY:'https://restcountries.com/v3.1'
 };
@@ -18,4 +17,3 @@ export const environment = {
  * This import should be commented out in production mode because it will have a negative impact
  * on performance if an error is thrown.
  */
-// import 'zone.js/plugins/zone-error';  // Included with Angular CLI.

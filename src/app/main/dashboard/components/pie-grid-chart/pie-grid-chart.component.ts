@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { LegendPosition } from '@swimlane/ngx-charts';
 
 @Component({
   selector: 'app-pie-grid-chart',
@@ -7,22 +8,40 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PieGridChartComponent {
 
-  single: any[];
-  view: any[] = [500, 400];
+  single: any[] =  [
+    {
+      "name": "Germany",
+      "value": 8940000
+    },
+    {
+      "name": "USA",
+      "value": 5000000
+    }
+  ];
+  view: any[] = [700, 400];
 
   // options
+  gradient: boolean = true;
   showLegend: boolean = true;
   showLabels: boolean = true;
+  isDoughnut: boolean = false;
 
   colorScheme = {
-    domain: ['#5AA454', '#E44D25', '#CFC0BB', '#7aa3e5', '#a8385d', '#aae3f5']
+    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
   };
 
   constructor() {
-    Object.assign(this, { single:this.single });
   }
 
-  onSelect(event:any) {
-    console.log(event);
+  onSelect(data:any): void {
+    console.log('Item clicked', JSON.parse(JSON.stringify(data)));
+  }
+
+  onActivate(data:any): void {
+    console.log('Activate', JSON.parse(JSON.stringify(data)));
+  }
+
+  onDeactivate(data:any): void {
+    console.log('Deactivate', JSON.parse(JSON.stringify(data)));
   }
 }

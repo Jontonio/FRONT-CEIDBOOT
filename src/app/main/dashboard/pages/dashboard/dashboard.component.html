@@ -1,21 +1,244 @@
 <div class="main p-4">
-  <div class="grid">
-    <div class="col-12 md:col-6">
-      <p-card>
-        <app-horizontal-bar-chart></app-horizontal-bar-chart>
-      </p-card>
-    </div>
-    <div class="col-12 md:col-6">
-      <p-card>
-        <app-vertical-bar-chart></app-vertical-bar-chart>
-      </p-card>
-    </div>
-  </div>
-  <div class="grid">
-    <div class="col-12">
-      <p-card>
-        <app-line-chart></app-line-chart>
-      </p-card>
-    </div>
-  </div>
+  <mat-tab-group dynamicHeight>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>bar_chart</mat-icon>
+        <p class="p-2">Alumnos por grupo</p>
+      </ng-template>
+      <div class="mt-4">
+        <p-card header="Opción de estado">
+          <div class="flex justify-content-between mt-3">
+            <div class="col">
+              <legend class="pr-3">
+                Selecione un estado. Por defecto se encuentra en [matriculas abiertas].
+              </legend>
+            </div>
+            <div class="col">
+              <p-dropdown class="p-fluid p-grid p-formgrid"
+                          [options]="listEstadoGrupo"
+                          [(ngModel)]="estadoGrupo"
+                          (onChange)="selectedEstado($event)"
+                          optionLabel="EstadoGrupo">
+              </p-dropdown>
+            </div>
+          </div>
+        </p-card>
+      </div>
+      <div class="card-container">
+        <div id="bar-horizontal">
+          <div  class="flex justify-content-between mt-4">
+            <h2>Estudiantes por grupos</h2>
+            <div>
+              <button mat-icon-button [matMenuTriggerFor]="menuBarHorizontal">
+                <mat-icon><i class="fa-solid fa-bars"></i></mat-icon>
+              </button>
+              <mat-menu #menuBarHorizontal="matMenu">
+                <button mat-menu-item>
+                  <mat-icon><i class="fa-regular fa-file-image"></i></mat-icon>
+                  <span>Descargar en imagen</span>
+                </button>
+                <button mat-menu-item
+                        [useExistingCss]="true"
+                        printSectionId="bar-horizontal"
+                        [title]="'Estudiante en grupo'"
+                        ngxPrint>
+                  <mat-icon><i class="fa-regular fa-file-pdf"></i></mat-icon>
+                  <span>Descargar en PDF</span>
+                </button>
+                <button mat-menu-item>
+                  <mat-icon><i class="fa-regular fa-file-excel"></i></mat-icon>
+                  <span>Descargar en Excel</span>
+                </button>
+              </mat-menu>
+            </div>
+          </div>
+          <div>
+            <app-horizontal-bar-chart [data]="dataEstudiantesGrupo"></app-horizontal-bar-chart>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>leaderboard</mat-icon>
+        <p class="p-2">Mensualidad y mora</p>
+      </ng-template>
+      <div class="mt-4">
+        <p-card header="Opción de estado y grupo">
+          <form [formGroup]="formInputs">
+            <div class="flex justify-content-between mt-3">
+              <div class="col">
+                <p-dropdown class="p-fluid p-grid p-formgrid"
+                            [options]="listEstadoGrupo"
+                            formControlName="inputEstadoGrupo"
+                            (ngModelChange)="selectedEstadoGrupo($event)"
+                            optionLabel="EstadoGrupo">
+                </p-dropdown>
+              </div>
+              <div class="col">
+                <p-dropdown class="p-fluid p-grid p-formgrid"
+                            appendTo="body"
+                            [options]="listGrupos"
+                            formControlName="inputGrupo"
+                            (ngModelChange)="selectedGrupo($event)">
+                  <ng-template pTemplate="selectedItem">
+                    <div class="grupo-item grupo-item-value" *ngIf="grupo">
+                        <span class="ml-1">
+                          <img class="flag-code-country" [src]="grupo.curso.UrlBandera" alt="">
+                          <span class="ml-1">{{grupo.curso.NombreCurso | titlecase }} {{grupo.curso.nivel.Nivel}}
+                            <p-tag severity="warning">{{grupo.tipoGrupo.NombreGrupo | titlecase}}</p-tag></span>
+                          </span>
+                    </div>
+                  </ng-template>
+                  <ng-template let-grupo pTemplate="item">
+                    <div>
+                      <img class="flag-code-country" [src]="grupo.curso.UrlBandera" alt="">
+                        <span class="ml-1 mr-1">{{grupo.curso.NombreCurso | titlecase }} {{grupo.curso.nivel.Nivel}} <p-tag>{{grupo.tipoGrupo.NombreGrupo | titlecase}}</p-tag></span>
+                        <p-tag severity="warning" *ngIf="!grupo.RequeridoPPago">New</p-tag>
+                    </div>
+                  </ng-template>
+                </p-dropdown>
+              </div>
+            </div>
+          </form>
+        </p-card>
+      </div>
+      <div>
+        <div id="bar-vertical">
+          <div  class="flex justify-content-between mt-3">
+            <h2>Pago y moras por grupo</h2>
+            <div>
+              <button mat-icon-button [matMenuTriggerFor]="menuBarVertical">
+                <mat-icon><i class="fa-solid fa-bars"></i></mat-icon>
+              </button>
+              <mat-menu #menuBarVertical="matMenu">
+                <button mat-menu-item>
+                  <mat-icon><i class="fa-regular fa-file-image"></i></mat-icon>
+                  <span>Descargar en imagen</span>
+                </button>
+                <button mat-menu-item
+                        [useExistingCss]="true"
+                        printSectionId="bar-vertical"
+                        [title]="'Estudiante en grupo'"
+                        ngxPrint>
+                  <mat-icon><i class="fa-regular fa-file-pdf"></i></mat-icon>
+                  <span>Descargar en PDF</span>
+                </button>
+                <button mat-menu-item>
+                  <mat-icon><i class="fa-regular fa-file-excel"></i></mat-icon>
+                  <span>Descargar en Excel</span>
+                </button>
+              </mat-menu>
+            </div>
+          </div>
+          <div>
+            <app-vertical-bar-chart [data]="dataPagosMora"></app-vertical-bar-chart>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">pie_chart</mat-icon>
+        <p class="p-2">Índice de la deuda vencidad</p>
+      </ng-template>
+      <div class="grid mt-2">
+        <div class="col-12 md:col-6">
+          <p-card>
+            <h2 class="mb-2">Lista de grupos</h2>
+            <div class="table-responsive">
+              <p-table [value]="listGruposLimit" [resizableColumns]="true" columnResizeMode="expand" responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>ID</th>
+                        <th>Cód. grupo</th>
+                        <th>Curso</th>
+                        <th>Modalidad</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-grupo let-rowIndex="rowIndex">
+                    <tr>
+                      <td>{{startPage + (rowIndex+1)}}</td>
+                      <td>{{ grupo.Id  }}</td>
+                      <td>
+                        <div class="grid">
+                          <div class="col-3 flex justify-content-center">
+                            <img class="img-flag mr-2" [alt]="'Bandera'+grupo.curso.NombreCurso" [src]="grupo.curso.UrlBandera" alt="" srcset="">
+                          </div>
+                          <div class="col-9 flex flex-column">
+                            <b class="mr-2 mb-1">{{grupo.curso.NombreCurso | titlecase}}</b>
+                            {{grupo.curso.nivel.Nivel}}
+                          </div>
+                        </div>
+                      </td>
+                      <td>{{ grupo.Modalidad}}</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td colspan="10">
+                      <app-lista-vacia [msg]="'No se encontraron registros de usuarios'"></app-lista-vacia>
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+            <div>
+              <div class="mt-4" *ngIf="resGrupo && resGrupo.count">
+                <div class="grid content flex justify-content-between">
+                  <p class="text-muted">Total de grupos en proceso: {{resGrupo.count}}</p>
+                  <p></p>
+                </div>
+                <div class="grid content flex justify-content-between">
+                  <div></div>
+                  <div>
+                    <p-paginator [rows]="5"
+                                  [totalRecords]="resGrupo.count!"
+                                  [rowsPerPageOptions]="[5,10,15,20]"
+                                  (onPageChange)="paginate($event)"></p-paginator>
+                  </div>
+                  <div></div>
+                </div>
+              </div>
+              <app-loadding *ngIf="loadingGruposLista && listGruposLimit.length==0" msg="Lista de grupos"></app-loadding>
+            </div>
+          </p-card>
+        </div>
+        <div class="col-12 md:col-6">
+          <p-card>
+            <div id="grafico-indice" class="mt-2">
+              <div  class="flex justify-content-between mt-3">
+                <h2>Índice de la deuda por grupo</h2>
+                <div>
+                  <button mat-icon-button [matMenuTriggerFor]="menuIndice">
+                    <mat-icon><i class="fa-solid fa-bars"></i></mat-icon>
+                  </button>
+                  <mat-menu #menuIndice="matMenu">
+                    <button mat-menu-item>
+                      <mat-icon><i class="fa-regular fa-file-image"></i></mat-icon>
+                      <span>Descargar en imagen</span>
+                    </button>
+                    <button mat-menu-item
+                            [useExistingCss]="true"
+                            printSectionId="grafico-indice"
+                            ngxPrint>
+                      <mat-icon><i class="fa-regular fa-file-pdf"></i></mat-icon>
+                      <span>Descargar en PDF</span>
+                    </button>
+                    <button mat-menu-item>
+                      <mat-icon><i class="fa-regular fa-file-excel"></i></mat-icon>
+                      <span>Descargar en Excel</span>
+                    </button>
+                  </mat-menu>
+                </div>
+              </div>
+              <app-pie-grid-chart></app-pie-grid-chart>
+            </div>
+          </p-card>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
 </div>
+

@@ -45,6 +45,9 @@ body::-webkit-scrollbar-thumb:active {
 .cursor{
   cursor: pointer;
 }
+.card-container{
+  position: relative;
+}
 :root{
   --my-font: var(--my-font);
 }
@@ -95,6 +98,7 @@ h3{
 .font{
   font-family: var(--my-font);
 }
+
 /**
 * Styles for images
 *
@@ -472,6 +476,9 @@ footer{
   .table-responsive{
     overflow-y: scroll !important;
   }
+  .table-responsive::-webkit-scrollbar-thumb {
+    display: none;
+  }
   .items-menu{
     width: 3000px !important;
   }
@@ -488,10 +495,19 @@ footer{
   .table-responsive{
     overflow-y: scroll !important;
   }
+  .table-responsive::-webkit-scrollbar-thumb {
+    display: none;
+  }
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
   /* Estilos para escritorio pequeño aquí */
+  .table-responsive{
+    overflow-y: scroll !important;
+  }
+  .table-responsive::-webkit-scrollbar-thumb {
+    display: none;
+  }
 }
 
 @media only screen and (min-width: 1200px) {

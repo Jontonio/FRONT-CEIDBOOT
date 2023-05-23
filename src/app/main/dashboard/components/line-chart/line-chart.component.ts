@@ -122,14 +122,6 @@ export class LineChartComponent {
         {
           "value": 3350,
           "name": "2016-09-13T14:00:00.183Z"
-        },
-        {
-          "value": 5311,
-          "name": "2016-09-16T13:23:35.441Z"
-        },
-        {
-          "value": 3868,
-          "name": "2016-09-23T06:37:27.910Z"
         }
       ]
     }

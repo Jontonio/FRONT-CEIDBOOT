@@ -30,7 +30,6 @@ export class ChabotService {
       next: (value:EstadoWhatsApp) => {
         this.estadoWhatsApp = value;
         this.loading = false;
-        console.log(value)
       },
       error: (e) => {
         this.loading = false;
@@ -49,6 +48,10 @@ export class ChabotService {
 
   updateOneTxtIntent(uuid:string, data:any):Observable<ResIntent>{
     return this.http.patch<ResIntent>(`${this.BASE_URL}/dialogflow/update-one-txt-intent/${uuid}`, data);
+  }
+
+  updateOnePayloadIntent(uuid:string, data:any):Observable<ResIntent>{
+    return this.http.patch<ResIntent>(`${this.BASE_URL}/dialogflow/update-one-payload-intent/${uuid}`, data);
   }
 
   sendMessage(data:Message):Observable<ResMessage>{

@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { DataVerticalBar } from 'src/app/class/Graphics';
+
 
 @Component({
   selector: 'app-vertical-bar-chart',
@@ -7,50 +9,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class VerticalBarChartComponent {
 
-  multi: any[] = [
-    {
-      "name": "Germany",
-      "series": [
-        {
-          "name": "2010",
-          "value": 7300000
-        },
-        {
-          "name": "2011",
-          "value": 8940000
-        }
-      ]
-    },
 
-    {
-      "name": "USA",
-      "series": [
-        {
-          "name": "2010",
-          "value": 7870000
-        },
-        {
-          "name": "2011",
-          "value": 8270000
-        }
-      ]
-    },
 
-    {
-      "name": "France",
-      "series": [
-        {
-          "name": "2010",
-          "value": 5000002
-        },
-        {
-          "name": "2011",
-          "value": 5800000
-        }
-      ]
-    }
-  ];;
-  view = [700, 400];
+  @Input() data: DataVerticalBar[];
 
   // options
   showXAxis: boolean = true;
@@ -58,20 +19,14 @@ export class VerticalBarChartComponent {
   gradient: boolean = true;
   showLegend: boolean = true;
   showXAxisLabel: boolean = true;
-  xAxisLabel: string = 'Country';
   showYAxisLabel: boolean = true;
-  yAxisLabel: string = 'Population';
+  yAxisLabel: string = 'Mensualidad y mora';
   legendTitle: string = 'Years';
 
-  colorScheme = {
-    domain: ['#5AA454', '#C7B42C', '#AAAAAA']
-  };
-
   constructor() {
-    Object.assign(this, { multi:this.multi })
   }
 
- onSelect(data:any): void {
+  onSelect(data:any): void {
     console.log('Item clicked', JSON.parse(JSON.stringify(data)));
   }
 
@@ -82,6 +37,9 @@ export class VerticalBarChartComponent {
   onDeactivate(data:any): void {
     console.log('Deactivate', JSON.parse(JSON.stringify(data)));
   }
+
+
+
 
 
 

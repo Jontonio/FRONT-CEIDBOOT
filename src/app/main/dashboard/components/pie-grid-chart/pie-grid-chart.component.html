@@ -1,7 +1,12 @@
-<div class="content-chart pie-grid-chart">
-  <ngx-charts-pie-grid
-  scheme="nightLights"
-  [results]="single"
-  (select)="onSelect($event)">
-  </ngx-charts-pie-grid>
+<div class="content-chart pie-chart">
+  <ngx-charts-advanced-pie-chart
+    scheme="flame"
+    [results]="single"
+    [gradient]="gradient"
+    (select)="onSelect($event)"
+    (activate)="onActivate($event)"
+    (deactivate)="onDeactivate($event)"
+    fitContainer
+    >
+  </ngx-charts-advanced-pie-chart>
 </div>

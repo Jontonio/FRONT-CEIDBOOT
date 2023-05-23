@@ -6,7 +6,7 @@ import { HttpClient } from "@angular/common/http";
 import { Grupo, ResGrupo, ResTipoGrupo } from '../class/Grupo';
 import { SocketService } from 'src/app/services/socket.service';
 import { UnAuthorizedService } from 'src/app/services/unauthorized.service';
-import { ResEstadoEstudEnGrupo } from '../class/EstudianteGrupo';
+import { ResEstadoEstudEnGrupo, ResEstudianteEnGrupo } from '../class/EstudianteGrupo';
 import { Pago, ResPago } from '../class/Pago';
 import { ResEstadoGrupo } from '../class/EstadoGrupo';
 import { GrupoModulo, ResGrupoModulo } from '../class/GrupoModulo';
@@ -63,6 +63,11 @@ export class GrupoService{
     return this.http.get<ResGrupo>(`${this.BASE_URL}/grupo/get-grupos?limit=${limit}&offset=${offset}`);
   }
 
+  getGruposReporte(idEstadoGrupo:number, withLimit:boolean = false, limit:number = 5, offset:number = 0){
+    const path = withLimit?`${idEstadoGrupo}?limit=${limit}&offset=${offset}`:`${idEstadoGrupo}`;
+    return this.http.get<ResGrupo>(`${environment.BASE_URL}/grupo/get-grupos-reporte/${path}`);
+  }
+
   getAllTipoGrupos(){
     return this.http.get<ResTipoGrupo>(`${this.BASE_URL}/grupo/get-tipo-grupos`);
   }
@@ -77,6 +82,10 @@ export class GrupoService{
 
   getEstudiantesEnGrupoEspecifico(Id:string, limit:number = 5, offset:number = 0){
     return this.http.get<ResEstadoEstudEnGrupo>(`${this.BASE_URL}/estudiante-en-grupo/get-estudiantes-en-grupo-especifico/${Id}?limit=${limit}&offset=${offset}`);
+  }
+
+  getEstudiantesEnGrupoEspecificoById(idGrupo:string, idEstudiante:string){
+    return this.http.get<ResEstudianteEnGrupo>(`${this.BASE_URL}/estudiante-en-grupo/get-estudiantes-en-grupo-especifico/${idGrupo}/${idEstudiante}`);
   }
 
   deleteEstudianteEnGrupoEspecifico(Id:number){

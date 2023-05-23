@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ChabotService } from '../../services/chatbot.service';
 import { Intent, Phrase } from '../../class/Intent';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
+import { Description_media, Link, Media, Message, PayloadBoot } from '../../class/PayloadBot';
 
 @Component({
   selector: 'app-intent',
@@ -15,8 +16,10 @@ export class IntentComponent implements OnInit {
   uuid:string;
   intent:Intent;
   responseForm:FormGroup;
+  payloadForm:FormGroup;
   lisText:string[] | undefined = [];
-  loadingSave:boolean;
+  loadingSavePhrase:boolean;
+  loadingSavePayload:boolean;
   loadingData:boolean;
 
   constructor(private readonly activeRoute:ActivatedRoute,
@@ -24,8 +27,10 @@ export class IntentComponent implements OnInit {
               private readonly _bot:ChabotService,
               private readonly _msg:MessageService) {
     this.createFormResponse();
+    this.createFormPayload();
     this.loadingData = false;
-    this.loadingSave = false;
+    this.loadingSavePhrase = false;
+    this.loadingSavePayload = false;
     this.getId(this.activeRoute);
   }
 
@@ -38,11 +43,33 @@ export class IntentComponent implements OnInit {
     })
   }
 
+  createFormPayload(){
+    this.payloadForm = this.fb.group({
+      description_media:[null],
+      link:[null],
+      media:[null],
+      message:[null],
+    })
+  }
+
   get text() : FormArray {
     return this.responseForm.get("text") as FormArray
   }
   get response(){
     return this.responseForm.get("text.response");
+  }
+
+  get description_media(){
+    return this.payloadForm.controls['description_media'];
+  }
+  get link(){
+    return this.payloadForm.controls['link'];
+  }
+  get media(){
+    return this.payloadForm.controls['media'];
+  }
+  get message(){
+    return this.payloadForm.controls['message'];
   }
 
   getId(activeRoute:ActivatedRoute){
@@ -67,10 +94,15 @@ export class IntentComponent implements OnInit {
         this.loadingData = false;
         if(value.ok){
           this.intent = value.data as Intent;
+          console.log(this.intent)
           this.intent.messages.forEach( data => {
             if(data.message=='text'){
               this.lisText = data.text?.text;
               this.completeText(this.lisText)
+            }
+            if(data.message=='payload'){
+              const { fields } = data.payload as any;
+              this.completePayload(fields);
             }
           })
           return;
@@ -89,6 +121,13 @@ export class IntentComponent implements OnInit {
     value.forEach( val => {
       this.text.push(this.newResponse(val))
     })
+  }
+
+  completePayload(payload:PayloadBoot){
+    this.message.setValue(payload.message.stringValue);
+    this.description_media.setValue(payload.description_media.stringValue);
+    this.link.setValue(payload.link.stringValue);
+    this.media.setValue(payload.media.stringValue);
   }
 
   newResponse(value:string=''): FormGroup {
@@ -110,7 +149,6 @@ export class IntentComponent implements OnInit {
     if(this.responseForm.invalid){
       Object.keys( this.responseForm.controls )
             .forEach( input => this.responseForm.controls[ input ].markAsDirty())
-            console.log(this.responseForm);
       this.toast('warn','Complete los campos','Los campos agregados o modificados son requeridos')
       return;
     }
@@ -119,10 +157,15 @@ export class IntentComponent implements OnInit {
     const text:string[] = [];
     arrayForm.forEach( val => text.push(val.response) )
 
-    this.loadingSave = true;
+    if(text.length==0){
+      this.toast('warn','Es necesario al menos un campo','Los campos agregados o modificados son requeridos')
+      return;
+    }
+
+    this.loadingSavePhrase = true;
     this._bot.updateOneTxtIntent(this.uuid, { text }).subscribe({
       next: (value) => {
-        this.loadingSave = false;
+        this.loadingSavePhrase = false;
         if(value.ok){
           this.toast('success', value.msg);
           return;
@@ -130,8 +173,38 @@ export class IntentComponent implements OnInit {
         this.toast('warn', value.msg);
       },
       error: (e) => {
-        this.loadingSave = false;
+        this.loadingSavePhrase = false;
         console.log(e)
+        this.messageError(e);
+      }
+    })
+  }
+
+  savePayload(){
+    if(this.payloadForm.invalid){
+      Object.keys( this.payloadForm.controls )
+            .forEach( input => this.responseForm.controls[ input ].markAsDirty())
+      return;
+    }
+    this.loadingSavePayload = true;
+    const payload = new PayloadBoot(new Message(this.message.value),
+                                    new Media(this.media.value),
+                                    new Link(this.link.value),
+                                    new Description_media(this.description_media.value))
+    this._bot.updateOnePayloadIntent(this.uuid, payload).subscribe({
+      next: (value) => {
+        this.loadingSavePayload = false
+        if(value.ok){
+          console.log(value.data)
+          this.toast('success', value.msg);
+          return;
+        }
+        this.toast('warn', value.msg);
+        console.log(value)
+      },
+      error: (e) => {
+        console.log(e)
+        this.loadingSavePayload = false
         this.messageError(e);
       }
     })
@@ -144,7 +217,7 @@ export class IntentComponent implements OnInit {
   messageError(e:any){
     const msg = e.error.message;
     Array.isArray(msg)?msg.forEach( (e:string) => this.toast('error', e, 'Error de validación de datos')):
-                                                  this.toast('error', msg,`${e.error.error}:${e.error.statusCode}`)
+                                                  this.toast('error', msg,`${e.error.error}:${e.error.statusCode}`);
   }
 
 

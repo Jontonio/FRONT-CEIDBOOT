@@ -64,61 +64,61 @@ export class MenuComponent implements OnInit {
         label: 'Panel principal',
         icon: 'fa-solid fa-house',
         routerLink:'/system/dashboard',
-        role:['admin_role'],
+        role:['admin_role','supervisor_role'],
       },
       {
         label: 'Grupos',
         icon: 'fa-solid fa-users-rectangle',
         routerLink:'/system/grupos/lista-grupos',
-        role:['admin_role','user_role','viewer_role']
+        role:['admin_role','user_role','viewer_role','supervisor_role']
       },
       {
         label: 'prematriculas',
         icon: 'fa-solid fa-landmark',
         routerLink:'/system/matricula/matriculados',
-        role:['admin_role','user_role','viewer_role']
+        role:['admin_role','user_role','viewer_role','supervisor_role']
       },
       {
         label: 'Cursos',
         icon: 'fa-solid fa-book',
         routerLink:'/system/cursos/lista-cursos',
-        role:['admin_role','user_role','viewer_role']
+        role:['admin_role','user_role','viewer_role','supervisor_role']
       },
       {
         label: 'Docentes',
         icon: 'fa-solid fa-chalkboard-user',
         routerLink:'/system/docentes/lista-docentes',
-        role:['admin_role','user_role','viewer_role']
+        role:['admin_role','user_role','viewer_role','supervisor_role']
       },
       {
         label: 'Trámites',
         icon: 'fa-solid fa-file-pen',
         routerLink:'/system/tramite/lista-tramites',
-        role:['admin_role','user_role','viewer_role']
+        role:['admin_role','user_role','viewer_role','supervisor_role']
       },
       {
         label: 'ChatBot',
         icon: 'pi pi-qrcode',
         routerLink:'/system/chat-bot/list-intents',
-        role:['admin_role','user_role','viewer_role']
+        role:['admin_role','user_role','viewer_role','supervisor_role']
       },
       {
         label: 'Usuarios',
         icon: 'fa-solid fa-users',
         routerLink:'/system/usuarios/lista-usuarios',
-        role:['admin_role']
+        role:['admin_role','supervisor_role']
       },
       {
         label: 'Configuraciones',
         icon: 'fa-solid fa-gear',
         routerLink:'/system/config/general',
-        role:['admin_role']
+        role:['admin_role','supervisor_role']
       },
       {
         label: 'Perfil',
         icon: 'fa-solid fa-user',
         routerLink:'/system/perfil',
-        role:['admin_role','user_role','viewer_role']
+        role:['admin_role','user_role','viewer_role','supervisor_role']
       }
     ];
   }

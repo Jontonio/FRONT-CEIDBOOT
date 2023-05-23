@@ -1,35 +1,75 @@
-<p-card>
-  <h3 class="p-3"><i class="fa-solid fa-chart-column"></i> Historial de pagos del estudiante</h3>
-  <div class="content-chart line-chart">
-    <ngx-charts-line-chart
-    scheme="nightLights"
-    [legend]="legend"
-    [showXAxisLabel]="showXAxisLabel"
-    [showYAxisLabel]="showYAxisLabel"
-    [xAxis]="xAxis"
-    [yAxis]="yAxis"
-    [xAxisLabel]="xAxisLabel"
-    [yAxisLabel]="yAxisLabel"
-    [timeline]="timeline"
-    [results]="multi"
-    [showGridLines]="false"
-    (select)="onSelect($event)"
-    (activate)="onActivate($event)"
-    (deactivate)="onDeactivate($event)"
-    >
-  </ngx-charts-line-chart>
-  </div>
-</p-card>
-<br>
 <div class="grid">
-  <div class="col-12 md:col-6">
+  <div class="col-12 md:col-4">
     <p-card>
-
+      <h2>Información del estudiante</h2>
+      <div *ngIf="estudiante">
+        <p-divider align="left">
+          <div class="inline-flex align-items-center">
+              <i class="pi pi-user mr-2"></i>
+              <b>Datos personales</b>
+          </div>
+        </p-divider>
+        <div class="p-2">
+          <p class="pb-1"><strong>Identificación:</strong> {{ estudiante.TipoDocumento }} {{ estudiante.Documento }}</p>
+          <p class="pb-1"><strong>Nombres:</strong> {{ estudiante.Nombres }}</p>
+          <p class="pb-1"><strong>Apellido Materno:</strong> {{ estudiante.ApellidoMaterno }}</p>
+          <p class="pb-1"><strong>Apellido Paterno:</strong> {{ estudiante.ApellidoPaterno }}</p>
+          <p class="pb-1"><strong>Celular:</strong> {{ estudiante.CodePhone}} {{ estudiante.Celular }}</p>
+          <p class="pb-1"><strong>Email:</strong> {{ estudiante.Email }}</p>
+          <p class="pb-1"><strong>Dirección:</strong> {{ estudiante.Direccion }}</p>
+        </div>
+      </div>
+      <div *ngIf="apoderado">
+        <p-divider align="left" >
+          <div class="inline-flex align-items-center">
+              <i class="pi pi-user mr-2"></i>
+              <b>Datos del apoderado</b>
+          </div>
+        </p-divider>
+        <div class="p-2">
+          <p class="pb-1"><strong>Identificación:</strong> {{ apoderado.TipoDocumento }} {{ apoderado.Documento }}</p>
+          <p class="pb-1"><strong>Nombres:</strong> {{ apoderado.NomApoderado }}</p>
+          <p class="pb-1"><strong>Apellido Materno:</strong> {{ apoderado.ApellidoMApoderado }}</p>
+          <p class="pb-1"><strong>Apellido Paterno:</strong> {{ apoderado.ApellidoPApoderado }}</p>
+          <p class="pb-1"><strong>Celular:</strong> {{ apoderado.CodePhone}} {{ apoderado.CelApoderado }}</p>
+        </div>
+      </div>
+      <div *ngIf="denominServicio">
+        <p-divider align="left">
+          <div class="inline-flex align-items-center">
+              <i class="fa-solid fa-users"></i>
+              <b>Datos del tipo de población</b>
+          </div>
+        </p-divider>
+        <div class="p-2">
+          <p class="pb-1"><strong>Monto matricula:</strong> {{ denominServicio.MontoMatricula | currency: 'PEN': 'symbol': '': 'es-PE'}}</p>
+          <p class="pb-1"><strong>Monto pensión:</strong> {{ denominServicio.MontoPension | currency: 'PEN': 'symbol': '': 'es-PE'}}</p>
+          <p class="pb-1"><strong>Descripción:</strong> {{ denominServicio.Descripcion }}</p>
+        </div>
+      </div>
     </p-card>
   </div>
-  <div class="col-12 md:col-6">
-    <p-card>
-
+  <div class="col-12 md:col-8">
+    <p-card *ngIf="data.length!=0">
+      <h2 class="pb-3 ml-3"><i class="fa-solid fa-chart-column"></i> Historial de registro de pagos</h2>
+      <div class="content-chart line-chart">
+        <ngx-charts-line-chart
+        scheme="nightLights"
+        [legend]="legend"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxis]="xAxis"
+        [yAxis]="yAxis"
+        [xAxisLabel]="xAxisLabel"
+        [yAxisLabel]="yAxisLabel"
+        [timeline]="timeline"
+        [results]="data"
+        [showGridLines]="false"
+        (select)="onSelect($event)"
+        (activate)="onActivate($event)"
+        (deactivate)="onDeactivate($event)">
+      </ngx-charts-line-chart>
+      </div>
     </p-card>
   </div>
 </div>

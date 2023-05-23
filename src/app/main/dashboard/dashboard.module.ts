@@ -10,7 +10,10 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { VerticalBarChartComponent } from './components/vertical-bar-chart/vertical-bar-chart.component';
 import { LineChartComponent } from './components/line-chart/line-chart.component';
 import { PieGridChartComponent } from './components/pie-grid-chart/pie-grid-chart.component';
-
+import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NgxPrintModule } from 'ngx-print';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -18,14 +21,18 @@ import { PieGridChartComponent } from './components/pie-grid-chart/pie-grid-char
     HorizontalBarChartComponent,
     VerticalBarChartComponent,
     LineChartComponent,
-    PieGridChartComponent
+    PieGridChartComponent,
   ],
   imports: [
     CommonModule,
     DashboardRoutingModule,
+    ReactiveFormsModule,
     PrimengModule,
     MaterialModule,
-    NgxChartsModule
+    NgxChartsModule,
+    HttpClientModule,
+    NgxPrintModule,
+    SharedModule
   ]
 })
 export class DashboardModule { }

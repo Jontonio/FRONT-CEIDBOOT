@@ -13,9 +13,9 @@ class EstadoGrupo {
   updatedAt: Date;
 
   constructor(estadoGrupo:string, descripcionEstadoGrupo:string, CodeEstado:string){
-    this.EstadoGrupo = estadoGrupo;
+    this.EstadoGrupo = estadoGrupo.toLowerCase();
     this.DescripcionEstadoGrupo = descripcionEstadoGrupo;
-    this.CodeEstado = CodeEstado;
+    this.CodeEstado = CodeEstado.toLowerCase();
   }
 
 }

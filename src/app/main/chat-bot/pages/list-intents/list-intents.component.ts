@@ -34,7 +34,6 @@ export class ListIntentsComponent implements OnInit {
         this.isLoading = false;
         if(value.ok){
           this.listIntents = value.data as Array<Intent>;
-          console.log(this.listIntents)
         }
       },
       error: (e) => {
@@ -48,7 +47,6 @@ export class ListIntentsComponent implements OnInit {
     const { name } = intent
     const splitName = name.split('/');
     const uuid  = splitName[splitName.length - 1];
-    console.log(intent)
     this.route.navigate(['/system/chat-bot/intent', uuid])
   }
 

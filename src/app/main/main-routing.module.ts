@@ -15,7 +15,7 @@ const routes: Routes = [
         path:'welcome',
         canActivate:[HasRoleGuard],
         data:{
-          rolesPermitidos:['admin_role','user_role','viewer_role']
+          rolesPermitidos:['admin_role','user_role','viewer_role','supervisor_role']
         },
         component:WelcomeComponent
       },
@@ -23,7 +23,7 @@ const routes: Routes = [
         path:'dashboard',
         canActivate:[HasRoleGuard],
         data:{
-          rolesPermitidos:['admin_role']
+          rolesPermitidos:['admin_role','supervisor_role']
         },
         loadChildren: () => import('./dashboard/dashboard.module').then( mod => mod.DashboardModule )
       },
@@ -31,7 +31,7 @@ const routes: Routes = [
         path:'docentes',
         canActivate:[HasRoleGuard],
         data:{
-          rolesPermitidos:['admin_role','user_role']
+          rolesPermitidos:['admin_role','user_role','supervisor_role']
         },
         loadChildren: () => import('./docente/docente.module').then( mod => mod.DocenteModule )
       },
@@ -39,7 +39,7 @@ const routes: Routes = [
         path:'cursos',
         canActivate:[HasRoleGuard],
         data:{
-          rolesPermitidos:['admin_role','user_role']
+          rolesPermitidos:['admin_role','user_role','supervisor_role']
         },
         loadChildren: () => import('./curso/curso.module').then( mod => mod.CursoModule )
       },
@@ -47,7 +47,7 @@ const routes: Routes = [
         path:'grupos',
         canActivate:[HasRoleGuard],
         data:{
-          rolesPermitidos:['admin_role','user_role']
+          rolesPermitidos:['admin_role','user_role','supervisor_role']
         },
         loadChildren: () => import('./grupo/grupo.module').then( mod => mod.GrupoModule )
       },
@@ -55,7 +55,7 @@ const routes: Routes = [
         path:'matricula',
         canActivate:[HasRoleGuard],
         data:{
-          rolesPermitidos:['admin_role','user_role']
+          rolesPermitidos:['admin_role','user_role','supervisor_role']
         },
         loadChildren: () => import('./matricula/matricula.module').then( mod => mod.MatriculaModule )
       },
@@ -63,7 +63,7 @@ const routes: Routes = [
         path:'tramite',
         canActivate:[HasRoleGuard],
         data:{
-          rolesPermitidos:['admin_role','user_role']
+          rolesPermitidos:['admin_role','user_role','supervisor_role']
         },
         loadChildren: () => import('./tramites/tramites.module').then( mod => mod.TramitesModule )
       },
@@ -71,14 +71,14 @@ const routes: Routes = [
         path:'chat-bot',
         canActivate:[HasRoleGuard],
         data:{
-          rolesPermitidos:['admin_role','user_role']
+          rolesPermitidos:['admin_role','user_role','supervisor_role']
         },
         loadChildren: () => import('./chat-bot/chat-bot.module').then( mod => mod.ChatBotModule )
       },
       {
         canActivate:[HasRoleGuard],
         data:{
-          rolesPermitidos:['admin_role']
+          rolesPermitidos:['admin_role','supervisor_role']
         },
         path:'config',
         loadChildren: () => import('./config/config.module').then( mod => mod.ConfigModule )
@@ -88,7 +88,7 @@ const routes: Routes = [
         path:'usuarios',
         canActivate:[HasRoleGuard],
         data:{
-          rolesPermitidos:['admin_role']
+          rolesPermitidos:['admin_role','supervisor_role']
         },
         loadChildren: () => import('./usuario/usuario.module').then( mod => mod.usuarioModule )
       },
@@ -96,7 +96,7 @@ const routes: Routes = [
         path:'perfil',
         canActivate:[HasRoleGuard],
         data:{
-          rolesPermitidos:['admin_role','user_role','viewer_role']
+          rolesPermitidos:['admin_role','user_role','viewer_role','supervisor_role']
         },
         loadChildren: () => import('./perfil/perfil.module').then( mod => mod.PerfilModule )
       },

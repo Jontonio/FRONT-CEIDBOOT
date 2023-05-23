@@ -1,40 +1,41 @@
-<p-card>
-  <h3>Lista de intents</h3>
-  <p-table [value]="listIntents" [resizableColumns]="true" columnResizeMode="expand" responsiveLayout="scroll">
-    <ng-template pTemplate="header">
+<p-card header="Lista de intents">
+  <div class="table-responsive">
+    <p-table [value]="listIntents" [resizableColumns]="true" columnResizeMode="expand" responsiveLayout="scroll">
+      <ng-template pTemplate="header">
+          <tr>
+              <th>ID</th>
+              <th>Nombre del Intent</th>
+              <th>WebHook</th>
+              <th>Operación</th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-intent let-rowIndex="rowIndex">
+          <tr>
+           <td>{{rowIndex+1}}</td>
+           <td><p-tag severity="success" [rounded]="true">{{intent.displayName}}</p-tag></td>
+           <td>{{intent.webhookState}}</td>
+           <td>
+            <span class="p-buttonset">
+              <button mat-button class="button-custom-round" (click)="moreInfoIntent(intent)">
+                <i class="fa-regular fa-comments"></i> Respuestas
+              </button>
+            </span>
+           </td>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage" *ngIf="!isLoading && (!listIntents || listIntents.length === 0)">
         <tr>
-            <th>ID</th>
-            <th>Nombre del Intent</th>
-            <th>WebHook</th>
-            <th>Operación</th>
+          <td colspan="10">
+            <app-lista-vacia [msg]="'No se encontraron intents para el chatbot'"></app-lista-vacia>
+          </td>
         </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-intent let-rowIndex="rowIndex">
-        <tr>
-         <td>{{rowIndex+1}}</td>
-         <td><p-tag severity="success" [rounded]="true">{{intent.displayName}}</p-tag></td>
-         <td>{{intent.webhookState}}</td>
-         <td>
-          <span class="p-buttonset">
-            <button mat-button class="button-custom-round" (click)="moreInfoIntent(intent)">
-              <i class="fa-regular fa-comments"></i> Respuestas
-            </button>
-          </span>
-         </td>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="emptymessage" *ngIf="!isLoading && (!listIntents || listIntents.length === 0)">
-      <tr>
-        <td colspan="10">
-          <app-lista-vacia [msg]="'No se encontraron intents para el chatbot'"></app-lista-vacia>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
-  <div *ngIf="isLoading" class="text-center mt-4">
-    <div class="flex flex-column">
-      <i class="pi pi-spin pi-spinner m-2" style="font-size: 2rem"></i>
-      <p>Cargando...</p>
+      </ng-template>
+    </p-table>
+    <div *ngIf="isLoading" class="text-center mt-4">
+      <div class="flex flex-column">
+        <i class="pi pi-spin pi-spinner m-2" style="font-size: 2rem"></i>
+        <p>Cargando...</p>
+      </div>
     </div>
   </div>
 </p-card>

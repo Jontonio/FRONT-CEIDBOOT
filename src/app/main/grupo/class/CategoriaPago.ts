@@ -11,8 +11,8 @@ class CategoriaPago{
     createdAt:Date;
     updatedAt:Date;
     constructor(TipoCategoriaPago:string, CodeCategoriaPago:string){
-      this.TipoCategoriaPago = TipoCategoriaPago;
-      this.CodeCategoriaPago = CodeCategoriaPago;
+      this.TipoCategoriaPago = TipoCategoriaPago.toLowerCase();
+      this.CodeCategoriaPago = CodeCategoriaPago.toLocaleLowerCase();
     }
 }
 
