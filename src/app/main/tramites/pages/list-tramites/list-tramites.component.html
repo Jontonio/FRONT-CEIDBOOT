@@ -96,7 +96,7 @@
                     <mat-icon><i class="fa-brands fa-whatsapp"></i></mat-icon>
                     <span>Notificar estudiante</span>
                   </button>
-                  <button mat-menu-item (click)="confirmDeleteTramite(tramite)">
+                  <button mat-menu-item *showForRoles="['admin_role','supervisor_role']" (click)="confirmDeleteTramite(tramite)">
                     <mat-icon><i class="fa-solid fa-trash-can"></i></mat-icon>
                     <span>Eliminar</span>
                   </button>

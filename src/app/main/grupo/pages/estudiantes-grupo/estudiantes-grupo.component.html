@@ -64,8 +64,13 @@
         <div class="p-1 content-time-line">
           <p-timeline [value]="grupo.grupoModulo" layout="horizontal" align="top">
             <ng-template pTemplate="content" let-data>
-              <div class="p-1 tag-a content-date" (click)="opendModalEdit(data, grupo.Id)">
-                <p-tag>{{ data.FechaPago | date:'mediumDate' | titlecase }} <i class="fa-solid fa-pen ml-2"></i></p-tag>
+              <div class="p-1 tag-a content-date">
+                <div (click)="opendModalEdit(data, grupo.Id, true)">
+                  <p-tag severity="success">Inicio {{ data.FechaPago | date:'mediumDate' | titlecase }} <i class="fa-solid fa-pen ml-2"></i></p-tag>
+                </div>
+                <div class="mt-1" (click)="opendModalEdit(data, grupo.Id, false)">
+                  <p-tag severity="error">Final {{ data.FechaFinalModulo | date:'mediumDate' | titlecase }} <i class="fa-solid fa-pen ml-2"></i></p-tag>
+                </div>
               </div>
             </ng-template>
             <ng-template pTemplate="opposite" let-event>
@@ -175,7 +180,7 @@
         <ng-template pTemplate="rowexpansion" let-grupo>
           <tr>
             <td colspan="11">
-              <h2 class="pb-3">Lista de pagos</h2>
+              <h2 class="pb-3"><i class="fa-solid fa-money-check-dollar"></i> Lista de pagos</h2>
               <div class="p-p-3">
                 <p-table [value]="grupo.pagos | filterPago:selectCategoria" responsiveLayout="scroll" dataKey="Id">
                   <ng-template pTemplate="header">
@@ -242,6 +247,63 @@
               </div>
             </td>
           </tr>
+          <tr>
+            <td colspan="11">
+              <h2 class="pb-3"><i class="fa-solid fa-sack-xmark"></i> Lista de moras</h2>
+              <div class="p-p-3">
+                <p-table [value]="grupo.moras | filterMora" responsiveLayout="scroll" dataKey="Id">
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th>N°</th>
+                      <th>Fecha de registro</th>
+                      <th colspan="2">Módulo del curso</th>
+                      <th>Estado mora</th>
+                      <th>Monto mora</th>
+                      <th colspan="2">Operación con la mora</th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-rowIndex="rowIndex" let-mora>
+                    <tr>
+                      <td>{{rowIndex+1}}</td>
+                      <td>{{mora.createdAt | date:'MMMM d, y, h:mm:ss a'}}</td>
+                      <td colspan="2">Mora del módulo {{mora.grupoModulo.modulo.Modulo}}</td>
+                      <td>
+                        <div *ngIf="mora.Verificado, else NotVerifyMora">
+                          <p-tag icon="pi pi-check" value="Verificado"></p-tag>
+                        </div>
+                        <ng-template #NotVerifyMora>
+                          <p-tag icon="pi pi-times" severity="danger" value="No verificado"></p-tag>
+                        </ng-template>
+                      </td>
+                      <td>{{mora.MontoMora | currency: 'PEN': 'symbol': '': 'es-PE'}}</td>
+                      <td class="flex" colspan="2">
+                        <div *ngIf="!mora.Verificado, else invalidar">
+                          <button mat-raised-button
+                                  (click)="confirmValidarMora(mora, true)"
+                                  color="success" class="mr-2"><i class="fa-solid fa-circle-check"></i> Mora pagada</button>
+                        </div>
+                        <ng-template #invalidar>
+                          <button mat-raised-button
+                                  (click)="confirmValidarMora(mora, false)"
+                                  color="success" class="mr-2"><i class="fa-solid fa-circle-check"></i> Invalidar mora</button>
+                        </ng-template>
+
+                        <button mat-raised-button
+                                *showForRoles="['admin_role','supervisor_role']"
+                                (click)="confirmEliminarMora(mora)"
+                                color="danger"><i class="fa-solid fa-trash"></i> Eliminar mora</button>
+                      </td>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="emptymessage">
+                      <tr>
+                          <td colspan="11"><app-lista-vacia msg="No se encontraron registros del estudiante"></app-lista-vacia></td>
+                      </tr>
+                  </ng-template>
+                </p-table>
+              </div>
+            </td>
+          </tr>
         </ng-template>
         <ng-template pTemplate="emptymessage">
           <tr>
@@ -278,12 +340,14 @@
 <app-modal-mensualidad [nameEventUpdate]="nameEventSocket"></app-modal-mensualidad>
 <!-- componente modal para las fechas de pago -->
 <app-modal-fechas-pago [formFecha]="formFecha"
+                       [updateFechaInicio]="updateFechaInicio"
                        [visibleModal]="visibleModalFecha"
                        (estadoModal)="estadoModalFecha($event)"></app-modal-fechas-pago>
 <!-- side bar message whatsapp -->
 <app-sidebar-message [sidebarMessage]="openSidebarMessage"
                      [dataEstudiante]="dataEstudianteMessage"
                      (estadoModal)="estadoModalMessage($event)"></app-sidebar-message>
+
 <!-- Delete message dialog estududiante del grupo -->
 <p-confirmDialog [style]="{width: '50vw'}"
                  key="deleteEstudentGrupoDialog"
@@ -292,6 +356,7 @@
                  acceptLabel="Confirmar"
                  [breakpoints]="{'960px': '75vw', '640px': '100vw'}"
                  rejectButtonStyleClass="p-button-outlined"></p-confirmDialog>
+
 <!-- Delete message dialog eliminar pago -->
 <p-confirmDialog [style]="{width: '50vw'}"
                  key="deletePagoDialog"
@@ -300,3 +365,20 @@
                  acceptLabel="Confirmar"
                  [breakpoints]="{'960px': '75vw', '640px': '100vw'}"
                  rejectButtonStyleClass="p-button-outlined"></p-confirmDialog>
+
+<!-- Confirmar validarMora -->
+<p-confirmDialog [style]="{width: '50vw'}"
+                  key="confirmValidarMoraDialog"
+                  position="top"
+                  [baseZIndex]="10000"
+                  acceptLabel="Confirmar"
+                  [breakpoints]="{'960px': '75vw', '640px': '100vw'}"
+                  rejectButtonStyleClass="p-button-outlined"></p-confirmDialog>
+
+<p-confirmDialog [style]="{width: '50vw'}"
+                  key="confirmEliminarMoraDialog"
+                  position="top"
+                  [baseZIndex]="10000"
+                  acceptLabel="Confirmar"
+                  [breakpoints]="{'960px': '75vw', '640px': '100vw'}"
+                  rejectButtonStyleClass="p-button-outlined"></p-confirmDialog>

@@ -425,11 +425,34 @@ footer{
 .p-menubar-root-list>.p-menuitem-active>p-menubarsub>.p-submenu-list{
   width: 250px;
 }
+.table-responsive{
+  overflow-x: scroll !important;
+}
+/* Asignamos ancho y alto del scrollbar de la pagina*/
+.table-responsive::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+/* Ponemos un color de fondo y redondeamos las esquinas del thumb */
+.table-responsive::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+/* Cambiamos el fondo y agregamos una sombra cuando esté en hover */
+.table-responsive::-webkit-scrollbar-thumb:hover {
+  background: #b3b3b3;
+  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+}
 .content-info-operacion{
   background: var(--surface-100);
   color: #676767;
   border-radius: 5px;
   padding: 8px;
+}
+.mat-tab-label, .mat-tab-link{
+  color: var(--text-color);
 }
 .content-file{
   background: var(--surface-100);

@@ -39,8 +39,10 @@
                 <td>
                   {{docente.Direccion}}
                 </td>
-                <td>
-                  <button mat-raised-button color="warn" (click)="dialogDelete(docente)"><i class="fa-solid fa-trash"></i> Eliminar</button>
+                <td class="flex">
+                  <div *showForRoles="['admin_role','supervisor_role']">
+                    <button mat-raised-button color="warn" (click)="dialogDelete(docente)"><i class="fa-solid fa-trash"></i> Eliminar</button>
+                  </div>
                   <button mat-raised-button (click)="sendEditDocente(docente)" class="ml-2"><i class="pi pi-pencil"></i> Editar</button>
                 </td>
             </tr>

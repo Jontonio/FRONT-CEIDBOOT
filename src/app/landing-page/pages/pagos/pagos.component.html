@@ -190,7 +190,7 @@
                   <div class="flex justify-content-between justify-content-center align-items-center file-content">
                     <label class="block label-file">
                       <p *ngIf="setPrecio">
-                        {{setPrecio.mensaje}} <strong>{{setPrecio.monto | currency: 'PEN': 'symbol': '': 'es-PE'}}</strong>
+                        {{setPrecio.mensaje}} <strong *ngIf="setPrecio.visibleInput">{{setPrecio.monto | currency: 'PEN': 'symbol': '': 'es-PE'}}</strong>
                       </p>
                     </label>
                     <div class="flex flex-column">

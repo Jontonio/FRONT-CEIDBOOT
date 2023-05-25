@@ -626,6 +626,12 @@ export class FormMatriculaComponent implements OnInit {
 
   ready(){
 
+    console.log(this.formMayorEdad)
+    console.log(this.formAcademica)
+    console.log(this.formEstudiante)
+    console.log(this.formGrupo)
+    console.log(this.formFiles)
+
     if(this.formFiles.invalid){
       Object.keys(this.formFiles.controls).forEach( input => {
         this.formFiles.controls[input].markAsDirty();

@@ -2,6 +2,7 @@ import { Estudiante } from "../../matricula/class/Estudiante";
 import { Matricula } from "../../matricula/class/Matricula";
 import { EstadoGrupoEstudiante } from "./EstadoGrupoEstudiante";
 import { Grupo } from "./Grupo";
+import { Mora } from "./Mora";
 import { Pago } from "./Pago";
 
 class ResEstudianteEnGrupo {
@@ -18,6 +19,7 @@ class EstudianteEnGrupo {
   grupo:Grupo;
   Estado:boolean;
   matricula:Matricula;
+  moras:Mora[];
   pagos?:Pago[];
   createdAt:Date;
   updateddAt:Date;

@@ -30,6 +30,10 @@ class Grupo {
   tipoGrupo:TipoGrupo;
   curso:Curso;
   grupoModulo:GrupoModulo[];
+  AplicaMora: boolean;
+  MontoMora: number;
+  NotificarGrupo: boolean;
+  NumDiasHolaguraMora: number;
 }
 
 class TipoGrupo {

@@ -74,7 +74,7 @@
                     <mat-icon><i class="fa-solid fa-pen-to-square"></i></mat-icon>
                     <span>Editar curso</span>
                   </button>
-                  <button mat-menu-item (click)="dialogDelete(curso)">
+                  <button mat-menu-item *showForRoles="['admin_role','supervisor_role']" (click)="dialogDelete(curso)">
                     <mat-icon><i class="fa-solid fa-trash-can"></i></mat-icon>
                     <span>Dar de baja al curso</span>
                   </button>

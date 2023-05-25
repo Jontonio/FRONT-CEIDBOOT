@@ -26,6 +26,7 @@ import { ChatBotModule } from '../chat-bot/chat-bot.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { ModalFechasPagoComponent } from './components/modal-fechas-pago/modal-fechas-pago.component';
 import { MainModule } from '../main.module';
+import { FilterMoraPipe } from './pipes/filter-mora.pipe';
 
 
 @NgModule({
@@ -46,6 +47,7 @@ import { MainModule } from '../main.module';
     FilterGrupoPipe,
     InfoEstudianteComponent,
     ModalFechasPagoComponent,
+    FilterMoraPipe,
   ],
   imports: [
     CommonModule,

@@ -10,6 +10,7 @@ import { ResEstadoEstudEnGrupo, ResEstudianteEnGrupo } from '../class/Estudiante
 import { Pago, ResPago } from '../class/Pago';
 import { ResEstadoGrupo } from '../class/EstadoGrupo';
 import { GrupoModulo, ResGrupoModulo } from '../class/GrupoModulo';
+import { Mora, ResMora } from '../class/Mora';
 
 
 @Injectable({
@@ -106,6 +107,14 @@ export class GrupoService{
 
   deletePago(id:number){
     return this.http.delete<ResPago>(`${this.BASE_URL}/pago/delete-pago/${id}`);
+  }
+
+  deleteMora(id:number){
+    return this.http.delete<ResMora>(`${this.BASE_URL}/pago/delete-mora/${id}`);
+  }
+
+  updateMora(id:number, data:Mora){
+    return this.http.patch<ResMora>(`${this.BASE_URL}/pago/update-mora/${id}`, data);
   }
 
   /** Listen Sockets */

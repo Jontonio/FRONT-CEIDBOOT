@@ -123,6 +123,7 @@ export class VerCursoComponent implements OnInit {
           this.formLibro.reset();
           this.sidebarVisible = false;
           this.toast('success', value.msg);
+          this.getIdCurso(this.activeRoute);
           return;
         }
       },
@@ -143,6 +144,7 @@ export class VerCursoComponent implements OnInit {
           this.isUpdate = false;
           this.sidebarVisible = false;
           this.toast('success', value.msg);
+          this.getIdCurso(this.activeRoute);
           return;
         }
         this.toast('warn', value.msg);

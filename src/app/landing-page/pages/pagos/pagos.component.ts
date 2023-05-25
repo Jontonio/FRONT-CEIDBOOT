@@ -5,7 +5,6 @@ import { MatButton } from '@angular/material/button';
 import { Button } from 'primeng/button';
 import { MatStepper } from '@angular/material/stepper';
 import { Curso } from 'src/app/main/curso/class/Curso';
-// import { EstudianteestudianteEnGrupo, ResEstudianteestudianteEnGrupo } from 'src/app/main/grupo/class/EstudianteGrupo';
 import { GlobalService } from 'src/app/services/global.service';
 import { Message, MessageService } from 'primeng/api';
 import { switchMap } from 'rxjs';
@@ -202,6 +201,7 @@ export class PagosComponent {
   }
 
   setearPrecios(categoria:CategoriaPago){
+
     if(categoria.CodeCategoriaPago=='category_mensualidad'){
       const monto = this.selectedGrupo.matricula.denomiServicio.MontoPension
       this.MontoPago.setValue( monto );
@@ -212,6 +212,7 @@ export class PagosComponent {
       }
       return;
     }
+
     if(categoria.CodeCategoriaPago=='category_matricula'){
       const monto = this.selectedGrupo.matricula.denomiServicio.MontoMatricula
       this.MontoPago.setValue( monto );
@@ -224,10 +225,10 @@ export class PagosComponent {
     }
 
     if(categoria.CodeCategoriaPago=='category_libro'){
-      this.MontoPago.setValue( null );
+      this.MontoPago.setValue( 0.0 );
       this.setPrecio = {
         mensaje:'Para más información del precio del libro comuniquese con del CEID',
-        monto: null,
+        monto: 0.0,
         visibleInput:false
       }
       return;
@@ -248,7 +249,7 @@ export class PagosComponent {
     this.MontoPago.setValue( 0.0 );
       this.setPrecio = {
         mensaje:'Para más información del precio comuniquese con del CEID',
-        monto: null,
+        monto: 0.0,
         visibleInput:false
     }
 
@@ -306,7 +307,6 @@ export class PagosComponent {
     this.selectedGrupo = data;
     console.log(this.selectedGrupo)
     this.listModulogrupo = this.selectedGrupo.grupo.grupoModulo;
-    this.listModulogrupo.pop();
     const current = this.listModulogrupo.filter( gModulo => gModulo.CurrentModulo == true )
     this.currentModulo = current?current[0]:null;
   }
@@ -342,12 +342,17 @@ export class PagosComponent {
 
   addValidatorsGrupoModulo(){
     this.grupoModulo.addValidators([ Validators.required ]);
+    // this.MontoPago.addValidators([ Validators.required ]);
   }
 
   clearValidatorsGrupoModulo(){
     this.grupoModulo.clearValidators();
     this.grupoModulo.updateValueAndValidity();
     this.grupoModulo.markAsPristine();
+
+    // this.MontoPago.clearValidators();
+    // this.MontoPago.updateValueAndValidity();
+    // this.MontoPago.markAsPristine();
   }
 
   selectFile(fileChangeEvent:any){
@@ -360,7 +365,7 @@ export class PagosComponent {
   }
 
   save(){
-
+    console.log(this.formFile)
     if(this.formFile.invalid){
       Object.keys( this.formFile.controls ).forEach(input => this.formFile.controls[input].markAsDirty())
       return;

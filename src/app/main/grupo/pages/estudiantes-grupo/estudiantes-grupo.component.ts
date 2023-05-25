@@ -23,6 +23,7 @@ import * as moment from 'moment';
 import {EstadoGrupoEstudiante, InfoDateGrupo } from '../../class/EstadoGrupoEstudiante';
 import { GrupoModulo } from '../../class/GrupoModulo';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Mora } from '../../class/Mora';
 
 @Component({
   selector: 'app-estudiantes-grupo',
@@ -48,6 +49,7 @@ export class EstudiantesGrupoComponent implements OnInit {
   expanded:boolean = false;
   displayFile:boolean = false;
   openSidebarMessage:boolean = false;
+  updateFechaInicio:boolean = true;
   fileURL:string;
   terminoBusqueda:string = '';
   infoDateGrupo:InfoDateGrupo;
@@ -83,6 +85,7 @@ export class EstudiantesGrupoComponent implements OnInit {
       Id:[null, Validators.required],
       CurrentModulo:[null, Validators.required],
       FechaPago:[null, Validators.required],
+      FechaFinalModulo:[null, Validators.required],
       modulo:[null, Validators.required],
       grupo:[null, Validators.required],
     })
@@ -135,7 +138,6 @@ export class EstudiantesGrupoComponent implements OnInit {
     .subscribe({
       next: (value) => {
         this.loadingLista = false;
-        console.log(value.data)
         if(value.ok){
           this.resAlumnoEnGrupo = value;
           this.grupo = value.data.grupo;
@@ -174,8 +176,13 @@ export class EstudiantesGrupoComponent implements OnInit {
                                     this.grupo.grupoModulo);
   }
 
-  opendModalEdit(data:GrupoModulo, Id:number){
+  opendModalEdit(data:GrupoModulo, Id:number, updateFechaInicio:boolean){
+    this.updateFechaInicio = updateFechaInicio;
+    const fechaPago = data.FechaPago;
+    const fechaFinalModulo = data.FechaFinalModulo;
+
     data.FechaPago = (moment(data.FechaPago)).toDate()
+    data.FechaFinalModulo = (moment(data.FechaFinalModulo)).toDate()
     data.grupo = { Id } as Grupo;
     this.formFecha.patchValue(data);
     this.visibleModalFecha = true;
@@ -251,7 +258,7 @@ export class EstudiantesGrupoComponent implements OnInit {
         console.log("No eliminar");
       },
       key: "deletePagoDialog"
-  });
+    });
   }
 
   onListaEstudiantesCurso(){
@@ -259,6 +266,82 @@ export class EstudiantesGrupoComponent implements OnInit {
       next:(value) => {
         this.grupo = value.data.grupo;
         this.listaEstudiantes = value.data.estudiantesEnGrupo;
+      },
+      error:(e) => {
+        console.log(e)
+        this.messageError(e)
+      }
+    })
+  }
+
+  /**
+   *
+   *
+   * Mora
+   *
+   *
+   */
+
+  confirmValidarMora(mora:Mora, Verificado:boolean){
+    this.confirService.confirm({
+      message: `<b>¿Está seguro de ${Verificado?'validar':'invalidar'} la mora del estudiante?</b><br>
+                Una vez confirmado, el estudiante ${Verificado?'es':'no es'} subsanado de la mora de ese módulo`,
+      header: `Confirmación de validación de mora`,
+      icon: 'pi pi-info-circle',
+      accept: () => {
+        this.validarMora(mora.Id, Verificado);
+      },
+      reject: (type:any) => {
+        console.log("No eliminar");
+      },
+      key: "confirmValidarMoraDialog"
+    });
+    console.log(mora)
+  }
+
+  confirmEliminarMora(mora:Mora){
+    this.confirService.confirm({
+      message: `<b>¿Está seguro de eliminar la mora del estudiante?</b><br>
+                Una vez confirmado, el estudiante no contará con esa mora del módulo escrito mora de ese módulo`,
+      header: `Confirmación de eiminación de mora`,
+      icon: 'pi pi-info-circle',
+      accept: () => {
+        this.eliminarMora(mora.Id);
+      },
+      reject: (type:any) => {
+        console.log("No eliminar");
+      },
+      key: "confirmEliminarMoraDialog"
+    });
+    console.log(mora)
+  }
+
+  validarMora(Id:number, Verificado:boolean){
+    this._grupo.updateMora(Id,{ Verificado } as Mora).subscribe({
+      next:(value) => {
+        if(value.ok){
+          this.toast('success', value.msg);
+          this._socket.EmitEvent('updated_list_estudiante_grupo', { Id:this.idGrupo, limit:this.limit, offset:this.offset });
+          return;
+        }
+        this.toast('warn', value.msg);
+      },
+      error:(e) => {
+        console.log(e)
+        this.messageError(e)
+      }
+    })
+  }
+
+  eliminarMora(Id:number){
+    this._grupo.deleteMora(Id).subscribe({
+      next:(value) => {
+        if(value.ok){
+          this.toast('success', value.msg);
+          this._socket.EmitEvent('updated_list_estudiante_grupo', { Id:this.idGrupo, limit:this.limit, offset:this.offset });
+          return;
+        }
+        this.toast('warn', value.msg);
       },
       error:(e) => {
         console.log(e)

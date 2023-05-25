@@ -9,6 +9,7 @@ class GrupoModulo{
   Id: number;
   CurrentModulo: boolean;
   FechaPago: Date;
+  FechaFinalModulo:Date;
   modulo: Modulo;
   grupo:Grupo;
   createdAt: Date

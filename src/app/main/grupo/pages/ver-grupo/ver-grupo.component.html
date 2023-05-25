@@ -16,6 +16,7 @@
                 pRipple
                 type="button"
                 icon="fa-solid fa-users"
+                [routerLink]="['/system/grupos/estudiantes-grupo', grupo.Id]"
                 pTooltip="Estudiantes en el grupo" tooltipPosition="bottom"
                 class="p-button-rounded p-button-text p-button-plain custom-btn"></button>
         <button pButton
@@ -24,13 +25,6 @@
                 icon="fa-solid fa-pen-to-square"
                 [routerLink]="['/system/grupos/edit-grupo', grupo.Id]"
                 pTooltip="Editar grupo" tooltipPosition="bottom"
-                class="p-button-rounded p-button-text p-button-plain custom-btn"></button>
-        <button pButton
-                pRipple
-                type="button"
-                icon="fa-solid fa-trash-can"
-                [routerLink]="['/system/grupos/edit-grupo', grupo.Id]"
-                pTooltip="Dar de baja el grupo" tooltipPosition="bottom"
                 class="p-button-rounded p-button-text p-button-plain custom-btn"></button>
       </div>
       <div class="mt-2">
@@ -75,8 +69,9 @@
           </div>
         </p-fieldset>
       </div>
-      <div class="mt-3">
-        <p-fieldset legend="Estado del grupo">
+      <div class="mt-3" *showForRoles="['admin_role','supervisor_role']">
+        <p-card>
+          <h2>Estado del grupo</h2>
           <div class="col-12">
             <p-dropdown class="p-fluid p-grid p-formgrid"
                         [options]="listEstadoGrupo"
@@ -93,7 +88,7 @@
                     (click)="saveEstadoGrupo()"
                     [disabled]="loadingSave">Guardar</button>
           </div>
-        </p-fieldset>
+        </p-card>
       </div>
     </div>
     <div class="col-12 md:col-8">
@@ -154,6 +149,73 @@
           </div>
         </div>
       </p-card>
+      <div class="mt-2">
+        <p-card>
+          <h2>Recordatorios de pagos y moras</h2>
+          <article class="p-2 mt-2">
+            <app-note-message msg="Es importante tomar en cuentas estas opciones para realizar los cobros de los grupos.
+            Cada grupo tiene estas opciones a considerar."></app-note-message>
+          </article>
+          <div>
+            <form [formGroup]="formRecodatorioPago">
+              <div class="col-12">
+                <label for="RT" class="block mb-2">Aplicar mora al grupo</label>
+                <div class="field-checkbox">
+                  <p-checkbox [binary]="true" inputId="RT" formControlName="AplicaMora"></p-checkbox>
+                  <label for="RT">Marque el check para aplicar la mora al grupo en cada mensualidad del curso.</label>
+                </div>
+                <!-- <small *ngIf="RequiTecnologico.hasError('required') && RequiTecnologico.dirty"
+                            class="p-error">Este campo es <strong>requerido</strong></small> -->
+              </div>
+              <div class="col-12">
+                <label for="NG" class="block mb-2">Enviar recordatorios de pago</label>
+                <div class="field-checkbox">
+                  <p-checkbox [binary]="true" inputId="NG" formControlName="NotificarGrupo"></p-checkbox>
+                  <label for="NG">Marque el check para enviar recordatorios de pago al grupo. Esta función necesita tener a CEIDBOT activo.</label>
+                </div>
+                <!-- <small *ngIf="RequiTecnologico.hasError('required') && RequiTecnologico.dirty"
+                            class="p-error">Este campo es <strong>requerido</strong></small> -->
+              </div>
+              <div class="col">
+                <label for="MontoPago" class="block mb-2">Monto de mora del grupo S/.</label>
+                <p-inputNumber inputId="minmaxfraction"
+                                mode="decimal"
+                                placeholder="Monto de mora"
+                                class="p-fluid p-grid p-formgrid full-width"
+                                formControlName="MontoMora"
+                                [min]="0"
+                                [max]="100"
+                                [minFractionDigits]="2"
+                                [maxFractionDigits]="5"></p-inputNumber>
+                <!-- <small *ngIf="MontoPago.hasError('pattern') && !MontoPago.hasError('required')"
+                        class="p-error">Digite un monto de pago <strong>válido</strong></small>
+                <small *ngIf="MontoPago.hasError('required') && MontoPago.dirty"
+                        class="p-error">El campo monto de pago es <strong>requerido</strong></small> -->
+              </div>
+              <div class="col">
+                <label for="NumDiasHolaguraMora" class="block mb-2">Número de dias de holgura</label>
+                <p-inputNumber  inputId="integeronly"
+                                mode="decimal"
+                                [useGrouping]="false"
+                                placeholder="Número de dias de holgura"
+                                class="p-fluid p-grid p-formgrid full-width"
+                                formControlName="NumDiasHolaguraMora"
+                                [min]="0"
+                                [max]="20"></p-inputNumber>
+                <!-- <small *ngIf="MontoPago.hasError('pattern') && !MontoPago.hasError('required')"
+                        class="p-error">Digite un monto de pago <strong>válido</strong></small>
+                <small *ngIf="MontoPago.hasError('required') && MontoPago.dirty"
+                        class="p-error">El campo monto de pago es <strong>requerido</strong></small> -->
+              </div>
+              <div align="end" class="col">
+                <button mat-raised-button
+                        (click)="save()"
+                        [disabled]="saveLoading"><i [class]="saveLoading?'pi pi-spin pi-spinner':'pi pi-save'"></i> Guardar</button>
+              </div>
+            </form>
+          </div>
+        </p-card>
+      </div>
     </div>
   </div>
 

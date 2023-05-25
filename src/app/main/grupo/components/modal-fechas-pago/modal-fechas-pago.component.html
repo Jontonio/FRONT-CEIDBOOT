@@ -4,18 +4,34 @@
           [closable]="false"
           [style]="{ width: '40vw'}">
           <form [formGroup]="formFecha">
-            <p-calendar inputId="FechaNacimiento"
-                        formControlName="FechaPago"
-                        placeholder="DD-MM-AAAA"
-                        dateFormat="dd-mm-yy"
-                        [inline]="true"
-                        class="p-fluid p-grid p-formgrid">
-                        <ng-template pTemplate="header">
-                          <div class="content-selected-date">
-                            <b>Fecha | </b>{{FechaPago.value | date:'fullDate'}}
-                          </div>
-                        </ng-template>
-            </p-calendar>
+            <div *ngIf="updateFechaInicio, else updateFechaFinal">
+              <p-calendar inputId="FechaPago"
+                          formControlName="FechaPago"
+                          placeholder="DD-MM-AAAA"
+                          dateFormat="dd-mm-yy"
+                          [inline]="true"
+                          class="p-fluid p-grid p-formgrid">
+                          <ng-template pTemplate="header">
+                            <div class="content-selected-date">
+                              <b>FECHA DE INICIO | </b>{{FechaPago.value | date:'fullDate'}}
+                            </div>
+                          </ng-template>
+              </p-calendar>
+            </div>
+            <ng-template #updateFechaFinal>
+              <p-calendar inputId="FechaFinalModulo"
+                          formControlName="FechaFinalModulo"
+                          placeholder="DD-MM-AAAA"
+                          dateFormat="dd-mm-yy"
+                          [inline]="true"
+                          class="p-fluid p-grid p-formgrid">
+                          <ng-template pTemplate="header">
+                            <div class="content-selected-date">
+                              <b>FECHA FINAL | </b>{{FechaFinalModulo.value | date:'fullDate'}}
+                            </div>
+                          </ng-template>
+              </p-calendar>
+            </ng-template>
           </form>
           <ng-template pTemplate="footer">
             <button mat-raised-button (click)="saveChanges()">Guardar cambios</button>

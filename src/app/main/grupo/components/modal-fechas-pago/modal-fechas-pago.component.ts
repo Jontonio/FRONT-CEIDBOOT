@@ -15,6 +15,7 @@ export class ModalFechasPagoComponent implements OnInit {
   @Input() formFecha:FormGroup;
   @Input() visibleModal:boolean;
   @Output() estadoModal = new EventEmitter<boolean>();
+  @Input() updateFechaInicio:boolean;
   date:Date;
 
   constructor(private readonly _grupo:GrupoService,
@@ -34,6 +35,9 @@ export class ModalFechasPagoComponent implements OnInit {
   }
   get FechaPago(){
     return this.formFecha.controls['FechaPago'];
+  }
+  get FechaFinalModulo(){
+    return this.formFecha.controls['FechaFinalModulo'];
   }
   get modulo(){
     return this.formFecha.controls['modulo'];
