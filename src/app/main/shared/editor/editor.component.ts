@@ -13,9 +13,9 @@ export class EditorComponent implements OnInit {
   @ViewChild('editor') editor: Editor;
   @Output() textMsg = new EventEmitter<string>();
   @Input() loading:boolean = false;
+  @Input() text:string = '';
 
   sanitizado:string;
-  text:string = '';
   listReplace:string[] = ['</strong>','<strong>'];
   listPlantillas:Plantilla[];
 

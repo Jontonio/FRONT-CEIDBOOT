@@ -24,6 +24,7 @@ import {EstadoGrupoEstudiante, InfoDateGrupo } from '../../class/EstadoGrupoEstu
 import { GrupoModulo } from '../../class/GrupoModulo';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Mora } from '../../class/Mora';
+import { Matricula } from 'src/app/main/matricula/class/Matricula';
 
 @Component({
   selector: 'app-estudiantes-grupo',
@@ -61,12 +62,14 @@ export class EstudiantesGrupoComponent implements OnInit {
   formFecha:FormGroup;
   dataEstudianteMessage:Estudiante;
 
+  moreInfoMatricula:boolean = false;
+  infoMatricula:Matricula;
+
   constructor(private readonly _grupo:GrupoService,
               private readonly fb:FormBuilder,
               private readonly activeRoute:ActivatedRoute,
               private readonly _socket:SocketService,
               private readonly _unAuth:UnAuthorizedService,
-              private readonly _chatboot:ChabotService,
               private readonly _global: GlobalService,
               private readonly confirService:ConfirmationService,
               private _msg:MessageService) {
@@ -331,6 +334,16 @@ export class EstudiantesGrupoComponent implements OnInit {
         this.messageError(e)
       }
     })
+  }
+
+  moreInfoEstudiante(matricula:Matricula, estudiante:Estudiante){
+    this.moreInfoMatricula = true;
+    this.infoMatricula = matricula;
+    this.infoMatricula.estudiante = estudiante;
+  }
+
+  updateEstadoModalInfo(estado:boolean){
+    this.moreInfoMatricula = estado;
   }
 
   eliminarMora(Id:number){

@@ -25,6 +25,8 @@
         </div>
       </div>
     </div>
-    <app-editor [loading]="loadingSend"  (textMsg)="sendMessage($event)"></app-editor>
+    <app-editor [loading]="loadingSend"
+                [text]="text"
+                (textMsg)="sendMessage($event)"></app-editor>
   </div>
 </p-sidebar>

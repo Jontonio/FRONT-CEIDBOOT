@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   // theme
-  BASE_URL:'http://192.168.10.102:3000',
+  BASE_URL:'http://192.168.10.108:3000',
   URL_SOCKET:'http://localhost:3000',
   URL_COUNTRY:'https://restcountries.com/v3.1'
 };

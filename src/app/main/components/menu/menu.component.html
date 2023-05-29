@@ -14,12 +14,11 @@
       <div class="active-user" [ngClass]="{'online': _socket.statusServer,'offline':!_socket.statusServer}"></div>
       <p-chip [label]="_auth.userAuth.Nombres | titlecase" icon="pi pi-user"></p-chip>
     </div>
-
-    <button pButton
+    <!-- <button pButton
             pRipple
             type="button"
             icon="pi pi-bell"
-            class="p-button-rounded p-button-text btn-custom"></button>
+            class="p-button-rounded p-button-text btn-custom"></button> -->
     <button pButton
             pRipple
             type="button"

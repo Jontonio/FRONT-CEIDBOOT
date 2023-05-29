@@ -7,13 +7,13 @@
       </ng-template>
       <div class="mt-4">
         <p-card header="Opción de estado">
-          <div class="flex justify-content-between mt-3">
-            <div class="col">
+          <div class="grid flex justify-content-between mt-3">
+            <div class="col-12 md:col-6">
               <legend class="pr-3">
                 Selecione un estado. Por defecto se encuentra en [matriculas abiertas].
               </legend>
             </div>
-            <div class="col">
+            <div class="col-12 md:col-6">
               <p-dropdown class="p-fluid p-grid p-formgrid"
                           [options]="listEstadoGrupo"
                           [(ngModel)]="estadoGrupo"
@@ -24,38 +24,32 @@
           </div>
         </p-card>
       </div>
-      <div class="card-container">
-        <div id="bar-horizontal">
-          <div  class="flex justify-content-between mt-4">
-            <h2>Estudiantes por grupos</h2>
+      <div class="card-container mt-2">
+        <p-card>
+          <div id="bar-horizontal">
+            <div  class="flex justify-content-between mt-4">
+              <h2>Estudiantes por grupos</h2>
+              <div>
+                <button mat-icon-button [matMenuTriggerFor]="menuBarHorizontal">
+                  <mat-icon><i class="fa-solid fa-bars"></i></mat-icon>
+                </button>
+                <mat-menu #menuBarHorizontal="matMenu">
+                  <button mat-menu-item
+                          [useExistingCss]="true"
+                          printSectionId="bar-horizontal"
+                          [title]="'Estudiante en grupo'"
+                          ngxPrint>
+                    <mat-icon><i class="fa-regular fa-file-pdf"></i></mat-icon>
+                    <span>Descargar en PDF</span>
+                  </button>
+                </mat-menu>
+              </div>
+            </div>
             <div>
-              <button mat-icon-button [matMenuTriggerFor]="menuBarHorizontal">
-                <mat-icon><i class="fa-solid fa-bars"></i></mat-icon>
-              </button>
-              <mat-menu #menuBarHorizontal="matMenu">
-                <button mat-menu-item>
-                  <mat-icon><i class="fa-regular fa-file-image"></i></mat-icon>
-                  <span>Descargar en imagen</span>
-                </button>
-                <button mat-menu-item
-                        [useExistingCss]="true"
-                        printSectionId="bar-horizontal"
-                        [title]="'Estudiante en grupo'"
-                        ngxPrint>
-                  <mat-icon><i class="fa-regular fa-file-pdf"></i></mat-icon>
-                  <span>Descargar en PDF</span>
-                </button>
-                <button mat-menu-item>
-                  <mat-icon><i class="fa-regular fa-file-excel"></i></mat-icon>
-                  <span>Descargar en Excel</span>
-                </button>
-              </mat-menu>
+              <app-horizontal-bar-chart [data]="dataEstudiantesGrupo"></app-horizontal-bar-chart>
             </div>
           </div>
-          <div>
-            <app-horizontal-bar-chart [data]="dataEstudiantesGrupo"></app-horizontal-bar-chart>
-          </div>
-        </div>
+        </p-card>
       </div>
     </mat-tab>
     <mat-tab>
@@ -66,8 +60,8 @@
       <div class="mt-4">
         <p-card header="Opción de estado y grupo">
           <form [formGroup]="formInputs">
-            <div class="flex justify-content-between mt-3">
-              <div class="col">
+            <div class="grid flex justify-content-between mt-3">
+              <div class="col-12 md:col-6">
                 <p-dropdown class="p-fluid p-grid p-formgrid"
                             [options]="listEstadoGrupo"
                             formControlName="inputEstadoGrupo"
@@ -75,7 +69,7 @@
                             optionLabel="EstadoGrupo">
                 </p-dropdown>
               </div>
-              <div class="col">
+              <div class="col-12 md:col-6">
                 <p-dropdown class="p-fluid p-grid p-formgrid"
                             appendTo="body"
                             [options]="listGrupos"
@@ -103,62 +97,59 @@
           </form>
         </p-card>
       </div>
-      <div>
-        <div id="bar-vertical">
-          <div  class="flex justify-content-between mt-3">
-            <h2>Pago y moras por grupo</h2>
+      <div class="mt-2">
+        <p-card>
+          <div id="bar-vertical">
+            <div  class="flex justify-content-between mt-3">
+              <h2>Pago y moras por grupo</h2>
+              <div>
+                <button mat-icon-button [matMenuTriggerFor]="menuBarVertical">
+                  <mat-icon><i class="fa-solid fa-bars"></i></mat-icon>
+                </button>
+                <mat-menu #menuBarVertical="matMenu">
+                  <button mat-menu-item
+                          [useExistingCss]="true"
+                          printSectionId="bar-vertical"
+                          [title]="'Estudiante en grupo'"
+                          ngxPrint>
+                    <mat-icon><i class="fa-regular fa-file-pdf"></i></mat-icon>
+                    <span>Descargar en PDF</span>
+                  </button>
+                </mat-menu>
+              </div>
+            </div>
             <div>
-              <button mat-icon-button [matMenuTriggerFor]="menuBarVertical">
-                <mat-icon><i class="fa-solid fa-bars"></i></mat-icon>
-              </button>
-              <mat-menu #menuBarVertical="matMenu">
-                <button mat-menu-item>
-                  <mat-icon><i class="fa-regular fa-file-image"></i></mat-icon>
-                  <span>Descargar en imagen</span>
-                </button>
-                <button mat-menu-item
-                        [useExistingCss]="true"
-                        printSectionId="bar-vertical"
-                        [title]="'Estudiante en grupo'"
-                        ngxPrint>
-                  <mat-icon><i class="fa-regular fa-file-pdf"></i></mat-icon>
-                  <span>Descargar en PDF</span>
-                </button>
-                <button mat-menu-item>
-                  <mat-icon><i class="fa-regular fa-file-excel"></i></mat-icon>
-                  <span>Descargar en Excel</span>
-                </button>
-              </mat-menu>
+              <app-vertical-bar-chart [data]="dataPagosMora"></app-vertical-bar-chart>
             </div>
           </div>
-          <div>
-            <app-vertical-bar-chart [data]="dataPagosMora"></app-vertical-bar-chart>
-          </div>
-        </div>
+        </p-card>
       </div>
     </mat-tab>
-
     <mat-tab>
       <ng-template mat-tab-label>
         <mat-icon class="example-tab-icon">pie_chart</mat-icon>
-        <p class="p-2">Índice de la deuda vencidad</p>
+        <p class="p-2">Índice de la deuda vencida</p>
       </ng-template>
       <div class="grid mt-2">
         <div class="col-12 md:col-6">
           <p-card>
-            <h2 class="mb-2">Lista de grupos</h2>
+            <h2 class="mb-2">Grupos en proceso</h2>
             <div class="table-responsive">
-              <p-table [value]="listGruposLimit" [resizableColumns]="true" columnResizeMode="expand" responsiveLayout="scroll">
+              <p-table [value]="listGruposLimit"
+                       [resizableColumns]="true"
+                       columnResizeMode="expand"
+                       responsiveLayout="scroll">
                 <ng-template pTemplate="header">
                     <tr>
                         <th>ID</th>
-                        <th>Cód. grupo</th>
-                        <th>Curso</th>
+                        <th>Código</th>
+                        <th>Curso dictado</th>
                         <th>Modalidad</th>
+                        <th>Nombre grupo</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-grupo let-rowIndex="rowIndex">
-                    <tr>
+                    <tr class="cursor" (click)="getIndiceData(grupo)">
                       <td>{{startPage + (rowIndex+1)}}</td>
                       <td>{{ grupo.Id  }}</td>
                       <td>
@@ -173,6 +164,7 @@
                         </div>
                       </td>
                       <td>{{ grupo.Modalidad}}</td>
+                      <td>{{grupo.tipoGrupo.NombreGrupo}}</td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
@@ -187,7 +179,7 @@
             <div>
               <div class="mt-4" *ngIf="resGrupo && resGrupo.count">
                 <div class="grid content flex justify-content-between">
-                  <p class="text-muted">Total de grupos en proceso: {{resGrupo.count}}</p>
+                  <p class="text-muted">Grupos en proceso: {{resGrupo.count}}</p>
                   <p></p>
                 </div>
                 <div class="grid content flex justify-content-between">
@@ -215,10 +207,6 @@
                     <mat-icon><i class="fa-solid fa-bars"></i></mat-icon>
                   </button>
                   <mat-menu #menuIndice="matMenu">
-                    <button mat-menu-item>
-                      <mat-icon><i class="fa-regular fa-file-image"></i></mat-icon>
-                      <span>Descargar en imagen</span>
-                    </button>
                     <button mat-menu-item
                             [useExistingCss]="true"
                             printSectionId="grafico-indice"
@@ -226,14 +214,11 @@
                       <mat-icon><i class="fa-regular fa-file-pdf"></i></mat-icon>
                       <span>Descargar en PDF</span>
                     </button>
-                    <button mat-menu-item>
-                      <mat-icon><i class="fa-regular fa-file-excel"></i></mat-icon>
-                      <span>Descargar en Excel</span>
-                    </button>
                   </mat-menu>
                 </div>
               </div>
-              <app-pie-grid-chart></app-pie-grid-chart>
+              <app-pie-grid-chart title="Pagos realizados"   [data]="total"></app-pie-grid-chart>
+              <app-pie-grid-chart title="Índice de la deuda" [data]="indice"></app-pie-grid-chart>
             </div>
           </p-card>
         </div>
@@ -245,7 +230,288 @@
         <p class="p-2">Reporte de pagos</p>
       </ng-template>
       <div class="grid mt-2">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad amet laboriosam delectus, nesciunt eos, officia nostrum provident nisi explicabo ratione obcaecati vitae quisquam, accusantium veniam eum accusamus libero corrupti natus.
+        <div class="col-12 md:col-4">
+          <form [formGroup]="formInputs">
+            <div class="mb-2">
+              <p-card header="Resumen general">
+                <div class="col">
+                  <label for="mesAnio"><p class="mb-2">Año/Mes</p></label>
+                  <p-calendar view="month"
+                              [(ngModel)]="dateReporteGeneral"
+                              [ngModelOptions]="{standalone: true}"
+                              class="p-fluid p-grid p-formgrid full-width"
+                              dateFormat="yy/mm"
+                              [readonlyInput]="true"></p-calendar>
+                  <button mat-raised-button
+                          (click)="reporteGeneral()"
+                          class="full-width mt-3">Reporte general</button>
+                </div>
+              </p-card>
+            </div>
+            <div class="mb-2">
+              <p-card header="Opción de estado y grupo">
+                  <div class="flex flex-column">
+                    <div class="col-12 md:col-12 sm:col-12">
+                      <label for="inputCategoriaPago" class="block mb-2"><p class="mt-2">Categorias de pago</p></label>
+                      <p-dropdown class="p-fluid p-grid p-formgrid"
+                                  appendTo="body"
+                                  [options]="listCategoriaPago"
+                                  formControlName="inputCategoriaPago"
+                                  optionLabel="TipoCategoriaPago"></p-dropdown>
+                    </div>
+                    <div class="col-12 md:col-12 sm:col-12">
+                      <label for="inputEstadoGrupo"><p class="mb-2">Estados de los grupos</p></label>
+                      <p-dropdown class="p-fluid p-grid p-formgrid"
+                                  appendTo="body"
+                                  [options]="listEstadoGrupo"
+                                  formControlName="inputEstadoGrupo"
+                                  (ngModelChange)="selectedEstadoGrupo($event)"
+                                  optionLabel="EstadoGrupo">
+                      </p-dropdown>
+                    </div>
+                    <div class="col-12 md:col-12 sm:col-12">
+                      <label for="inputEstadoGrupo"><p class="mb-2">Lista grupos</p></label>
+                      <p-dropdown class="p-fluid p-grid p-formgrid"
+                                  appendTo="body"
+                                  [options]="listGrupos"
+                                  formControlName="inputGrupo"
+                                  (ngModelChange)="selectedGrupo($event)">
+                        <ng-template pTemplate="selectedItem">
+                          <div class="grupo-item grupo-item-value" *ngIf="grupo">
+                              <span class="ml-1">
+                                <img class="flag-code-country" [src]="grupo.curso.UrlBandera" alt="">
+                                <span class="ml-1">{{grupo.curso.NombreCurso | titlecase }} {{grupo.curso.nivel.Nivel}}
+                                  <p-tag severity="warning">{{grupo.tipoGrupo.NombreGrupo | titlecase}}</p-tag></span>
+                                </span>
+                          </div>
+                        </ng-template>
+                        <ng-template let-grupo pTemplate="item">
+                          <div>
+                            <img class="flag-code-country" [src]="grupo.curso.UrlBandera" alt="">
+                              <span class="ml-1 mr-1">{{grupo.curso.NombreCurso | titlecase }} {{grupo.curso.nivel.Nivel}} <p-tag>{{grupo.tipoGrupo.NombreGrupo | titlecase}}</p-tag></span>
+                          </div>
+                        </ng-template>
+                      </p-dropdown>
+                    </div>
+                    <div class="col-12 md:col-12 sm:col-12">
+                      <label for="inputModulo" class="block mb-2">Selecione un módulo</label>
+                      <p-dropdown class="p-fluid p-grid p-formgrid"
+                                  appendTo="body"
+                                  [options]="listModulos"
+                                  formControlName="inputModulo"
+                                  optionLabel="Modulo"></p-dropdown>
+                      <!-- <small *ngIf="modulo.hasError('required') && modulo.dirty"
+                      class="p-error">El campo módulo del curso es <strong>requerido</strong></small> -->
+                    </div>
+                    <div class="col">
+                      <button mat-raised-button
+                              class="full-width"
+                              (click)="generarReporteEstudiantes()">Reporte grupo</button>
+                    </div>
+                  </div>
+                </p-card>
+            </div>
+          </form>
+          </div>
+        <div class="col-12 md:col-8">
+          <div class="mt-2">
+            <p-card header="Resumen de pagos en general">
+              <div class="flex justify-content-between mb-3">
+                <div>
+                </div>
+                <div>
+                  <span class="p-buttonset">
+                    <button mat-stroked-button
+                            (click)="generarReporteGeneralExcel()"
+                            class="ml-1"><i class="fa-solid fa-file-excel icon-size-button"></i>
+                    </button>
+                    <button mat-stroked-button
+                            printTitle="Reporte de pagos general CEID"
+                            [useExistingCss]="true"
+                            printSectionId="tabla-reporte-general"
+                            ngxPrint
+                            class="ml-1"><i class="fa-regular fa-file-pdf icon-size-button"></i></button>
+                  </span>
+                </div>
+              </div>
+              <div class="table-responsive" id="tabla-reporte-general">
+                <p-table [value]="listReporteGeneral"
+                         [resizableColumns]="true"
+                         columnResizeMode="expand"
+                         styleClass="p-datatable-gridlines"
+                         responsiveLayout="scroll">
+                  <ng-template pTemplate="header">
+                      <tr>
+                          <th>ID</th>
+                          <th>Código grupo</th>
+                          <th>Nombre del curso</th>
+                          <th>Nivel</th>
+                          <th>Categoria pago</th>
+                          <th>Total pagos</th>
+                      </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-rGeneral let-rowIndex="rowIndex">
+                      <tr>
+                        <td>{{startPage + (rowIndex+1)}}</td>
+                        <td>{{rGeneral.grupoId}}</td>
+                        <td>{{rGeneral.NombreCurso}}</td>
+                        <td>{{rGeneral.Nivel}}</td>
+                        <td>{{rGeneral.TipoCategoriaPago}}</td>
+                        <td>{{rGeneral.total_pago | currency: 'PEN': 'symbol': '': 'es-PE'}}</td>
+                      </tr>
+                  </ng-template>
+                  <ng-template pTemplate="emptymessage">
+                    <tr>
+                      <td colspan="10">
+                        <app-lista-vacia [msg]="'Genere un reporte general para visualizar los datos'"></app-lista-vacia>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div>
+            </p-card>
+          </div>
+          <div class="mt-2">
+            <p-card header="Lista de estudiantes">
+              <div class="flex justify-content-between mb-2">
+                <div></div>
+                <div>
+                  <span class="p-buttonset">
+                    <button mat-stroked-button
+                            (click)="genearReportePagosExcel()"
+                            class="ml-1"><i class="fa-solid fa-file-excel icon-size-button"></i>
+                    </button>
+                    <button mat-stroked-button
+                            [useExistingCss]="true"
+                            printTitle="Reporte de pagos por grupo CEID"
+                            printSectionId="tabla-reporte-pagos"
+                            ngxPrint
+                            class="ml-1"><i class="fa-regular fa-file-pdf icon-size-button"></i></button>
+                  </span>
+                </div>
+              </div>
+              <div class="table-responsive" id="tabla-reporte-pagos">
+                <p-table [value]="listReportePagos"
+                         [resizableColumns]="true"
+                         columnResizeMode="expand"
+                         styleClass="p-datatable-gridlines"
+                         responsiveLayout="scroll">
+                  <ng-template pTemplate="header">
+                      <tr>
+                          <th>ID</th>
+                          <th>Código grupo</th>
+                          <th>Nombres</th>
+                          <th>Apellidos</th>
+                          <th>Categoria pago</th>
+                          <th>Monto pago</th>
+                          <th>Código voucher</th>
+                          <th>Fecha de pago</th>
+                      </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-reporte let-rowIndex="rowIndex">
+                      <tr>
+                        <td>{{startPage + (rowIndex+1)}}</td>
+                        <td>{{reporte.grupoId}}</td>
+                        <td>{{reporte.Nombres}}</td>
+                        <td>{{reporte.ApellidoPaterno}} {{reporte.ApellidoMaterno}}</td>
+                        <td>{{reporte.TipoCategoriaPago}}</td>
+                        <td>{{reporte.MontoPago | currency: 'PEN': 'symbol': '': 'es-PE'}}</td>
+                        <td>{{reporte.CodigoVoucher}}</td>
+                        <td>{{reporte.FechaPago | date:'mediumDate'}}</td>
+                      </tr>
+                  </ng-template>
+                  <ng-template pTemplate="emptymessage">
+                    <tr>
+                      <td colspan="10">
+                        <app-lista-vacia [msg]="'No se encontraron registros de grupos en proceso'"></app-lista-vacia>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div>
+            </p-card>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">table_chart</mat-icon>
+        <p class="p-2">Reporte de otros pagos</p>
+      </ng-template>
+      <div class="grid mt-3">
+        <div class="col-12 md:col-4">
+          <p-card header="Resumen otros pagos">
+            <div class="col">
+              <label for="mesAnio"><p class="mb-2">Año/Mes</p></label>
+              <p-calendar view="month"
+                          [(ngModel)]="dateReporteGeneral"
+                          appendTo="body"
+                          [ngModelOptions]="{standalone: true}"
+                          class="p-fluid p-grid p-formgrid full-width"
+                          dateFormat="yy/mm"
+                          [readonlyInput]="true"></p-calendar>
+              <button mat-raised-button
+                      (click)="reporteOtrosPagos()"
+                      class="full-width mt-3">Reporte otros pagos</button>
+            </div>
+          </p-card>
+        </div>
+        <div class="col-12 md:col-8">
+          <div class="mt-2">
+            <p-card header="Resumen de pagos en general">
+              <div class="flex justify-content-between mb-3">
+                <div>
+                </div>
+                <div>
+                  <span class="p-buttonset">
+                    <button mat-stroked-button
+                            (click)="generarReporteGeneralExcel()"
+                            class="ml-1"><i class="fa-solid fa-file-excel icon-size-button"></i>
+                    </button>
+                    <button mat-stroked-button
+                            printTitle="Reporte de otros pagos CEID"
+                            [useExistingCss]="true"
+                            printSectionId="tabla-reporte-otros-pagos"
+                            ngxPrint
+                            class="ml-1"><i class="fa-regular fa-file-pdf icon-size-button"></i></button>
+                  </span>
+                </div>
+              </div>
+              <div class="table-responsive" id="tabla-reporte-otros-pagos">
+                <p-table [value]="listReporteOtrosPagos"
+                         [resizableColumns]="true"
+                         columnResizeMode="expand"
+                         styleClass="p-datatable-gridlines"
+                         responsiveLayout="scroll">
+                  <ng-template pTemplate="header">
+                      <tr>
+                          <th>ID</th>
+                          <th>Tipo categoria otros</th>
+                          <th>Monto pago S/.</th>
+                          <th>Mes</th>
+                      </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-otros let-rowIndex="rowIndex">
+                      <tr>
+                        <td>{{startPage + (rowIndex+1)}}</td>
+                        <td>{{otros.TipoTramite}}</td>
+                        <td>{{otros.total_pago | currency: 'PEN': 'symbol': '': 'es-PE'}}</td>
+                        <td>{{otros.Num_mes}}</td>
+                      </tr>
+                  </ng-template>
+                  <ng-template pTemplate="emptymessage">
+                    <tr>
+                      <td colspan="10">
+                        <app-lista-vacia [msg]="'Genere un reporte general para visualizar los datos'"></app-lista-vacia>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div>
+            </p-card>
+          </div>
+        </div>
       </div>
     </mat-tab>
   </mat-tab-group>

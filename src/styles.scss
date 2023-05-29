@@ -183,6 +183,9 @@ footer{
 .icon-size{
   font-size: 24px;
 }
+.icon-size-button{
+  font-size: 18px;
+}
 .card-login{
   width: 360px;
 }
@@ -457,6 +460,13 @@ footer{
 .content-file{
   background: var(--surface-100);
   border-radius: 5px;
+}
+.p-card .p-card-content{
+  padding: 0px !important;
+  padding-bottom: 4px !important;
+}
+.mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar{
+  background-color: #f4ab36;
 }
 @media only screen and (max-width: 767px) {
   /* Estilos para teléfonos móviles aquí */

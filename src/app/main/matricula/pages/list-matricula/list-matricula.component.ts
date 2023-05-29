@@ -41,7 +41,6 @@ export class ListMatriculaComponent implements OnInit {
               public readonly _matricula:MatriculaService,
               private readonly _socket:SocketService,
               public readonly _grupo:GrupoService,
-              private readonly spinner:NgxSpinnerService,
               public readonly _confirService:ConfirmationService) {}
 
   ngOnInit(): void {}
@@ -86,6 +85,10 @@ export class ListMatriculaComponent implements OnInit {
   moreService(servicio:Servicio){
     this.moreInfo = true;
     this.description = servicio.Descripcion;
+  }
+
+  updateEstadoModalInfo(estado:boolean){
+    this.moreInfoMatricula = estado;
   }
 
   moreInfoEstudiante(matricula:Matricula){

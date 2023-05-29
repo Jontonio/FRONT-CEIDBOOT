@@ -17,6 +17,7 @@ import { WelcomeComponent } from './pages/welcome/welcome.component';
 import { InputSearchComponent } from './shared/input-search/input-search.component';
 import { SidebarMessageComponent } from './shared/sidebar-message/sidebar-message.component';
 import { ChatBotModule } from './chat-bot/chat-bot.module';
+import { ModalInfoEstudianteComponent } from './shared/modal-info-estudiante/modal-info-estudiante.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { ChatBotModule } from './chat-bot/chat-bot.module';
     WelcomeComponent,
     InputSearchComponent,
     SidebarMessageComponent,
+    ModalInfoEstudianteComponent,
   ],
   imports: [
     CommonModule,
@@ -44,7 +46,8 @@ import { ChatBotModule } from './chat-bot/chat-bot.module';
   exports:[
     ShowForRolesDirective,
     InputSearchComponent,
-    SidebarMessageComponent
+    SidebarMessageComponent,
+    ModalInfoEstudianteComponent
   ]
 })
 export class MainModule { }

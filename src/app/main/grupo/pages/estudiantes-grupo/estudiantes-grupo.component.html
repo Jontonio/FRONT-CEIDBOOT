@@ -156,8 +156,7 @@
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #menu="matMenu">
-                <button mat-menu-item
-                        [routerLink]="['/system/grupos/estudiantes-grupo', idGrupo, 'estudiante', grupo.estudiante.Id]">
+                <button mat-menu-item (click)="moreInfoEstudiante(grupo.matricula, grupo.estudiante)">
                   <mat-icon><i class="fa-solid fa-circle-info"></i></mat-icon>
                   <span>ver más</span>
                 </button>
@@ -333,6 +332,11 @@
     </div>
   </p-card>
 </div>
+
+<!--Componente modal ver mas estudiante-->
+<app-modal-info-estudiante [modalVisible]="moreInfoMatricula"
+                           [matriculaEstudiante]="infoMatricula"
+                           (estadoModal)="updateEstadoModalInfo($event)"></app-modal-info-estudiante>
 
 <!-- componente para la visualización de documentos -->
 <app-show-file [fileURL]="fileURL"></app-show-file>

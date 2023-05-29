@@ -16,8 +16,7 @@ const routes: Routes = [
       { path:'edit-grupo/:id', component: AddGrupoComponent },
       { path:'lista-grupos', component: ListGrupoComponent },
       { path:'ver-grupo/:id', component: VerGrupoComponent },
-      { path:'estudiantes-grupo/:idGrupo', component: EstudiantesGrupoComponent },
-      { path:'estudiantes-grupo/:idGrupo/estudiante/:idEstudiante', component: InfoEstudianteComponent },
+      { path:'estudiantes-grupo/:idGrupo', component: EstudiantesGrupoComponent }
     ]
   }
 ];

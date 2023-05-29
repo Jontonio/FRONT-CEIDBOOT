@@ -91,6 +91,7 @@ export class FormMatriculaComponent implements OnInit {
   listProvincias:Provincia[] = [];
   listDistritos:Distrito[] = [];
   listMedioPago:MedioPago[] = [];
+  listCategoriasPago:CategoriaPago[] = [];
 
   TipoDocumentoSelected:string;
   selecInstitucion:Institucion;
@@ -106,7 +107,6 @@ export class FormMatriculaComponent implements OnInit {
               private readonly _global:GlobalService,
               private readonly _msg:MessageService,
               private _socket:SocketService,
-              private _auth:AuthService,
               public readonly _main:MainService) {
                 this.createFormEstudiante();
                 this.createFormMayorEdad();
@@ -162,6 +162,7 @@ export class FormMatriculaComponent implements OnInit {
     this.getListGrupos();
     this.getMediosPagos();
     this.inicializateCodes();
+    this.getCategoriasPago();
   }
 
   inicializateCodes(){
@@ -239,10 +240,9 @@ export class FormMatriculaComponent implements OnInit {
       medioPagoMensualidad:[null, Validators.required],
       medioPagoLibro:[null, Validators.required],
       medioPagoMatricula:[null, Validators.required],
-      idCatMensualidad:[1, Validators.required],
-      idCatMatricula:[2, Validators.required],
-      idCatLibro:[3, Validators.required],
-      // idCatCertificado:[4, Validators.required]
+      // idCatMensualidad:[null, Validators.required],
+      // idCatMatricula:[null, Validators.required],
+      // idCatLibro:[null, Validators.required],
     })
   }
 
@@ -391,17 +391,14 @@ export class FormMatriculaComponent implements OnInit {
   get MontoPagoLibro(){
     return this.formFiles.controls['MontoPagoLibro'];
   }
-  get idCatMensualidad(){
-    return this.formFiles.controls['idCatMensualidad'];
-  }
-  get idCatMatricula(){
-    return this.formFiles.controls['idCatMatricula'];
-  }
-  get idCatLibro(){
-    return this.formFiles.controls['idCatLibro'];
-  }
-  // get idCatCertificado(){
-  //   return this.formFiles.controls['idCatCertificado'];
+  // get idCatMensualidad(){
+  //   return this.formFiles.controls['idCatMensualidad'];
+  // }
+  // get idCatMatricula(){
+  //   return this.formFiles.controls['idCatMatricula'];
+  // }
+  // get idCatLibro(){
+  //   return this.formFiles.controls['idCatLibro'];
   // }
 
   getMediosPagos() {
@@ -436,7 +433,6 @@ export class FormMatriculaComponent implements OnInit {
       next: (resp) => {
         if(resp.ok){
           this.listGrupos = resp.data as Array<Grupo>;
-          console.log(resp.data)
         }
         this.hayErrorGetData = false;
       },
@@ -499,6 +495,21 @@ export class FormMatriculaComponent implements OnInit {
       }
     })
 
+  }
+
+  getCategoriasPago(){
+    this._global.getCategoriaPago().subscribe({
+      next:(value) => {
+        if(value.ok){
+          this.listCategoriasPago = value.data as Array<CategoriaPago>;
+          console.log(this.listCategoriasPago)
+          return;
+        }
+      },
+      error:(e)  =>{
+        console.log(e)
+      }
+    })
   }
 
   getDepartamentos(){
@@ -682,33 +693,45 @@ export class FormMatriculaComponent implements OnInit {
     if(this.selecGrupo!.RequeridoPPago){
       let listPagos:Pago[] = [];
       if(this.filePagoMatricula.value){
-        const catMatricula = { Id: this.idCatMatricula.value };
+        const categoriaMatricula = this.finCategoriaPago('category_matricula')
+        if(!categoriaMatricula){
+          this.toast('warn','Error de categorias de pago','Las categorias de pago matricula es necesaria.')
+          return;
+        }
         const pagoMatricula = new Pago(this.resFilePagoMatricula.webViewLink,
                                        moment(this.FechaPagoMatricula.value,'DD/MM/YYYY').toDate(),
                                        this.NumOperacionMatricula.value,
                                        this.MontoPagoMatricula.value,
                                        this.medioPagoMatricula.value,
-                                       catMatricula as CategoriaPago);
+                                       categoriaMatricula);
         listPagos.push(pagoMatricula);
       }
       if(this.filePagoLibro.value){
-        const catLibro = { Id: this.idCatLibro.value };
+        const categoriaLibro = this.finCategoriaPago('category_libro')
+        if(!categoriaLibro){
+          this.toast('warn','Error de categorias de pago','Las categorias de pago libro es necesaria.')
+          return;
+        }
         const pagoLibro = new Pago(this.resFilePagoLibro.webViewLink,
                                    moment(this.FechaPagoLibro.value,'DD/MM/YYYY').toDate(),
                                    this.NumOperacionLibro.value,
                                    this.MontoPagoLibro.value,
                                    this.medioPagoLibro.value,
-                                   catLibro as CategoriaPago);
+                                   categoriaLibro);
         listPagos.push(pagoLibro);
       }
       if(this.filePagoMensualidad.value){
-        const catMensualidad = { Id: this.idCatMensualidad.value };
+        const categoriaMensualidad = this.finCategoriaPago('category_mensualidad')
+        if(!categoriaMensualidad){
+          this.toast('warn','Error de categorias de pago','Las categoria de mensuaidad es necesaria.')
+          return;
+        }
         const pagoMensualidad = new Pago(this.resFilePagoMensualidad.webViewLink,
                                          moment(this.FechaPagoMensualidad.value,'DD/MM/YYYY').toDate(),
                                          this.NumOperacionMensualidad.value,
                                          this.MontoPagoMensualidad.value,
                                          this.medioPagoMensualidad.value,
-                                         catMensualidad as CategoriaPago);
+                                         categoriaMensualidad);
         listPagos.push(pagoMensualidad);
       }
       const estudianteEnGrupo = new EstudianteEnGrupo(estudiante, this.selecGrupo!, matricula, listPagos);
@@ -717,6 +740,10 @@ export class FormMatriculaComponent implements OnInit {
       this.registerPrematricula(matricula);
     }
 
+  }
+
+  finCategoriaPago(codeCategoria:string){
+    return this.listCategoriasPago.find( res => res.CodeCategoriaPago==codeCategoria);
   }
 
   registerMatricula(estudianteEnGrupo:EstudianteEnGrupo){

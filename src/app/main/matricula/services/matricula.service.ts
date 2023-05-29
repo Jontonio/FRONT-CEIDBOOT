@@ -6,6 +6,7 @@ import { Matricula, ResMatricula } from "../class/Matricula";
 import { SocketService } from "src/app/services/socket.service";
 import { UnAuthorizedService } from "src/app/services/unauthorized.service";
 import { ResEstudianteEnGrupo } from "../../grupo/class/EstudianteGrupo";
+import { Estudiante } from "../class/Estudiante";
 
 @Injectable({
   providedIn:'root'
@@ -29,7 +30,16 @@ export class MatriculaService{
   }
 
   removeMatriculado(Id:number){
-    return this.http.delete<ResMatricula>(`${environment.BASE_URL}/matricula/remove-matriculado/${Id}`);
+    //TODO: falta validar
+    return this.http.delete<ResMatricula>(`${environment.BASE_URL}/matricula/remove-fake-matriculado/${Id}`);
+  }
+
+  updateMatricula(Id:number, data:Matricula){
+    return this.http.patch(`${environment.BASE_URL}/matricula/update-matricula/${Id}`, data);
+  }
+
+  updateEstudiante(Id:number, data:Estudiante){
+    return this.http.patch(`${environment.BASE_URL}/estudiante/update-estudiante/${Id}`, data);
   }
 
   addAlumnoEnGrupo(data:any){

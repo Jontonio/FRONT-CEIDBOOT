@@ -101,7 +101,7 @@
                 <mat-icon><i class="fa-solid fa-pen-to-square"></i></mat-icon>
                 <span>Editar estudiante</span>
               </button>
-              <button mat-menu-item (click)="dialogDelete(matriculado)">
+              <button mat-menu-item disabled="true" (click)="dialogDelete(matriculado)">
                 <mat-icon><i class="fa-solid fa-trash-can"></i></mat-icon>
                 <span>Eliminar</span>
               </button>
@@ -153,67 +153,10 @@
           [style]="{ width: '50vw' }" [draggable]="true" [resizable]="false"><p>{{description}}</p>
 </p-dialog>
 <!-- Información general dialog -->
-<p-dialog header="Información general"
-          [(visible)]="moreInfoMatricula"
-          [modal]="true"
-          position="bottom-left"
-          [breakpoints]="{ '960px': '75vw' }"
-          [style]="{ width: '50vw' }" [draggable]="true" [resizable]="false">
-          <div *ngIf="infoMatricula">
-            <div>
-              <div class="grid content c1">
-                <div class="col-12 md:col-6">
-                  <h3>Estudiante</h3>
-                  <p class="m-2"><i class="fa-regular fa-id-card"></i> {{infoMatricula.estudiante.TipoDocumento}} {{infoMatricula.estudiante.Documento}}</p>
-                  <p class="m-2"><i class="fa-regular fa-user"></i> {{infoMatricula.estudiante.Nombres | titlecase}}
-                    {{infoMatricula.estudiante.ApellidoPaterno | titlecase}}
-                    {{infoMatricula.estudiante.ApellidoMaterno | titlecase}}</p>
-                  <p class="m-2"><i class="fa-regular fa-envelope"></i> {{infoMatricula.estudiante.Email}}</p>
-                  <p class="m-2"><i class="fa-sharp fa-solid fa-phone"></i> {{infoMatricula.estudiante.CodePhone}} {{infoMatricula.estudiante.Celular}}</p>
-                </div>
-                <div class="col-12 md:col-6" *ngIf="infoMatricula.estudiante.apoderado">
-                  <h3>Apoderado</h3>
-                  <p class="m-2"><i class="fa-regular fa-id-card"></i> {{infoMatricula.estudiante.apoderado.TipoDocumento}} {{infoMatricula.estudiante.apoderado.Documento}}</p>
-                  <p class="m-2"><i class="fa-regular fa-user"></i> {{infoMatricula.estudiante.apoderado.NomApoderado | titlecase}}
-                    {{infoMatricula.estudiante.apoderado.ApellidoPApoderado | titlecase}}
-                    {{infoMatricula.estudiante.apoderado.ApellidoMApoderado | titlecase}}</p>
-                  <p class="m-2"><i class="fa-sharp fa-solid fa-phone"></i> {{infoMatricula.estudiante.apoderado.CodePhone}} {{infoMatricula.estudiante.apoderado.CelApoderado}}</p>
-                </div>
-              </div>
-            </div>
-            <div class="grid content c2">
-              <div class="col-12 md:col-6">
-                <div>
-                  <h3>Curso inscrito</h3>
-                  <div class="grid content" *ngIf="infoMatricula.curso">
-                    <div class="col-12 md:col-4">
-                      <img class="flag" [src]="infoMatricula.curso.UrlBandera" alt="">
-                    </div>
-                    <div class="col-12 md:col-4 mt-2"> {{infoMatricula.curso.NombreCurso | titlecase}}</div>
-                    <div class="col-12 md:col-4 mt-2"> {{infoMatricula.curso.nivel.Nivel }}</div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-12 md:col-6">
-                <div>
-                  <h3>Institución</h3>
-                  <div class="grid content">
-                    <div class="col-12 md:col-6 mt-2"> {{infoMatricula.institucion.NombreInstitucion}}</div>
-                    <div class="col-12 md:col-6 mt-2"> {{infoMatricula.institucion.EscuelaProfe}}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <h3 class="mt-2">Tipo de población</h3>
-            <div class="grid content c3">
-              <div class="col-12 md:col-8">
-                <p>{{infoMatricula.denomiServicio.Descripcion}}</p>
-              </div>
-              <div class="col-12 md:col-2">Matricula: <br> s/. {{infoMatricula.denomiServicio.MontoMatricula}}</div>
-              <div class="col-12 md:col-2">Mensualidad: <br> s/. {{infoMatricula.denomiServicio.MontoPension}}</div>
-            </div>
-          </div>
-</p-dialog>
+<app-modal-info-estudiante [modalVisible]="moreInfoMatricula"
+                           [matriculaEstudiante]="infoMatricula"
+                           (estadoModal)="updateEstadoModalInfo($event)"></app-modal-info-estudiante>
+
 <!-- mostrar el archivo cargado -->
 <app-show-file [fileURL]="FileMatriculaURL"></app-show-file>
 <!-- side bar message whatsapp -->

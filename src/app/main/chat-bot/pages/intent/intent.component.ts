@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ChabotService } from '../../services/chatbot.service';
 import { Intent, Phrase } from '../../class/Intent';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Description_media, Link, Media, Message, PayloadBoot } from '../../class/PayloadBot';
 
@@ -46,8 +46,8 @@ export class IntentComponent implements OnInit {
   createFormPayload(){
     this.payloadForm = this.fb.group({
       description_media:[null],
-      link:[null],
-      media:[null],
+      link:[null, [Validators.pattern(/^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/)]],
+      media:[null, [Validators.pattern(/^https?:\/\/(?:[a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,}(?:\/[^\s]*)?\.(?:png|jpg)$/)]],
       message:[null],
     })
   }
@@ -70,6 +70,12 @@ export class IntentComponent implements OnInit {
   }
   get message(){
     return this.payloadForm.controls['message'];
+  }
+
+  imageLinkValidator(control: FormControl): { [key: string]: any } | null {
+    const regex: RegExp = /\.(jpg|png)$/i;
+    const valid = regex.test(control.value);
+    return valid ? null : { invalidImageLink: true };
   }
 
   getId(activeRoute:ActivatedRoute){
@@ -187,10 +193,10 @@ export class IntentComponent implements OnInit {
       return;
     }
     this.loadingSavePayload = true;
-    const payload = new PayloadBoot(new Message(this.message.value),
-                                    new Media(this.media.value),
-                                    new Link(this.link.value),
-                                    new Description_media(this.description_media.value))
+    const payload = new PayloadBoot(new Message((this.message.value).trim()),
+                                    new Media((this.media.value).trim()),
+                                    new Link((this.link.value).trim()),
+                                    new Description_media((this.description_media.value).trim()))
     this._bot.updateOnePayloadIntent(this.uuid, payload).subscribe({
       next: (value) => {
         this.loadingSavePayload = false

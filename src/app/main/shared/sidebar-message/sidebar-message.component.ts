@@ -18,6 +18,7 @@ export class SidebarMessageComponent implements OnInit {
 
   destino:string;
   loadingSend:boolean;
+  text:string = '';
 
   constructor( private readonly _chatboot:ChabotService,
                private readonly _msg:MessageService) { }
@@ -50,14 +51,16 @@ export class SidebarMessageComponent implements OnInit {
   }
 
   sendMessage(event:string){
+    this.text = event;
     const numeroCelular = this.destinoSend( this.dataEstudiante );
-    const message = new Message(this.dataEstudiante.Nombres.toUpperCase(), numeroCelular, event );
+    const message = new Message(this.dataEstudiante.Nombres.toUpperCase(), numeroCelular, this.text );
     this.loadingSend = true;
     this._chatboot.sendMessage( message ).subscribe({
       next:(value) => {
         this.loadingSend = false;
         if(value.ok){
           this.toast('success', value.msg);
+          this.text = '';
           return;
         }
         this.toast('warn', value.msg);

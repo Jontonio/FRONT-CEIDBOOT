@@ -1,8 +1,6 @@
 import { CdkStepperNext } from '@angular/cdk/stepper';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatButton } from '@angular/material/button';
-import { Button } from 'primeng/button';
 import { MatStepper } from '@angular/material/stepper';
 import { Curso } from 'src/app/main/curso/class/Curso';
 import { GlobalService } from 'src/app/services/global.service';
@@ -10,7 +8,6 @@ import { Message, MessageService } from 'primeng/api';
 import { switchMap } from 'rxjs';
 import { Pago } from 'src/app/main/grupo/class/Pago';
 import { CategoriaPago } from 'src/app/main/grupo/class/CategoriaPago';
-import { Grupo } from 'src/app/main/grupo/class/Grupo';
 import * as moment from 'moment';
 import { MedioPago } from 'src/app/class/MedioDePago';
 import { GrupoModulo } from 'src/app/main/grupo/class/GrupoModulo';

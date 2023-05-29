@@ -81,6 +81,8 @@
                     autocomplete="off"
                     pInputText/>
           </span>
+          <small *ngIf="media.hasError('pattern') && !media.hasError('required')"
+                  class="p-error">Introduzca un link de una imagen <strong>válida</strong></small>
         </div>
         <div class="col full-width">
           <label for="description_media">Descripción de la imagen</label>
@@ -111,6 +113,8 @@
                     autocomplete="off"
                     pInputText/>
           </span>
+          <small *ngIf="link.hasError('pattern') && !link.hasError('required')"
+                  class="p-error">Introduzca un link <strong>válido</strong></small>
         </div>
         <div class="col">
           <button mat-raised-button (click)="savePayload()" [disabled]="loadingSavePayload || loadingData">

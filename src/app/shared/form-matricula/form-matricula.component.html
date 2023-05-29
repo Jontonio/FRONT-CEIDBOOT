@@ -256,7 +256,7 @@
                     type="text"
                     autocomplete="off"
                     (ngModelChange)="searchApoderado($event)"
-                    [maxlength]="isPeru?8:15"
+                    [maxlength]="(TipoDocumento.value=='DNI')?8:12"
                     formControlName="DocumentoApoderado"
                     pInputText/>
               </div>
@@ -413,6 +413,7 @@
             <label for="Poblacion" class="block mb-2">Población a la que pertenece</label>
             <p-dropdown class="p-fluid p-grid p-formgrid"
                         formControlName="Poblacion"
+                        appendTo="body"
                         [options]="listDenominServicio"
                         (ngModelChange)="selectServicio($event)"
                         placeholder="Selececionea la población que pertenece"
