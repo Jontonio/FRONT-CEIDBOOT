@@ -11,7 +11,7 @@ import { TokeInterceptorsService } from './interceptors/token-interceptors.servi
 import { LOCALE_ID } from '@angular/core';
 
 import localEs from "@angular/common/locales/es-PE";
-import { registerLocaleData } from "@angular/common";
+import { HashLocationStrategy, LocationStrategy, registerLocaleData } from "@angular/common";
 import { UnauthorizedPageComponent } from './pages/unauthorized-page/unauthorized-page.component';
 
 registerLocaleData(localEs);
@@ -32,7 +32,8 @@ const config: SocketIoConfig = { url: environment.BASE_URL, options: {} };
   ],
   bootstrap: [AppComponent],
   providers: [
-    {provide: LOCALE_ID, useValue: 'es-PE' },
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
+    { provide: LOCALE_ID, useValue: 'es-PE' },
     { provide: HTTP_INTERCEPTORS, useClass: TokeInterceptorsService, multi:true },
   ]
 
