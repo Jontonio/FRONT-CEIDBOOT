@@ -204,15 +204,12 @@ export class FormUsuarioComponent {
 
   getIdUpdate(activeRouter:ActivatedRoute){
     const { id } = activeRouter.snapshot.params;
-    console.log(id)
     if(!id) return;
     this.Id = id;
     this.isUpdate = true;
-    console.log(this.isUpdate)
     this.loadingGetUpdate = true;
     this._usuario.getUsuario(id).subscribe({
       next: (resp) => {
-        console.log(resp)
         this.loadingGetUpdate = false;
         if(!resp.ok) return;
         this.completeDataUpdate(resp.data as Usuario);

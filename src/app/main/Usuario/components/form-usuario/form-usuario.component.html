@@ -3,7 +3,7 @@
 </div>
 <ng-template #form>
   <form [formGroup]="FormUsuario">
-    <div class="mb-1">{{isUpdate}}
+    <div class="mb-1">
       <div *ngIf="isUpdate else notUpdate">
         <h2 class="ml-1"><i class="fa-solid fa-user-pen"></i> Editar usuario</h2>
       </div>

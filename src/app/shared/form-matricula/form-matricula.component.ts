@@ -502,7 +502,6 @@ export class FormMatriculaComponent implements OnInit {
       next:(value) => {
         if(value.ok){
           this.listCategoriasPago = value.data as Array<CategoriaPago>;
-          console.log(this.listCategoriasPago)
           return;
         }
       },
@@ -637,12 +636,6 @@ export class FormMatriculaComponent implements OnInit {
 
   ready(){
 
-    console.log(this.formMayorEdad)
-    console.log(this.formAcademica)
-    console.log(this.formEstudiante)
-    console.log(this.formGrupo)
-    console.log(this.formFiles)
-
     if(this.formFiles.invalid){
       Object.keys(this.formFiles.controls).forEach( input => {
         this.formFiles.controls[input].markAsDirty();
@@ -751,7 +744,6 @@ export class FormMatriculaComponent implements OnInit {
     this._global.registerMatricula(estudianteEnGrupo).subscribe({
       next:(value) => {
         if(value.ok){
-          console.log(value)
           this.resetFroms();
           this.toast('success', value.msg);
           this._socket.EmitEvent('updated_list_matriculados');

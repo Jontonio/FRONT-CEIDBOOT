@@ -125,7 +125,6 @@ export class AddUsuarioComponent {
       next: (value) => {
         this.loading = false;
         if(!value.ok){
-          console.log(value)
           this.toast('error', 'Error al actualizar usuario', value.msg)
           return;
         }
@@ -152,7 +151,6 @@ export class AddUsuarioComponent {
  */
   save(opt:optionOperation): void{
     this.loading = true;
-    console.log(opt)
     opt.option?this.updateUsuario(opt):this.createUsuario(opt)
   }
 

@@ -4,7 +4,7 @@ class ReportePagos{
   ApellidoMaterno:string;
   ApellidoPaterno:string;
   CodigoVoucher:string;
-  FechaPago:Date;
+  FechaPago:string;
   MedioDePago:string;
   Modulo:number;
   MontoPago:number;

@@ -131,9 +131,12 @@
         <p class="p-2">Índice de la deuda vencida</p>
       </ng-template>
       <div class="grid mt-2">
-        <div class="col-12 md:col-6">
+        <div class="col-12 md:col-12">
           <p-card>
-            <h2 class="mb-2">Grupos en proceso</h2>
+            <div class="flex justify-content-between">
+              <h2 class="mb-2">Selecione el grupo</h2>
+              <p-tag severity="success">Grupos en proceso</p-tag>
+            </div>
             <div class="table-responsive">
               <p-table [value]="listGruposLimit"
                        [resizableColumns]="true"
@@ -142,27 +145,21 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th>ID</th>
-                        <th>Código</th>
+                        <th>Código grupo</th>
+                        <th>Bandera</th>
                         <th>Curso dictado</th>
+                        <th>Nivel del curso</th>
                         <th>Modalidad</th>
                         <th>Nombre grupo</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-grupo let-rowIndex="rowIndex">
-                    <tr class="cursor" (click)="getIndiceData(grupo)">
+                    <tr class="cursor list-grupo-en-proceso" (click)="getIndiceData(grupo)">
                       <td>{{startPage + (rowIndex+1)}}</td>
                       <td>{{ grupo.Id  }}</td>
-                      <td>
-                        <div class="grid">
-                          <div class="col-3 flex justify-content-center">
-                            <img class="img-flag mr-2" [alt]="'Bandera'+grupo.curso.NombreCurso" [src]="grupo.curso.UrlBandera" alt="" srcset="">
-                          </div>
-                          <div class="col-9 flex flex-column">
-                            <b class="mr-2 mb-1">{{grupo.curso.NombreCurso | titlecase}}</b>
-                            {{grupo.curso.nivel.Nivel}}
-                          </div>
-                        </div>
-                      </td>
+                      <td><img class="img-flag mr-2" [alt]="'Bandera'+grupo.curso.NombreCurso" [src]="grupo.curso.UrlBandera" alt="" srcset=""></td>
+                      <td>{{grupo.curso.NombreCurso | titlecase}}</td>
+                      <td>{{grupo.curso.nivel.Nivel}}</td>
                       <td>{{ grupo.Modalidad}}</td>
                       <td>{{grupo.tipoGrupo.NombreGrupo}}</td>
                     </tr>
@@ -197,11 +194,21 @@
             </div>
           </p-card>
         </div>
-        <div class="col-12 md:col-6">
+        <div class="col-12 md:col-12" *ngIf="selectGrupoIndice">
           <p-card>
             <div id="grafico-indice" class="mt-2">
               <div  class="flex justify-content-between mt-3">
-                <h2>Índice de la deuda por grupo</h2>
+                <h2 *ngIf="!selectGrupoIndice, else infoGrupo">Índice de la deuda por grupo</h2>
+                <ng-template #infoGrupo>
+                  <h2>
+                    {{selectGrupoIndice.curso.NombreCurso | titlecase}}
+                    {{selectGrupoIndice.curso.nivel.Nivel | titlecase}}
+                  </h2>
+                  <p><p-tag [rounded]="true">Cód. G-{{selectGrupoIndice.Id}}</p-tag></p>
+                </ng-template>
+              </div>
+              <div class="flex justify-content-between">
+                <div></div>
                 <div>
                   <button mat-icon-button [matMenuTriggerFor]="menuIndice">
                     <mat-icon><i class="fa-solid fa-bars"></i></mat-icon>
@@ -217,8 +224,14 @@
                   </mat-menu>
                 </div>
               </div>
-              <app-pie-grid-chart title="Pagos realizados"   [data]="total"></app-pie-grid-chart>
-              <app-pie-grid-chart title="Índice de la deuda" [data]="indice"></app-pie-grid-chart>
+              <div class="grid">
+                <div class="col-12 md:col-6">
+                  <app-pie-grid-chart title="Pagos realizados"   [data]="total"></app-pie-grid-chart>
+                </div>
+                <div class="col-12 md:col-6">
+                  <app-pie-grid-chart title="Índice de la deuda" [data]="indice"></app-pie-grid-chart>
+                </div>
+              </div>
             </div>
           </p-card>
         </div>
@@ -417,7 +430,7 @@
                         <td>{{reporte.TipoCategoriaPago}}</td>
                         <td>{{reporte.MontoPago | currency: 'PEN': 'symbol': '': 'es-PE'}}</td>
                         <td>{{reporte.CodigoVoucher}}</td>
-                        <td>{{reporte.FechaPago | date:'mediumDate'}}</td>
+                        <td>{{reporte.FechaPago}}</td>
                       </tr>
                   </ng-template>
                   <ng-template pTemplate="emptymessage">

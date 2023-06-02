@@ -52,6 +52,7 @@ export class DashboardComponent implements OnInit {
   startPage:number = 0;
   limit:number = 5;
   offset:number = 0;
+  selectGrupoIndice:Grupo;
 
   constructor(private readonly _dashboard:DashboardService,
               private readonly _grupo:GrupoService,
@@ -214,7 +215,7 @@ export class DashboardComponent implements OnInit {
           next:(value) => {
             if(value.length==0) this.toast('warn','Reporte estudiantes','No se encontraron datos registrados para esas opciones de estado y grupo')
             this.listReportePagos = value;
-            console.log(value)
+            this.listReportePagos.map(data => data.FechaPago = moment(new Date(data.FechaPago)).format('DD [de] MMMM [del] YYYY'));
           },
           error:(e) => {
             console.log(e)
@@ -238,7 +239,7 @@ export class DashboardComponent implements OnInit {
                          { wch: 15 },
                          { wch: 15 },
                          { wch: 15 },
-                         { wch: 15 },
+                         { wch: 20 },
                          { wch: 15 },
                          { wch: 5 }]; // Ejemplo de anchuras para las 10 columnas
     worksheet['!cols'] = headerWidth;
@@ -259,8 +260,8 @@ export class DashboardComponent implements OnInit {
                     'Categoria de pago',
                     'Medio del pago',
                     'Monto pago S/.',
-                    'Código del voucher',
                     'Fecha de pago',
+                    'Código del voucher',
                     'Módulo'];
     const newData:any[] = [];
     newData.push(header);
@@ -370,11 +371,11 @@ export class DashboardComponent implements OnInit {
   }
 
   getIndiceData(grupo:Grupo){
+    this.selectGrupoIndice = grupo;
     this._dashboard.getIndiceDeDeudaVencida(grupo.Id).subscribe({
       next: (value) => {
         this.indice = value.indice;
         this.total = value.total;
-        console.log(value)
       },
       error: (e) => {
         console.log(e)

@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { LegendPosition } from '@swimlane/ngx-charts';
 import { Data } from '../../class/ReportePagos';
 
 @Component({

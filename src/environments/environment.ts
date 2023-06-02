@@ -5,10 +5,10 @@
 export const environment = {
   production: false,
   // theme
-  // BASE_URL:'http://192.168.10.108:3000',
-  // URL_SOCKET:'http://192.168.10.108:3000',
-  BASE_URL:'https://server.ceidbot.com',
-  URL_SOCKET:'https://server.ceidbot.com',
+  BASE_URL:'http://192.168.10.105:3000',
+  URL_SOCKET:'http://192.168.10.105:3000',
+  // BASE_URL:'https://server.ceidbot.com',
+  // URL_SOCKET:'https://server.ceidbot.com',
   URL_COUNTRY:'https://restcountries.com/v3.1'
 };
 

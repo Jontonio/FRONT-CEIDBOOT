@@ -29,7 +29,6 @@ export class ResetPasswordComponent implements OnInit {
       next: (resp) => {
         this.loading = false;
         if(resp.ok){
-          console.log(resp)
           this.isSendEmail = true;
           return;
         }

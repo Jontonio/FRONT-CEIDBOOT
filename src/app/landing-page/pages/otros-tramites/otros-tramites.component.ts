@@ -6,10 +6,9 @@ import { Person } from 'src/app/class/Person';
 import { Tramite } from 'src/app/class/Tramite';
 import { TipoTramite } from 'src/app/main/class/TipoTramite';
 import { Curso } from 'src/app/main/curso/class/Curso';
-import { Docente } from 'src/app/main/docente/class/Docente';
 import { Pago } from 'src/app/main/grupo/class/Pago';
 import { GlobalService } from 'src/app/services/global.service';
-
+import * as moment from 'moment';
 @Component({
   selector: 'app-otros-tramites',
   templateUrl: './otros-tramites.component.html',
@@ -317,7 +316,7 @@ export class OtrosTramitesComponent implements OnInit {
     }
 
     const pago = new Pago(this.FileDataPago.value.webViewLink,
-                          this.FechaPago.value,
+                          moment(this.FechaPago.value,'DD/MM/YYYY').toDate(),
                           this.NumOperacion.value,
                           this.MontoPago.value,
                           this.MedioDePago.value);

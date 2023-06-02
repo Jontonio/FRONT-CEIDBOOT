@@ -200,8 +200,8 @@ export class PagosComponent {
   setearPrecios(categoria:CategoriaPago){
 
     if(categoria.CodeCategoriaPago=='category_mensualidad'){
-      const monto = this.selectedGrupo.matricula.denomiServicio.MontoPension
-      this.MontoPago.setValue( monto );
+      const monto = this.selectedGrupo.matricula.denomiServicio.MontoPension;
+      this.MontoPago.setValue(monto);
       this.setPrecio = {
         mensaje:'cargue su voucher de monto ',
         monto: monto,
@@ -211,8 +211,8 @@ export class PagosComponent {
     }
 
     if(categoria.CodeCategoriaPago=='category_matricula'){
-      const monto = this.selectedGrupo.matricula.denomiServicio.MontoMatricula
-      this.MontoPago.setValue( monto );
+      const monto = this.selectedGrupo.matricula.denomiServicio.MontoMatricula;
+      this.MontoPago.setValue(monto);
       this.setPrecio = {
         mensaje:'cargue su voucher de monto ',
         monto: monto,
@@ -222,7 +222,7 @@ export class PagosComponent {
     }
 
     if(categoria.CodeCategoriaPago=='category_libro'){
-      this.MontoPago.setValue( 0.0 );
+      this.MontoPago.setValue(0.0);
       this.setPrecio = {
         mensaje:'Para más información del precio del libro comuniquese con del CEID',
         monto: 0.0,
@@ -302,7 +302,6 @@ export class PagosComponent {
   selectOneGrupo(data:EstudianteEnGrupo){
     if(!data) return;
     this.selectedGrupo = data;
-    console.log(this.selectedGrupo)
     this.listModulogrupo = this.selectedGrupo.grupo.grupoModulo;
     const current = this.listModulogrupo.filter( gModulo => gModulo.CurrentModulo == true )
     this.currentModulo = current?current[0]:null;
