@@ -1,150 +1,120 @@
-<p-dialog header="Información general"
-          [(visible)]="modalVisible"
-          [modal]="true"
-          position="bottom-left"
-          (onHide)="onModalClose()"
-          [breakpoints]="{ '960px': '75vw' }"
-          [style]="{ width: '60vw' }" [draggable]="true" [resizable]="false">
-          <div *ngIf="matriculaEstudiante">
-            <div>
-              <div class="grid content c1">
-                <div class="col-12 md:col-6">
-                  <h3>Estudiante</h3>
-                  <p class="m-2"><i class="fa-regular fa-id-card"></i> {{matriculaEstudiante.estudiante.TipoDocumento}} {{matriculaEstudiante.estudiante.Documento}}</p>
-                  <p class="m-2"><i class="fa-regular fa-user"></i> {{matriculaEstudiante.estudiante.Nombres | titlecase}}
-                    {{matriculaEstudiante.estudiante.ApellidoPaterno | titlecase}}
-                    {{matriculaEstudiante.estudiante.ApellidoMaterno | titlecase}}</p>
-                  <p class="m-2"><i class="fa-regular fa-envelope"></i> {{matriculaEstudiante.estudiante.Email}}</p>
-                  <p class="m-2"><i class="fa-sharp fa-solid fa-phone"></i> {{matriculaEstudiante.estudiante.CodePhone}} {{matriculaEstudiante.estudiante.Celular}}</p>
-                </div>
-                <div class="col-12 md:col-6" *ngIf="matriculaEstudiante.estudiante.apoderado">
-                  <h3>Apoderado</h3>
-                  <p class="m-2"><i class="fa-regular fa-id-card"></i> {{matriculaEstudiante.estudiante.apoderado.TipoDocumento}} {{matriculaEstudiante.estudiante.apoderado.Documento}}</p>
-                  <p class="m-2"><i class="fa-regular fa-user"></i> {{matriculaEstudiante.estudiante.apoderado.NomApoderado | titlecase}}
-                    {{matriculaEstudiante.estudiante.apoderado.ApellidoPApoderado | titlecase}}
-                    {{matriculaEstudiante.estudiante.apoderado.ApellidoMApoderado | titlecase}}</p>
-                  <p class="m-2"><i class="fa-sharp fa-solid fa-phone"></i> {{matriculaEstudiante.estudiante.apoderado.CodePhone}} {{matriculaEstudiante.estudiante.apoderado.CelApoderado}}</p>
-                </div>
-              </div>
-            </div>
-            <div class="grid content c2">
-              <div class="col-12 md:col-6" *ngIf="matriculaEstudiante.curso">
-                <div>
-                  <h3>Curso inscrito</h3>
-                  <div class="grid content">
-                    <div class="col-12 md:col-4">
-                      <img class="flag" [src]="matriculaEstudiante.curso.UrlBandera" alt="">
-                    </div>
-                    <div class="col-12 md:col-4 mt-2"> {{matriculaEstudiante.curso.NombreCurso | titlecase}}</div>
-                    <div class="col-12 md:col-4 mt-2" *ngIf="matriculaEstudiante.curso.nivel"> {{matriculaEstudiante.curso.nivel.Nivel }}</div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-12 md:col-6" *ngIf="matriculaEstudiante.institucion">
-                <div>
-                  <h3>Institución</h3>
-                  <div class="grid content">
-                    <div class="col-12 md:col-6 mt-2"> {{matriculaEstudiante.institucion.NombreInstitucion}}</div>
-                    <div class="col-12 md:col-6 mt-2"> {{matriculaEstudiante.institucion.EscuelaProfe}}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <h3 class="mt-2">Tipo de población</h3>
-            <div class="grid content c3">
-              <div class="col-12 md:col-8">
-                <p>{{matriculaEstudiante.denomiServicio.Descripcion}}</p>
-              </div>
-              <div class="col-12 md:col-2">Matricula: <br> s/. {{matriculaEstudiante.denomiServicio.MontoMatricula}}</div>
-              <div class="col-12 md:col-2">Pensión: <br> s/. {{matriculaEstudiante.denomiServicio.MontoPension}}</div>
-            </div>
-            <h3 class="mt-2">Datos de contacto del estudiante</h3>
-            <form [formGroup]="formEstudiante">
-              <div class="grid content">
-                <div class="col-4 md:col-4">
-                  <app-input-code [country]="country"
-                                  (selectedCountry)="selectedCountry($event)">
-                  </app-input-code>
-                </div>
-                <div class="col-8 md:col-8">
-                  <label for="celular" class="block mb-2 dot">.</label>
-                  <span class="p-input-icon-left full-width">
-                    <i class="pi pi-whatsapp"></i>
-                    <input id="Celular"
-                          type="text"
-                          autocomplete="off"
-                          formControlName="Celular"
-                          (click)="opCelular.toggle($event)"
-                          [maxLength]="isPeru?9:15"
-                          pInputText/>
-
-                  </span>
-                  <small *ngIf="Celular.hasError('pattern') && !Celular.hasError('required')"
-                        class="p-error">Digite un Celular <strong>válido</strong></small>
-                  <small *ngIf="Celular.hasError('required') && Celular.dirty"
-                        class="p-error">El campo Celular es <strong>requerido</strong></small>
-                  <p-overlayPanel #opCelular>
-                    Es de suma importancia que el <br> número tenga una cuenta de WhatsApp
-                  </p-overlayPanel>
-                </div>
-              </div>
-              <div class="col-12">
-                <label for="email" class="block mb-2">Email</label>
-                <span class="p-input-icon-left full-width">
-                  <i class="fa-regular fa-envelope"></i>
-                  <input id="Email"
-                        type="email"
-                        autocomplete="off"
-                        (click)="opEmail.toggle($event)"
-                        formControlName="Email"
-                        pInputText/>
-                </span>
-                <small *ngIf="Email.hasError('pattern') && !Email.hasError('required')"
-                    class="p-error">Digite un email <strong>válido</strong></small>
-                <small *ngIf="Email.hasError('required') && Email.dirty"
-                        class="p-error">El campo email es <strong>requerido</strong></small>
-                <p-overlayPanel #opEmail>
-                  Verifique que esté correctamente <br> escrito su email, para el envío de información académica.
-                </p-overlayPanel>
-              </div>
-              <div class="col-12">
-                <label for="denomiServicio" class="block mb-2">Población a la que pertenece</label>
-                <p-dropdown class="p-fluid p-grid p-formgrid"
-                            formControlName="denomiServicio"
-                            appendTo="body"
-                            [options]="listDenominServicio"
-                            (ngModelChange)="selectServicio($event)"
-                            placeholder="Selececionea la población que pertenece"
-                            optionLabel="Descripcion"></p-dropdown>
-                <small *ngIf="denomiServicio.hasError('required') && denomiServicio.dirty"
-                        class="p-error">El campo de población de edad <strong>requerido</strong></small>
-              </div>
-              <div class="col">
-                <button mat-raised-button
-                        (click)="updateDatos()">Guardar</button>
-              </div>
-            </form>
-            <!-- <div class="col-4 md:col-4">
-              <app-input-code [country]="country"
-                              (selectedCountry)="selectedCountry($event)">
-              </app-input-code>
-            </div>
-            <div class="col-8 md:col-8">
-              <label for="Email" class="block mb-2 dot">.</label>
-              <div class="p-inputgroup">
-                <span class="p-inputgroup-addon"><i class="fa-brands fa-whatsapp fa-xl"></i></span>
-                <input id="CelApoderado"
-                      class="p-fluid p-grid p-formgrid input-form"
-                      type="text"
-                      autocomplete="off"
-                      formControlName="CelApoderado"
-                      [maxLength]="isPeru?9:15"
-                      pInputText/>
-              </div>
-              <small *ngIf="CelApoderado.hasError('pattern') && !CelApoderado.hasError('required')"
-                class="p-error">Digite un número de celular <strong>válido</strong></small>
-              <small *ngIf="CelApoderado.hasError('required') && CelApoderado.dirty"
-                    class="p-error">El campo celular del apoderado es <strong>requerido</strong></small>
-            </div> -->
+<div *ngIf="matriculaEstudiante">
+  <div>
+    <div class="grid content c1">
+      <div class="col-12 md:col-6">
+        <h3>Estudiante</h3>
+        <p class="m-2"><i class="fa-regular fa-id-card"></i> {{matriculaEstudiante.estudiante.TipoDocumento}} {{matriculaEstudiante.estudiante.Documento}}</p>
+        <p class="m-2"><i class="fa-regular fa-user"></i> {{matriculaEstudiante.estudiante.Nombres | titlecase}}
+          {{matriculaEstudiante.estudiante.ApellidoPaterno | titlecase}}
+          {{matriculaEstudiante.estudiante.ApellidoMaterno | titlecase}}</p>
+        <p class="m-2"><i class="fa-regular fa-envelope"></i> {{matriculaEstudiante.estudiante.Email}}</p>
+        <p class="m-2"><i class="fa-sharp fa-solid fa-phone"></i> {{matriculaEstudiante.estudiante.CodePhone}} {{matriculaEstudiante.estudiante.Celular}}</p>
+      </div>
+      <div class="col-12 md:col-6" *ngIf="matriculaEstudiante.estudiante.apoderado">
+        <h3>Apoderado</h3>
+        <p class="m-2"><i class="fa-regular fa-id-card"></i> {{matriculaEstudiante.estudiante.apoderado.TipoDocumento}} {{matriculaEstudiante.estudiante.apoderado.Documento}}</p>
+        <p class="m-2"><i class="fa-regular fa-user"></i> {{matriculaEstudiante.estudiante.apoderado.NomApoderado | titlecase}}
+          {{matriculaEstudiante.estudiante.apoderado.ApellidoPApoderado | titlecase}}
+          {{matriculaEstudiante.estudiante.apoderado.ApellidoMApoderado | titlecase}}</p>
+        <p class="m-2"><i class="fa-sharp fa-solid fa-phone"></i> {{matriculaEstudiante.estudiante.apoderado.CodePhone}} {{matriculaEstudiante.estudiante.apoderado.CelApoderado}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="grid content c2">
+    <div class="col-12 md:col-6" *ngIf="matriculaEstudiante.curso">
+      <div>
+        <h3>Curso inscrito</h3>
+        <div class="grid content">
+          <div class="col-12 md:col-4">
+            <img class="flag" [src]="matriculaEstudiante.curso.UrlBandera" alt="">
           </div>
-</p-dialog>
+          <div class="col-12 md:col-4 mt-2"> {{matriculaEstudiante.curso.NombreCurso | titlecase}}</div>
+          <div class="col-12 md:col-4 mt-2" *ngIf="matriculaEstudiante.curso.nivel"> {{matriculaEstudiante.curso.nivel.Nivel }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 md:col-6" *ngIf="matriculaEstudiante.institucion">
+      <div>
+        <h3>Institución</h3>
+        <div class="grid content">
+          <div class="col-12 md:col-6 mt-2"> {{matriculaEstudiante.institucion.NombreInstitucion}}</div>
+          <div class="col-12 md:col-6 mt-2"> {{matriculaEstudiante.institucion.EscuelaProfe}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <h3 class="mt-2">Tipo de población</h3>
+  <div class="grid content c3">
+    <div class="col-12 md:col-8">
+      <p>{{matriculaEstudiante.denomiServicio.Descripcion}}</p>
+    </div>
+    <div class="col-12 md:col-2">Matricula: <br> s/. {{matriculaEstudiante.denomiServicio.MontoMatricula}}</div>
+    <div class="col-12 md:col-2">Pensión: <br> s/. {{matriculaEstudiante.denomiServicio.MontoPension}}</div>
+  </div>
+  <h3 class="mt-2">Datos de contacto del estudiante</h3>
+  <form [formGroup]="formEstudiante" (ngSubmit)="updateDatos()">
+    <div class="grid content">
+      <div class="col-4 md:col-4">
+        <app-input-code [country]="country"
+                        (selectedCountry)="selectedCountry($event)">
+        </app-input-code>
+      </div>
+      <div class="col-8 md:col-8">
+        <label for="celular" class="block mb-2 dot">.</label>
+        <span class="p-input-icon-left full-width">
+          <i class="pi pi-whatsapp"></i>
+          <input id="Celular"
+                type="text"
+                autocomplete="off"
+                formControlName="Celular"
+                (click)="opCelular.toggle($event)"
+                [maxLength]="isPeru?9:15"
+                pInputText/>
+
+        </span>
+        <small *ngIf="Celular.hasError('pattern') && !Celular.hasError('required')"
+              class="p-error">Digite un Celular <strong>válido</strong></small>
+        <small *ngIf="Celular.hasError('required') && Celular.dirty"
+              class="p-error">El campo Celular es <strong>requerido</strong></small>
+        <p-overlayPanel #opCelular>
+          Es de suma importancia que el <br> número tenga una cuenta de WhatsApp
+        </p-overlayPanel>
+      </div>
+    </div>
+    <div class="col-12">
+      <label for="email" class="block mb-2">Email</label>
+      <span class="p-input-icon-left full-width">
+        <i class="fa-regular fa-envelope"></i>
+        <input id="Email"
+              type="email"
+              autocomplete="off"
+              (click)="opEmail.toggle($event)"
+              formControlName="Email"
+              pInputText/>
+      </span>
+      <small *ngIf="Email.hasError('pattern') && !Email.hasError('required')"
+          class="p-error">Digite un email <strong>válido</strong></small>
+      <small *ngIf="Email.hasError('required') && Email.dirty"
+              class="p-error">El campo email es <strong>requerido</strong></small>
+      <p-overlayPanel #opEmail>
+        Verifique que esté correctamente <br> escrito su email, para el envío de información académica.
+      </p-overlayPanel>
+    </div>
+    <div class="col-12">
+      <label for="denomiServicio" class="block mb-2">Población a la que pertenece</label>
+      <p-dropdown class="p-fluid p-grid p-formgrid"
+                  formControlName="denomiServicio"
+                  appendTo="body"
+                  [options]="listDenominServicio"
+                  (ngModelChange)="selectServicio($event)"
+                  placeholder="Selececionea la población que pertenece"
+                  optionLabel="Descripcion"></p-dropdown>
+      <small *ngIf="denomiServicio.hasError('required') && denomiServicio.dirty"
+              class="p-error">El campo de población de edad <strong>requerido</strong></small>
+    </div>
+    <div class="col">
+      <button mat-raised-button type="submit" [disabled]="loadingUpdate">Guardar</button>
+    </div>
+  </form>
+</div>
+

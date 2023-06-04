@@ -27,7 +27,7 @@
 }
 .select-tr{
   background:rgba(5, 160, 51, 0.188) !important;
-  color: #000 !important;
+  color: var(--text-color);
 }
 @media only screen and (min-width: 1200px) {
   /* Estilos para escritorio grande aquí */

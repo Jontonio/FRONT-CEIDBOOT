@@ -1,3 +1,4 @@
+import { EstudianteEnGrupo } from "./EstudianteGrupo";
 import { GrupoModulo } from "./GrupoModulo";
 
 class ResMora {
@@ -12,6 +13,13 @@ class Mora{
   createdAt:Date;
   updatedAt:Date;
   grupoModulo:GrupoModulo;
+  estudianteEnGrupo:EstudianteEnGrupo;
+
+  constructor(MontoMora:number, grupoModulo:GrupoModulo, estudianteEnGrupo:EstudianteEnGrupo){
+    this.MontoMora = MontoMora;
+    this.grupoModulo = grupoModulo;
+    this.estudianteEnGrupo = estudianteEnGrupo;
+  }
 }
 
 export { Mora, ResMora }

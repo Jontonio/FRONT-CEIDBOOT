@@ -766,7 +766,6 @@ export class FormMatriculaComponent implements OnInit {
     this._global.registerPrematricula(matricula).subscribe({
       next:(value) => {
         if(value.ok){
-          console.log(value)
           this.resetFroms();
           this.toast('success', value.msg);
           this._socket.EmitEvent('updated_list_matriculados');

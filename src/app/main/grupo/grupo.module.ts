@@ -27,6 +27,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { ModalFechasPagoComponent } from './components/modal-fechas-pago/modal-fechas-pago.component';
 import { MainModule } from '../main.module';
 import { FilterMoraPipe } from './pipes/filter-mora.pipe';
+import { ModalPagoExtemporaneoComponent } from './components/modal-pago-extemporaneo/modal-pago-extemporaneo.component';
+import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 
 @NgModule({
@@ -48,6 +50,7 @@ import { FilterMoraPipe } from './pipes/filter-mora.pipe';
     InfoEstudianteComponent,
     ModalFechasPagoComponent,
     FilterMoraPipe,
+    ModalPagoExtemporaneoComponent,
   ],
   imports: [
     CommonModule,
@@ -63,6 +66,7 @@ import { FilterMoraPipe } from './pipes/filter-mora.pipe';
   ],
   exports:[
     ModalMensualidadComponent
-  ]
+  ],
+  providers:[DialogService, DynamicDialogRef, DynamicDialogConfig]
 })
 export class GrupoModule { }

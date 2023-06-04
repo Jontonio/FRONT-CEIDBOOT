@@ -1,0 +1,56 @@
+<p class="mb-2 p-2">
+  <p-messages severity="info">
+    <ng-template pTemplate>
+      <div>
+        <p>Los pago extemporáneos son asignados a estudiantes que incumplen los pagos la fecha.</p>
+        <p *ngIf="estudianteEnGrupo">Pago extemporáneo será aplicado a: <b>{{estudianteEnGrupo.estudiante.Nombres | uppercase}}</b></p>
+      </div>
+    </ng-template>
+  </p-messages>
+</p>
+<form [formGroup]="formMora" (ngSubmit)="guardar()">
+  <div class="col">
+    <label for="MontoPago" class="block mb-2">Monto de pago (extemporaneo) S/.</label>
+      <p-inputNumber inputId="minmaxfraction"
+                      mode="decimal"
+                      autocomplete="off"
+                      placeholder="Digite el monto de pago extemporaneo"
+                      class="p-fluid p-grid p-formgrid full-width"
+                      formControlName="MontoPago"
+                      [min]="0"
+                      [max]="1000"
+                      [minFractionDigits]="2"
+                      [maxFractionDigits]="5"></p-inputNumber>
+    <small *ngIf="MontoPago.hasError('pattern') && !MontoPago.hasError('required')"
+            class="p-error">Digite un monto de pago <strong>válido</strong></small>
+    <small *ngIf="MontoPago.hasError('required') && MontoPago.dirty"
+            class="p-error">El campo monto de pago es <strong>requerido</strong></small>
+  </div>
+  <div class="col">
+    <label for="grupo" class="block mb-2">Selecione el idioma</label>
+    <p-dropdown class="p-fluid p-grid p-formgrid"
+                appendTo="body"
+                [options]="listGrupoModulo"
+                formControlName="grupoModulo"
+                placeholder="Selecione el grupo"
+                (ngModelChange)="selectGrupoModulo($event)">
+      <ng-template pTemplate="selectedItem">
+        <div class="grupo-item grupo-item-value" *ngIf="selecGrupoModulo">
+          <span class="ml-1">
+            Módulo {{selecGrupoModulo.modulo.Modulo}}
+          </span>
+        </div>
+      </ng-template>
+      <ng-template let-grupoModulo pTemplate="item">
+        <div>
+          Módulo {{grupoModulo.modulo.Modulo}}
+        </div>
+      </ng-template>
+    </p-dropdown>
+    <small *ngIf="grupoModulo.hasError('required') && grupoModulo.dirty"
+            class="p-error">El campo módulo del grupo es <strong>requerido</strong></small>
+  </div>
+  <div class="col">
+    <button mat-raised-button type="submit"><i class="pi pi-save"></i> Guardar</button>
+  </div>
+</form>

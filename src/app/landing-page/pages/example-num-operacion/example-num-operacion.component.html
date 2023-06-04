@@ -1,9 +1,12 @@
-<div class="header-example"></div>
-<div class="container-example">
-  <div class="grid">
-    <div *ngFor="let item of ejemplos" class="col-12 md:col-3">
-      <p-card [header]="item.header">
-        <img class="img-voucher-example" [src]="item.url" alt="">
+<div class="header-show-file"></div>
+<div class="container-show-file">
+  <div class="animate__animated animate__fadeInDown">
+    <div class="content-file">
+      <p-card header="¿Dónde encuentro el número de operación?">
+        <object data="assets/files/ejemplo-numero-operacion.pdf#toolbar=0"
+                type="application/pdf"
+                class="embed-file">
+        </object>
       </p-card>
     </div>
   </div>

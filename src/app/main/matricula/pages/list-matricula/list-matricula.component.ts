@@ -10,6 +10,8 @@ import { MatriculaService } from '../../services/matricula.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ShowFileComponent } from 'src/app/shared/show-file/show-file.component';
 import { Estudiante } from '../../class/Estudiante';
+import { ModalInfoEstudianteComponent } from 'src/app/main/shared/modal-info-estudiante/modal-info-estudiante.component';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-list-matricula',
@@ -36,8 +38,12 @@ export class ListMatriculaComponent implements OnInit {
   openSidebarMessage:boolean = false;
   dataEstudianteMessage:Estudiante;
   termino:string;
+  refDialog: DynamicDialogRef;
+  limit:number  = 5;
+  offset:number = 0;
 
-  constructor(private readonly _msg:MessageService,
+  constructor(private readonly dialogService: DialogService,
+              private readonly _msg:MessageService,
               public readonly _matricula:MatriculaService,
               private readonly _socket:SocketService,
               public readonly _grupo:GrupoService,
@@ -47,7 +53,9 @@ export class ListMatriculaComponent implements OnInit {
 
   paginate(event:any) {
     this.startPage = event.first;
-    this._matricula.getListaMatriculados(event.rows, event.first);
+    this.limit = event.rows;
+    this.offset = event.first;
+    this._matricula.getListaMatriculados(this.limit, this.offset);
   }
 
   dialogDelete(matricula:Matricula) {
@@ -94,6 +102,25 @@ export class ListMatriculaComponent implements OnInit {
   moreInfoEstudiante(matricula:Matricula){
     this.moreInfoMatricula = true;
     this.infoMatricula = matricula;
+
+    this.infoMatricula = matricula;
+
+    const width = window.innerWidth < 768 ? '95%' : '70%';
+
+    this.refDialog = this.dialogService.open(ModalInfoEstudianteComponent,{
+      data: {
+        infoMatricula:this.infoMatricula,
+      },
+      header:`Información de ${this.infoMatricula.estudiante.Nombres}`,
+      width: width,
+      contentStyle: { overflow: 'auto' },
+      baseZIndex: 10000,
+    });
+
+    // verificar si se cerró el modal
+    this.refDialog.onClose.subscribe((result) => {
+      this._socket.EmitEvent('updated_list_matriculados', { limit:this.limit, offset:this.offset });
+    });
   }
 
   deleteDuplicate(list:any[], data:any){

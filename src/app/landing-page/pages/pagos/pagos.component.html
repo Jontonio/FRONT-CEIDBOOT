@@ -170,12 +170,17 @@
                         maxlength="20"
                         formControlName="NumOperacion"
                         autocomplete="off"
+                        (click)="numOp.toggle($event)"
                         pInputText/>
                   <small *ngIf="NumOperacion.hasError('pattern') && !NumOperacion.hasError('required')"
                   class="p-error">Digite un número de operación <strong>válido</strong></small>
                   <small *ngIf="NumOperacion.hasError('required') && NumOperacion.dirty"
                           class="p-error">El campo número de operación es <strong>requerido</strong></small>
                 </div>
+                <p-overlayPanel #numOp>
+                  <p><i class="fa-solid fa-message"></i><b> Nota </b>El número de operación corresponde al número o folio de la boleta <br> que se imprime en el voucher.
+                    para más información <a class="tag-a" routerLink="/main/example/numero-operacion" target="_blank">Ver ejemplo</a></p>
+                </p-overlayPanel>
                 <div class="col-12 md:col-12">
                   <label for="FechaPagoLibro" class="block mb-2">Fecha de pago</label>
                   <p-inputMask mask="99/99/9999"

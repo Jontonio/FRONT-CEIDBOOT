@@ -14,17 +14,18 @@ import { ModalMensualidadComponent } from '../../components/modal-mensualidad/mo
 import { Pago } from '../../class/Pago'
 import { GlobalService } from 'src/app/services/global.service';
 import { CategoriaPago } from '../../class/CategoriaPago';
-import { ChabotService } from 'src/app/main/chat-bot/services/chatbot.service';
-import { Message } from 'src/app/main/chat-bot/class/Message';
 import { Estudiante } from 'src/app/main/matricula/class/Estudiante';
 import { SocketService } from 'src/app/services/socket.service';
 import { PayloadSocket } from 'src/app/class/PayloadSocket';
 import * as moment from 'moment';
-import {EstadoGrupoEstudiante, InfoDateGrupo } from '../../class/EstadoGrupoEstudiante';
+import { InfoDateGrupo } from '../../class/EstadoGrupoEstudiante';
 import { GrupoModulo } from '../../class/GrupoModulo';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Mora } from '../../class/Mora';
 import { Matricula } from 'src/app/main/matricula/class/Matricula';
+import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { ModalPagoExtemporaneoComponent } from '../../components/modal-pago-extemporaneo/modal-pago-extemporaneo.component';
+import { ModalInfoEstudianteComponent } from 'src/app/main/shared/modal-info-estudiante/modal-info-estudiante.component';
 
 @Component({
   selector: 'app-estudiantes-grupo',
@@ -62,10 +63,14 @@ export class EstudiantesGrupoComponent implements OnInit {
   formFecha:FormGroup;
   dataEstudianteMessage:Estudiante;
 
-  moreInfoMatricula:boolean = false;
   infoMatricula:Matricula;
+  /** Variables pago extemporaneo */
+  estudianteEnGrupo:EstudianteEnGrupo;
+  grupoModulo:GrupoModulo[] = [];
+  refDialog: DynamicDialogRef;
 
-  constructor(private readonly _grupo:GrupoService,
+  constructor(private readonly dialogService: DialogService,
+              private readonly _grupo:GrupoService,
               private readonly fb:FormBuilder,
               private readonly activeRoute:ActivatedRoute,
               private readonly _socket:SocketService,
@@ -144,6 +149,7 @@ export class EstudiantesGrupoComponent implements OnInit {
         if(value.ok){
           this.resAlumnoEnGrupo = value;
           this.grupo = value.data.grupo;
+          this.grupoModulo = this.grupo.grupoModulo;
           this.curso = value.data.grupo.curso;
           this.docente = value.data.grupo.docente;
           this.listaEstudiantes = value.data.estudiantesEnGrupo;
@@ -196,9 +202,28 @@ export class EstudiantesGrupoComponent implements OnInit {
   }
 
   openModalSidebarMessage(estudiante:Estudiante){
-    console.log(estudiante)
     this.openSidebarMessage = true;
     this.dataEstudianteMessage = estudiante;
+  }
+
+  openModalAddPagoExtemporaneo(estudianteEnGrupo:EstudianteEnGrupo){
+    const width = window.innerWidth < 768 ? '90%' : '40%';
+
+    this.estudianteEnGrupo = estudianteEnGrupo;
+    this.refDialog = this.dialogService.open(ModalPagoExtemporaneoComponent,{
+      data: {
+        estudianteEnGrupo:this.estudianteEnGrupo,
+        grupoModulo:this.grupoModulo
+      },
+      header:'Agregar pago extemporáneo (mora)',
+      width: width,
+      contentStyle: { overflow: 'auto' },
+      baseZIndex: 10000,
+    });
+    // verificar si se cerró el modal
+    this.refDialog.onClose.subscribe((result) => {
+      this._socket.EmitEvent('updated_list_estudiante_grupo', { Id:this.idGrupo, limit:this.limit, offset:this.offset });
+    });
   }
 
   estadoModalMessage(estado:boolean){
@@ -279,9 +304,7 @@ export class EstudiantesGrupoComponent implements OnInit {
 
   /**
    *
-   *
    * Mora
-   *
    *
    */
 
@@ -299,7 +322,6 @@ export class EstudiantesGrupoComponent implements OnInit {
       },
       key: "confirmValidarMoraDialog"
     });
-    console.log(mora)
   }
 
   confirmEliminarMora(mora:Mora){
@@ -316,7 +338,6 @@ export class EstudiantesGrupoComponent implements OnInit {
       },
       key: "confirmEliminarMoraDialog"
     });
-    console.log(mora)
   }
 
   validarMora(Id:number, Verificado:boolean){
@@ -337,13 +358,27 @@ export class EstudiantesGrupoComponent implements OnInit {
   }
 
   moreInfoEstudiante(matricula:Matricula, estudiante:Estudiante){
-    this.moreInfoMatricula = true;
+
     this.infoMatricula = matricula;
     this.infoMatricula.estudiante = estudiante;
-  }
 
-  updateEstadoModalInfo(estado:boolean){
-    this.moreInfoMatricula = estado;
+    const width = window.innerWidth < 768 ? '95%' : '70%';
+
+    this.refDialog = this.dialogService.open(ModalInfoEstudianteComponent,{
+      data: {
+        infoMatricula:this.infoMatricula,
+      },
+      header:`Información de ${this.infoMatricula.estudiante.Nombres}`,
+      width: width,
+      contentStyle: { overflow: 'auto' },
+      baseZIndex: 10000,
+    });
+
+    // verificar si se cerró el modal
+    this.refDialog.onClose.subscribe((result) => {
+      this._socket.EmitEvent('updated_list_estudiante_grupo', { Id:this.idGrupo, limit:this.limit, offset:this.offset });
+    });
+
   }
 
   eliminarMora(Id:number){
@@ -367,7 +402,7 @@ export class EstudiantesGrupoComponent implements OnInit {
     if(e.status==401) return;
     const msg = e.error.message;
     Array.isArray(msg)?msg.forEach((e) => this.toast('error',e,'Error de validación de datos')):
-                                                  this.toast('error',msg,`${e.error.error}:${e.error.statusCode}`)
+                                          this.toast('error',msg,`${e.error.error}:${e.error.statusCode}`)
   }
 
   toast(type:string, msg:string, detail?:string){

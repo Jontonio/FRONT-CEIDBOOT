@@ -249,7 +249,6 @@ export class FormGrupoComponent implements OnInit {
   }
 
   ready(){
-    console.log(this.FormGrupo)
     /** validate data */
     if(this.FormGrupo.invalid){
       Object.keys( this.FormGrupo.controls ).forEach( input => this.FormGrupo.controls[input].markAsDirty() );

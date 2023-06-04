@@ -117,6 +117,10 @@ export class GrupoService{
     return this.http.patch<ResMora>(`${this.BASE_URL}/pago/update-mora/${id}`, data);
   }
 
+  registerMora(data:Mora){
+    return this.http.post<ResMora>(`${this.BASE_URL}/pago/register-mora`, data);
+  }
+
   /** Listen Sockets */
 
   OnGrupos(){

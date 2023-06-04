@@ -125,9 +125,10 @@
           </div>
           <div class="col-12 md:col-6">
             <p-paginator [rows]="5"
-                          [totalRecords]="_matricula.respMatricula.count!"
-                          [rowsPerPageOptions]="[5,10,15,20]"
-                          (onPageChange)="paginate($event)"></p-paginator>
+                         dropdownAppendTo="body"
+                         [totalRecords]="_matricula.respMatricula.count!"
+                         [rowsPerPageOptions]="[5,10,15,20]"
+                         (onPageChange)="paginate($event)"></p-paginator>
           </div>
           <div class="col-12 md:col-3"></div>
         </div>
@@ -152,10 +153,6 @@
           [breakpoints]="{ '960px': '75vw' }"
           [style]="{ width: '50vw' }" [draggable]="true" [resizable]="false"><p>{{description}}</p>
 </p-dialog>
-<!-- Información general dialog -->
-<app-modal-info-estudiante [modalVisible]="moreInfoMatricula"
-                           [matriculaEstudiante]="infoMatricula"
-                           (estadoModal)="updateEstadoModalInfo($event)"></app-modal-info-estudiante>
 
 <!-- mostrar el archivo cargado -->
 <app-show-file [fileURL]="FileMatriculaURL"></app-show-file>

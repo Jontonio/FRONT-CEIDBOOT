@@ -62,7 +62,7 @@
     <div>
       <p-card header="Fechas de pago" *ngIf="grupo">
         <div class="p-1 content-time-line">
-          <p-timeline [value]="grupo.grupoModulo" layout="horizontal" align="top">
+          <p-timeline [value]="grupoModulo" layout="horizontal" align="top">
             <ng-template pTemplate="content" let-data>
               <div class="p-1 tag-a content-date">
                 <div (click)="opendModalEdit(data, grupo.Id, true)">
@@ -160,9 +160,13 @@
                   <mat-icon><i class="fa-solid fa-circle-info"></i></mat-icon>
                   <span>ver más</span>
                 </button>
-                <button mat-menu-item (click)="openModalSidebarMessage( grupo.estudiante )">
+                <button mat-menu-item (click)="openModalSidebarMessage(grupo.estudiante)">
                   <mat-icon><i class="fa-brands fa-whatsapp"></i></mat-icon>
                   <span>Notificar estudiante</span>
+                </button>
+                <button mat-menu-item (click)="openModalAddPagoExtemporaneo(grupo)">
+                  <mat-icon><i class="fa-solid fa-hand-holding-dollar"></i></mat-icon>
+                  <span>Agregar pago extemporaneo</span>
                 </button>
                 <button mat-menu-item (click)="confirmarEliminar(grupo)">
                   <mat-icon><i class="fa-solid fa-trash-can"></i></mat-icon>
@@ -221,10 +225,6 @@
                           <mat-icon>more_vert</mat-icon>
                         </button>
                         <mat-menu #menu="matMenu">
-                          <button mat-menu-item>
-                            <mat-icon><i class="fa-solid fa-circle-info"></i></mat-icon>
-                            <span>Acerca del pago</span>
-                          </button>
                           <button mat-menu-item (click)="confirmarEliminarPago(pago)">
                             <mat-icon><i class="fa-solid fa-trash-can"></i></mat-icon>
                             <span>Eliminar pago</span>
@@ -319,7 +319,7 @@
             <p-paginator [rows]="5"
                          [totalRecords]="resAlumnoEnGrupo.count!"
                          [rowsPerPageOptions]="[5,10,15,20]"
-                        (onPageChange)="paginate($event)"></p-paginator>
+                         (onPageChange)="paginate($event)"></p-paginator>
           </div>
           <div></div>
         </div>
@@ -329,15 +329,12 @@
   </p-card>
 </div>
 
-<!--Componente modal ver mas estudiante-->
-<app-modal-info-estudiante [modalVisible]="moreInfoMatricula"
-                           [matriculaEstudiante]="infoMatricula"
-                           (estadoModal)="updateEstadoModalInfo($event)"></app-modal-info-estudiante>
-
 <!-- componente para la visualización de documentos -->
 <app-show-file [fileURL]="fileURL"></app-show-file>
+
 <!-- componente para visualizar el modal del mensualidad -->
 <app-modal-mensualidad [nameEventUpdate]="nameEventSocket"></app-modal-mensualidad>
+
 <!-- componente modal para las fechas de pago -->
 <app-modal-fechas-pago [formFecha]="formFecha"
                        [updateFechaInicio]="updateFechaInicio"

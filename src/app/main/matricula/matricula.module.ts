@@ -12,6 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from 'src/app/material/material.module';
 import { MainModule } from '../main.module';
 import { BuscarMatriculaPipe } from './pipes/buscar-matricula.pipe';
+import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 
 @NgModule({
@@ -31,6 +32,7 @@ import { BuscarMatriculaPipe } from './pipes/buscar-matricula.pipe';
     HttpClientModule,
     MaterialModule,
     MainModule
-  ]
+  ],
+  providers:[DialogService, DynamicDialogRef, DynamicDialogConfig]
 })
 export class MatriculaModule { }

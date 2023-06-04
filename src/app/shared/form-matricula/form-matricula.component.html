@@ -343,59 +343,59 @@
         <ng-template matStepLabel>Grupo y curso</ng-template>
         <div class="grid content">
           <div class="col-12">
-              <label for="grupo" class="block mb-2">Selecione el idioma</label>
-              <p-dropdown class="p-fluid p-grid p-formgrid"
-                          appendTo="body"
-                          [options]="listGrupos"
-                          formControlName="grupo"
-                          placeholder="Selecione el grupo"
-                          (ngModelChange)="selectGrupo($event)">
-                <ng-template pTemplate="selectedItem">
-                  <div class="grupo-item grupo-item-value" *ngIf="selecGrupo">
-                    <span class="ml-1">
-                      <img class="flag-code-country" [src]="selecGrupo.curso.UrlBandera" alt="">
-                      <span class="ml-1">{{selecGrupo.curso.NombreCurso | titlecase }} {{selecGrupo.curso.nivel.Nivel}}
-                      <p-tag severity="warning">{{selecGrupo.tipoGrupo.NombreGrupo | titlecase}}</p-tag></span>
-                    </span>
+            <label for="grupo" class="block mb-2">Selecione el idioma</label>
+            <p-dropdown class="p-fluid p-grid p-formgrid"
+                        appendTo="body"
+                        [options]="listGrupos"
+                        formControlName="grupo"
+                        placeholder="Selecione el grupo"
+                        (ngModelChange)="selectGrupo($event)">
+              <ng-template pTemplate="selectedItem">
+                <div class="grupo-item grupo-item-value" *ngIf="selecGrupo">
+                  <span class="ml-1">
+                    <img class="flag-code-country" [src]="selecGrupo.curso.UrlBandera" alt="">
+                    <span class="ml-1">{{selecGrupo.curso.NombreCurso | titlecase }} {{selecGrupo.curso.nivel.Nivel}}
+                    <p-tag severity="warning">{{selecGrupo.tipoGrupo.NombreGrupo | titlecase}}</p-tag></span>
+                  </span>
+                </div>
+              </ng-template>
+              <ng-template let-grupo pTemplate="item">
+                <div>
+                  <img class="flag-code-country" [src]="grupo.curso.UrlBandera" alt="">
+                  <!-- <span class="ml-1 mr-1">{{grupo.curso.NombreCurso | titlecase }} {{grupo.curso.nivel.Nivel}} - {{grupo.horario.HoraInicio | date:'h:mm a'}} a {{grupo.horario.HoraFinal | date:'h:mm a'}}</span> -->
+                  <span class="ml-1 mr-1">{{grupo.curso.NombreCurso | titlecase }} {{grupo.curso.nivel.Nivel}} <p-tag>{{grupo.tipoGrupo.NombreGrupo | titlecase}}</p-tag></span>
+                  <p-tag severity="warning" *ngIf="!grupo.RequeridoPPago">New</p-tag>
+                </div>
+              </ng-template>
+            </p-dropdown>
+            <small *ngIf="grupo.hasError('required') && grupo.dirty"
+                    class="p-error">El campo grupo es <strong>requerido</strong></small>
+            <div *ngIf="selecGrupo">
+              <p-fieldset legend="Idioma selecionado">
+                <div class="grid content">
+                  <div class="col-12 md:col-6">
+                    <p><img class="img-flag" [src]="selecGrupo.curso.UrlBandera" alt="bandera del curso"></p>
+                    <p class="mt-2"><b>Idioma</b></p>
+                    <p class="mt-1">{{selecGrupo.curso.NombreCurso | titlecase}}</p>
+                    <p class="mt-2"><b>Nivel del curso</b></p>
+                    <p class="mt-1">{{selecGrupo.curso.nivel.Nivel }}</p>
+                    <p class="mt-2"><b>Grupo</b></p>
+                    <p class="mt-1">{{selecGrupo.tipoGrupo.NombreGrupo | titlecase}}</p>
                   </div>
-                </ng-template>
-                <ng-template let-grupo pTemplate="item">
-                  <div>
-                    <img class="flag-code-country" [src]="grupo.curso.UrlBandera" alt="">
-                    <!-- <span class="ml-1 mr-1">{{grupo.curso.NombreCurso | titlecase }} {{grupo.curso.nivel.Nivel}} - {{grupo.horario.HoraInicio | date:'h:mm a'}} a {{grupo.horario.HoraFinal | date:'h:mm a'}}</span> -->
-                    <span class="ml-1 mr-1">{{grupo.curso.NombreCurso | titlecase }} {{grupo.curso.nivel.Nivel}} <p-tag>{{grupo.tipoGrupo.NombreGrupo | titlecase}}</p-tag></span>
-                    <p-tag severity="warning" *ngIf="!grupo.RequeridoPPago">New</p-tag>
+                  <div class="col-12 md:col-6">
+                    <p class="mt-2"><b>Horario</b></p>
+                    <p class="mt-1">{{selecGrupo.horario.HoraInicio | date:'h:mm a'}} a {{selecGrupo.horario.HoraFinal | date:'h:mm a'}}</p>
+                    <p class="mt-2"><b>Número de módulos</b></p>
+                    <p class="mt-1">{{selecGrupo.curso.modulo.Modulo}} Módulos</p>
+                    <p class="mt-2"><b>Inicio del grupo</b></p>
+                    <p class="mt-1"><i class="fa-regular fa-calendar mr-2"></i> {{selecGrupo.FechaInicioGrupo | date:'mediumDate'}}</p>
+                    <p class="mt-2"><b>Finalización del grupo</b></p>
+                    <p class="mt-1"><i class="fa-regular fa-calendar mr-2"></i> {{ selecGrupo.FechaFinalGrupo | date:'mediumDate'}}</p>
                   </div>
-                </ng-template>
-              </p-dropdown>
-              <small *ngIf="grupo.hasError('required') && grupo.dirty"
-                      class="p-error">El campo grupo es <strong>requerido</strong></small>
-              <div *ngIf="selecGrupo">
-                <p-fieldset legend="Idioma selecionado">
-                  <div class="grid content">
-                    <div class="col-12 md:col-6">
-                      <p><img class="img-flag" [src]="selecGrupo.curso.UrlBandera" alt="bandera del curso"></p>
-                      <p class="mt-2"><b>Idioma</b></p>
-                      <p class="mt-1">{{selecGrupo.curso.NombreCurso | titlecase}}</p>
-                      <p class="mt-2"><b>Nivel del curso</b></p>
-                      <p class="mt-1">{{selecGrupo.curso.nivel.Nivel }}</p>
-                      <p class="mt-2"><b>Grupo</b></p>
-                      <p class="mt-1">{{selecGrupo.tipoGrupo.NombreGrupo | titlecase}}</p>
-                    </div>
-                    <div class="col-12 md:col-6">
-                      <p class="mt-2"><b>Horario</b></p>
-                      <p class="mt-1">{{selecGrupo.horario.HoraInicio | date:'h:mm a'}} a {{selecGrupo.horario.HoraFinal | date:'h:mm a'}}</p>
-                      <p class="mt-2"><b>Número de módulos</b></p>
-                      <p class="mt-1">{{selecGrupo.curso.modulo.Modulo}} Módulos</p>
-                      <p class="mt-2"><b>Inicio del grupo</b></p>
-                      <p class="mt-1"><i class="fa-regular fa-calendar mr-2"></i> {{selecGrupo.FechaInicioGrupo | date:'mediumDate'}}</p>
-                      <p class="mt-2"><b>Finalización del grupo</b></p>
-                      <p class="mt-1"><i class="fa-regular fa-calendar mr-2"></i> {{ selecGrupo.FechaFinalGrupo | date:'mediumDate'}}</p>
-                    </div>
-                  </div>
-              </p-fieldset>
+                </div>
+            </p-fieldset>
 
-              </div>
+            </div>
           </div>
         </div>
         <br>

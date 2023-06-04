@@ -45,6 +45,7 @@ import { AccordionModule } from 'primeng/accordion';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { EditorModule } from 'primeng/editor';
 import { TimelineModule } from 'primeng/timeline';
+import { DynamicDialogModule } from 'primeng/dynamicdialog';
 
 /**
  * array of modules
@@ -90,7 +91,8 @@ const listModules:any[] = [
   AccordionModule,
   OverlayPanelModule,
   EditorModule,
-  TimelineModule
+  TimelineModule,
+  DynamicDialogModule
 ]
 
 @NgModule({

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, OnInit } from '@angular/core';
 import { Matricula } from '../../matricula/class/Matricula';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Code } from '../../grupo/class/Code';
@@ -9,64 +9,55 @@ import { MainService } from '../../services/main.service';
 import { MatriculaService } from '../../matricula/services/matricula.service';
 import { Estudiante } from '../../matricula/class/Estudiante';
 import { MessageService } from 'primeng/api';
-import { HttpResponse } from '@angular/common/http';
 import { SocketService } from 'src/app/services/socket.service';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-modal-info-estudiante',
   templateUrl: './modal-info-estudiante.component.html',
   styleUrls: ['./modal-info-estudiante.component.scss']
 })
-export class ModalInfoEstudianteComponent {
+export class ModalInfoEstudianteComponent implements OnInit {
 
-  @Output() estadoModal = new EventEmitter<boolean>();
-  @Input() modalVisible:boolean;
-  @Input() matriculaEstudiante:Matricula;
+  matriculaEstudiante:Matricula;
 
   listDenominServicio:DenominServicio[];
   listDenominServicio$:Subscription;
   hayErrorGetData:boolean = false;
+  loadingUpdate:boolean = false;
 
   formEstudiante:FormGroup;
-  formApoderado:FormGroup;
   country:Code;
   isPeru:boolean;
 
   constructor(private readonly fb:FormBuilder,
               private readonly _global:GlobalService,
               private readonly _matricula:MatriculaService,
+              private readonly ref: DynamicDialogRef,
               private readonly _msg:MessageService,
-              private readonly _socket:SocketService,
+              private readonly config: DynamicDialogConfig,
               private readonly _main:MainService) {
-    this.modalVisible = false;
     this.country = { name:'Peru', codePhone:'+51', flag:'https://flagcdn.com/pe.svg', code:'PE'};
     this.isPeru = true;
     this.createFormEstudiante();
     this.getListaDenominacionServicio();
   }
 
-  onModalClose(){
-    this.modalVisible = false;
-    this.estadoModal.emit( this.modalVisible );
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if(changes['matriculaEstudiante'] && changes['matriculaEstudiante'].currentValue){
-      const data:Matricula = changes['matriculaEstudiante'].currentValue;
-      this.Celular.setValue(data.estudiante.Celular);
-      this.Email.setValue(data.estudiante.Email);
-      this.denomiServicio.setValue(data.denomiServicio)
-      this._main.getOneCountryByCode(data.estudiante.Code).subscribe({
-        next: (resp) => {
-          if(resp.length!=0){
-            this.country = resp[0];
-          }
-        },
-        error: (e) => {
-          console.log(e)
+  ngOnInit(): void {
+    this.matriculaEstudiante = this.config.data.infoMatricula;
+    this.Celular.setValue(this.matriculaEstudiante.estudiante.Celular);
+    this.Email.setValue(this.matriculaEstudiante.estudiante.Email);
+    this.denomiServicio.setValue(this.matriculaEstudiante.denomiServicio)
+    this._main.getOneCountryByCode(this.matriculaEstudiante.estudiante.Code).subscribe({
+      next: (resp) => {
+        if(resp.length!=0){
+          this.country = resp[0];
         }
-      })
-    }
+      },
+      error: (e) => {
+        console.log(e)
+      }
+    })
   }
 
   getListaDenominacionServicio(){
@@ -107,48 +98,18 @@ export class ModalInfoEstudianteComponent {
     this.isPeru = (this.country.code!='PE')?false:true;
   }
 
-  createFormMayorEdad(){
-    this.formApoderado = this.fb.group({
-      DocumentoApoderado:[null],
-      NomApoderado:[null],
-      ApellidoPApoderado:[null],
-      ApellidoMApoderado:[null],
-      CelApoderado:[null],
-    })
-  }
-
 
   selectServicio(servicio:DenominServicio){
     if(!servicio) return;
-    // this.MontoPagoMensualidad.setValue(servicio.MontoPension);
-    // this.MontoPagoMatricula.setValue(servicio.MontoMatricula);
-    // this.MontoPagoMatricula.disable();
-    // this.MontoPagoMensualidad.disable();
-    // this.MontoPagoMensualidad.patchValue(servicio.MontoPension);
-    // this.MontoPagoMatricula.patchValue(servicio.MontoMatricula);
   }
 
-  get DocumentoApoderado(){
-    return this.formApoderado.controls['DocumentoApoderado'];
-  }
-  get NomApoderado(){
-    return this.formApoderado.controls['NomApoderado'];
-  }
-  get ApellidoPApoderado(){
-    return this.formApoderado.controls['ApellidoPApoderado'];
-  }
-  get ApellidoMApoderado(){
-    return this.formApoderado.controls['ApellidoMApoderado'];
-  }
-  get CelApoderado(){
-    return this.formApoderado.controls['CelApoderado'];
-  }
 
   updateDatos(){
     if(this.formEstudiante.invalid){
       Object.keys( this.formEstudiante.controls ).forEach( label => this.formEstudiante.controls[label].markAsDirty())
       return;
     }
+    this.loadingUpdate = true;
     this._matricula.updateMatricula(this.matriculaEstudiante.Id, { denomiServicio: this.denomiServicio.value } as Matricula)
         .pipe(
           switchMap((res) =>
@@ -156,11 +117,12 @@ export class ModalInfoEstudianteComponent {
         )
         .subscribe({
           next:(value) => {
-            this.modalVisible = false;
+            this.loadingUpdate = false;
             this.toast('success','Actualización de datos','Datos del estudiante actualizados correctamente');
-            this._socket.EmitEvent('updated_list_matriculados');
+            this.ref.close('cerrar modal info estudiante');
           },
           error:(e) => {
+            this.loadingUpdate = false;
             this.messageError(e);
           }
         })

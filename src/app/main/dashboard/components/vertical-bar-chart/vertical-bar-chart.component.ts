@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, SimpleChanges } from '@angular/core';
 import { DataVerticalBar } from 'src/app/class/Graphics';
 
 
@@ -9,7 +9,7 @@ import { DataVerticalBar } from 'src/app/class/Graphics';
 })
 export class VerticalBarChartComponent {
 
-  @Input() data: DataVerticalBar[];
+  @Input() data: DataVerticalBar[] = [];
 
   // options
   showXAxis: boolean = true;

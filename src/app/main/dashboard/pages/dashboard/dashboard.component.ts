@@ -18,6 +18,7 @@ import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { MessageService } from 'primeng/api';
 import { HttpErrorResponse } from '@angular/common/http';
+import { tap } from 'rxjs';
 
 
 @Component({
@@ -150,7 +151,18 @@ export class DashboardComponent implements OnInit {
   }
 
   getDataVerticalBarPagosMora(grupoId:number, estadoGrupoId:number){
-    this._dashboard.getDataVerticalBarPagosMora(grupoId, estadoGrupoId)
+    this._dashboard.
+    getDataVerticalBarPagosMora(grupoId, estadoGrupoId).
+    pipe(
+      tap( data => {
+        // data.forEach(objeto => {
+        //   objeto.series.forEach(item => {
+        //     item.value = Number(item.value);
+        //   });
+        // });
+        return data;
+      })
+    )
     .subscribe({
       next:(value) => {
         this.dataPagosMora = value;
@@ -362,7 +374,6 @@ export class DashboardComponent implements OnInit {
       next: (value) => {
         if(value.length==0) this.toast('warn','Reporte Otros pagos','No se encontraron datos registrados para esa fecha')
         this.listReporteOtrosPagos = value;
-        console.log(value)
       },
       error: (e) => {
         console.log(e)
