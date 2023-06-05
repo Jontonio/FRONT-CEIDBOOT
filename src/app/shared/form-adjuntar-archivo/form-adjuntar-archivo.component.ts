@@ -92,6 +92,27 @@ export class FormAdjuntarArchivoComponent implements OnInit {
   onDocumentoChange(fileChangeEvent:any) {
     const file = fileChangeEvent.target.files[0];
     if( !file )return;
+
+    // Verificar el tamaño del archivo
+    const fileSizeInMB = file.size / (1024 * 1024);
+    if (fileSizeInMB > 4) {
+      // El archivo excede el tamaño permitido
+      // Mostrar un mensaje de error o realizar alguna acción adecuada
+      this.toast('warn',`El tamaño del archivo excede 4 MB`);
+      this.FileDocumento.reset();
+      return;
+    }
+
+    // Verificar el formato del archivo
+    const allowedFormats = ['application/pdf'];
+    if (!allowedFormats.includes(file.type)) {
+      // El formato del archivo no es permitido
+      // Mostrar un mensaje de error o realizar alguna acción adecuada
+      this.toast('warn',`El formato del archivo no es permitido`);
+      this.FileDocumento.reset();
+      return;
+    }
+
     this.loadingDocumento = true;
     this.emiterloadingDocument.emit(true);
     this.FileDocumento.disable();
@@ -120,6 +141,27 @@ export class FormAdjuntarArchivoComponent implements OnInit {
   onFilePagoChange(fileChangeEvent:any) {
     const file = fileChangeEvent.target.files[0];
     if( !file )return;
+
+    // Verificar el tamaño del archivo
+    const fileSizeInMB = file.size / (1024 * 1024);
+    if (fileSizeInMB > 4) {
+      // El archivo excede el tamaño permitido
+      // Mostrar un mensaje de error o realizar alguna acción adecuada
+      this.toast('warn',`El tamaño del archivo excede 4 MB`);
+      this.FilePago.reset();
+      return;
+    }
+
+    // Verificar el formato del archivo
+    const allowedFormats = ['application/pdf', 'image/png', 'image/jpeg'];
+    if (!allowedFormats.includes(file.type)) {
+      // El formato del archivo no es permitido
+      // Mostrar un mensaje de error o realizar alguna acción adecuada
+      this.toast('warn',`El formato del archivo no es permitido`);
+      this.FilePago.reset();
+      return;
+    }
+
     this.loadingFilePago = true;
     this.emiterloadingFilePago.emit(true);
     this.FilePago.disable();
@@ -149,6 +191,27 @@ export class FormAdjuntarArchivoComponent implements OnInit {
   onFileDocumentoExtraChange(fileChangeEvent:any) {
     const file = fileChangeEvent.target.files[0];
     if( !file )return;
+
+    // Verificar el tamaño del archivo
+    const fileSizeInMB = file.size / (1024 * 1024);
+    if (fileSizeInMB > 4) {
+      // El archivo excede el tamaño permitido
+      // Mostrar un mensaje de error o realizar alguna acción adecuada
+      this.toast('warn',`El tamaño del archivo excede 4 MB`);
+      this.FileDocumentoExtra.reset();
+      return;
+    }
+
+    // Verificar el formato del archivo
+    const allowedFormats = ['image/png', 'image/jpeg'];
+    if (!allowedFormats.includes(file.type)) {
+      // El formato del archivo no es permitido
+      // Mostrar un mensaje de error o realizar alguna acción adecuada
+      this.toast('warn',`El formato del archivo no es permitido`);
+      this.FileDocumentoExtra.reset();
+      return;
+    }
+
     this.loadingFileExtra = true;
     this.emiterloadingFileExtra.emit(true);
     this.FileDocumentoExtra.disable();

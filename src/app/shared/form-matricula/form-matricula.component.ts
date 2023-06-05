@@ -1026,6 +1026,26 @@ export class FormMatriculaComponent implements OnInit {
   onDocumentoMatriculaChange(fileChangeEvent:any) {
     const file = fileChangeEvent.target.files[0];
     if( !file )return;
+    // Verificar el tamaño del archivo
+    const fileSizeInMB = file.size / (1024 * 1024);
+    if (fileSizeInMB > 4) {
+      // El archivo excede el tamaño permitido
+      // Mostrar un mensaje de error o realizar alguna acción adecuada
+      this.toast('warn',`El tamaño del archivo excede 4 MB`);
+      this.fileDocumentoMatricula.reset();
+      return;
+    }
+
+    // Verificar el formato del archivo
+    const allowedFormats = ['application/pdf'];
+    if (!allowedFormats.includes(file.type)) {
+      // El formato del archivo no es permitido
+      // Mostrar un mensaje de error o realizar alguna acción adecuada
+      this.toast('warn',`El formato del archivo no es permitido`);
+      this.fileDocumentoMatricula.reset();
+      return;
+    }
+
     this.loadingDocumentoMatricula = true;
     this.fileDocumentoMatricula.disable();
     const direccion = 'requisitos';
@@ -1051,6 +1071,25 @@ export class FormMatriculaComponent implements OnInit {
   onFilePagoMatriculaChange(fileChangeEvent:any) {
     const file = fileChangeEvent.target.files[0];
     if( !file )return;
+    // Verificar el tamaño del archivo
+    const fileSizeInMB = file.size / (1024 * 1024);
+    if (fileSizeInMB > 4) {
+      // El archivo excede el tamaño permitido
+      // Mostrar un mensaje de error o realizar alguna acción adecuada
+      this.toast('warn',`El tamaño del archivo excede 4 MB`);
+      this.filePagoMatricula.reset();
+      return;
+    }
+
+    // Verificar el formato del archivo
+    const allowedFormats = ['application/pdf','image/png', 'image/jpeg'];
+    if (!allowedFormats.includes(file.type)) {
+      // El formato del archivo no es permitido
+      // Mostrar un mensaje de error o realizar alguna acción adecuada
+      this.toast('warn',`El formato del archivo no es permitido`);
+      this.filePagoMatricula.reset();
+      return;
+    }
     this.loadingFilePagoMatricula = true;
     this.filePagoMatricula.disable();
     const direccion = 'matricula';
@@ -1076,6 +1115,25 @@ export class FormMatriculaComponent implements OnInit {
   onFilePagoMensualidadChange(fileChangeEvent:any) {
     const file = fileChangeEvent.target.files[0];
     if( !file )return;
+    // Verificar el tamaño del archivo
+    const fileSizeInMB = file.size / (1024 * 1024);
+    if (fileSizeInMB > 4) {
+      // El archivo excede el tamaño permitido
+      // Mostrar un mensaje de error o realizar alguna acción adecuada
+      this.toast('warn',`El tamaño del archivo excede 4 MB`);
+      this.filePagoMensualidad.reset();
+      return;
+    }
+
+    // Verificar el formato del archivo
+    const allowedFormats = ['application/pdf','image/png', 'image/jpeg'];
+    if (!allowedFormats.includes(file.type)) {
+      // El formato del archivo no es permitido
+      // Mostrar un mensaje de error o realizar alguna acción adecuada
+      this.toast('warn',`El formato del archivo no es permitido`);
+      this.filePagoMensualidad.reset();
+      return;
+    }
     this.loadingFilePagoMensualidad = true;
     this.filePagoMensualidad.disable();
     const direccion = 'mensualidad';
@@ -1102,6 +1160,25 @@ export class FormMatriculaComponent implements OnInit {
   onFilePagoLibroChange(fileChangeEvent:any) {
     const file = fileChangeEvent.target.files[0];
     if( !file )return;
+    // Verificar el tamaño del archivo
+    const fileSizeInMB = file.size / (1024 * 1024);
+    if (fileSizeInMB > 4) {
+      // El archivo excede el tamaño permitido
+      // Mostrar un mensaje de error o realizar alguna acción adecuada
+      this.toast('warn',`El tamaño del archivo excede 4 MB`);
+      this.filePagoLibro.reset();
+      return;
+    }
+
+    // Verificar el formato del archivo
+    const allowedFormats = ['application/pdf','image/png', 'image/jpeg'];
+    if (!allowedFormats.includes(file.type)) {
+      // El formato del archivo no es permitido
+      // Mostrar un mensaje de error o realizar alguna acción adecuada
+      this.toast('warn',`El formato del archivo no es permitido`);
+      this.filePagoLibro.reset();
+      return;
+    }
     this.loadingFilePagoLibro = true;
     const direccion = 'libro';
     this.filePagoLibro.disable();

@@ -354,6 +354,26 @@ export class PagosComponent {
   selectFile(fileChangeEvent:any){
     this.file = fileChangeEvent.target.files[0];
     if(!this.file )return;
+    // Verificar el tamaño del archivo
+    const fileSizeInMB = this.file.size / (1024 * 1024);
+    if (fileSizeInMB > 4) {
+      // El archivo excede el tamaño permitido
+      // Mostrar un mensaje de error o realizar alguna acción adecuada
+      this.toast('warn',`El tamaño del archivo excede 4 MB`);
+      this.FileURL.reset();
+      return;
+    }
+
+    // Verificar el formato del archivo
+    const allowedFormats = ['image/png', 'image/jpeg'];
+    if (!allowedFormats.includes(this.file.type)) {
+      // El formato del archivo no es permitido
+      // Mostrar un mensaje de error o realizar alguna acción adecuada
+      this.toast('warn',`El formato del archivo no es permitido`);
+      this.FileURL.reset();
+      return;
+    }
+
     this.formData = new FormData();
     this.formData.append('file', this.file, this.file.name);
     this.formData.append('id_grupo', String(this.estudianteEnGrupo.value.grupo.Id));
