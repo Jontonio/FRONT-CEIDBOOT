@@ -7,6 +7,7 @@ import { SocketService } from 'src/app/services/socket.service';
 import { EstadoWhatsApp } from '../class/AuthBot';
 import { Message, ResMessage } from '../class/Message';
 import { ResIntent } from '../class/Intent';
+import { ResBot } from '../class/Bot';
 
 
 @Injectable({
@@ -60,6 +61,10 @@ export class ChabotService {
 
   generarQR(){
     return this.http.get(`${this.BASE_URL}/bot/generate-qr-whatsapp`);
+  }
+
+  getInfoCelphone(){
+    return this.http.get<ResBot>(`${this.BASE_URL}/bot/info-whatsapp`);
   }
 
 }

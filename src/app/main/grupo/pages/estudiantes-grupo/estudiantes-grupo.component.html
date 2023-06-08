@@ -132,7 +132,8 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-grupo let-rowIndex="rowIndex" let-expanded="expanded">
-          <tr class="select-tr">
+          <tr class="select-tr-matriculado" [ngClass]="{'select-tr-matriculado': grupo.matricula.EstadoMatricula=='matriculado',
+                                                        'select-tr-retirado': grupo.matricula.EstadoMatricula=='retirado'}">
             <td>
               <button type="button"
                       pButton
@@ -156,9 +157,9 @@
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #menu="matMenu">
-                <button mat-menu-item (click)="moreInfoEstudiante(grupo.matricula, grupo.estudiante)">
+                <button mat-menu-item (click)="moreInformacionEstudiante(grupo.estudiante)">
                   <mat-icon><i class="fa-solid fa-circle-info"></i></mat-icon>
-                  <span>ver más</span>
+                  <span>Acerca del estudiante</span>
                 </button>
                 <button mat-menu-item (click)="openModalSidebarMessage(grupo.estudiante)">
                   <mat-icon><i class="fa-brands fa-whatsapp"></i></mat-icon>
@@ -167,6 +168,10 @@
                 <button mat-menu-item (click)="openModalAddPagoExtemporaneo(grupo)">
                   <mat-icon><i class="fa-solid fa-hand-holding-dollar"></i></mat-icon>
                   <span>Agregar pago extemporaneo</span>
+                </button>
+                <button mat-menu-item (click)="openModalEstadoEstudiante(grupo.matricula)">
+                  <mat-icon><i class="fa-solid fa-question"></i></mat-icon>
+                  <span>Estado del estudiante en grupo</span>
                 </button>
                 <button mat-menu-item (click)="confirmarEliminar(grupo)">
                   <mat-icon><i class="fa-solid fa-trash-can"></i></mat-icon>
@@ -328,6 +333,33 @@
     </div>
   </p-card>
 </div>
+
+<!-- Modal estado estudiante -->
+<p-dialog header="Estado del estudiante"
+          [(visible)]="modalEstadoEstudiante"
+          [modal]="true"
+          [style]="{width: '45vw'}"
+          [breakpoints]="{'960px': '75vw', '640px': '90vw'}"
+          [draggable]="false"
+          [resizable]="false">
+        <div class="col-12">
+          <label for="EsMayor" class="block mb-2">¿Usted es mayor de edad?</label>
+          <p-dropdown class="p-fluid p-grid p-formgrid"
+                      appendTo="body"
+                      [(ngModel)]="estadoEstudiante"
+                      [options]="optionEstadoEstudiante"
+                      placeholder="Selececione"
+                      optionValue="code"
+                      optionLabel="value"></p-dropdown>
+        </div>
+        <ng-template pTemplate="footer">
+          <button mat-raised-button
+                  class="button-custom"
+                  (click)="saveEstadoEstudiante()">
+                  <i [class]="loadingSaveEstadoEstudiante?'pi pi-spin pi-spinner':'pi pi-save'"></i> Guardar</button>
+        </ng-template>
+</p-dialog>
+
 
 <!-- componente para la visualización de documentos -->
 <app-show-file [fileURL]="fileURL"></app-show-file>

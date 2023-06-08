@@ -11,7 +11,7 @@ import { Description_media, Link, Media, Message, PayloadBoot } from '../../clas
   templateUrl: './intent.component.html',
   styleUrls: ['./intent.component.scss']
 })
-export class IntentComponent implements OnInit {
+export class IntentComponent {
 
   uuid:string;
   intent:Intent;
@@ -34,9 +34,6 @@ export class IntentComponent implements OnInit {
     this.getId(this.activeRoute);
   }
 
-  ngOnInit(): void {
-  }
-
   createFormResponse(){
     this.responseForm = this.fb.group({
       text: this.fb.array([])
@@ -47,7 +44,7 @@ export class IntentComponent implements OnInit {
     this.payloadForm = this.fb.group({
       description_media:[null],
       link:[null, [Validators.pattern(/^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/)]],
-      media:[null, [Validators.pattern(/^https?:\/\/(?:[a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,}(?:\/[^\s]*)?\.(?:png|jpg)$/)]],
+      media:[null, [Validators.pattern('^https?:\\/\\/.*\\.(jpe?g|png|gif|bmp)(\\?.*)?$')]],
       message:[null],
     })
   }
@@ -100,7 +97,6 @@ export class IntentComponent implements OnInit {
         this.loadingData = false;
         if(value.ok){
           this.intent = value.data as Intent;
-          console.log(this.intent)
           this.intent.messages.forEach( data => {
             if(data.message=='text'){
               this.lisText = data.text?.text;
@@ -193,15 +189,14 @@ export class IntentComponent implements OnInit {
       return;
     }
     this.loadingSavePayload = true;
-    const payload = new PayloadBoot(new Message((this.message.value).trim()),
-                                    new Media((this.media.value).trim()),
-                                    new Link((this.link.value).trim()),
-                                    new Description_media((this.description_media.value).trim()))
+    const payload = new PayloadBoot(new Message(this.message.value),
+                                    new Media(this.media.value),
+                                    new Link(this.link.value),
+                                    new Description_media(this.description_media.value))
     this._bot.updateOnePayloadIntent(this.uuid, payload).subscribe({
       next: (value) => {
         this.loadingSavePayload = false
         if(value.ok){
-          console.log(value.data)
           this.toast('success', value.msg);
           return;
         }

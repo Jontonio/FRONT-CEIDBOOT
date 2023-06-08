@@ -30,12 +30,11 @@ export class MatriculaService{
   }
 
   removeMatriculado(Id:number){
-    //TODO: falta validar
-    return this.http.delete<ResMatricula>(`${environment.BASE_URL}/matricula/remove-fake-matriculado/${Id}`);
+    return this.http.delete<ResMatricula>(`${environment.BASE_URL}/matricula/eliminar-matriculado/${Id}`);
   }
 
   updateMatricula(Id:number, data:Matricula){
-    return this.http.patch(`${environment.BASE_URL}/matricula/update-matricula/${Id}`, data);
+    return this.http.patch<ResMatricula>(`${environment.BASE_URL}/matricula/update-matricula/${Id}`, data);
   }
 
   updateEstudiante(Id:number, data:Estudiante){

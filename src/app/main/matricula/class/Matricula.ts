@@ -17,6 +17,7 @@ class Matricula {
   RequiTecnologico:boolean;
   CarCompromiso:boolean;
   estudiante:Estudiante;
+  EstadoMatricula:string;
   denomiServicio:Servicio;
   institucion:Institucion;
   FileMatriculaURL:string;

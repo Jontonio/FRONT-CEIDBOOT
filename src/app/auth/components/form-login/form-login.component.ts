@@ -15,6 +15,7 @@ export class FormLoginComponent implements OnInit {
   formLogin:FormGroup;
   loading:boolean = false;
   msg: Message[] = [];
+  seePassword:boolean = false;
 
   constructor(private fb:FormBuilder,
               private _auth:AuthService,

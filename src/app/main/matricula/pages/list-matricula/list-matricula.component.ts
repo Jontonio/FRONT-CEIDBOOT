@@ -7,7 +7,6 @@ import { SocketService } from 'src/app/services/socket.service';
 import { Matricula } from '../../class/Matricula';
 import { Servicio } from '../../class/Servicio';
 import { MatriculaService } from '../../services/matricula.service';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { ShowFileComponent } from 'src/app/shared/show-file/show-file.component';
 import { Estudiante } from '../../class/Estudiante';
 import { ModalInfoEstudianteComponent } from 'src/app/main/shared/modal-info-estudiante/modal-info-estudiante.component';
@@ -65,7 +64,6 @@ export class ListMatriculaComponent implements OnInit {
         header: 'Confirmación de eliminar al preinscrito',
         icon: 'pi pi-info-circle',
         accept: () => {
-          console.log(matricula)
           this.deleteMatriculado(matricula.Id);
         },
         reject: (type:any) => {

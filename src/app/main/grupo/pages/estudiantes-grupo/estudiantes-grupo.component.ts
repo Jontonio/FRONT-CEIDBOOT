@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Grupo } from '../../class/Grupo';
 import { GrupoService } from '../../services/grupo.service';
 import { Subscription, tap } from 'rxjs';
@@ -23,9 +23,14 @@ import { GrupoModulo } from '../../class/GrupoModulo';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Mora } from '../../class/Mora';
 import { Matricula } from 'src/app/main/matricula/class/Matricula';
-import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ModalPagoExtemporaneoComponent } from '../../components/modal-pago-extemporaneo/modal-pago-extemporaneo.component';
-import { ModalInfoEstudianteComponent } from 'src/app/main/shared/modal-info-estudiante/modal-info-estudiante.component';
+import { MatriculaService } from 'src/app/main/matricula/services/matricula.service';
+
+interface EstadoMatricula{
+  value:string;
+  code:string;
+}
 
 @Component({
   selector: 'app-estudiantes-grupo',
@@ -63,11 +68,17 @@ export class EstudiantesGrupoComponent implements OnInit {
   formFecha:FormGroup;
   dataEstudianteMessage:Estudiante;
 
-  infoMatricula:Matricula;
   /** Variables pago extemporaneo */
   estudianteEnGrupo:EstudianteEnGrupo;
   grupoModulo:GrupoModulo[] = [];
   refDialog: DynamicDialogRef;
+
+  /** Estado estudiante */
+  loadingSaveEstadoEstudiante:boolean = false;
+  modalEstadoEstudiante:boolean = false;
+  estadoEstudiante:string;
+  optionEstadoEstudiante:EstadoMatricula[] = [];
+  matriculaSecionada:Matricula;
 
   constructor(private readonly dialogService: DialogService,
               private readonly _grupo:GrupoService,
@@ -76,6 +87,8 @@ export class EstudiantesGrupoComponent implements OnInit {
               private readonly _socket:SocketService,
               private readonly _unAuth:UnAuthorizedService,
               private readonly _global: GlobalService,
+              private readonly router:Router,
+              private readonly _matricula:MatriculaService,
               private readonly confirService:ConfirmationService,
               private _msg:MessageService) {
                 this.getIdGrupo(this.activeRoute);
@@ -86,6 +99,10 @@ export class EstudiantesGrupoComponent implements OnInit {
   ngOnInit(): void {
     this.nameEventSocket = 'updated_list_estudiante_grupo';
     this.visibleModalFecha = false;
+    this.optionEstadoEstudiante = [
+      { value:'Matriculado', code:'matriculado' },
+      { value:'Retirado', code:'retirado' }
+    ];
   }
 
   createFormFecha(){
@@ -357,30 +374,6 @@ export class EstudiantesGrupoComponent implements OnInit {
     })
   }
 
-  moreInfoEstudiante(matricula:Matricula, estudiante:Estudiante){
-
-    this.infoMatricula = matricula;
-    this.infoMatricula.estudiante = estudiante;
-
-    const width = window.innerWidth < 768 ? '95%' : '70%';
-
-    this.refDialog = this.dialogService.open(ModalInfoEstudianteComponent,{
-      data: {
-        infoMatricula:this.infoMatricula,
-      },
-      header:`Información de ${this.infoMatricula.estudiante.Nombres}`,
-      width: width,
-      contentStyle: { overflow: 'auto' },
-      baseZIndex: 10000,
-    });
-
-    // verificar si se cerró el modal
-    this.refDialog.onClose.subscribe((result) => {
-      this._socket.EmitEvent('updated_list_estudiante_grupo', { Id:this.idGrupo, limit:this.limit, offset:this.offset });
-    });
-
-  }
-
   eliminarMora(Id:number){
     this._grupo.deleteMora(Id).subscribe({
       next:(value) => {
@@ -394,6 +387,35 @@ export class EstudiantesGrupoComponent implements OnInit {
       error:(e) => {
         console.log(e)
         this.messageError(e)
+      }
+    })
+  }
+
+  moreInformacionEstudiante(estudiante:Estudiante){
+    this.router.navigate(['/system/grupos/estudiante-en-grupo', this.idGrupo, estudiante.Id]);
+  }
+
+  openModalEstadoEstudiante(matricula:Matricula){
+    this.matriculaSecionada = matricula;
+    this.estadoEstudiante = matricula.EstadoMatricula;
+    this.modalEstadoEstudiante = true;
+  }
+
+  saveEstadoEstudiante(){
+    if(!this.estadoEstudiante){
+      this.toast('warn','Selecione un estado del estudiante para continuar');
+    }
+    // console.log(this.estadoEstudiante)
+    this._matricula.updateMatricula(this.matriculaSecionada.Id, {EstadoMatricula: this.estadoEstudiante } as Matricula).subscribe({
+      next:(resp)=>{
+        if(resp.ok){
+          this.toast('success', resp.msg,'Actualización del estado del estudiante');
+          this._socket.EmitEvent('updated_list_estudiante_grupo', { Id:this.idGrupo, limit:this.limit, offset:this.offset });
+          this.modalEstadoEstudiante = false;
+        }
+      },
+      error:(e)=>{
+        this.messageError(e);
       }
     })
   }

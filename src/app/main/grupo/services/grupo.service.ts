@@ -11,6 +11,7 @@ import { Pago, ResPago } from '../class/Pago';
 import { ResEstadoGrupo } from '../class/EstadoGrupo';
 import { GrupoModulo, ResGrupoModulo } from '../class/GrupoModulo';
 import { Mora, ResMora } from '../class/Mora';
+import { Estudiante, ResEstudiante } from '../../matricula/class/Estudiante';
 
 
 @Injectable({
@@ -85,8 +86,8 @@ export class GrupoService{
     return this.http.get<ResEstadoEstudEnGrupo>(`${this.BASE_URL}/estudiante-en-grupo/get-estudiantes-en-grupo-especifico/${Id}?limit=${limit}&offset=${offset}`);
   }
 
-  getEstudiantesEnGrupoEspecificoById(idGrupo:string, idEstudiante:string){
-    return this.http.get<ResEstudianteEnGrupo>(`${this.BASE_URL}/estudiante-en-grupo/get-estudiantes-en-grupo-especifico/${idGrupo}/${idEstudiante}`);
+  getEstudianteEnGrupoEspecificoById(idGrupo:string, idEstudiante:string){
+    return this.http.get<ResEstudianteEnGrupo>(`${this.BASE_URL}/estudiante-en-grupo/get-estudiante-en-grupo-especifico/${idGrupo}/${idEstudiante}`);
   }
 
   deleteEstudianteEnGrupoEspecifico(Id:number){
@@ -99,6 +100,10 @@ export class GrupoService{
 
   updateGrupoModulo(id:string, data:GrupoModulo){
     return this.http.patch<ResGrupoModulo>(`${this.BASE_URL}/grupo/update-grupo-modulo/${id}`, data);
+  }
+
+  updateApoderadoEstudiante(id:number, data:Estudiante){
+    return this.http.patch<ResEstudiante>(`${this.BASE_URL}/estudiante/update-apoderado-estudiante/${id}`, data);
   }
 
   deleteGrupo(id:number){

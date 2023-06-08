@@ -24,15 +24,21 @@
           class="p-error">El campo usuario es <strong>requerido</strong></small>
   </div>
   <div class="field mb-4">
-    <label for="usuario" class="block">contraseña</label>
-    <input type="password"
-           placeholder="Contraseña"
-           autocomplete="false"
-           [feedback]="false"
-           class="p-fluid p-grid p-formgrid"
-           formControlName="Password"
-           pPassword/>
-    <small *ngIf="Password.hasError('required') && Password.dirty"
+    <label for="NewPassword" class="block mb-2">Contraseña</label>
+      <span class="p-input-icon-right full-width">
+        <i class="pi cursor"
+           (click)="seePassword=!seePassword"
+           [ngClass]="{'pi-eye': !seePassword, 'pi-eye-slash': seePassword}"></i>
+
+        <input [type]="seePassword?'text':'password'"
+                placeholder="Contraseña"
+                autocomplete="false"
+                [feedback]="false"
+                class="p-fluid p-grid p-formgrid"
+                formControlName="Password"
+                pPassword/>
+      </span>
+      <small *ngIf="Password.hasError('required') && Password.dirty"
     class="p-error">La contraseña es <strong>requerida</strong></small>
   </div>
   <div class="mb-3">

@@ -240,9 +240,6 @@ export class FormMatriculaComponent implements OnInit {
       medioPagoMensualidad:[null, Validators.required],
       medioPagoLibro:[null, Validators.required],
       medioPagoMatricula:[null, Validators.required],
-      // idCatMensualidad:[null, Validators.required],
-      // idCatMatricula:[null, Validators.required],
-      // idCatLibro:[null, Validators.required],
     })
   }
 
@@ -391,15 +388,6 @@ export class FormMatriculaComponent implements OnInit {
   get MontoPagoLibro(){
     return this.formFiles.controls['MontoPagoLibro'];
   }
-  // get idCatMensualidad(){
-  //   return this.formFiles.controls['idCatMensualidad'];
-  // }
-  // get idCatMatricula(){
-  //   return this.formFiles.controls['idCatMatricula'];
-  // }
-  // get idCatLibro(){
-  //   return this.formFiles.controls['idCatLibro'];
-  // }
 
   getMediosPagos() {
     this._global.getMediosDePago().subscribe({
@@ -1063,7 +1051,7 @@ export class FormMatriculaComponent implements OnInit {
         this.fileDocumentoMatricula.enable();
         this.fileDocumentoMatricula.setValue(null);
         this.loadingDocumentoMatricula = false;
-        this.messageError(e,`Vuelve a intentar con ${direccion} de matrícula`);
+        this.messageError(e,`Vuelve a intentar con la carga ${direccion} de matrícula`);
       },
     })
   }
@@ -1107,7 +1095,7 @@ export class FormMatriculaComponent implements OnInit {
         this.filePagoMatricula.enable();
         this.filePagoMatricula.setValue(null);
         this.loadingFilePagoMatricula = false;
-        this.messageError(e,`Vuelve a intentar con pago de ${direccion}`);
+        this.messageError(e,`Vuelve a intentar con la carga de pago de ${direccion}`);
       },
     })
   }
@@ -1152,7 +1140,7 @@ export class FormMatriculaComponent implements OnInit {
         this.filePagoMensualidad.enable();
         this.filePagoMensualidad.setValue(null);
         this.loadingFilePagoMensualidad = false;
-        this.messageError(e,`Vuelve a intentar con pago de ${direccion}`);
+        this.messageError(e,`Vuelve a intentar con la carga de pago de ${direccion}`);
       }
     })
   }
@@ -1197,7 +1185,7 @@ export class FormMatriculaComponent implements OnInit {
         this.filePagoLibro.enable();
         this.filePagoLibro.setValue(null);
         this.loadingFilePagoLibro = false;
-        this.messageError(e,`Vuelve a intentar con pago de ${direccion}`)
+        this.messageError(e,`Vuelve a intentar con la carga de pago de ${direccion}`)
       }
     })
   }

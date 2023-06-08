@@ -1,25 +1,44 @@
-<p-card header="Estado de CEIDBOT">
-  <div>
-    <div *ngIf="_bot.loading else qr">
-      cargando...
-    </div>
-    <ng-template #qr>
-      <div *ngIf="_bot.estadoWhatsApp">
-        <div class="mb-3 flex justify-content-between justify-content-center align-items-center">
-          <h3>{{_bot.estadoWhatsApp.title}}</h3>
-        </div>
-        <p class="mb-3">
-          {{_bot.estadoWhatsApp.description}}
-        </p>
-        <div class="text-center" *ngIf="_bot.estadoWhatsApp.qr">
-          <qrcode [qrdata]="_bot.estadoWhatsApp.qr" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
-        </div>
-        <div class="text-center" *ngIf="_bot.estadoWhatsApp.showQr">
-          <button mat-raised-button (click)="generateQR()"><i class="fa-solid fa-qrcode"></i> Generar QR</button>
-        </div>
+<div class="mb-2">
+  <p-card header="Dispositivo conectado">
+    <div class="flex">
+      <div>
+        <p-avatar label="C"
+                  styleClass="mr-2"
+                  size="large"
+                  [style]="{ 'background-color': '#2196F3', color: '#ffffff' }"
+                  shape="circle"></p-avatar>
       </div>
-    </ng-template>
-  </div>
-</p-card>
+      <p class="mt-3" *ngIf="clientInfo && clientInfo.pushname, else notInfo"><b>{{clientInfo.pushname}}</b></p>
+      <ng-template #notInfo><p class="mt-3"><b>Sin información</b></p></ng-template>
+    </div>
+    <p class="bm-2 mt-2" *ngIf="clientInfo && clientInfo.me"><b>Usuario </b> <i class="fa-solid fa-mobile"></i> {{clientInfo.me.user}}</p>
+    <p class="bm-2 mt-2" *ngIf="clientInfo && clientInfo.platform"><b>Plataforma </b> <i class="fa-brands fa-android"></i> {{clientInfo.platform}}</p>
+  </p-card>
+</div>
+<div>
+  <p-card header="Estado de CEIDBOT">
+    <div>
+      <div *ngIf="_bot.loading else qr">
+        cargando...
+      </div>
+      <ng-template #qr>
+        <div *ngIf="_bot.estadoWhatsApp">
+          <div class="mb-3 flex justify-content-between justify-content-center align-items-center">
+            <h3>{{_bot.estadoWhatsApp.title}}</h3>
+          </div>
+          <p class="mb-3">
+            {{_bot.estadoWhatsApp.description}}
+          </p>
+          <div class="text-center" *ngIf="_bot.estadoWhatsApp.qr">
+            <qrcode [qrdata]="_bot.estadoWhatsApp.qr" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+          </div>
+          <div class="text-center" *ngIf="_bot.estadoWhatsApp.showQr">
+            <button mat-raised-button (click)="generateQR()"><i class="fa-solid fa-qrcode"></i> Generar QR</button>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </p-card>
+</div>
 
 

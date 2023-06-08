@@ -1,75 +1,307 @@
-<div class="grid">
-  <div class="col-12 md:col-4">
-    <p-card>
-      <h2>Información del estudiante</h2>
-      <div *ngIf="estudiante">
-        <p-divider align="left">
-          <div class="inline-flex align-items-center">
-              <i class="pi pi-user mr-2"></i>
-              <b>Datos personales</b>
+<div *ngIf="matriculaEstudiante">
+  <div class="grid">
+    <div class="col-12 md:col-5">
+      <p-card header="Datos del estudiante">
+        <div>
+          <div class="grid content">
+            <div class="col-12 md:col-6">
+              <h3>Estudiante</h3>
+              <p class="m-2"><i class="fa-regular fa-id-card"></i> {{matriculaEstudiante.estudiante.TipoDocumento}} {{matriculaEstudiante.estudiante.Documento}}</p>
+              <p class="m-2"><i class="fa-regular fa-user"></i> {{matriculaEstudiante.estudiante.Nombres | titlecase}}
+                {{matriculaEstudiante.estudiante.ApellidoPaterno | titlecase}}
+                {{matriculaEstudiante.estudiante.ApellidoMaterno | titlecase}}</p>
+              <p class="m-2"><i class="fa-regular fa-envelope"></i> {{matriculaEstudiante.estudiante.Email}}</p>
+              <p class="m-2"><i class="fa-sharp fa-solid fa-phone"></i> {{matriculaEstudiante.estudiante.CodePhone}} {{matriculaEstudiante.estudiante.Celular}}</p>
+            </div>
+            <div class="col-12 md:col-6" *ngIf="matriculaEstudiante.estudiante.apoderado">
+              <h3>Apoderado</h3>
+              <p class="m-2"><i class="fa-regular fa-id-card"></i> {{matriculaEstudiante.estudiante.apoderado.TipoDocumento}} {{matriculaEstudiante.estudiante.apoderado.Documento}}</p>
+              <p class="m-2"><i class="fa-regular fa-user"></i> {{matriculaEstudiante.estudiante.apoderado.NomApoderado | titlecase}}
+                {{matriculaEstudiante.estudiante.apoderado.ApellidoPApoderado | titlecase}}
+                {{matriculaEstudiante.estudiante.apoderado.ApellidoMApoderado | titlecase}}</p>
+              <p class="m-2"><i class="fa-sharp fa-solid fa-phone"></i> {{matriculaEstudiante.estudiante.apoderado.CodePhone}} {{matriculaEstudiante.estudiante.apoderado.CelApoderado}}</p>
+            </div>
           </div>
-        </p-divider>
-        <div class="p-2">
-          <p class="pb-1"><strong>Identificación:</strong> {{ estudiante.TipoDocumento }} {{ estudiante.Documento }}</p>
-          <p class="pb-1"><strong>Nombres:</strong> {{ estudiante.Nombres }}</p>
-          <p class="pb-1"><strong>Apellido Materno:</strong> {{ estudiante.ApellidoMaterno }}</p>
-          <p class="pb-1"><strong>Apellido Paterno:</strong> {{ estudiante.ApellidoPaterno }}</p>
-          <p class="pb-1"><strong>Celular:</strong> {{ estudiante.CodePhone}} {{ estudiante.Celular }}</p>
-          <p class="pb-1"><strong>Email:</strong> {{ estudiante.Email }}</p>
-          <p class="pb-1"><strong>Dirección:</strong> {{ estudiante.Direccion }}</p>
         </div>
-      </div>
-      <div *ngIf="apoderado">
-        <p-divider align="left" >
-          <div class="inline-flex align-items-center">
-              <i class="pi pi-user mr-2"></i>
-              <b>Datos del apoderado</b>
+        <div class="grid content c2">
+          <div class="col-12 md:col-6" *ngIf="matriculaEstudiante.matricula.curso">
+            <div>
+              <h3>Curso inscrito</h3>
+              <div class="grid content">
+                <div class="col-12 md:col-4">
+                  <img class="flag" [src]="matriculaEstudiante.matricula.curso.UrlBandera" alt="">
+                </div>
+                <div class="col-12 md:col-4 mt-2"> {{matriculaEstudiante.matricula.curso.NombreCurso | titlecase}}</div>
+                <div class="col-12 md:col-4 mt-2" *ngIf="matriculaEstudiante.matricula.curso.nivel"> {{matriculaEstudiante.matricula.curso.nivel.Nivel }}</div>
+              </div>
+            </div>
           </div>
-        </p-divider>
-        <div class="p-2">
-          <p class="pb-1"><strong>Identificación:</strong> {{ apoderado.TipoDocumento }} {{ apoderado.Documento }}</p>
-          <p class="pb-1"><strong>Nombres:</strong> {{ apoderado.NomApoderado }}</p>
-          <p class="pb-1"><strong>Apellido Materno:</strong> {{ apoderado.ApellidoMApoderado }}</p>
-          <p class="pb-1"><strong>Apellido Paterno:</strong> {{ apoderado.ApellidoPApoderado }}</p>
-          <p class="pb-1"><strong>Celular:</strong> {{ apoderado.CodePhone}} {{ apoderado.CelApoderado }}</p>
-        </div>
-      </div>
-      <div *ngIf="denominServicio">
-        <p-divider align="left">
-          <div class="inline-flex align-items-center">
-              <i class="fa-solid fa-users"></i>
-              <b>Datos del tipo de población</b>
+          <div class="col-12 md:col-6" *ngIf="matriculaEstudiante.matricula.institucion">
+            <div>
+              <h3>Institución</h3>
+              <div class="grid content">
+                <div class="col-12 md:col-6 mt-2"> {{matriculaEstudiante.matricula.institucion.NombreInstitucion}}</div>
+                <div class="col-12 md:col-6 mt-2"> {{matriculaEstudiante.matricula.institucion.EscuelaProfe}}</div>
+              </div>
+            </div>
           </div>
-        </p-divider>
-        <div class="p-2">
-          <p class="pb-1"><strong>Monto matricula:</strong> {{ denominServicio.MontoMatricula | currency: 'PEN': 'symbol': '': 'es-PE'}}</p>
-          <p class="pb-1"><strong>Monto pensión:</strong> {{ denominServicio.MontoPension | currency: 'PEN': 'symbol': '': 'es-PE'}}</p>
-          <p class="pb-1"><strong>Descripción:</strong> {{ denominServicio.Descripcion }}</p>
         </div>
-      </div>
-    </p-card>
-  </div>
-  <div class="col-12 md:col-8">
-    <p-card *ngIf="data.length!=0">
-      <h2 class="pb-3 ml-3"><i class="fa-solid fa-chart-column"></i> Historial de registro de pagos</h2>
-      <div class="content-chart line-chart">
-        <ngx-charts-line-chart
-        scheme="nightLights"
-        [legend]="legend"
-        [showXAxisLabel]="showXAxisLabel"
-        [showYAxisLabel]="showYAxisLabel"
-        [xAxis]="xAxis"
-        [yAxis]="yAxis"
-        [xAxisLabel]="xAxisLabel"
-        [yAxisLabel]="yAxisLabel"
-        [timeline]="timeline"
-        [results]="data"
-        [showGridLines]="false"
-        (select)="onSelect($event)"
-        (activate)="onActivate($event)"
-        (deactivate)="onDeactivate($event)">
-      </ngx-charts-line-chart>
-      </div>
-    </p-card>
+        <h3 class="mt-2">Tipo de población</h3>
+        <div class="grid content">
+          <div class="col-12 md:col-8">
+            <p>{{matriculaEstudiante.matricula.denomiServicio.Descripcion}}</p>
+          </div>
+          <div class="col-12 md:col-2">Matricula <br> s/. {{matriculaEstudiante.matricula.denomiServicio.MontoMatricula}}</div>
+          <div class="col-12 md:col-2">Pensión <br> s/. {{matriculaEstudiante.matricula.denomiServicio.MontoPension}}</div>
+        </div>
+      </p-card>
+    </div>
+    <div class="col-12 md:col-7">
+      <p-progressBar *ngIf="loadingDocumento"
+                     mode="indeterminate"
+                     [style]="{'height': '6px'}"></p-progressBar>
+      <p-card>
+        <mat-tab-group>
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="example-tab-icon">schools</mat-icon>
+              <p class="p-2">Contacto del estudiante</p>
+            </ng-template>
+            <div class="mt-3">
+              <form [formGroup]="formEstudiante" (ngSubmit)="updateDatos()">
+                <div class="grid content">
+                  <div class="col-4 md:col-4">
+                    <app-input-code [country]="country"
+                                    (selectedCountry)="selectedCountry($event)">
+                    </app-input-code>
+                  </div>
+                  <div class="col-8 md:col-8">
+                    <label for="celular" class="block mb-2 dot">.</label>
+                    <span class="p-input-icon-left full-width">
+                      <i class="pi pi-whatsapp"></i>
+                      <input id="Celular"
+                            type="text"
+                            autocomplete="off"
+                            formControlName="Celular"
+                            (click)="opCelular.toggle($event)"
+                            [maxLength]="isPeru?9:15"
+                            pInputText/>
+
+                    </span>
+                    <small *ngIf="Celular.hasError('pattern') && !Celular.hasError('required')"
+                          class="p-error">Digite un Celular <strong>válido</strong></small>
+                    <small *ngIf="Celular.hasError('required') && Celular.dirty"
+                          class="p-error">El campo Celular es <strong>requerido</strong></small>
+                    <p-overlayPanel #opCelular>
+                      Es de suma importancia que el <br> número tenga una cuenta de WhatsApp
+                    </p-overlayPanel>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <label for="email" class="block mb-2">Email</label>
+                  <span class="p-input-icon-left full-width">
+                    <i class="fa-regular fa-envelope"></i>
+                    <input id="Email"
+                          type="email"
+                          autocomplete="off"
+                          (click)="opEmail.toggle($event)"
+                          formControlName="Email"
+                          pInputText/>
+                  </span>
+                  <small *ngIf="Email.hasError('pattern') && !Email.hasError('required')"
+                      class="p-error">Digite un email <strong>válido</strong></small>
+                  <small *ngIf="Email.hasError('required') && Email.dirty"
+                          class="p-error">El campo email es <strong>requerido</strong></small>
+                  <p-overlayPanel #opEmail>
+                    Verifique que esté correctamente <br> escrito su email, para el envío de información académica.
+                  </p-overlayPanel>
+                </div>
+                <div class="col-12">
+                  <label for="denomiServicio" class="block mb-2">Población a la que pertenece</label>
+                  <p-dropdown class="p-fluid p-grid p-formgrid"
+                              formControlName="denomiServicio"
+                              appendTo="body"
+                              [options]="listDenominServicio"
+                              (ngModelChange)="selectServicio($event)"
+                              placeholder="Selececionea la población que pertenece"
+                              optionLabel="Descripcion"></p-dropdown>
+                  <small *ngIf="denomiServicio.hasError('required') && denomiServicio.dirty"
+                          class="p-error">El campo de población de edad <strong>requerido</strong></small>
+                </div>
+                <div class="col">
+                  <button mat-raised-button type="submit" [disabled]="loadingUpdate">Guardar</button>
+                </div>
+              </form>
+            </div>
+
+          </mat-tab>
+
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="example-tab-icon">person</mat-icon>
+              <p class="p-2">Datos del apoderado</p>
+            </ng-template>
+            <div class="mt-3">
+              <p-messages *ngIf="!apoderado" severity="info">
+                <ng-template pTemplate>
+                    <div class="ml-2">No se registro ningún apoderado del estudiante. <b>Registre uno si considera necesario</b></div>
+                </ng-template>
+              </p-messages>
+              <form [formGroup]="formApoderado" method="post" (ngSubmit)="saveApoderado()">
+                <div class="col">
+                  <div class="grid flex">
+                    <div class="col-12 md:col-5">
+                      <label for="TipoDocumento" class="block mb-2">Tipo documento</label>
+                      <p-dropdown class="p-fluid p-grid p-formgrid"
+                                  [options]="card"
+                                  formControlName="TipoDocumento"
+                                  (ngModelChange)="changeCard($event)"
+                                  optionValue="code"
+                                  optionLabel="name">
+                              </p-dropdown>
+                      <small *ngIf="TipoDocumento.hasError('required') && TipoDocumento.dirty"
+                            class="p-error">El tipo de documento es <strong>requerido</strong></small>
+                    </div>
+                    <div class="col-12 md:col-7">
+                      <label for="DocumentoApoderado" class="block mb-2">{{TipoDocumento.value}} apoderado</label>
+                      <span class="p-input-icon-left full-width">
+                        <i class="pi pi-id-card"></i>
+                        <input id="DocumentoApoderado"
+                              class="p-fluid p-grid p-formgrid input-form"
+                              type="text"
+                              autocomplete="off"
+                              [maxlength]="(TipoDocumento.value=='DNI')?8:12"
+                              formControlName="Documento"
+                              pInputText/>
+                      </span>
+                      <small *ngIf="DocumentoApoderado.hasError('pattern') && !DocumentoApoderado.hasError('required')"
+                              class="p-error">Digite un DNI <strong>válido</strong></small>
+                      <small *ngIf="DocumentoApoderado.hasError('required') && DocumentoApoderado.dirty"
+                              class="p-error">El campo DNI del apoderado es <strong>requerido</strong></small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12">
+                    <label for="NomApoderado" class="block mb-2">Nombres del apoderado</label>
+                    <input id="NomApoderado"
+                          class="p-fluid p-grid p-formgrid input-form"
+                          type="text"
+                          autocomplete="off"
+                          [maxlength]="50"
+                          formControlName="NomApoderado"
+                          pInputText/>
+                    <small *ngIf="NomApoderado.hasError('pattern') && !NomApoderado.hasError('required')"
+                            class="p-error">Digite nombres <strong>válidos</strong></small>
+                    <small *ngIf="NomApoderado.hasError('required') && NomApoderado.dirty"
+                            class="p-error">El campo nombre apoderado es <strong>requerido</strong></small>
+                </div>
+                <div class="col">
+                  <div class="grid">
+                    <div class="col-12 md:col-6">
+                        <label for="ApellidoPApoderado" class="block mb-2">Apellido paterno del apoderado</label>
+                        <input id="ApellidoPApoderado"
+                              class="p-fluid p-grid p-formgrid input-form"
+                              type="text"
+                              autocomplete="off"
+                              formControlName="ApellidoPApoderado"
+                              pInputText/>
+                        <small *ngIf="ApellidoPApoderado.hasError('pattern') && !ApellidoPApoderado.hasError('required')"
+                                class="p-error">Digite un apellido paterno <strong>válido</strong></small>
+                        <small *ngIf="ApellidoPApoderado.hasError('required') && ApellidoPApoderado.dirty"
+                                class="p-error">El campo apellido paterno del apoderado es <strong>requerido</strong></small>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <label for="ApellidoMApoderado" class="block mb-2">Apellido materno del apoderado</label>
+                        <input id="ApellidoMApoderado"
+                              class="p-fluid p-grid p-formgrid input-form"
+                              type="text"
+                              autocomplete="off"
+                              formControlName="ApellidoMApoderado"
+                              pInputText/>
+                        <small *ngIf="ApellidoMApoderado.hasError('pattern') && !ApellidoMApoderado.hasError('required')"
+                                class="p-error">Digite un apellido materno <strong>válido</strong></small>
+                        <small *ngIf="ApellidoMApoderado.hasError('required') && ApellidoMApoderado.dirty"
+                                class="p-error">El campo apellido materno del apoderado es <strong>requerido</strong></small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="grid">
+                    <div class="col-4 md:col-4">
+                      <app-input-code [country]="countryApoderado"
+                                      (selectedCountry)="selectedCountryApoderado($event)">
+                      </app-input-code>
+                    </div>
+                    <div class="col-8 md:col-8">
+                      <label for="CelApoderado" class="block mb-2 dot">.</label>
+                      <span class="p-input-icon-left full-width">
+                        <i class="pi pi-whatsapp"></i>
+                        <input id="CelApoderado"
+                              class="p-fluid p-grid p-formgrid input-form"
+                              type="text"
+                              autocomplete="off"
+                              formControlName="CelApoderado"
+                              [maxLength]="isPeru?9:15"
+                              pInputText/>
+                      </span>
+                      <small *ngIf="CelApoderado.hasError('pattern') && !CelApoderado.hasError('required')"
+                        class="p-error">Digite un número de celular <strong>válido</strong></small>
+                      <small *ngIf="CelApoderado.hasError('required') && CelApoderado.dirty"
+                            class="p-error">El campo celular del apoderado es <strong>requerido</strong></small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <button mat-raised-button type="submit">Guardar</button>
+                </div>
+              </form>
+            </div>
+          </mat-tab>
+
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="example-tab-icon">picture_as_pdf</mat-icon>
+              <p class="p-2">Documentos de matricula</p>
+            </ng-template>
+            <form [formGroup]="formFile" (ngSubmit)="onSubmitDocumento()">
+              <div class="col mt-2">
+                <div class="col">
+                  <div class="p-1 flex">
+                    Archivo registrado en la matricula<a (click)="showFile()" class="tag-a cursor ml-2"><i class="fa-solid fa-link"></i> Archivo subido</a>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="col flex justify-content-between justify-content-center align-items-center content-file">
+                  <label class="block p-1">Carque nuevo archivo</label>
+                  <div class="text-center">
+                    <div (click)="uploadFileDoc.click()">
+                      <button mat-raised-button
+                              type="button"
+                              [disabled]="loadingDocumento"
+                              class="custom-btn-file">
+                        <mat-icon>{{(FileDocumento.value && !loadingDocumento)?'check':'attach_file'}}</mat-icon> Elija el archivo</button>
+                      <input #uploadFileDoc
+                              formControlName="FileDocumento"
+                              (change)="onDocumentoChange($event)"
+                              accept=".pdf"
+                              type='file' style="display:none"/>
+                    </div>
+                    <small *ngIf="FileDocumento.hasError('required') && FileDocumento.dirty"
+                            class="p-error">El documento de requisitos es <strong>requerido</strong></small>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <button mat-raised-button [disabled]="loadingDocumento">Guardar cambios</button>
+              </div>
+            </form>
+          </mat-tab>
+        </mat-tab-group>
+      </p-card>
+    </div>
   </div>
 </div>
+
+<!-- componente para la visualización de documentos -->
+<app-show-file [fileURL]="fileURL"></app-show-file>

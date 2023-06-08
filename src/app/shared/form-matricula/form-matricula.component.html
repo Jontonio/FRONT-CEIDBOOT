@@ -19,7 +19,7 @@
             <div class="col-12 md:col-6">
               <div class="grid content">
                 <div class="col-12 md:col-6">
-                  <label for="usuario" class="block mb-2">Tipo documento</label>
+                  <label for="TipoDocumento" class="block mb-2">Tipo documento</label>
                   <p-dropdown class="p-fluid p-grid p-formgrid"
                               [options]="card"
                               formControlName="TipoDocumento"
@@ -95,6 +95,7 @@
                 <span class="p-input-icon-left full-width">
                   <i class="pi pi-calendar"></i>
                   <p-calendar inputId="FechaNacimiento"
+                              appendTo="body"
                               placeholder="DD-MM-AAAA"
                               dateFormat="dd-mm-yy"
                               [maxDate]="today"
@@ -249,17 +250,17 @@
           <div *ngIf="displayMayoria" class="grid content">
             <div class="col-12">
               <label for="DocumentoApoderado" class="block mb-2">{{TipoDocumento.value}} apoderado</label>
-              <div class="p-inputgroup">
-              <span class="p-inputgroup-addon"><i [class]="loadGetApoderado?'pi pi-spin pi-spinner':'pi pi-id-card'"></i></span>
-              <input id="DocumentoApoderado"
-                    class="p-fluid p-grid p-formgrid input-form"
-                    type="text"
-                    autocomplete="off"
-                    (ngModelChange)="searchApoderado($event)"
-                    [maxlength]="(TipoDocumento.value=='DNI')?8:12"
-                    formControlName="DocumentoApoderado"
-                    pInputText/>
-              </div>
+              <span class="p-input-icon-left full-width">
+                <i [class]="loadGetApoderado?'pi pi-spin pi-spinner':'pi pi-id-card'"></i>
+                <input id="DocumentoApoderado"
+                      class="p-fluid p-grid p-formgrid input-form"
+                      type="text"
+                      autocomplete="off"
+                      (ngModelChange)="searchApoderado($event)"
+                      [maxlength]="(TipoDocumento.value=='DNI')?8:12"
+                      formControlName="DocumentoApoderado"
+                      pInputText/>
+              </span>
               <small *ngIf="DocumentoApoderado.hasError('pattern') && !DocumentoApoderado.hasError('required')"
                       class="p-error">Digite un DNI <strong>válido</strong></small>
               <small *ngIf="DocumentoApoderado.hasError('required') && DocumentoApoderado.dirty"
@@ -312,9 +313,9 @@
                 </app-input-code>
               </div>
               <div class="col-8 md:col-8">
-                <label for="Email" class="block mb-2 dot">.</label>
-                <div class="p-inputgroup">
-                  <span class="p-inputgroup-addon"><i class="fa-brands fa-whatsapp fa-xl"></i></span>
+                <label for="CelApoderado" class="block mb-2 dot">.</label>
+                <span class="p-input-icon-left full-width">
+                  <i class="pi pi-whatsapp"></i>
                   <input id="CelApoderado"
                         class="p-fluid p-grid p-formgrid input-form"
                         type="text"
@@ -322,7 +323,7 @@
                         formControlName="CelApoderado"
                         [maxLength]="isPeru?9:15"
                         pInputText/>
-                </div>
+                </span>
                 <small *ngIf="CelApoderado.hasError('pattern') && !CelApoderado.hasError('required')"
                   class="p-error">Digite un número de celular <strong>válido</strong></small>
                 <small *ngIf="CelApoderado.hasError('required') && CelApoderado.dirty"
@@ -723,11 +724,11 @@
                               loadingFilePagoLibro       ||
                               loadingFilePagoMatricula   ||
                               loadingFilePagoMensualidad ||
-                              loadingSave">guardar</button>
+                              loadingSave">
+                              <i [ngClass]="{'pi-spin pi-spinner': loadingSave,
+                               'pi-save':!loadingSave}" class="pi mr-1"></i> guardar</button>
         </div>
       </form>
     </mat-step>
   </mat-stepper>
 </ng-template>
-
-<!-- <app-show-file fileURL="https://drive.google.com/file/d/1A8mF2DQrgSPsVmgDzbWH03BmmNHhfAi1/view?usp=sharing"></app-show-file> -->
