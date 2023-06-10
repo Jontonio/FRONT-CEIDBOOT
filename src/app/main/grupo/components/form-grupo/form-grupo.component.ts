@@ -17,6 +17,7 @@ import { MainService } from 'src/app/main/services/main.service';
 
 import * as moment from 'moment';
 import { EstadoGrupo } from '../../class/EstadoGrupo';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 moment.locale("es");
 
 @Component({
@@ -35,6 +36,7 @@ export class FormGrupoComponent implements OnInit {
   getListCursos$:Subscription;
   getListTiposGrupos$:Subscription;
   getListHorarios$:Subscription;
+  getAllEstadoGrupo$:Subscription;
 
   /** Varaibles de clase */
   FormGrupo:FormGroup;
@@ -82,10 +84,11 @@ export class FormGrupoComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.getListDocentes$.unsubscribe();
-    this.getListCursos$.unsubscribe();
-    this.getListTiposGrupos$.unsubscribe();
-    this.getListHorarios$.unsubscribe();
+    if(this.getListDocentes$)this.getListDocentes$.unsubscribe();
+    if(this.getListCursos$)this.getListCursos$.unsubscribe();
+    if(this.getListTiposGrupos$)this.getListTiposGrupos$.unsubscribe();
+    if(this.getListHorarios$)this.getListHorarios$.unsubscribe();
+    if(this.getAllEstadoGrupo$)this.getAllEstadoGrupo$.unsubscribe();
   }
 
   getListDocentes(){
@@ -94,8 +97,8 @@ export class FormGrupoComponent implements OnInit {
         if(!value.ok) return;
         this.ListDocentes = value.data as Array<Docente>;
       },
-      error: (err) => {
-        console.log(err);
+      error: (e) => {
+        this.messageError(e);
       }
     })
   }
@@ -107,8 +110,8 @@ export class FormGrupoComponent implements OnInit {
           this.ListCursos = value.data as Array<Curso>;
         }
       },
-      error: (err) => {
-        console.log(err);
+      error: (e) => {
+        this.messageError(e);
       }
     })
   }
@@ -120,8 +123,8 @@ export class FormGrupoComponent implements OnInit {
           this.ListTipoNombres = value.data as Array<TipoGrupo>;
         }
       },
-      error: (err) => {
-        console.log(err);
+      error: (e) => {
+        this.messageError(e);
       }
     })
   }
@@ -133,14 +136,14 @@ export class FormGrupoComponent implements OnInit {
           this.ListHorarios = value.data as Array<Horario>;
         }
       },
-      error: (err) => {
-        console.log(err);
+      error: (e) => {
+        console.log(e);
       }
     })
   }
 
   getListaEstadosGrupo(){
-    this._grupo.getAllEstadoGrupo().pipe(
+    this.getAllEstadoGrupo$ = this._grupo.getAllEstadoGrupo().pipe(
       tap( estadoGrupo => {
         /** aqui cateamos con valor del grupo de estado de matricula */
         const arrEstado = estadoGrupo.data as Array<EstadoGrupo>;
@@ -220,7 +223,7 @@ export class FormGrupoComponent implements OnInit {
     this._msg.add({severity:type, summary:msg, detail, key});
   }
 
-  messageError(e:any){
+  messageError(e:HttpErrorResponse){
     const msg = e.error.message;
     if(Array.isArray(msg)){
       msg.forEach( e => this.toast('error',e,'Error de validación de datos'))
@@ -261,7 +264,6 @@ export class FormGrupoComponent implements OnInit {
   completeDataUpdate(grupo:Grupo){
     const fechaIniselect = moment(grupo.FechaInicioGrupo);
     const fechaFinselect = moment(grupo.FechaFinalGrupo);
-    console.log(grupo)
     this.tipoGrupo.setValue(grupo.tipoGrupo);
     this.docente.setValue(grupo.docente);
     this.curso.setValue(grupo.curso);

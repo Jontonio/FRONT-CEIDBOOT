@@ -139,7 +139,6 @@ export class IntentComponent {
   }
 
   deleteResponse(index:number){
-    console.log(index)
     this.text.removeAt(index);
   }
 
@@ -201,7 +200,6 @@ export class IntentComponent {
           return;
         }
         this.toast('warn', value.msg);
-        console.log(value)
       },
       error: (e) => {
         console.log(e)

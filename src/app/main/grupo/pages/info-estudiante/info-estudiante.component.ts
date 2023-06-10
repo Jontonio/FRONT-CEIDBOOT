@@ -314,7 +314,6 @@ export class InfoEstudianteComponent {
         this.messageError(e);
       }
     })
-    console.log(this.formApoderado.value)
   }
 
   toast(severity:string, summary:string, detail:string=''){

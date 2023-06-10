@@ -10,7 +10,8 @@ export class IframeFileComponent implements OnInit {
 
   @Input() fileURL:string;
 
-  constructor(private readonly spinner:NgxSpinnerService) { }
+  constructor(private spinner:NgxSpinnerService) {
+  }
 
   ngOnInit(): void {
   }

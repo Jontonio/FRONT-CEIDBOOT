@@ -1,257 +1,356 @@
-<div class="col">
-  <div class="content-warning">
-    <h2><i class="fa-solid fa-triangle-exclamation"></i> Advertencia</h2>
-    <p class="pt-1">Se recomienda actualizar los datos en esta seción bajo supervisión técnica.
-      La manipulación de los datos de manera irresponsable queda <b>bajo responsabilidad del usuario</b>.
-    </p>
-  </div>
-</div>
-<div class="col">
-  <p-card header="Denominación de servicio">
-    <div class="p-2">
-      <div class="grid flex justify-content-between pb-2">
-        <div></div>
-        <div>
-          <button class="button-custom-round" mat-raised-button (click)="openModalCreateServicio()"><i class="fa-solid fa-plus"></i> nuevo servicio</button>
-        </div>
-      </div>
-      <div class="table-responsive">
-        <p-table [value]="listDenominacionServicios" [resizableColumns]="true" columnResizeMode="expand" responsiveLayout="scroll">
-          <ng-template pTemplate="header">
-              <tr>
-                  <th>Id</th>
-                  <th>Monto pensión</th>
-                  <th>Monto matricula</th>
-                  <th>Descripción</th>
-                  <th>Fecha actualización</th>
-                  <th>Operación</th>
-              </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-denominServicio>
-              <tr>
-                  <td>{{ denominServicio.Id }}</td>
-                  <td>{{ denominServicio.MontoPension | currency: 'PEN': 'symbol': '': 'es-PE' }}</td>
-                  <td>{{ denominServicio.MontoMatricula | currency: 'PEN': 'symbol': '': 'es-PE' }}</td>
-                  <td>
-                    {{ denominServicio.Descripcion | slice:0:30 }}... <p-tag class="cursor" severity="info" (click)="opDenomin.toggle($event)">Ver mas</p-tag>
-                    <p-overlayPanel #opDenomin>
-                      {{denominServicio.Descripcion}}
-                    </p-overlayPanel>
+<p-card>
+  <mat-tab-group>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">list_alt</mat-icon>
+        <p class="p-2">Servicios</p>
+      </ng-template>
+      <div>
+        <div class="p-2">
+          <div class="grid flex justify-content-between pb-2">
+            <div></div>
+            <div>
+              <button class="button-custom-round" mat-raised-button (click)="openModalCreateServicio()"><i class="fa-solid fa-plus"></i> nuevo servicio</button>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <p-table [value]="listDenominacionServicios" [resizableColumns]="true" columnResizeMode="expand" responsiveLayout="scroll">
+              <ng-template pTemplate="header">
+                  <tr>
+                      <th>Id</th>
+                      <th>Monto pensión</th>
+                      <th>Monto matricula</th>
+                      <th>Descripción</th>
+                      <th>Fecha actualización</th>
+                      <th>Operación</th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-denominServicio>
+                  <tr>
+                      <td>{{ denominServicio.Id }}</td>
+                      <td>{{ denominServicio.MontoPension | currency: 'PEN': 'symbol': '': 'es-PE' }}</td>
+                      <td>{{ denominServicio.MontoMatricula | currency: 'PEN': 'symbol': '': 'es-PE' }}</td>
+                      <td>
+                        {{ denominServicio.Descripcion | slice:0:30 }}... <p-tag class="cursor" severity="info" (click)="opDenomin.toggle($event)">Ver mas</p-tag>
+                        <p-overlayPanel #opDenomin>
+                          {{denominServicio.Descripcion}}
+                        </p-overlayPanel>
+                      </td>
+                      <td>{{ denominServicio.updatedAt | date:'medium' }}</td>
+                      <td>
+                        <span class="p-buttonset">
+                          <button mat-icon-button><i class="fa-solid fa-pen-to-square" (click)="sendEditServicio(denominServicio)"></i></button>
+                          <button mat-icon-button><i class="fa-solid fa-trash" (click)="confirmDeleteServicio(denominServicio)"></i></button>
+                        </span>
+                      </td>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="6">
+                    <app-lista-vacia [msg]="'No se encontraron denominación de servicios'"></app-lista-vacia>
                   </td>
-                  <td>{{ denominServicio.updatedAt | date:'medium' }}</td>
-                  <td>
-                    <span class="p-buttonset">
-                      <button mat-icon-button><i class="fa-solid fa-pen-to-square" (click)="sendEditServicio(denominServicio)"></i></button>
-                      <button mat-icon-button><i class="fa-solid fa-trash" (click)="confirmDeleteServicio(denominServicio)"></i></button>
-                    </span>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">receipt_long</mat-icon>
+        <p class="p-2">Trámites</p>
+      </ng-template>
+      <div>
+        <div class="p-2">
+          <div class="grid flex justify-content-between pb-2">
+            <div></div>
+            <div>
+              <button class="button-custom-round" mat-raised-button (click)="openModalTipoTramite()"><i class="fa-solid fa-plus"></i> estado grupo</button>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <p-table [value]="listTiposTramite" [resizableColumns]="true" columnResizeMode="expand" responsiveLayout="scroll">
+              <ng-template pTemplate="header">
+                  <tr>
+                      <th>Id</th>
+                      <th>Derecho de pago</th>
+                      <th>Tipo</th>
+                      <th>Descripción</th>
+                      <th>Fecha de actualización</th>
+                      <th>Operación</th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-tipoTramite>
+                  <tr>
+                      <td>{{ tipoTramite.Id }}</td>
+                      <td>{{ tipoTramite.DerechoPagoTramite | currency: 'PEN': 'symbol': '': 'es-PE' }}</td>
+                      <td>{{ tipoTramite.TipoTramite }}</td>
+                      <td>{{ tipoTramite.DescripcionTramite }}</td>
+                      <td>{{ tipoTramite.updatedAt | date:'medium'}}</td>
+                      <td>
+                        <span class="p-buttonset">
+                          <button mat-icon-button><i class="fa-solid fa-pen-to-square" (click)="sendEditTipoTramite(tipoTramite)"></i></button>
+                          <button mat-icon-button><i class="fa-solid fa-trash" (click)="confirmDeleteTipoTramite(tipoTramite)"></i></button>
+                        </span>
+                      </td>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="6">
+                    <app-lista-vacia [msg]="'No se encontraron tipos de trámites'"></app-lista-vacia>
                   </td>
-              </tr>
-          </ng-template>
-          <ng-template pTemplate="emptymessage">
-            <tr>
-              <td colspan="6">
-                <app-lista-vacia [msg]="'No se encontraron denominación de servicios'"></app-lista-vacia>
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </div>
-    </div>
-  </p-card>
-</div>
-<div class="col">
-  <p-card header="Tipos de trámite">
-    <div class="p-2">
-      <div class="grid flex justify-content-between pb-2">
-        <div></div>
-        <div>
-          <button class="button-custom-round" mat-raised-button (click)="openModalTipoTramite()"><i class="fa-solid fa-plus"></i> estado grupo</button>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
         </div>
       </div>
-      <div class="table-responsive">
-        <p-table [value]="listTiposTramite" [resizableColumns]="true" columnResizeMode="expand" responsiveLayout="scroll">
-          <ng-template pTemplate="header">
-              <tr>
-                  <th>Id</th>
-                  <th>Derecho de pago</th>
-                  <th>Tipo</th>
-                  <th>Descripción</th>
-                  <th>Fecha de actualización</th>
-                  <th>Operación</th>
-              </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-tipoTramite>
-              <tr>
-                  <td>{{ tipoTramite.Id }}</td>
-                  <td>{{ tipoTramite.DerechoPagoTramite | currency: 'PEN': 'symbol': '': 'es-PE' }}</td>
-                  <td>{{ tipoTramite.TipoTramite }}</td>
-                  <td>{{ tipoTramite.DescripcionTramite }}</td>
-                  <td>{{ tipoTramite.updatedAt | date:'medium'}}</td>
-                  <td>
-                    <span class="p-buttonset">
-                      <button mat-icon-button><i class="fa-solid fa-pen-to-square" (click)="sendEditTipoTramite(tipoTramite)"></i></button>
-                      <button mat-icon-button><i class="fa-solid fa-trash" (click)="confirmDeleteTipoTramite(tipoTramite)"></i></button>
-                    </span>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">store</mat-icon>
+        <p class="p-2">Medios de pago</p>
+      </ng-template>
+      <div>
+        <div class="p-2">
+          <div class="grid flex justify-content-between pb-2">
+            <div></div>
+            <div>
+              <button class="button-custom-round" mat-raised-button (click)="showSideBar('medioPago')"><i class="fa-solid fa-plus"></i> medio de pago</button>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <p-table [value]="listMediosPago" [resizableColumns]="true" columnResizeMode="expand" responsiveLayout="scroll">
+              <ng-template pTemplate="header">
+                  <tr>
+                      <th>Id</th>
+                      <th>Medio de pago</th>
+                      <th>Fecha de actualización</th>
+                      <th>Operación</th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-medioPago>
+                  <tr>
+                      <td>{{ medioPago.Id }}</td>
+                      <td>{{ medioPago.MedioDePago }}</td>
+                      <td>{{ medioPago.updatedAt | date:'medium'}}</td>
+                      <td>
+                        <span class="p-buttonset">
+                          <button mat-icon-button (click)="sendEditMedioPago(medioPago)"><i class="fa-solid fa-pen-to-square"></i></button>
+                          <button mat-icon-button (click)="confirmDeleteMedioPago(medioPago)"><i class="fa-solid fa-trash"></i></button>
+                        </span>
+                      </td>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="4">
+                    <app-lista-vacia [msg]="'No se encontraron medios de pago'"></app-lista-vacia>
                   </td>
-              </tr>
-          </ng-template>
-          <ng-template pTemplate="emptymessage">
-            <tr>
-              <td colspan="6">
-                <app-lista-vacia [msg]="'No se encontraron tipos de trámites'"></app-lista-vacia>
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </div>
-    </div>
-  </p-card>
-</div>
-<div class="col">
-  <p-card header="Medios de pago">
-    <div class="p-2">
-      <div class="grid flex justify-content-between pb-2">
-        <div></div>
-        <div>
-          <button class="button-custom-round" mat-raised-button (click)="showSideBar('medioPago')"><i class="fa-solid fa-plus"></i> medio de pago</button>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
         </div>
       </div>
-      <div class="table-responsive">
-        <p-table [value]="listMediosPago" [resizableColumns]="true" columnResizeMode="expand" responsiveLayout="scroll">
-          <ng-template pTemplate="header">
+    </mat-tab>
+    <mat-tab *showForRoles="['admin_role']">
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">category</mat-icon>
+        <p class="p-2">Categorias de pago</p>
+      </ng-template>
+      <div class="col">
+        <div class="content-warning">
+          <h2><i class="fa-solid fa-triangle-exclamation"></i> Advertencia</h2>
+          <p class="pt-1">Se recomienda actualizar los datos en esta seción bajo supervisión técnica.
+            La manipulación de los datos de manera irresponsable queda <b>bajo responsabilidad del usuario</b>.
+          </p>
+        </div>
+      </div>
+      <div class="p-2">
+        <div class="grid flex justify-content-between pb-2">
+          <div></div>
+          <div>
+            <button class="button-custom-round" mat-raised-button (click)="showSideBar('categoriaPago')"><i class="fa-solid fa-plus"></i> categoria de pago</button>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <p-table [value]="listCategoriaspago" [resizableColumns]="true" columnResizeMode="expand" responsiveLayout="scroll">
+            <ng-template pTemplate="header">
               <tr>
-                  <th>Id</th>
-                  <th>Medio de pago</th>
-                  <th>Fecha de actualización</th>
-                  <th>Operación</th>
+                <th>Id</th>
+                <th>Tipo</th>
+                <th>Código</th>
+                <th>Fecha de actualización</th>
+                <th>Operación</th>
               </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-medioPago>
+            </ng-template>
+            <ng-template pTemplate="body" let-categoriaPago>
               <tr>
-                  <td>{{ medioPago.Id }}</td>
-                  <td>{{ medioPago.MedioDePago }}</td>
-                  <td>{{ medioPago.updatedAt | date:'medium'}}</td>
-                  <td>
-                    <span class="p-buttonset">
-                      <button mat-icon-button (click)="sendEditMedioPago(medioPago)"><i class="fa-solid fa-pen-to-square"></i></button>
-                      <button mat-icon-button (click)="confirmDeleteMedioPago(medioPago)"><i class="fa-solid fa-trash"></i></button>
-                    </span>
-                  </td>
+                <td>{{ categoriaPago.Id }}</td>
+                <td>{{ categoriaPago.TipoCategoriaPago }}</td>
+                <td>{{ categoriaPago.CodeCategoriaPago }}</td>
+                <td>{{ categoriaPago.updatedAt | date:'medium'}}</td>
+                <td>
+                  <span class="p-buttonset">
+                    <button mat-icon-button (click)="sendEditCategoriaPago(categoriaPago)"><i class="fa-solid fa-pen-to-square"></i></button>
+                    <button mat-icon-button (click)="confirmDeteteCategoriaPago(categoriaPago)"><i class="fa-solid fa-trash"></i></button>
+                  </span>
+                </td>
               </tr>
-          </ng-template>
-          <ng-template pTemplate="emptymessage">
-            <tr>
-              <td colspan="4">
-                <app-lista-vacia [msg]="'No se encontraron medios de pago'"></app-lista-vacia>
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </div>
-    </div>
-  </p-card>
-</div>
-<div class="col" *showForRoles="['admin_role']">
-  <p-card header="Categorias de pago">
-    <div class="p-2">
-      <div class="grid flex justify-content-between pb-2">
-        <div></div>
-        <div>
-          <button class="button-custom-round" mat-raised-button (click)="showSideBar('categoriaPago')"><i class="fa-solid fa-plus"></i> categoria de pago</button>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="5">
+                  <app-lista-vacia [msg]="'No se encontraron categorias de pago'"></app-lista-vacia>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
         </div>
       </div>
-      <div class="table-responsive">
-        <p-table [value]="listCategoriaspago" [resizableColumns]="true" columnResizeMode="expand" responsiveLayout="scroll">
-          <ng-template pTemplate="header">
-            <tr>
-              <th>Id</th>
-              <th>Tipo</th>
-              <th>Código</th>
-              <th>Fecha de actualización</th>
-              <th>Operación</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-categoriaPago>
-            <tr>
-              <td>{{ categoriaPago.Id }}</td>
-              <td>{{ categoriaPago.TipoCategoriaPago }}</td>
-              <td>{{ categoriaPago.CodeCategoriaPago }}</td>
-              <td>{{ categoriaPago.updatedAt | date:'medium'}}</td>
-              <td>
-                <span class="p-buttonset">
-                  <button mat-icon-button (click)="sendEditCategoriaPago(categoriaPago)"><i class="fa-solid fa-pen-to-square"></i></button>
-                  <button mat-icon-button (click)="confirmDeteteCategoriaPago(categoriaPago)"><i class="fa-solid fa-trash"></i></button>
-                </span>
-              </td>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="emptymessage">
-            <tr>
-              <td colspan="5">
-                <app-lista-vacia [msg]="'No se encontraron categorias de pago'"></app-lista-vacia>
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </div>
-    </div>
-  </p-card>
-</div>
-<div class="col" *showForRoles="['admin_role']">
-  <p-card header="Estados de grupo">
-    <div class="p-2">
-      <div class="grid flex justify-content-between pb-2">
-        <div></div>
-        <div>
-          <button class="button-custom-round" mat-raised-button (click)="showSideBar('estadoGrupo')"><i class="fa-solid fa-plus"></i> estado grupo</button>
+    </mat-tab>
+    <mat-tab *showForRoles="['admin_role']">
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">contactless</mat-icon>
+        <p class="p-2">Categorias de pago</p>
+      </ng-template>
+      <div class="col">
+        <div class="content-warning">
+          <h2><i class="fa-solid fa-triangle-exclamation"></i> Advertencia</h2>
+          <p class="pt-1">Se recomienda actualizar los datos en esta seción bajo supervisión técnica.
+            La manipulación de los datos de manera irresponsable queda <b>bajo responsabilidad del usuario</b>.
+          </p>
         </div>
       </div>
-      <div class="table-responsive">
-        <p-table [value]="listEstadosGrupo"
-                 [resizableColumns]="true"
-                 responsiveLayout="scroll">
-          <ng-template pTemplate="header">
-            <tr>
-              <th>Id</th>
-              <th>Código</th>
-              <th>Estado</th>
-              <th>Descripción</th>
-              <th>Fecha de actualización</th>
-              <th>Operación</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-estadoGrupo>
-            <tr>
-              <td>{{ estadoGrupo.Id }}</td>
-              <td>{{ estadoGrupo.CodeEstado }}</td>
-              <td>{{ estadoGrupo.EstadoGrupo }}</td>
-              <td>
-                {{ estadoGrupo.DescripcionEstadoGrupo | slice:0:40 }}... <p-tag class="cursor" severity="info" (click)="opDescrip.toggle($event)">Ver mas</p-tag>
-                <p-overlayPanel #opDescrip [style]="{'width': '50%'}">
-                  {{ estadoGrupo.DescripcionEstadoGrupo }}
-                </p-overlayPanel>
-              </td>
-              <td>{{ estadoGrupo.updatedAt | date:'medium'}}</td>
-              <td>
-                <span class="p-buttonset">
-                  <button mat-icon-button (click)="sendEditEstadoGrupo(estadoGrupo)"><i class="fa-solid fa-pen-to-square"></i></button>
-                  <button mat-icon-button (click)="confirmDeteleEstadoGrupo(estadoGrupo)"><i class="fa-solid fa-trash"></i></button>
-                </span>
-              </td>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="emptymessage">
-            <tr>
-              <td colspan="6">
-                <app-lista-vacia [msg]="'No se encontraron estados de grupos'"></app-lista-vacia>
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
+      <div class="p-2">
+        <div class="grid flex justify-content-between pb-2">
+          <div></div>
+          <div>
+            <button class="button-custom-round" mat-raised-button (click)="showSideBar('estadoGrupo')"><i class="fa-solid fa-plus"></i> estado grupo</button>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <p-table [value]="listEstadosGrupo"
+                   [resizableColumns]="true"
+                   responsiveLayout="scroll">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Id</th>
+                <th>Código</th>
+                <th>Estado</th>
+                <th>Descripción</th>
+                <th>Fecha de actualización</th>
+                <th>Operación</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-estadoGrupo>
+              <tr>
+                <td>{{ estadoGrupo.Id }}</td>
+                <td>{{ estadoGrupo.CodeEstado }}</td>
+                <td>{{ estadoGrupo.EstadoGrupo }}</td>
+                <td>
+                  {{ estadoGrupo.DescripcionEstadoGrupo | slice:0:40 }}... <p-tag class="cursor" severity="info" (click)="opDescrip.toggle($event)">Ver mas</p-tag>
+                  <p-overlayPanel #opDescrip [style]="{'width': '50%'}">
+                    {{ estadoGrupo.DescripcionEstadoGrupo }}
+                  </p-overlayPanel>
+                </td>
+                <td>{{ estadoGrupo.updatedAt | date:'medium'}}</td>
+                <td>
+                  <span class="p-buttonset">
+                    <button mat-icon-button (click)="sendEditEstadoGrupo(estadoGrupo)"><i class="fa-solid fa-pen-to-square"></i></button>
+                    <button mat-icon-button (click)="confirmDeteleEstadoGrupo(estadoGrupo)"><i class="fa-solid fa-trash"></i></button>
+                  </span>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="6">
+                  <app-lista-vacia [msg]="'No se encontraron estados de grupos'"></app-lista-vacia>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
       </div>
-    </div>
-  </p-card>
-</div>
+    </mat-tab>
+    <mat-tab *showForRoles="['admin_role','supervisor_role']">
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">schedule</mat-icon>
+        <p class="p-2">Redordatorios de pago</p>
+      </ng-template>
+      <div class="p-2">
+        <div class="grid flex">
+          <div class="col p-4">
+            <p-messages severity="info">
+              <ng-template pTemplate>
+                  <img src="./assets/icon/logo.svg" width="32" />
+                  <div class="ml-2"><b>Recuerda que el tiempo establecido para notificar a los estudiantes será configurado para todos los grupos registrados y cuyos alumnos aún no hayan pagado su mensualidad  antes del inicio del módulo.</b></div>
+              </ng-template>
+            </p-messages>
+          </div>
+        </div>
+        <form [formGroup]="formNotifications" (ngSubmit)="saveNotificacion()">
+          <div class="grid flex full-width">
+            <div class="col-12 md:col-6">
+              <div class="col">
+                <label for="HoraNotificacion" class="block mb-2">Hora</label>
+                <p-dropdown class="p-fluid p-grid p-formgrid"
+                            appendTo="body"
+                            [options]="listHoras"
+                            formControlName="HoraNotificacion"
+                            optionValue="value"
+                            optionLabel="name">
+                        </p-dropdown>
+                <small *ngIf="HoraNotificacion.hasError('required') && HoraNotificacion.dirty"
+                      class="p-error">El campo Hora es <strong>requerido</strong></small>
+              </div>
+              <div class="col">
+                <label for="MinutoNotificacion" class="block mb-2">Minuto</label>
+                <p-dropdown class="p-fluid p-grid p-formgrid"
+                            appendTo="body"
+                            [options]="listMinutos"
+                            formControlName="MinutoNotificacion"
+                            optionValue="value"
+                            optionLabel="name">
+                        </p-dropdown>
+                <small *ngIf="MinutoNotificacion.hasError('required') && MinutoNotificacion.dirty"
+                      class="p-error">El campo Minutos es <strong>requerido</strong></small>
+              </div>
+            </div>
+            <div class="col-12 md:col-6">
+              <div class="col">
+                <label for="DescriptionNotificacion"><p class="mb-2">Descripción</p></label>
+                <textarea rows="5"
+                          cols="30"
+                          id="DescriptionNotificacion"
+                          [maxlength]="200"
+                          pInputTextarea
+                          formControlName="DescriptionNotificacion"></textarea>
+                <small *ngIf="DescriptionNotificacion.hasError('required') && DescriptionNotificacion.dirty"
+                       class="p-error">El campo descripción es <strong>requerido</strong></small>
+              </div>
+            </div>
+            <div class="col ml-2">
+              <button mat-raised-button
+                      disa
+                      type="submit">
+              <i class="pi" [ngClass]="{'pi-spin pi-spinner': loadingNotificacion,
+                                        'pi-save':!loadingNotificacion}"></i> Guardar
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</p-card>
 
 <!-- formulario add grupo módulo -->
 <p-sidebar [(visible)]="sidebarVisible" position="right">

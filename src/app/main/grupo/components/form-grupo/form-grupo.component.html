@@ -1,4 +1,4 @@
-<form [formGroup]="FormGrupo">
+<form [formGroup]="FormGrupo" (ngSubmit)="ready()">
   <div class="mb-4">
     <div *ngIf="isUpdate else notUpdate">
       <h2 class="ml-1"><i class="fa-solid fa-pen-to-square"></i> Editar grupo</h2>
@@ -201,15 +201,16 @@
   <div class="flex justify-content-end mt-2">
       <button mat-raised-button
               color="primary"
+              type="submit"
               class="button-custom"
-              (click)="ready()"
               [disabled]="loading || isEmptyListEstadoGrupo">
               <i [class]="loading?'pi pi-spin pi-spinner':'pi pi-save'"></i> {{isUpdate?'Guardar':'Registrar'}}
       </button>
       <button mat-raised-button
               color="primary"
+              type="reset"
               class="button-custom ml-2"
-              (click)="returnLista()"> Cancelar
+              (click)="returnLista()"> Regresar
       </button>
   </div>
 </form>

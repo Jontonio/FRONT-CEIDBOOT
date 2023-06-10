@@ -92,7 +92,6 @@ export class VerGrupoComponent implements OnInit {
   saveEstadoGrupo(){
     if((!this.estadoGrupo) && (!this.grupo)) return;
     this.loadingSave = true;
-    this.loadingSave = false;
     this._grupo.updateGrupo(this.grupo.Id, { estadoGrupo:{ Id:this.estadoGrupo.Id } }as Grupo)
     .subscribe({
       next: (value) => {
@@ -114,9 +113,9 @@ export class VerGrupoComponent implements OnInit {
   createFormRecordatorioPago(){
     this.formRecodatorioPago = this.fb.group({
       AplicaMora:[null],
-      MontoMora: [null],
+      MontoMora: [null, Validators.required],
       NotificarGrupo: [null],
-      NumDiasHolaguraMora: [null, Validators.required]
+      NumDiasHolaguraMora: [null, Validators.required, Validators.required]
     })
   }
 

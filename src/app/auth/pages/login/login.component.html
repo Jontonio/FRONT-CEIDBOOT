@@ -4,7 +4,7 @@
       <div class="col-12">
         <div class="title-main">
           <div class="card-login">
-            <p-card>
+            <p-card *ngIf="!isAuth, else showLoading">
               <app-form-login></app-form-login>
               <div class="text-center">
                 <a class="forgot-password" routerLink="/auth/reset-password">Olvidé mi constraseña</a>
@@ -13,6 +13,17 @@
                 <a class="forgot-password" routerLink="/main/home">Página principal</a>
               </div>
             </p-card>
+            <ng-template #showLoading>
+              <p-card>
+                <div class="field">
+                  <p>Bienvenido a </p>
+                  <h2>CEID</h2>
+                </div>
+                <div class="col text-center flex flex-column">
+                  <i class="pi pi-spin pi-spinner mb-3" style="font-size: 2rem"></i> Verificando sesión...
+                </div>
+              </p-card>
+            </ng-template>
           </div>
         </div>
       </div>

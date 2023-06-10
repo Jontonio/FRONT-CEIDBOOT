@@ -1,6 +1,6 @@
 import { Directive, Input, ViewContainerRef, TemplateRef, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from 'src/app/auth/services/auth.service';
-import { map, distinctUntilChanged, tap, Subscription } from 'rxjs';
+import { map, distinctUntilChanged, tap, Subscription, of } from 'rxjs';
 
 /** Este será una directiva estructural */
 
@@ -17,14 +17,23 @@ export class ShowForRolesDirective implements OnInit, OnDestroy {
               private templateRef:TemplateRef<any>) { }
 
   ngOnInit(): void {
-    this.sub$ = this._auth.authenticated()
+    const hasRole: boolean = Boolean(this.rolesPermitidos?.includes(this._auth.userAuth!.TipoRol));
+    this.sub$ = of(hasRole)
     .pipe(
-      map((user) => Boolean(this.rolesPermitidos!.includes(user.user.TipoRol))),
       distinctUntilChanged(),
       tap((hasRole) => hasRole
-                       ?this.viewContainerRedf.createEmbeddedView(this.templateRef)
-                       :this.viewContainerRedf.clear())
-    ).subscribe();
+        ? this.viewContainerRedf.createEmbeddedView(this.templateRef)
+        : this.viewContainerRedf.clear())
+    )
+    .subscribe();
+    // this.sub$ = this._auth.authenticated()
+    // .pipe(
+    //   map((user) => Boolean(this.rolesPermitidos!.includes(user.user.TipoRol))),
+    //   distinctUntilChanged(),
+    //   tap((hasRole) => hasRole
+    //                    ?this.viewContainerRedf.createEmbeddedView(this.templateRef)
+    //                    :this.viewContainerRedf.clear())
+    // ).subscribe();
   }
 
   ngOnDestroy(): void {

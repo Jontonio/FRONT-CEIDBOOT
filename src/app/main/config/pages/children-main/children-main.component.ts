@@ -9,11 +9,19 @@ import { CategoriaPago } from 'src/app/main/grupo/class/CategoriaPago';
 import { TipoTramite } from 'src/app/main/class/TipoTramite';
 import { MedioPago } from 'src/app/class/MedioDePago';
 import { DenominServicio } from 'src/app/denomin-servicio/class/Denomin-servicio';
+import { Subscription } from 'rxjs';
+import { TimeNotification } from 'src/app/main/class/TimeNotification';
+
 
 export enum OptionSideBar{
   medioPago = 'medioPago',
   categoriaPago = 'categoriaPago',
   estadosPago = 'estadoGrupo'
+}
+
+interface Tiempo{
+  name:string;
+  value:number;
 }
 
 @Component({
@@ -23,8 +31,15 @@ export enum OptionSideBar{
 })
 export class ChildrenMainComponent implements OnInit {
 
+  /** rxjs */
+  getEstadosGrupo$:Subscription;
+  getCategoriasPago$:Subscription;
+  getTiposTramite$:Subscription;
+  getMediosPago$:Subscription;
+  getDenominServicio$:Subscription;
+  getTimeNotification$:Subscription;
+
   sidebarVisible:boolean;
-  products: any[];
   listEstadosGrupo:EstadoGrupo[] = [];
   listCategoriaspago:CategoriaPago[] = [];
   listTiposTramite:TipoTramite[] = [];
@@ -65,6 +80,12 @@ export class ChildrenMainComponent implements OnInit {
   isUpdateCategoriaPago:boolean = false;
   IdCategoriaPago:number | undefined;
 
+  /** Time notificaions */
+  formNotifications:FormGroup;
+  listHoras:Tiempo[] = [];
+  listMinutos:Tiempo[] = [];
+  loadingNotificacion:boolean = false;
+
   constructor(private readonly fb:FormBuilder,
               private _msg:MessageService,
               private _unAuth:UnAuthorizedService,
@@ -77,6 +98,7 @@ export class ChildrenMainComponent implements OnInit {
     this.getAllTiposTramite();
     this.getAllMediosPago();
     this.getAllDenominServicio();
+    this.getTimeNotification();
   }
 
   ngOnInit(): void {
@@ -84,6 +106,16 @@ export class ChildrenMainComponent implements OnInit {
     this.createFormTipoTramite();
     this.createFormMedioPago();
     this.createFormCategoriaPago();
+    this.createFormTimeNotifications();
+  }
+
+  ngOnDestroy(): void {
+    if(this.getEstadosGrupo$) this.getEstadosGrupo$.unsubscribe();
+    if(this.getCategoriasPago$) this.getCategoriasPago$.unsubscribe();
+    if(this.getTiposTramite$) this.getTiposTramite$.unsubscribe();
+    if(this.getMediosPago$) this.getMediosPago$.unsubscribe();
+    if(this.getDenominServicio$) this.getDenominServicio$.unsubscribe();
+    if(this.getTimeNotification$) this.getTimeNotification$.unsubscribe();
   }
 
   inicializedVariables(){
@@ -91,10 +123,18 @@ export class ChildrenMainComponent implements OnInit {
     this.isUpdateEstadoGrupo = false;
     this.loadingEstadoGrupo = false;
     this.toast('succcess','OJO','no tocar','mensaje-advertencia');
+    /** variables de tiempo */
+    for (let index = 0; index <= 23; index++) {
+      this.listHoras.push({value:index, name:`${index} horas`});
+    }
+
+    for (let index = 0; index <= 59; index++) {
+      this.listMinutos.push({value:index, name:`${index} minutos`});
+    }
   }
 
   getAllEstadosGrupos(){
-    this._config.getEstadosGrupo().subscribe({
+    this.getEstadosGrupo$ = this._config.getEstadosGrupo().subscribe({
       next:(value) => {
         if(value.ok){
           this.listEstadosGrupo = value.data as Array<EstadoGrupo>;
@@ -108,7 +148,7 @@ export class ChildrenMainComponent implements OnInit {
   }
 
   getAllCategoriasPago(){
-    this._config.getCategoriasPago().subscribe({
+    this.getCategoriasPago$ = this._config.getCategoriasPago().subscribe({
       next:(value) => {
         if(value.ok){
           this.listCategoriaspago = value.data as Array<CategoriaPago>;
@@ -122,7 +162,7 @@ export class ChildrenMainComponent implements OnInit {
   }
 
   getAllTiposTramite(){
-    this._config.getTiposTramite().subscribe({
+    this.getTiposTramite$ = this._config.getTiposTramite().subscribe({
       next:(value) => {
         if(value.ok){
           this.listTiposTramite = value.data as Array<TipoTramite>;
@@ -136,7 +176,7 @@ export class ChildrenMainComponent implements OnInit {
   }
 
   getAllMediosPago(){
-    this._config.getMediosPago().subscribe({
+    this.getMediosPago$ =this._config.getMediosPago().subscribe({
       next:(value) => {
         if(value.ok){
           this.listMediosPago = value.data as Array<MedioPago>;
@@ -150,10 +190,27 @@ export class ChildrenMainComponent implements OnInit {
   }
 
   getAllDenominServicio(){
-    this._config.getDenominServicio().subscribe({
+    this.getDenominServicio$ = this._config.getDenominServicio().subscribe({
       next:(value) => {
         if(value.ok){
           this.listDenominacionServicios = value.data as Array<DenominServicio>;
+        }
+      },
+      error:(e) => {
+        console.log(e)
+        this.messageError(e)
+      }
+    })
+  }
+
+  getTimeNotification(){
+    this.getTimeNotification$ = this._config.getTimeNotification().subscribe({
+      next:(value) => {
+        if(value.ok){
+          /** completar formulario */
+          this.HoraNotificacion.setValue(value.data.HoraNotificacion);
+          this.MinutoNotificacion.setValue(value.data.MinutoNotificacion);
+          this.DescriptionNotificacion.setValue(value.data.DescriptionNotificacion);
         }
       },
       error:(e) => {
@@ -168,6 +225,24 @@ export class ChildrenMainComponent implements OnInit {
     this.modalVisibleServicio = true;
     this.isUpdateServicio = false;
     this.IdServicio = undefined;
+  }
+
+  createFormTimeNotifications(){
+    this.formNotifications = this.fb.group({
+      HoraNotificacion:[null, [Validators.required, Validators.pattern(/^([0-9])*$/)]],
+      MinutoNotificacion:[null, [Validators.required, Validators.pattern(/^([0-9])*$/)]],
+      DescriptionNotificacion:[null, Validators.required]
+    })
+  }
+
+  get HoraNotificacion(){
+    return this.formNotifications.controls['HoraNotificacion'];
+  }
+  get MinutoNotificacion(){
+    return this.formNotifications.controls['MinutoNotificacion'];
+  }
+  get DescriptionNotificacion(){
+    return this.formNotifications.controls['DescriptionNotificacion'];
   }
 
   createFormServicio(){
@@ -846,6 +921,31 @@ export class ChildrenMainComponent implements OnInit {
         this.messageError(e);
       }
     })
+  }
+
+  saveNotificacion(){
+    if(this.formNotifications.invalid){
+      Object.keys( this.formNotifications.controls ).forEach( label => this.formNotifications.controls[ label ].markAsDirty());
+      return;
+    }
+    this.loadingNotificacion = true;
+    const newTime = new TimeNotification(this.HoraNotificacion.value,
+                                         this.MinutoNotificacion.value,
+                                         this.DescriptionNotificacion.value)
+    this._config.updateTimeNotificacion(1, newTime).subscribe({
+      next: (resp) => {
+        this.loadingNotificacion = false;
+        if(resp.ok){
+          this.toast('success', resp.msg);
+          return;
+        }
+        this.toast('warn', resp.msg);
+      },
+      error: (e) => {
+        this.loadingNotificacion = false;
+        this.messageError(e);
+      }
+    });
   }
 
   messageError(e:HttpErrorResponse){

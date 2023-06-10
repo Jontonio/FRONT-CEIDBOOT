@@ -13,13 +13,20 @@
           <div mat-subheader>Documentos</div>
           <mat-list-item *ngFor="let note of notes">
             <mat-icon matListItemIcon class="mr-2">note</mat-icon>
-            <div matListItemTitle><a class="tag-a" [href]="note.link" target="_blank" rel="noopener noreferrer">{{note.name}}</a></div>
+            <div matListItemTitle><a class="tag-a"
+                                     [href]="note.link"
+                                     target="_blank"
+                                     rel="noopener noreferrer">{{note.name}}</a></div>
           </mat-list-item>
           <mat-divider></mat-divider>
-          <div mat-subheader>Folders</div>
+          <div mat-subheader>Preguntas</div>
           <mat-list-item *ngFor="let folder of folders">
             <mat-icon matListItemIcon class="mr-2">folder</mat-icon>
-            <div matListItemTitle>{{folder.name}}</div>
+            <div matListItemTitle>
+              <a class="tag-a"
+                [href]="folder.link"
+                target="_blank"
+                rel="noopener noreferrer">{{folder.name}}</a></div>
           </mat-list-item>
         </mat-list>
       </p-card>

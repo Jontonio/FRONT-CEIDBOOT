@@ -1,4 +1,4 @@
-<form [formGroup]="formDocente">
+<form [formGroup]="formDocente" (ngSubmit)="ready()">
   <div class="mb-1">
     <div *ngIf="isUpdate else notUpdate">
       <h2 class="ml-1"><i class="fa-solid fa-user-pen"></i> Editar docente</h2>
@@ -154,15 +154,16 @@
   <div class="flex justify-content-end">
     <button mat-raised-button
             color="primary"
+            type="button"
             class="button-custom"
-            (click)="ready()"
             [disabled]="loading">
             <i [class]="loading?'pi pi-spin pi-spinner':'pi pi-save'"></i> {{isUpdate?'Guardar':'Registrar'}}
     </button>
     <button mat-raised-button
             color="primary"
+            type="reset"
             class="button-custom ml-2"
-            (click)="returnLista()"> Cancelar
+            (click)="returnLista()"> Regresar
     </button>
   </div>
 </form>

@@ -104,9 +104,14 @@
       </ng-template>
       <ng-template pTemplate="emptymessage">
         <tr>
-          <td colspan="10">
-            <app-lista-vacia [msg]="'No se encontraron registros de usuarios'"></app-lista-vacia>
+          <td colspan="10" *ngIf="_usuario.loadingLista && _usuario.listUsuarios.length==0, else nothing">
+            <app-loadding msg="Lista de usuarios"></app-loadding>
           </td>
+          <ng-template #nothing>
+            <td colspan="10">
+              <app-lista-vacia [msg]="'No se encontraron registros de usuarios'"></app-lista-vacia>
+            </td>
+          </ng-template>
         </tr>
       </ng-template>
     </p-table>
@@ -128,7 +133,6 @@
         <div></div>
       </div>
     </div>
-    <app-loadding *ngIf="_usuario.loadingLista && _usuario.listUsuarios.length==0" msg="Lista de usuarios"></app-loadding>
   </div>
 </p-card>
 <!-- Delete message dialog -->

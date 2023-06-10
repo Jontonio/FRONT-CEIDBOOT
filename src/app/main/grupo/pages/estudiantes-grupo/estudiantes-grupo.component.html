@@ -307,7 +307,14 @@
         </ng-template>
         <ng-template pTemplate="emptymessage">
           <tr>
-            <td colspan="11"><app-lista-vacia [msg]="'No se encontraron registros con coincidentes con '+terminoBusqueda"></app-lista-vacia></td>
+            <td colspan="11" *ngIf="loadingLista && listaEstudiantes.length==0, else nothing">
+              <app-loadding msg="Lista de estudiantes en el grupo"></app-loadding>
+            </td>
+            <ng-template #nothing>
+              <td colspan="11">
+                <app-lista-vacia [msg]="'No se encontraron registros de estudiantes'"></app-lista-vacia>
+              </td>
+            </ng-template>
           </tr>
         </ng-template>
       </p-table>
@@ -329,7 +336,6 @@
           <div></div>
         </div>
       </div>
-      <app-loadding *ngIf="loadingLista && listaEstudiantes.length==0" msg="Lista de usuarios"></app-loadding>
     </div>
   </p-card>
 </div>

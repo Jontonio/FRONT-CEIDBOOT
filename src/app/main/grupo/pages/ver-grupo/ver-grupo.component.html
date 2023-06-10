@@ -86,7 +86,9 @@
           <div class="col">
             <button mat-raised-button
                     (click)="saveEstadoGrupo()"
-                    [disabled]="loadingSave">Guardar</button>
+                    [disabled]="loadingSave">
+                   <i class="pi" [ngClass]="{'pi-spin pi-spinner': loadingSave}"></i> Guardar
+            </button>
           </div>
         </p-card>
       </div>

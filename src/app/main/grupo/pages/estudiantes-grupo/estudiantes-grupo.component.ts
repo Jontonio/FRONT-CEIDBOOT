@@ -310,6 +310,7 @@ export class EstudiantesGrupoComponent implements OnInit {
     this._socket.OnEvent('list_estudian_en_grupo').subscribe({
       next:(value) => {
         this.grupo = value.data.grupo;
+        this.grupoModulo = this.grupo.grupoModulo;
         this.listaEstudiantes = value.data.estudiantesEnGrupo;
       },
       error:(e) => {
@@ -405,7 +406,6 @@ export class EstudiantesGrupoComponent implements OnInit {
     if(!this.estadoEstudiante){
       this.toast('warn','Selecione un estado del estudiante para continuar');
     }
-    // console.log(this.estadoEstudiante)
     this._matricula.updateMatricula(this.matriculaSecionada.Id, {EstadoMatricula: this.estadoEstudiante } as Matricula).subscribe({
       next:(resp)=>{
         if(resp.ok){

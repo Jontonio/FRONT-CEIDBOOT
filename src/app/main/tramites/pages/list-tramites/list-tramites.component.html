@@ -5,28 +5,6 @@
         <app-input-search (busqueda)="busquedaTermino($event)"
                           placeholder="Buscar nombres/DNI"></app-input-search>
       </div>
-      <div class="col-12 md:col-9 flex justify-content-end">
-        <div>
-          <!-- <button mat-raised-button
-                  [matMenuTriggerFor]="menuFilter"
-                  class="button-custom-round mr-2">{{selectEstadoGrupo | titlecase}} <i class="pi pi-filter-fill ml-2"></i></button>
-          <mat-menu #menuFilter="matMenu">
-            <button mat-menu-item
-                    *ngFor="let item of listEstadosGrupo"
-                    (click)="selectForFiltro(item)">
-                    <i class="pi"
-                       [ngClass]="{'pi-filter-fill':item.CodeEstado==selectCodeEstado,
-                                   'pi-filter':item.CodeEstado!=selectCodeEstado}"></i> {{item.EstadoGrupo | titlecase}}
-            </button>
-          </mat-menu> -->
-          <button mat-raised-button
-                  type="button"
-                  class="button-custom-round"
-                  routerLink="/system/grupos/add-grupo">
-                  <i class="fa-solid fa-plus"></i> Filtrar
-          </button>
-        </div>
-      </div>
     </div>
     <div class="col table-responsive content-tables">
       <p-table [value]="_tramite.listTramites | busdTramite:termino"
@@ -106,9 +84,14 @@
         </ng-template>
         <ng-template pTemplate="emptymessage">
           <tr>
-            <td colspan="10">
-              <app-lista-vacia [msg]="'No se encontraron registros'"></app-lista-vacia>
+            <td colspan="10" *ngIf="_tramite.loadingLista && _tramite.listTramites.length==0, else nothing">
+              <app-loadding msg="Lista de trámites"></app-loadding>
             </td>
+            <ng-template #nothing>
+              <td colspan="10">
+                <app-lista-vacia [msg]="'No se encontraron registros'"></app-lista-vacia>
+              </td>
+            </ng-template>
           </tr>
         </ng-template>
       </p-table>
@@ -129,7 +112,6 @@
         </div>
       </div>
     </div>
-    <app-loadding *ngIf="_tramite.loadingLista && _tramite.listTramites.length==0" msg="Lista de grupos"></app-loadding>
   </p-card>
 </div>
 <!-- componente para la visualización de documentos -->

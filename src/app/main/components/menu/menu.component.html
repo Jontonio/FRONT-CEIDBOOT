@@ -14,11 +14,6 @@
       <div class="active-user" [ngClass]="{'online': _socket.statusServer,'offline':!_socket.statusServer}"></div>
       <p-chip [label]="_auth.userAuth.Nombres | titlecase" icon="pi pi-user"></p-chip>
     </div>
-    <!-- <button pButton
-            pRipple
-            type="button"
-            icon="pi pi-bell"
-            class="p-button-rounded p-button-text btn-custom"></button> -->
     <button pButton
             pRipple
             type="button"
@@ -30,7 +25,7 @@
 </div>
 <p-sidebar [(visible)]="display">
   <div class="flex justify-content-center flex align-items-center">
-    <img src="assets/icon/CEIDBOT.svg" alt="" srcset="">
+    <img src="assets/icon/CEIDBOT.svg" alt="logo ceidbot">
     <h3 class="m-2 font">SISTEMA CEIDBOT</h3>
   </div>
   <p-divider layout="horizontal"></p-divider>

@@ -158,7 +158,6 @@ export class ModalMensualidadComponent implements OnInit {
     this.MontoPago.setValue(pago.MontoPago);
     this.Verificado.setValue(pago.Verificado);
     this.MedioDePago.setValue(pago.medioDePago);
-    console.log(pago.grupoModulo)
     this.selectGrupoModulo = pago.grupoModulo;
     this.grupoModulo.setValue(pago.grupoModulo);
   }

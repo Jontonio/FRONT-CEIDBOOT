@@ -18,7 +18,7 @@ import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { MessageService } from 'primeng/api';
 import { HttpErrorResponse } from '@angular/common/http';
-import { tap } from 'rxjs';
+import { tap, Subscription } from 'rxjs';
 
 
 @Component({
@@ -27,6 +27,18 @@ import { tap } from 'rxjs';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+
+  getDataHorizontalBarEstudinatesEnGrupo$:Subscription;
+  getListaModulos$:Subscription;
+  getCategoriasPago$:Subscription;
+  getAllEstadoGrupo$:Subscription;
+  getDataVerticalBarPagosMora$:Subscription;
+  getGruposReporte$:Subscription;
+  getGruposReporteLimit$:Subscription;
+  getListaEstudiantesConPagoGrupoModulo$:Subscription;
+  getResumenGeneralPagos$:Subscription;
+  getReproteOtrosPagos$:Subscription;
+  getIndiceDeDeudaVencida$:Subscription;
 
   listEstadoGrupo:EstadoGrupo[] = [];
   estadoGrupo:EstadoGrupo;
@@ -55,6 +67,11 @@ export class DashboardComponent implements OnInit {
   offset:number = 0;
   selectGrupoIndice:Grupo;
 
+  /** loading  */
+  loadingRGeneral:boolean = false;
+  loadingEstudiantes:boolean = false;
+  loadingOtrosPagos:boolean = false;
+
   constructor(private readonly _dashboard:DashboardService,
               private readonly _grupo:GrupoService,
               private readonly fb:FormBuilder,
@@ -69,6 +86,20 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  ngOnDestroy(): void {
+    if(this.getDataHorizontalBarEstudinatesEnGrupo$) this.getDataHorizontalBarEstudinatesEnGrupo$.unsubscribe();
+    if(this.getListaEstudiantesConPagoGrupoModulo$) this.getListaEstudiantesConPagoGrupoModulo$.unsubscribe();
+    if(this.getListaModulos$) this.getListaModulos$.unsubscribe();
+    if(this.getCategoriasPago$) this.getCategoriasPago$.unsubscribe();
+    if(this.getAllEstadoGrupo$) this.getAllEstadoGrupo$.unsubscribe();
+    if(this.getDataVerticalBarPagosMora$) this.getDataVerticalBarPagosMora$.unsubscribe();
+    if(this.getGruposReporte$) this.getGruposReporte$.unsubscribe();
+    if(this.getGruposReporteLimit$) this.getGruposReporteLimit$.unsubscribe();
+    if(this.getResumenGeneralPagos$) this.getResumenGeneralPagos$.unsubscribe();
+    if(this.getReproteOtrosPagos$) this.getReproteOtrosPagos$.unsubscribe();
+    if(this.getIndiceDeDeudaVencida$) this.getIndiceDeDeudaVencida$.unsubscribe();
+  }
 
   createFormImputs(){
     this.formInputs = this.fb.group({
@@ -93,7 +124,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getDataHorizontalBar(idEstado:number){
-    this._dashboard.getDataHorizontalBarEstudinatesEnGrupo(idEstado).subscribe({
+    this.getDataHorizontalBarEstudinatesEnGrupo$ = this._dashboard.getDataHorizontalBarEstudinatesEnGrupo(idEstado).subscribe({
       next:(res) => {
         this.dataEstudiantesGrupo = res;
       },
@@ -104,7 +135,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getListaModulos(){
-    this._dashboard.getListaModulos().subscribe({
+    this.getListaModulos$ = this._dashboard.getListaModulos().subscribe({
       next:(value) => {
         if(value.ok){
           this.listModulos = value.data as Array<Modulo>;
@@ -118,7 +149,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getListaCategoriasPago(){
-    this._dashboard.getCategoriasPago().subscribe({
+    this.getCategoriasPago$ = this._dashboard.getCategoriasPago().subscribe({
       next:(value) => {
         if(value.ok){
           this.listCategoriaPago = value.data as Array<CategoriaPago>;
@@ -132,7 +163,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getEstadosGrupo(){
-    this._grupo.getAllEstadoGrupo().subscribe({
+    this.getAllEstadoGrupo$ = this._grupo.getAllEstadoGrupo().subscribe({
       next: (value) => {
         if(value.ok){
           this.listEstadoGrupo = value.data as Array<EstadoGrupo>;
@@ -151,18 +182,8 @@ export class DashboardComponent implements OnInit {
   }
 
   getDataVerticalBarPagosMora(grupoId:number, estadoGrupoId:number){
-    this._dashboard.
-    getDataVerticalBarPagosMora(grupoId, estadoGrupoId).
-    pipe(
-      tap( data => {
-        // data.forEach(objeto => {
-        //   objeto.series.forEach(item => {
-        //     item.value = Number(item.value);
-        //   });
-        // });
-        return data;
-      })
-    )
+    this.getDataVerticalBarPagosMora$ = this._dashboard.
+    getDataVerticalBarPagosMora(grupoId, estadoGrupoId)
     .subscribe({
       next:(value) => {
         this.dataPagosMora = value;
@@ -184,7 +205,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getGrupos(idEstadoGrupo:number = 1){
-    this._grupo.getGruposReporte(idEstadoGrupo).subscribe({
+    this.getGruposReporte$ = this._grupo.getGruposReporte(idEstadoGrupo).subscribe({
       next: (value) => {
         if(value.ok){
           this.listGrupos = value.data as Array<Grupo>;
@@ -199,7 +220,7 @@ export class DashboardComponent implements OnInit {
 
   getLimitGrupos(idEstadoGrupo:number, limit:number = 5, offset:number = 0){
     this.loadingGruposLista = true;
-    this._grupo.getGruposReporte(idEstadoGrupo, true, this.limit, this.offset ).subscribe({
+    this.getGruposReporteLimit$ = this._grupo.getGruposReporte(idEstadoGrupo, true, this.limit, this.offset ).subscribe({
       next: (value) => {
         this.loadingGruposLista = false;
         if(value.ok){
@@ -215,21 +236,25 @@ export class DashboardComponent implements OnInit {
   }
 
   generarReporteEstudiantes(){
+
     if(this.formInputs.invalid){
       Object.keys( this.formInputs.controls ).forEach( label => this.formInputs.controls[ label].markAsDirty() )
       return;
     }
-    this._dashboard.
+    this.loadingEstudiantes = true;
+    this.getListaEstudiantesConPagoGrupoModulo$ = this._dashboard.
         getListaEstudiantesConPagoGrupoModulo(this.inputGrupo.value.Id,
                                               this.inputCategoriaPago.value.Id,
                                               this.inputModulo.value.Id)
         .subscribe({
           next:(value) => {
+            this.loadingEstudiantes = false;
             if(value.length==0) this.toast('warn','Reporte estudiantes','No se encontraron datos registrados para esas opciones de estado y grupo')
             this.listReportePagos = value;
             this.listReportePagos.map(data => data.FechaPago = moment(new Date(data.FechaPago)).format('DD [de] MMMM [del] YYYY'));
           },
           error:(e) => {
+            this.loadingEstudiantes = false;
             console.log(e)
           }
         })
@@ -288,21 +313,34 @@ export class DashboardComponent implements OnInit {
     this.getLimitGrupos(2, this.limit, this.offset);
   }
 
+  /**
+   * The function generates a general report by fetching data from an API and displaying it in a list,
+   * with error handling and a warning message if no data is found.
+   */
   reporteGeneral(){
+
     const data = moment(this.dateReporteGeneral,'YYYY-MM-DD');
     const anio = data.format('YYYY');
     const numMes = data.format('MM');
-    this._dashboard.getResumenGeneralPagos(anio, numMes).subscribe({
+    this.loadingRGeneral = true;
+
+    this.getResumenGeneralPagos$ = this._dashboard.getResumenGeneralPagos(anio, numMes).subscribe({
       next: (value) => {
+        this.loadingRGeneral = false;
         if(value.length==0) this.toast('warn','Reporte general','No se encontraron datos registrados para esa fecha')
         this.listReporteGeneral = value;
       },
       error: (e) => {
+        this.loadingRGeneral = false;
         console.log(e)
       }
     })
   }
 
+  /**
+   * This function generates a general report in Excel format and downloads it.
+   * @returns The function is not returning anything, it is generating and downloading an Excel file.
+  */
   generarReporteGeneralExcel(){
     if(this.listReporteGeneral.length == 0){
       this.toast('warn','Reporte','Genere datos antes de descargar el reporte general.')
@@ -328,6 +366,10 @@ export class DashboardComponent implements OnInit {
     saveAs(blob, `Reporte-general-${this.dateReporteGeneral}.xlsx`);
   }
 
+  /**
+   * This function generates an Excel report for other payments based on a list of data.
+   * @returns The function does not return anything, it generates and downloads an Excel report.
+   */
   generarReporteOtrosPagosdasExcel(){
     if(this.listReporteGeneral.length == 0){
       this.toast('warn','Reporte','Genere datos antes de descargar el reporte general.')
@@ -353,6 +395,14 @@ export class DashboardComponent implements OnInit {
     saveAs(blob, `Reporte-general-${this.dateReporteGeneral}.xlsx`);
   }
 
+  /**
+   * The function transforms an array of objects into a 2D array with specific headers.
+   * @param {ReporteGeneral[]} data - An array of objects of type ReporteGeneral, which contains
+   * information about payments for a course group.
+   * @returns The function `transformGeneralPagoToExls` is returning a two-dimensional array of data,
+   * where each row represents a report on a course payment and each column represents a specific
+   * attribute of that report. The first row of the array contains the header names for each column.
+   */
   transformGeneralPagoToExls(data:ReporteGeneral[]){
     const header = ['Código del grupo',
                     'Nombre del curso',
@@ -366,24 +416,37 @@ export class DashboardComponent implements OnInit {
     return newData;
   }
 
+  /**
+   * This function generates a report of other payments based on a given date.
+   */
   reporteOtrosPagos(){
     const data = moment(this.dateReporteGeneral,'YYYY-MM-DD');
     const anio = data.format('YYYY');
     const numMes = data.format('MM');
-    this._dashboard.getReproteOtrosPagos(anio, numMes).subscribe({
+    this.loadingOtrosPagos = true;
+    this.getReproteOtrosPagos$ = this._dashboard.getReproteOtrosPagos(anio, numMes).subscribe({
       next: (value) => {
+        this.loadingOtrosPagos = false;
         if(value.length==0) this.toast('warn','Reporte Otros pagos','No se encontraron datos registrados para esa fecha')
         this.listReporteOtrosPagos = value;
       },
       error: (e) => {
+        this.loadingOtrosPagos = false;
         console.log(e)
       }
     })
   }
 
+  /**
+   * This function sets a selected group and subscribes to an observable to retrieve data for a debt
+   * index.
+   * @param {Grupo} grupo - The parameter "grupo" is of type "Grupo", which is likely a custom class or
+   * interface defined elsewhere in the codebase. It is being used as an argument to the
+   * "getIndiceData" function.
+   */
   getIndiceData(grupo:Grupo){
     this.selectGrupoIndice = grupo;
-    this._dashboard.getIndiceDeDeudaVencida(grupo.Id).subscribe({
+    this.getIndiceDeDeudaVencida$ = this._dashboard.getIndiceDeDeudaVencida(grupo.Id).subscribe({
       next: (value) => {
         this.indice = value.indice;
         this.total = value.total;

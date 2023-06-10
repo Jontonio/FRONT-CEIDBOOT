@@ -166,7 +166,7 @@
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
                   <tr>
-                    <td colspan="10">
+                    <td colspan="7">
                       <app-lista-vacia [msg]="'No se encontraron registros de grupos en proceso'"></app-lista-vacia>
                     </td>
                   </tr>
@@ -257,7 +257,10 @@
                               [readonlyInput]="true"></p-calendar>
                   <button mat-raised-button
                           (click)="reporteGeneral()"
-                          class="full-width mt-3">Reporte general</button>
+                          [disabled]="loadingRGeneral"
+                          class="full-width mt-3">
+                          <i class="pi" [ngClass]="{'pi-spin pi-spinner': loadingRGeneral}"></i> Reporte general
+                  </button>
                 </div>
               </p-card>
             </div>
@@ -319,7 +322,10 @@
                     <div class="col">
                       <button mat-raised-button
                               class="full-width"
-                              (click)="generarReporteEstudiantes()">Reporte grupo</button>
+                              [disabled]="loadingEstudiantes"
+                              (click)="generarReporteEstudiantes()">
+                              <i class="pi" [ngClass]="{'pi-spin pi-spinner': loadingEstudiantes}"></i> Reporte grupo
+                      </button>
                     </div>
                   </div>
                 </p-card>
@@ -466,7 +472,9 @@
                           [readonlyInput]="true"></p-calendar>
               <button mat-raised-button
                       (click)="reporteOtrosPagos()"
-                      class="full-width mt-3">Reporte otros pagos</button>
+                      [disabled]="loadingOtrosPagos"
+                      class="full-width mt-3">
+                      <i class="pi" [ngClass]="{'pi-spin pi-spinner': loadingOtrosPagos}"></i> Reporte otros pagos</button>
             </div>
           </p-card>
         </div>

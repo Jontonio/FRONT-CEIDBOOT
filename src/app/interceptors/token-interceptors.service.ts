@@ -1,13 +1,15 @@
-import { HttpEvent,
+import { HttpErrorResponse, HttpEvent,
          HttpHandler,
          HttpHeaders,
          HttpInterceptor,
          HttpRequest
         } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { AuthService } from '../auth/services/auth.service';
 import { environment } from 'src/environments/environment';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { UnAuthorizedService } from '../services/unauthorized.service';
 
 
 @Injectable({
@@ -18,7 +20,7 @@ export class TokeInterceptorsService implements HttpInterceptor {
   listURLs:string[] = []; //list exclude URLs
   BASE_URL:string;
 
-  constructor(private _auth:AuthService) {
+  constructor(private _auth:AuthService, private _unAuth:UnAuthorizedService) {
     this.BASE_URL = environment.BASE_URL;
     this.initExcludeURLs();
   }
@@ -39,7 +41,16 @@ export class TokeInterceptorsService implements HttpInterceptor {
       headers
     });
 
-    return next.handle( reqClone );
+    return next.handle(reqClone).pipe(
+      catchError((error: HttpErrorResponse) => {
+        let errorMessage: string = 'Error personalizado';
+
+        if (error.status === 401) {
+          this._unAuth.unAuthResponse(error);
+        }
+        return throwError(() => error);
+      })
+    ) as Observable<HttpEvent<any>>;
   }
 
   initExcludeURLs(){

@@ -56,10 +56,9 @@ export class AuthService {
     if(this.readStorage('token')){
       this.authenticated().subscribe({
         next:(res) => {
-          console.log(res);
           this.route.navigate(['/system/welcome']);
         },
-        error: (err) => console.log(err)
+        error: (e) => console.log(e)
       })
     }else{
       console.log('redirecionar a login');

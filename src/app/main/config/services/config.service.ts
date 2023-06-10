@@ -9,6 +9,7 @@ import { MedioPago, ResMedioDePago } from "src/app/class/MedioDePago";
 import { DenominServicio, ResDenominServicio } from "src/app/denomin-servicio/class/Denomin-servicio";
 import { TipoGrupo } from "../../grupo/class/Grupo";
 import { ResTramite } from "src/app/class/Tramite";
+import { ResTimeNotification, TimeNotification } from "../../class/TimeNotification";
 
 @Injectable({
   providedIn:'root'
@@ -50,6 +51,10 @@ export class ConfigService {
     return this.http.get<ResDenominServicio>(`${this.BASE_URL}/denomin-servicio/get-lista-denomin-servicios`);
   }
 
+  getTimeNotification():Observable<ResTimeNotification>{
+    return this.http.get<ResTimeNotification>(`${this.BASE_URL}/bot/get-time-notification`);
+  }
+
   createDenominacionServicio(data:DenominServicio){
     return this.http.post<ResDenominServicio>(`${this.BASE_URL}/denomin-servicio/create-denomin-servicio`, data);
   }
@@ -64,6 +69,10 @@ export class ConfigService {
 
   createCategoriaPago(data:CategoriaPago){
     return this.http.post<ResCategoriaPago>(`${this.BASE_URL}/categoria-pago/create-categoria-pago`, data);
+  }
+
+  updateTimeNotificacion(Id:number, data:TimeNotification){
+    return this.http.patch<ResTimeNotification>(`${this.BASE_URL}/bot/update-time-notification-bot/${Id}`, data);
   }
 
   updateDenominServicio(Id:number, data:DenominServicio){

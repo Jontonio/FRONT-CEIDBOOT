@@ -479,7 +479,6 @@ export class FormMatriculaComponent implements OnInit {
       },
       error: (e) => {
         this.loadGetData = false;
-        console.log(e);
       }
     })
 
@@ -834,7 +833,6 @@ export class FormMatriculaComponent implements OnInit {
         next: (value) => {
           this.loadGetApoderado = false;
           if(value.ok){
-            console.log(value)
             this.completeDataApoderado(value.data as Apoderado);
           }
         },
@@ -1212,7 +1210,6 @@ export class FormMatriculaComponent implements OnInit {
         this.toast('error', e, detail)
       })
     }else{
-      console.log()
       this.toast('error',e.error.message, detail);
     }
   }

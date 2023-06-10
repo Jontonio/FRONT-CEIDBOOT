@@ -22,13 +22,9 @@ export class MatriculaComponent implements OnInit {
 
   folders: Section[] = [
     {
-      name: 'Vacation Itinerary',
-      link: '',
-    },
-    {
-      name: 'Kitchen Remodel',
-      link: '',
-    },
+      name: '¿Donde encuentro el número de operación de mi pago?',
+      link: 'https://unajma.ceidbot.com/#/main/example/numero-operacion',
+    }
   ];
   notes: Section[] = [
     {

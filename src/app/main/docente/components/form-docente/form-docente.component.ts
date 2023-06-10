@@ -149,14 +149,13 @@ export class FormDocenteComponent implements OnInit {
             this.completeData(value.data);
             this.toast('success',value.msg,'Datos consultados a RENIEC')
           }else{
-            console.log(value.msg);
             this.toast('warn',value.msg,'Datos consultados a RENIEC')
           }
           this.loadGetData = false;
         },
-        error: (err) => {
+        error: (e) => {
           this.loadGetData = false;
-          console.log(err);
+          console.log(e);
         }
       })
     }
@@ -180,7 +179,6 @@ export class FormDocenteComponent implements OnInit {
     this.isUpdate = true;
     this._docente.getOneDocenteById(id).subscribe({
       next: (resp) => {
-        console.log(resp);
         this.completeDataUpdate(resp.data as Docente);
       },
       error: (e) => {

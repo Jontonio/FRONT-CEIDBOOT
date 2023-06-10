@@ -88,6 +88,16 @@
               <app-lista-vacia [msg]="'No se encontraron registros de cursos'"></app-lista-vacia>
             </td>
           </tr>
+          <tr>
+            <td colspan="9" *ngIf="_curso.loadingLista && _curso.listCursos.length==0, else nothing">
+              <app-loadding msg="Lista de cursos"></app-loadding>
+            </td>
+            <ng-template #nothing>
+              <td colspan="9">
+                <app-lista-vacia [msg]="'No se encontraron registros de cursos'"></app-lista-vacia>
+              </td>
+            </ng-template>
+          </tr>
         </ng-template>
       </p-table>
     </div>
@@ -106,7 +116,6 @@
           <div class="col-12 md:col-3"></div>
         </div>
       </div>
-      <app-loadding *ngIf="_curso.loadingLista && _curso.listCursos.length==0" msg="Lista de cursos"></app-loadding>
     </div>
 </p-card>
 

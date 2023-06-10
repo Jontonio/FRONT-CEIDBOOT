@@ -44,9 +44,7 @@ export class MainComponent implements OnInit {
               private readonly idle: Idle,
               private readonly ngZone: NgZone,
               private readonly cd: ChangeDetectorRef,
-              private readonly _socket:SocketService,
-              private readonly _chatbot:ChabotService){
-
+              private readonly _socket:SocketService){
                 this.InitIdle();
                 this._socket.Onconexion();
   }

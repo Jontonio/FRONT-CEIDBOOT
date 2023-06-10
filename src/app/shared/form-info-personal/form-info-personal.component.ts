@@ -238,7 +238,6 @@ export class FormInfoPersonalComponent implements OnInit {
         this.toast('error', e, detail)
       })
     }else{
-      console.log()
       this.toast('error',e.error.message, detail);
     }
   }

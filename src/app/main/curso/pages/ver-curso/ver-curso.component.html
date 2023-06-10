@@ -14,7 +14,14 @@
           <p class="mt-2"><b>Descrión del curso</b></p>
           <p class="mt-1">{{curso.DescripcionCurso}}</p>
           <p class="mt-2"><b>Recurso</b></p>
-          <p class="mt-1"><a class="tag-a" [href]="curso.LinkRequisitos?curso.LinkRequisitos:'#'" target="_blank">Información del curso</a></p>
+          <p class="mt-2">
+            <span *ngIf="curso.LinkRequisitos, else nothingRecurso">
+              <p class="mt-1"><a class="tag-a" [href]="curso.LinkRequisitos" target="_blank">Información del curso</a></p>
+            </span>
+            <ng-template #nothingRecurso>
+              <p>Sin recursos</p>
+            </ng-template>
+          </p>
         </div>
       </div>
       <ng-template pTemplate="footer">

@@ -58,7 +58,6 @@ export class FormChangePasswordComponent implements OnInit {
   }
 
   changeInput(data:any){
-    console.log(data)
     this.diferentPassword = false;
   }
 

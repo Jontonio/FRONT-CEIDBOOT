@@ -104,9 +104,14 @@
         </ng-template>
         <ng-template pTemplate="emptymessage">
           <tr>
-            <td colspan="10">
-              <app-lista-vacia [msg]="'No se encontraron registros'"></app-lista-vacia>
+            <td colspan="10" *ngIf="_grupo.loadingLista && _grupo.listGrupos.length==0, else nothing">
+              <app-loadding msg="Lista de grupos"></app-loadding>
             </td>
+            <ng-template #nothing>
+              <td colspan="10">
+                <app-lista-vacia [msg]="'No se encontraron registros de grupos'"></app-lista-vacia>
+              </td>
+            </ng-template>
           </tr>
         </ng-template>
       </p-table>
@@ -127,8 +132,6 @@
         </div>
       </div>
     </div>
-    <app-loadding *ngIf="_grupo.loadingLista && _grupo.listGrupos.length==0" msg="Lista de grupos"></app-loadding>
-    <!-- <app-lista-vacia *ngIf="_grupo.listGrupos.length==0 && !_grupo.loadingLista" msg="No se encontraron grupos registrados"></app-lista-vacia> -->
   </p-card>
 </div>
 

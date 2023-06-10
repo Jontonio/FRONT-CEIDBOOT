@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA  } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -35,7 +35,8 @@ const config: SocketIoConfig = { url: environment.BASE_URL, options: {} };
     { provide: LocationStrategy, useClass: HashLocationStrategy },
     { provide: LOCALE_ID, useValue: 'es-PE' },
     { provide: HTTP_INTERCEPTORS, useClass: TokeInterceptorsService, multi:true },
-  ]
+  ],
+  schemas:[CUSTOM_ELEMENTS_SCHEMA]
 
 })
 export class AppModule { }

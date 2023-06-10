@@ -355,7 +355,6 @@ export class OtrosTramitesComponent implements OnInit {
     this._global.apiReniec(documento).subscribe({
       next: (value) => {
         if(value.ok){
-          console.log(value)
           this.completeDataPersona(value.data);
           this.toast('success',value.msg,'Datos consultados a RENIEC');
           return;

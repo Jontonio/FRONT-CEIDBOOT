@@ -381,7 +381,6 @@ export class PagosComponent {
   }
 
   save(){
-    console.log(this.formFile)
     if(this.formFile.invalid){
       Object.keys( this.formFile.controls ).forEach(input => this.formFile.controls[input].markAsDirty())
       return;

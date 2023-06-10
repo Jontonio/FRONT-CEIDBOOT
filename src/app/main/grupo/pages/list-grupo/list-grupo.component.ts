@@ -5,6 +5,7 @@ import { Grupo } from '../../class/Grupo';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { SocketService } from 'src/app/services/socket.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-list-grupo',
@@ -12,6 +13,9 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./list-grupo.component.scss']
 })
 export class ListGrupoComponent {
+
+  /** rxjs */
+  getAllEstadoGrupo$:Subscription;
 
   /** Variables de clase */
   startPage:number
@@ -32,6 +36,7 @@ export class ListGrupoComponent {
 
   ngOnDestroy(): void {
     if(this._grupo.listGrupos$) this._grupo.listGrupos$.unsubscribe();
+    if(this.getAllEstadoGrupo$) this.getAllEstadoGrupo$.unsubscribe();
   }
 
   inicializeVariables(){
@@ -42,12 +47,14 @@ export class ListGrupoComponent {
   }
 
   getListaEstadosGrupo(){
-    this._grupo.getAllEstadoGrupo()
+    this.getAllEstadoGrupo$ = this._grupo.getAllEstadoGrupo()
     .subscribe({
       next: (value) => {
-        const newArr = [...value.data as EstadoGrupo[], {EstadoGrupo: 'Mostrar todo', CodeEstado: 'all'}];
+        const newArr = [...value.data as EstadoGrupo[], { EstadoGrupo: 'Mostrar todo', CodeEstado: 'all' }];
         this.listEstadosGrupo = newArr as Array<EstadoGrupo>;
-      }
+      },error(e) {
+        console.log(e)
+      },
     })
   }
 
@@ -80,7 +87,6 @@ export class ListGrupoComponent {
             if(res.ok){
               this._socket.EmitEvent('updated_list_grupo',{ limit: this.limit, offset: this.offset})
               this.toast('success', res.msg);
-              console.log(res)
             }
           },
           error: (e) => {
