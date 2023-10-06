@@ -18,7 +18,8 @@ export class VerticalBarChartComponent {
   showLegend: boolean = true;
   showXAxisLabel: boolean = true;
   showYAxisLabel: boolean = true;
-  yAxisLabel: string = 'Mensualidad y mora';
+  yAxisLabel: string = 'Número de registros';
+  xAxisLabel: string = 'Módulos del curso';
   legendTitle: string = 'Years';
 
   constructor() {

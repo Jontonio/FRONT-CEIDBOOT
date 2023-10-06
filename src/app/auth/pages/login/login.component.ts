@@ -25,7 +25,6 @@ export class LoginComponent implements OnInit {
         },
         error: (e) => {
           this.isAuth = false;
-          console.log(e)
         }
       })
     }else{

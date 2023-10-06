@@ -70,6 +70,7 @@
                         type="text"
                         autocomplete="off"
                         formControlName="ApellidoPaterno"
+                        [maxlength]="50"
                         dateFormat="dd-mm-yy"
                         pInputText/>
                   <small *ngIf="ApellidoPaterno.hasError('pattern') && !ApellidoPaterno.hasError('required')"
@@ -83,6 +84,7 @@
                         class="p-fluid p-grid p-formgrid input-form"
                         type="text"
                         autocomplete="off"
+                        [maxlength]="50"
                         formControlName="ApellidoMaterno"
                         pInputText/>
                   <small *ngIf="ApellidoMaterno.hasError('pattern') && !ApellidoMaterno.hasError('required')"
@@ -142,7 +144,7 @@
                   </app-input-code>
                 </div>
                 <div class="col-8 md:col-8">
-                  <label for="celular" class="block mb-2 dot">.</label>
+                  <label for="celular" class="block mb-2">Celular con WhatsApp</label>
                   <span class="p-input-icon-left full-width">
                     <i class="pi pi-whatsapp"></i>
                     <input id="Celular"
@@ -171,6 +173,7 @@
                   <input id="Email"
                         type="email"
                         autocomplete="off"
+                        [maxlength]="100"
                         (click)="opEmail.toggle($event)"
                         (keyup)="cerrarPanelEmail($event)"
                         formControlName="Email"
@@ -452,7 +455,7 @@
               <p-checkbox [binary]="true" inputId="DJ" formControlName="DeclaraJurada"></p-checkbox>
               <label for="DJ">Tengo pleno conocimiento de los requisitos estipulados en el reglamento del CEID para ser considerado como estudiante.</label>
             </div>
-            <small *ngIf="DeclaraJurada.hasError('required') && DeclaraJurada.dirty"
+            <small *ngIf="DeclaraJurada.hasError('required') && DeclaraJurada.dirty && DeclaraJurada.hasError('notTrue')"
                         class="p-error">Este campo es <strong>requerido</strong></small>
           </div>
           <div class="col-12">
@@ -461,7 +464,7 @@
               <p-checkbox [binary]="true" inputId="RT" formControlName="RequiTecnologico"></p-checkbox>
               <label for="RT">Cuento con una laptop o computadora con acceso a internet, con cámara y micrófino.</label>
             </div>
-            <small *ngIf="RequiTecnologico.hasError('required') && RequiTecnologico.dirty"
+            <small *ngIf="RequiTecnologico.hasError('required') && RequiTecnologico.dirty && DeclaraJurada.hasError('notTrue')"
                         class="p-error">Este campo es <strong>requerido</strong></small>
           </div>
           <div class="col-12">
@@ -473,7 +476,7 @@
                               en caso de estar fuera de la provincia coordinar con la asistente administrativa del ceid y enviar al correo
                               institucional todos los requisitos solicitados por el CEID.</label>
             </div>
-            <small *ngIf="CarCompromiso.hasError('required') && CarCompromiso.dirty"
+            <small *ngIf="CarCompromiso.hasError('required') && CarCompromiso.dirty && DeclaraJurada.hasError('notTrue')"
                         class="p-error">Este campo es <strong>requerido</strong></small>
           </div>
         </div>
@@ -500,7 +503,8 @@
                   <div (click)="uploadFileRequisitos.click()">
                     <button mat-raised-button
                             [disabled]="loadingDocumentoMatricula"
-                            class="custom-btn-file">
+                            [ngClass]="{'custom-btn-file': !(fileDocumentoMatricula.value && !loadingDocumentoMatricula),
+                                        'custom-btn-upload': (fileDocumentoMatricula.value && !loadingDocumentoMatricula)}">
                       <mat-icon>{{(fileDocumentoMatricula.value && !loadingDocumentoMatricula)?'check':'attach_file'}}</mat-icon> Elija el archivo</button>
                     <input #uploadFileRequisitos
                            formControlName="fileDocumentoMatricula"
@@ -566,7 +570,8 @@
                       <button mat-raised-button
                               [disabled]="loadingFilePagoMatricula"
                               (click)="uploadFileMatricula.click()"
-                              class="custom-btn-file">
+                              [ngClass]="{'custom-btn-file': !(filePagoMatricula.value && !loadingFilePagoMatricula),
+                                         'custom-btn-upload': (filePagoMatricula.value && !loadingFilePagoMatricula)}">
                               <mat-icon>{{(filePagoMatricula.value && !loadingFilePagoMatricula)?'check':'attach_file'}}</mat-icon> Elija el archivo</button>
                       <input #uploadFileMatricula
                               formControlName="filePagoMatricula"
@@ -595,7 +600,7 @@
                 </div>
                 <div class="col-12 md:col-4">
                   <div class="">
-                    <label for="NumOperacionLibro" class="block mb-2">Número de operación</label>
+                    <label for="NumOperacionLibro" class="block mb-2">N° de operación</label>
                     <input id="NumOperacionLibro"
                           class="p-fluid p-grid p-formgrid full-width"
                           type="text"
@@ -632,7 +637,8 @@
                       <button mat-raised-button
                               [disabled]="loadingFilePagoLibro"
                               (click)="uploadFileLibro.click()"
-                              class="custom-btn-file">
+                              [ngClass]="{'custom-btn-file':!(filePagoLibro.value && !loadingFilePagoLibro),
+                                         'custom-btn-upload':(filePagoLibro.value && !loadingFilePagoLibro)}">
                               <mat-icon>{{(filePagoLibro.value && !loadingFilePagoLibro)?'check':'attach_file'}}</mat-icon> Elija el archivo</button>
                       <input #uploadFileLibro
                               formControlName="filePagoLibro"
@@ -661,7 +667,7 @@
                 </div>
                 <div class="col-12 md:col-4">
                   <div class="">
-                    <label for="NumOperacionMensualidad" class="block mb-2">Número de operación</label>
+                    <label for="NumOperacionMensualidad" class="block mb-2">N° de operación</label>
                     <input id="NumOperacionMensualidad"
                            class="p-fluid p-grid p-formgrid full-width"
                            type="text"
@@ -698,7 +704,8 @@
                       <button mat-raised-button
                               [disabled]="loadingFilePagoMensualidad"
                               (click)="uploadFileMensualidad.click()"
-                              class="custom-btn-file">
+                              [ngClass]="{'custom-btn-file': !(filePagoMensualidad.value && !loadingFilePagoMensualidad),
+                                         'custom-btn-upload': (filePagoMensualidad.value && !loadingFilePagoMensualidad)}">
                               <mat-icon>{{(filePagoMensualidad.value && !loadingFilePagoMensualidad)?'check':'attach_file'}}</mat-icon> Elija el archivo</button>
                       <input #uploadFileMensualidad
                               formControlName="filePagoMensualidad"

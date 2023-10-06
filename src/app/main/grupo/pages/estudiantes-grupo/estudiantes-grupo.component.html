@@ -83,24 +83,17 @@
       </p-card>
     </div>
   </div>
-  <p-card header="Lista de estudiantes en el grupo">
+  <p-card header="Estudiantes en el grupo">
     <div class="col table-responsive">
       <p-toolbar>
         <div class="p-toolbar-group-start">
-            <span class="p-input-icon-left" style="width: 250px;">
-              <i class="pi pi-search"></i>
-              <input type="text"
-                     pInputText
-                     name="termino"
-                     #termino
-                     pattern="^[a-zA-Z0-9]+$"
-                     (keyup)="terminoBusqueda = termino.value"
-                     class="full-width"
-                     placeholder="Buscar por nombres / DNI" />
-            </span>
+          <app-input-search (busqueda)="buscarTermino($event)"
+                             placeholder="Buscar nombres/DNI"></app-input-search>
         </div>
         <div class="p-toolbar-group-end">
+          <!-- <button mat-raised-button class="m-1" (click)="openModalComunicadoGrupal()">Comunicado grupal <i class="fa-solid fa-message icon-size"></i></button> -->
           <button mat-raised-button
+                  class="m-1"
                   [matMenuTriggerFor]="menuFilter"
                   color="primary">{{selectCategoria | titlecase}}<i class="pi pi-filter-fill ml-2"></i></button>
           <mat-menu #menuFilter="matMenu">
@@ -330,10 +323,18 @@
           <div>
             <p-paginator [rows]="5"
                          [totalRecords]="resAlumnoEnGrupo.count!"
-                         [rowsPerPageOptions]="[5,10,15,20]"
+                         [rowsPerPageOptions]="[5,10,15,25,30]"
                          (onPageChange)="paginate($event)"></p-paginator>
           </div>
-          <div></div>
+          <div>
+            <div class="ml-3 content-legend">
+              <b>Leyenda</b>
+              <ul class="ul-legend mt-1">
+                <li><i class="fa-solid fa-square legend-matriculado"></i> Estudiante matriculado</li>
+                <li><i class="fa-solid fa-square legend-retirado"></i> Estudiante retirado</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -349,7 +350,7 @@
           [draggable]="false"
           [resizable]="false">
         <div class="col-12">
-          <label for="EsMayor" class="block mb-2">¿Usted es mayor de edad?</label>
+          <label for="EsMayor" class="block mb-2">Estado del estudiante en el grupo</label>
           <p-dropdown class="p-fluid p-grid p-formgrid"
                       appendTo="body"
                       [(ngModel)]="estadoEstudiante"

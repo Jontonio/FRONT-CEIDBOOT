@@ -365,7 +365,7 @@ export class PagosComponent {
     }
 
     // Verificar el formato del archivo
-    const allowedFormats = ['image/png', 'image/jpeg'];
+    const allowedFormats = ['image/png', 'image/jpeg', 'application/pdf'];
     if (!allowedFormats.includes(this.file.type)) {
       // El formato del archivo no es permitido
       // Mostrar un mensaje de error o realizar alguna acción adecuada

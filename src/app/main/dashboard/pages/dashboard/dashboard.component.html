@@ -184,7 +184,7 @@
                   <div>
                     <p-paginator [rows]="5"
                                   [totalRecords]="resGrupo.count!"
-                                  [rowsPerPageOptions]="[5,10,15,20]"
+                                  [rowsPerPageOptions]="[5,10,15,20,25]"
                                   (onPageChange)="paginate($event)"></p-paginator>
                   </div>
                   <div></div>
@@ -373,7 +373,7 @@
                       <tr>
                         <td>{{startPage + (rowIndex+1)}}</td>
                         <td>{{rGeneral.grupoId}}</td>
-                        <td>{{rGeneral.NombreCurso}}</td>
+                        <td>{{rGeneral.NombreCurso | uppercase}}</td>
                         <td>{{rGeneral.Nivel}}</td>
                         <td>{{rGeneral.TipoCategoriaPago}}</td>
                         <td>{{rGeneral.total_pago | currency: 'PEN': 'symbol': '': 'es-PE'}}</td>

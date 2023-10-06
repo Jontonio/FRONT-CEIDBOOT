@@ -34,7 +34,7 @@ export class VerGrupoComponent implements OnInit {
 
   constructor(private routerActive:ActivatedRoute,
               private readonly fb:FormBuilder,
-              private _grupo:GrupoService,
+              private readonly _grupo:GrupoService,
               private readonly _unAuth:UnAuthorizedService,
               private readonly _socket:SocketService,
               private route:Router,
@@ -84,7 +84,7 @@ export class VerGrupoComponent implements OnInit {
         this.toast('warn', value.msg);
       },
       error: (e) => {
-
+        this.messageError(e);
       }
     })
   }
@@ -115,7 +115,7 @@ export class VerGrupoComponent implements OnInit {
       AplicaMora:[null],
       MontoMora: [null, Validators.required],
       NotificarGrupo: [null],
-      NumDiasHolaguraMora: [null, Validators.required, Validators.required]
+      NumDiasHolaguraMora: [null, Validators.required]
     })
   }
 
@@ -151,6 +151,12 @@ export class VerGrupoComponent implements OnInit {
   }
 
   save(){
+
+    if(this.formRecodatorioPago.invalid){
+      Object.keys( this.formRecodatorioPago.controls ).forEach( label => this.formRecodatorioPago.controls[label].markAsDirty() )
+      return;
+    }
+
     this.saveLoading = true;
     this._grupo.updateGrupo(this.IdGrupo!, this.formRecodatorioPago.value as Grupo).subscribe({
       next: (value) => {

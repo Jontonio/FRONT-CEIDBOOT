@@ -3,7 +3,7 @@
   <div class="content-form-pagos">
     <div class="mb-2">
       <p-card header="Nota">
-        <p><i class="fa-solid fa-message"></i> Para subir su voucher de pago es necesario consultar sus datos en el siguiente formulario.</p>
+        <p><i class="fa-solid fa-message"></i> Para subir su comprobante de pago, es necesario completar sus datos en el siguiente formulario.</p>
       </p-card>
     </div>
     <div>
@@ -52,7 +52,7 @@
           </mat-step>
           <mat-step [stepControl]="formSelectGrupoCategoria">
             <form [formGroup]="formSelectGrupoCategoria">
-              <ng-template matStepLabel>Cursos y tipo de registro</ng-template>
+              <ng-template matStepLabel>Curso y tipo de registro</ng-template>
                 <div class="col">
                   <label for="EnGrupo" class="block mb-2">Selecione el curso</label>
                   <p-dropdown class="p-fluid p-grid p-formgrid"
@@ -128,7 +128,7 @@
               <p-messages severity="info">
                 <ng-template pTemplate>
                     <img src="assets/icon/logo.png" height="40"/>
-                    <div class="ml-2">Estás en el <b>Módulo {{currentModulo.modulo.Modulo}}</b> del curso. Recuerda que debes registrar tu pago antes de avanzar al siguiente módulo para evitar pagos extemporaneos.</div>
+                    <div class="ml-2">Estás en el <b>Módulo {{currentModulo.modulo.Modulo}}</b> del curso. Recuerda que debes registrar tu pago antes de las fechas límite de pagos y evitar pagos extemporáneos.</div>
                 </ng-template>
               </p-messages>
             </div>
@@ -203,7 +203,8 @@
                       <button mat-raised-button
                               [disabled]="loadingFilePago || loading"
                               (click)="uploadFile.click()"
-                              class="custom-btn-file">
+                              [ngClass]="{'custom-btn-file':!(FileURL.value && !loadingFilePago),
+                                         'custom-btn-upload':(FileURL.value && !loadingFilePago)}">
                               <mat-icon>{{(FileURL.value && !loadingFilePago)?'check':'attach_file'}}</mat-icon> Elija el archivo</button>
                       <input #uploadFile
                               (change)="selectFile($event)"

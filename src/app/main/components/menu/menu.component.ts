@@ -98,7 +98,7 @@ export class MenuComponent implements OnInit {
       },
       {
         label: 'ChatBot',
-        icon: 'pi pi-qrcode',
+        icon: 'fa-solid fa-robot',
         routerLink:'/system/chat-bot/list-intents',
         role:['admin_role','user_role','viewer_role','supervisor_role']
       },

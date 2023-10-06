@@ -1,4 +1,4 @@
-<form [formGroup]="formCurso">
+<form [formGroup]="formCurso" (ngSubmit)="ready()">
   <div class="mb-1">
     <div *ngIf="isUpdate else notUpdate">
       <h2 class="ml-1"><i class="fa-solid fa-pen-to-square"></i> Editar curso</h2>
@@ -118,12 +118,13 @@
   <div class="flex justify-content-end">
     <button mat-raised-button
             color="primary"
+            type="submit"
             class="button-custom"
-            (click)="ready()"
             [disabled]="loading">
             <i [class]="loading?'pi pi-spin pi-spinner':'pi pi-save'"></i> {{isUpdate?'Guardar':'Registrar'}}
     </button>
     <button mat-raised-button
+            type="reset"
             color="primary"
             class="button-custom ml-2"
             (click)="returnLista()"> Cancelar

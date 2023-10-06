@@ -1,0 +1,33 @@
+<div class="grid">
+  <div class="col-12 md:col-6">
+    <div class="col table-responsive content-tables">
+      <p-table [value]="listaEstudiantesEnviar"
+               responsiveLayout="scroll"
+               [rowHover]="true"
+               [resizableColumns]="true"
+               columnResizeMode="expand">
+        <ng-template pTemplate="header">
+            <tr>
+              <th style="width: 4rem">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+              </th>
+              <th>N°</th>
+              <th>Nombres y apellidos</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-data let-rowIndex="rowIndex">
+            <tr class="tr-custom">
+              <td>
+                <p-tableCheckbox [value]="data"></p-tableCheckbox>
+              </td>
+              <td>{{rowIndex+1}}</td>
+              <td>{{data.estudiante.Nombres}} {{data.estudiante.ApellidoPaterno}} {{data.estudiante.ApellidoMaterno}}</td>
+            </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+  <div class="col-12 md:col-6">
+    <app-editor></app-editor>
+  </div>
+</div>

@@ -44,7 +44,7 @@
               </div>
             </td>
             <td>{{ usuario.Nombres | titlecase }} {{ usuario.ApellidoPaterno | titlecase }}</td>
-            <td>{{ usuario.Email | titlecase }}</td>
+            <td>{{ usuario.Email | lowercase }}</td>
             <td>{{usuario.CodePhone}} {{ usuario.Celular}}</td>
             <td>
               <div *ngIf="imAuth?.Id==usuario.Id else other">
@@ -127,7 +127,7 @@
         <div>
           <p-paginator [rows]="5"
                         [totalRecords]="_usuario.respUsuario.count!"
-                        [rowsPerPageOptions]="[5,10,15,20]"
+                        [rowsPerPageOptions]="[5,10,15,20,25]"
                         (onPageChange)="paginate($event)"></p-paginator>
         </div>
         <div></div>

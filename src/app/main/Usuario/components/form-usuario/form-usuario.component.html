@@ -2,7 +2,7 @@
   <app-skeleton-form></app-skeleton-form>
 </div>
 <ng-template #form>
-  <form [formGroup]="FormUsuario">
+  <form [formGroup]="FormUsuario" (submit)="ready()">
     <div class="mb-1">
       <div *ngIf="isUpdate else notUpdate">
         <h2 class="ml-1"><i class="fa-solid fa-user-pen"></i> Editar usuario</h2>
@@ -163,12 +163,13 @@
       <button mat-raised-button
                   color="primary"
                   class="button-custom"
-                  (click)="ready()"
+                  type="submit"
                   [disabled]="loading">
                   <i [class]="loading?'pi pi-spin pi-spinner':'pi pi-save'"></i> {{isUpdate?'Guardar':'Registrar'}}
       </button>
       <button mat-raised-button
                   color="primary"
+                  type="reset"
                   class="button-custom ml-2"
                   (click)="returnList()"> Cancelar
       </button>

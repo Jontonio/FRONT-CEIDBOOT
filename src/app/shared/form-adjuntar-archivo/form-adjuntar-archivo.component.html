@@ -17,7 +17,8 @@
             <div (click)="uploadFileDoc.click()">
               <button mat-raised-button
                       [disabled]="loadingDocumento"
-                      class="custom-btn-file">
+                      [ngClass]="{'custom-btn-file':!(FileDocumento.value && !loadingDocumento),
+                                  'custom-btn-upload':(FileDocumento.value && !loadingDocumento)}">
                 <mat-icon>{{(FileDocumento.value && !loadingDocumento)?'check':'attach_file'}}</mat-icon> Elija el archivo</button>
               <input #uploadFileDoc
                       formControlName="FileDocumento"
@@ -41,7 +42,8 @@
             <div (click)="uploadFileDocExtra.click()">
             <button mat-raised-button
                   [disabled]="loadingFileExtra"
-                  class="custom-btn-file">
+                  [ngClass]="{'custom-btn-file':!(FileDocumentoExtra.value && !loadingFileExtra),
+                              'custom-btn-upload':(FileDocumentoExtra.value && !loadingFileExtra)}">
             <mat-icon>{{(FileDocumentoExtra.value && !loadingFileExtra)?'check':'attach_file'}}</mat-icon> Elija el archivo</button>
             <input #uploadFileDocExtra
                   formControlName="FileDocumentoExtra"
@@ -112,7 +114,8 @@
                 <button mat-raised-button
                         [disabled]="loadingFilePago"
                         (click)="uploadFilePago.click()"
-                        class="custom-btn-file">
+                        [ngClass]="{'custom-btn-file':!(FilePago.value && !loadingFilePago),
+                                    'custom-btn-upload':(FilePago.value && !loadingFilePago)}">
                         <mat-icon>{{(FilePago.value && !loadingFilePago)?'check':'attach_file'}}</mat-icon> Elija el archivo</button>
                 <input #uploadFilePago
                         formControlName="FilePago"

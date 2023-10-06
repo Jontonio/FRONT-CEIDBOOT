@@ -26,6 +26,7 @@ import { Matricula } from 'src/app/main/matricula/class/Matricula';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ModalPagoExtemporaneoComponent } from '../../components/modal-pago-extemporaneo/modal-pago-extemporaneo.component';
 import { MatriculaService } from 'src/app/main/matricula/services/matricula.service';
+import { ModalComunicadoGrupalComponent } from '../../components/modal-comunicado-grupal/modal-comunicado-grupal.component';
 
 interface EstadoMatricula{
   value:string;
@@ -243,6 +244,25 @@ export class EstudiantesGrupoComponent implements OnInit {
     });
   }
 
+  openModalComunicadoGrupal(){
+    const width = window.innerWidth < 768 ? '90%' : '70%';
+
+    this.refDialog = this.dialogService.open(ModalComunicadoGrupalComponent,{
+      data: {
+        estudianteEnGrupo:this.listaEstudiantes,
+      },
+      header:`Comunicado grupal - ${this.grupo.curso.NombreCurso.toUpperCase()} ${this.grupo.curso.nivel.Nivel.toUpperCase()} `,
+      width: width,
+      contentStyle: { overflow: 'auto' },
+      baseZIndex: 10000,
+    });
+    // verificar si se cerró el modal
+    this.refDialog.onClose.subscribe((result) => {
+      console.log("se cerro")
+      // this._socket.EmitEvent('updated_list_estudiante_grupo', { Id:this.idGrupo, limit:this.limit, offset:this.offset });
+    });
+  }
+
   estadoModalMessage(estado:boolean){
     this.openSidebarMessage = estado;
   }
@@ -418,6 +438,10 @@ export class EstudiantesGrupoComponent implements OnInit {
         this.messageError(e);
       }
     })
+  }
+
+  buscarTermino(termino:string){
+    this.terminoBusqueda = termino;
   }
 
   messageError(e:HttpErrorResponse){

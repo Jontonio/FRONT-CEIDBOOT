@@ -29,6 +29,7 @@ import { MainModule } from '../main.module';
 import { FilterMoraPipe } from './pipes/filter-mora.pipe';
 import { ModalPagoExtemporaneoComponent } from './components/modal-pago-extemporaneo/modal-pago-extemporaneo.component';
 import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { ModalComunicadoGrupalComponent } from './components/modal-comunicado-grupal/modal-comunicado-grupal.component';
 
 
 @NgModule({
@@ -51,6 +52,7 @@ import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dy
     ModalFechasPagoComponent,
     FilterMoraPipe,
     ModalPagoExtemporaneoComponent,
+    ModalComunicadoGrupalComponent,
   ],
   imports: [
     CommonModule,

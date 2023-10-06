@@ -166,6 +166,7 @@ footer{
   margin-left: 15px;
   list-style: none;
 }
+
 /**
 * Media querys
 *
@@ -182,6 +183,9 @@ footer{
 }
 .icon-size{
   font-size: 24px;
+}
+.icon{
+  color: var(--surface-e);
 }
 .icon-size-button{
   font-size: 18px;
@@ -262,6 +266,16 @@ footer{
 .offline{
   background: rgb(190, 5, 5);
 }
+.ul-legend li{
+  list-style: none;
+  padding: 2px;
+}
+.content-legend{
+  width: 300px;
+  border-radius: 5px;
+  padding: 7px;
+  border: 1px solid rgb(104, 103, 103);
+}
 .content-navbar{
   position: absolute;
   width: 100%;
@@ -278,9 +292,6 @@ footer{
 }
 .p-menubar{
   border: none !important;
-}
-.dot{
-  color: var(--surface-e);
 }
 .p-menuitem-text{
   color: #0B0D17 !important;
@@ -365,9 +376,6 @@ footer{
 .file{
   background: rebeccapurple !important;
 }
-.tag-custom{
-  background: linear-gradient(-225deg,#AC32E4 0%,#7918F2 48%,#4801FF 100%) !important;
-}
 .p-radiobutton .p-radiobutton-box .p-radiobutton-icon {
   background-color: #ec9b1a;
 }
@@ -380,6 +388,10 @@ footer{
 .custom-btn-file{
   color: #FFF;
   background: #f4ab36;
+}
+.custom-btn-upload{
+  color: #FFF;
+  background: #2987c9;
 }
 .tag-a{
   text-decoration: none;
@@ -521,6 +533,9 @@ footer{
   mat-form-field{
     margin-top: 20px;
     margin-bottom: 20px;
+  }
+  .p-toolbar-group-end{
+    margin-top: 8px;
   }
 }
 @media only screen and (min-width: 768px) and (max-width: 991px) {

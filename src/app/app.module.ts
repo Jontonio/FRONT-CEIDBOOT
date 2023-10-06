@@ -16,7 +16,7 @@ import { UnauthorizedPageComponent } from './pages/unauthorized-page/unauthorize
 
 registerLocaleData(localEs);
 
-const config: SocketIoConfig = { url: environment.BASE_URL, options: {} };
+const config: SocketIoConfig = { url: environment.URL_SOCKET, options: {} };
 
 @NgModule({
   declarations: [

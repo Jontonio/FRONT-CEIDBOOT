@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef} from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Message, MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import * as moment from 'moment';
@@ -243,14 +243,23 @@ export class FormMatriculaComponent implements OnInit {
     })
   }
 
+  checkValueIsTrue(control: FormControl): { [key: string]: boolean } | null {
+    const value = control.value;
+    if (value !== true) {
+      return { 'notTrue': true };
+    }
+    return null;
+  }
+
+
   createFormAcademica(){
     this.formAcademica = this.fb.group({
         Poblacion:[null, Validators.required],
         NombreInstitucion:[null, Validators.required],
         EscuelaProfe:[null],
-        DeclaraJurada:[null, Validators.required],
-        RequiTecnologico:[null, Validators.required],
-        CarCompromiso:[null, Validators.required]
+        DeclaraJurada:[null, [Validators.required, this.checkValueIsTrue]],
+        RequiTecnologico:[null, [Validators.required, this.checkValueIsTrue]],
+        CarCompromiso:[null, [Validators.required, this.checkValueIsTrue]]
     })
   }
 

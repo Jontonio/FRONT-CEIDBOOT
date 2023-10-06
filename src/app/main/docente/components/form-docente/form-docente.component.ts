@@ -99,7 +99,6 @@ export class FormDocenteComponent implements OnInit {
   }
 
   ready(){
-
     if(this.formDocente.invalid){
       Object.keys(this.formDocente.controls)
             .forEach( input => this.formDocente.controls[input].markAsDirty())
@@ -117,6 +116,8 @@ export class FormDocenteComponent implements OnInit {
                                 this.country.code,
                                 this.country.codePhone);
     this.dataForm.emit({data:docente, option: this.isUpdate, Id:this.Id });
+
+    return;
   }
 
   returnLista(){

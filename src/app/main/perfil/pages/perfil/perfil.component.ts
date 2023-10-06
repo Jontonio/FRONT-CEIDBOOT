@@ -89,8 +89,8 @@ export class PerfilComponent implements OnInit {
   createFormChangePassword(){
     this.passwordChangeForm = this.fb.group({
       CurrentPassword:[null, Validators.required],
-      NewPassword:[null, [Validators.required, Validators.pattern(/^(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]{8,}$/)]],
-      RepeatPassword:[null, [Validators.required, Validators.pattern(/^(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]{8,}$/)] ]
+      NewPassword:[null, [Validators.required, Validators.pattern(/^(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9#$%@!]*$/)]],
+      RepeatPassword:[null, [Validators.required, Validators.pattern(/^(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9#$%@!]*$/)] ]
     })
   }
 
@@ -271,10 +271,10 @@ export class PerfilComponent implements OnInit {
       next: (value)=> {
         this.loadingPassword = false;
         if(!value.ok){
-          this.toast('error', value.msg)
+          this.toast('error', value.msg, 'Error de cambio de contraseña')
           return;
         }
-        this.toast('success', value.msg);
+        this.toast('success', value.msg,'Cambio de contraseña');
         this.passwordChangeForm.reset();
       },
       error: (e)=> {

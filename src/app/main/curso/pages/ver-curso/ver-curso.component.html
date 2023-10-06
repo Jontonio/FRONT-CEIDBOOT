@@ -22,6 +22,8 @@
               <p>Sin recursos</p>
             </ng-template>
           </p>
+          <p class="mt-2"><b>Costo exámen de suficiencia</b></p>
+          <p class="mt-1">{{curso.PrecioExamSuficiencia | currency: 'PEN': 'symbol': '': 'es-PE'}} <button mat-icon-button (click)="openModalExamen()"><i class="fa-solid fa-pen-to-square"></i></button></p>
         </div>
       </div>
       <ng-template pTemplate="footer">
@@ -123,6 +125,39 @@
     </div>
   </form>
 </p-sidebar>
+
+<!-- Modal examen suficiencia costo -->
+<p-dialog header="Costo del exámen de suficiencia"
+          [(visible)]="modalCostoExamen"
+          [modal]="true"
+          [style]="{width: '45vw'}"
+          [breakpoints]="{'960px': '75vw', '640px': '90vw'}"
+          [draggable]="false"
+          [resizable]="false">
+          <form [formGroup]="formExamen" (ngSubmit)="updateMontoExamen()">
+            <div class="col">
+              <label for="PrecioExamSuficiencia" class="block mb-2"><i class="fa-solid fa-money-bill"></i> Monto de exámen de suficiencia S/.</label>
+              <p-inputNumber inputId="minmaxfraction"
+                              mode="decimal"
+                              class="p-fluid p-grid p-formgrid full-width"
+                              formControlName="PrecioExamSuficiencia"
+                              [min]="0"
+                              [max]="5000"
+                              [minFractionDigits]="2"
+                              [maxFractionDigits]="5"></p-inputNumber>
+              <small *ngIf="PrecioExamSuficiencia.hasError('pattern') && !PrecioExamSuficiencia.hasError('required')"
+                    class="p-error">Digite un monto de exámen <strong>válido</strong></small>
+              <small *ngIf="PrecioExamSuficiencia.hasError('required') && PrecioExamSuficiencia.dirty"
+                    class="p-error">El campo de monto es <strong>requerido</strong></small>
+            </div>
+            <div class="col">
+              <button mat-raised-button
+                      type="submit"
+                      class="button-custom">
+                      <i [class]="loadingUpdateExamen?'pi pi-spin pi-spinner':'pi pi-save'"></i> Guardar</button>
+            </div>
+          </form>
+</p-dialog>
 
 <!-- Delete message dialog -->
 <p-confirmDialog [style]="{width: '50vw'}"

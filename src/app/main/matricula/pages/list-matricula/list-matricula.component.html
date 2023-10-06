@@ -5,7 +5,7 @@
   <div class="grid justify-content-center justify-content-between">
     <div class="col-12 md:col-3">
       <app-input-search (busqueda)="busquedaTermino($event)"
-                        placeholder="Bsucar nombres/DNI"></app-input-search>
+                        placeholder="Buscar nombres/DNI"></app-input-search>
     </div>
     <div class="col-12 md:col-9 flex justify-content-end">
       <div>
@@ -132,7 +132,7 @@
             <p-paginator [rows]="5"
                          dropdownAppendTo="body"
                          [totalRecords]="_matricula.respMatricula.count!"
-                         [rowsPerPageOptions]="[5,10,15,20]"
+                         [rowsPerPageOptions]="[5,10,15,20,25]"
                          (onPageChange)="paginate($event)"></p-paginator>
           </div>
           <div class="col-12 md:col-3"></div>

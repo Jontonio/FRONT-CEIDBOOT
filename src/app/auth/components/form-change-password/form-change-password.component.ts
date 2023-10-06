@@ -36,8 +36,8 @@ export class FormChangePasswordComponent implements OnInit {
   createFormChangePassword(){
     this.formChangePassword = this.fb.group({
       ResetPasswordToken:[null, Validators.required],
-      NewPassword:[null, [ Validators.required, Validators.pattern(/^(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]{8,}$/)]],
-      RepeatPassword:[null, [Validators.required, Validators.pattern(/^(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]{8,}$/)]]
+      NewPassword:[null, [ Validators.required, Validators.pattern(/^(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9#$%@!]*$/)]],
+      RepeatPassword:[null, [Validators.required, Validators.pattern(/^(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9#$%@!]*$/)]]
     })
   }
 

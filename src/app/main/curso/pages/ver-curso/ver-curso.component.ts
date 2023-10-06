@@ -14,7 +14,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class VerCursoComponent implements OnInit {
 
   curso:Curso;
-  idCurso:string;
+  idCurso:number;
   urlLista:string;
   listaLibros:Libro[] = [];
   loading:boolean = false;
@@ -25,6 +25,10 @@ export class VerCursoComponent implements OnInit {
   idLibro:string;
   position:string;
 
+  formExamen:FormGroup;
+  modalCostoExamen:boolean = false;
+  loadingUpdateExamen:boolean = false;
+
   constructor(private readonly activeRoute:ActivatedRoute,
               private readonly route:Router,
               private _msg:MessageService,
@@ -33,6 +37,7 @@ export class VerCursoComponent implements OnInit {
               private readonly _curso:CursoService) {
     this.getIdCurso(this.activeRoute);
     this.createFormLibro();
+    this.createFormExamenSuficiencia();
   }
 
   ngOnInit(): void {
@@ -47,6 +52,12 @@ export class VerCursoComponent implements OnInit {
     })
   }
 
+  createFormExamenSuficiencia(){
+    this.formExamen = this.fb.group({
+      PrecioExamSuficiencia:[null, [Validators.required, Validators.pattern(/^([0-9])+(.[0-9]+)?$/)]]
+    })
+  }
+
   /** getters */
   get TituloLibro(){
     return this.formLibro.controls['TituloLibro'];
@@ -56,6 +67,10 @@ export class VerCursoComponent implements OnInit {
   }
   get DescripcionLibro(){
     return this.formLibro.controls['DescripcionLibro'];
+  }
+
+  get PrecioExamSuficiencia(){
+    return this.formExamen.controls['PrecioExamSuficiencia'];
   }
 
   getIdCurso(activeRoute:ActivatedRoute){
@@ -134,6 +149,10 @@ export class VerCursoComponent implements OnInit {
     });
   }
 
+  openModalExamen(){
+    this.modalCostoExamen = true;
+  }
+
   updateLibro(Id:string, libro:Libro){
     if(!Id) return;
     console.log(Id)
@@ -184,6 +203,28 @@ export class VerCursoComponent implements OnInit {
         },
         key: "deleteUsuarioDialog"
     });
+  }
+
+  updateMontoExamen(){
+    if(this.formExamen.invalid){
+      Object.keys( this.formExamen.controls ).forEach( label => this.formExamen.controls[ label ].markAsDirty());
+      return;
+    }
+    this._curso.updateCurso(this.idCurso,{ PrecioExamSuficiencia: this.PrecioExamSuficiencia.value } as Curso).subscribe({
+      next:(resp) => {
+        if(resp.ok){
+          // updated variables
+          this.curso.PrecioExamSuficiencia = this.PrecioExamSuficiencia.value;
+          this.toast('success', resp.msg, 'Actualización del precio del exámen del curso')
+          return;
+        }
+        this.toast('warn', resp.msg,'Error actualización del precio del exámen del curso');
+      },
+      error:(e) => {
+        this.messageError(e)
+      },
+    })
+    console.log(this.formExamen.value)
   }
 
   completeDataLibro(libro:Libro){

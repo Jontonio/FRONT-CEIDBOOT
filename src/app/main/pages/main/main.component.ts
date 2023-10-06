@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit, NgZone, Inject} from '@angular/core';
 import { Idle, DEFAULT_INTERRUPTSOURCES } from '@ng-idle/core';
 import { AuthService } from 'src/app/auth/services/auth.service';
-import { MenuItem } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { SocketService } from 'src/app/services/socket.service';
 import { Logout } from 'src/app/auth/interfaces/Logout';
 import { GlobalService } from 'src/app/services/global.service';
@@ -41,6 +41,7 @@ export class MainComponent implements OnInit {
               public  readonly _auth:AuthService,
               public  readonly _unAuth:UnAuthorizedService,
               public  readonly _global:GlobalService,
+              private _msg:MessageService,
               private readonly idle: Idle,
               private readonly ngZone: NgZone,
               private readonly cd: ChangeDetectorRef,
@@ -58,6 +59,7 @@ export class MainComponent implements OnInit {
 
   ngOnInit(): void {
     this.reset();
+    this.listenStatusNotificacions();
   }
 
   modeTheme(value:boolean, system:boolean = true){
@@ -118,4 +120,18 @@ export class MainComponent implements OnInit {
     this.route.navigate(['/main/auth/login']);
   }
 
+  listenStatusNotificacions(){
+    this._socket.OnEvent('message-send-notification').subscribe({
+      next:(value) => {
+        this.toast('success', value.msg, 'Notificación de envio de comunicados','message-send-comunicados');
+      },
+      error:(e) => {
+        console.log(e)
+      },
+    })
+  }
+
+  toast(severity:string, summary:string, detail:string='', key=''){
+    this._msg.add({severity, summary, detail, key});
+  }
 }

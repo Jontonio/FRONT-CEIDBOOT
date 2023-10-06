@@ -1,6 +1,6 @@
 <div class="animate__animated animate__fadeIn">
   <p-card header="Lista de grupos">
-    <div class="grid justify-content-center justify-content-between">
+    <div class="grid justify-content-center justify-content-between p-2">
       <div class="col-12 md:col-3">
         <app-input-search (busqueda)="buscarTermino($event)"
                            placeholder="Buscar idioma/grupo/nivel"></app-input-search>
@@ -38,7 +38,6 @@
               <th>Horario</th>
               <th>Modalidad</th>
               <th>Fecha Inicio - Finalizaión</th>
-              <th>Alumnos</th>
               <th>Req. Primer pago</th>
               <th>Estado grupo</th>
               <th>Operación</th>
@@ -67,7 +66,6 @@
                 <p-tag [rounded]="true"
                        severity="warning">{{grupo.FechaInicioGrupo | date}} a {{grupo.FechaFinalGrupo | date}}</p-tag>
               </td>
-              <td>{{grupo.NumeroEstudiantes}} de {{grupo.MaximoEstudiantes}}</td>
               <td>
                 <span *ngIf="grupo.RequeridoPPago else notRequired">
                   <p-tag styleClass="mr-2" icon="pi pi-check" severity="success" value="Requiere"></p-tag>
@@ -125,10 +123,19 @@
           <div class="col-12 md:col-6">
             <p-paginator  [rows]="5"
                           [totalRecords]="_grupo.respGrupo.count!"
-                          [rowsPerPageOptions]="[5,10,15,20]"
+                          [rowsPerPageOptions]="[5,10,15,20,25]"
                           (onPageChange)="paginate($event)"></p-paginator>
           </div>
-          <div class="col-12 md:col-3"></div>
+          <div class="col-12 md:col-3">
+            <div class="ml-2 content-legend">
+              <b>Leyenda</b>
+              <ul class="ul-legend mt-1">
+                <li><i class="fa-solid fa-square legend-state-1"></i> Grupo con matriculas abiertas</li>
+                <li><i class="fa-solid fa-square legend-state-2"></i> Grupo en proceso</li>
+                <li><i class="fa-solid fa-square legend-state-3"></i> Grupo en finalizado</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </div>

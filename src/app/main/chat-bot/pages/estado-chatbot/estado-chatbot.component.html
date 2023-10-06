@@ -1,5 +1,19 @@
 <div class="mb-2">
-  <p-card header="Dispositivo conectado">
+  <p-card>
+    <div class="flex justify-content-between mb-3">
+      <h2>Dispositivo conectado</h2>
+      <div>
+        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+      </div>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="generateQR()">
+          <mat-icon><i class="fa-solid fa-repeat"></i></mat-icon>
+          <span>Forzar a generar QR</span>
+        </button>
+      </mat-menu>
+    </div>
     <div class="flex">
       <div>
         <p-avatar label="C"

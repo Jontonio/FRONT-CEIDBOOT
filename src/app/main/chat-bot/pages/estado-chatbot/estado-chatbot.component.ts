@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ChabotService } from '../../services/chatbot.service';
 import { Subscription } from 'rxjs';
 import { ClientInfo } from '../../class/Bot';
+import { SocketService } from 'src/app/services/socket.service';
 
 
 @Component({
@@ -16,12 +17,14 @@ export class EstadoChatbotComponent implements OnInit {
 
   clientInfo:ClientInfo;
 
-  constructor(public readonly _bot:ChabotService) {
+  constructor(public readonly _bot:ChabotService,
+              private readonly _socket:SocketService) {
     this.getInfoCelphone();
   }
 
 
   ngOnInit(): void {
+    this.stateChangeWhatsApp();
   }
 
   ngOnDestroy(): void {
@@ -49,6 +52,21 @@ export class EstadoChatbotComponent implements OnInit {
         console.log(e)
       }
     })
+  }
+
+  stateChangeWhatsApp(){
+    this._socket.OnEvent('change_state_whatsApp').subscribe({
+      next:(res) => {
+        console.log(res)
+      },
+      error:(e) => {
+        console.log(e)
+      }
+    })
+  }
+
+  reloadQr(){
+
   }
 
 }

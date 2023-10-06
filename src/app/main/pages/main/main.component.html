@@ -1,5 +1,8 @@
 
 <app-menu></app-menu>
+<div class="pl-4 pr-4">
+  <p-messages [closable]="true" key="message-send-comunicados"></p-messages>
+</div>
 <router-outlet></router-outlet>
 <p-dialog [modal]="true"
           [closable]="false"
@@ -26,4 +29,5 @@
 
 <!-- A component that is used to show messages to the user. -->
 <p-toast position="top-right" [breakpoints]="{'920px': {width: '100%', right: '0', left: '0', padding:'10px'}}"></p-toast>
+
 

@@ -17,22 +17,22 @@ export class MatriculaComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.msg = 'Ten en cuenta que algunos cursos requiren los vouchers de pago. Consulta los precios en los requisitos de los cursos.'
+    this.msg = 'Ten en cuenta que algunos cursos requieren los vouchers de pago. Consulta los precios en los requisitos de los cursos.'
   }
 
   folders: Section[] = [
     {
-      name: '¿Donde encuentro el número de operación de mi pago?',
+      name: '¿Dónde encuentro el número de operación de mi pago?',
       link: 'https://unajma.ceidbot.com/#/main/example/numero-operacion',
     }
   ];
   notes: Section[] = [
     {
-      name: 'Descarque el formato de declaración jurada aquí',
+      name: 'Descarga el formato de declaración jurada aquí.',
       link: 'https://drive.google.com/drive/folders/1zZhE0LOJn6ITSNzP3LuyZzfHbuinjQds?fbclid=IwAR3HDCI8yiiNMGj8fmqq61eh2_KMREbI8kv94so_Vu6iJjYKDUqZh2W4XRA',
     },
     {
-      name: 'Descarque el formato de solicitud aquí',
+      name: 'Descarga el formato de solicitud aquí.',
       link: 'https://drive.google.com/drive/folders/1zZhE0LOJn6ITSNzP3LuyZzfHbuinjQds?fbclid=IwAR3HDCI8yiiNMGj8fmqq61eh2_KMREbI8kv94so_Vu6iJjYKDUqZh2W4XRA',
     }
   ];

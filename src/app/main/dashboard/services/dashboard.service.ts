@@ -18,8 +18,7 @@ export class DashboardService {
 
 
   constructor(private http:HttpClient){
-    this.BASE_URL = environment.BASE_URL;
-
+    this.BASE_URL = environment.BASE_URL
   }
 
   getDataHorizontalBarEstudinatesEnGrupo(idEstadoGrupo:number){
