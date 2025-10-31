@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Curso } from 'src/app/main/curso/class/Curso';
 import { GlobalService } from 'src/app/services/global.service';
 
@@ -11,7 +11,7 @@ import { GlobalService } from 'src/app/services/global.service';
 export class FormSelectIdiomaComponent implements OnInit {
 
   @Output() formData =  new EventEmitter<Curso>();
-  @Input()  formCurso:FormGroup;
+  @Input()  formCurso:UntypedFormGroup;
 
   listCursos :Curso[] = [];
   selectCurso:Curso;

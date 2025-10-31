@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
 import { Matricula } from '../../matricula/class/Matricula';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Code } from '../../grupo/class/Code';
 import { DenominServicio } from 'src/app/denomin-servicio/class/Denomin-servicio';
 import { Subscription, switchMap } from 'rxjs';
@@ -26,11 +26,11 @@ export class ModalInfoEstudianteComponent implements OnInit {
   hayErrorGetData:boolean = false;
   loadingUpdate:boolean = false;
 
-  formEstudiante:FormGroup;
+  formEstudiante:UntypedFormGroup;
   country:Code;
   isPeru:boolean;
 
-  constructor(private readonly fb:FormBuilder,
+  constructor(private readonly fb:UntypedFormBuilder,
               private readonly _global:GlobalService,
               private readonly _matricula:MatriculaService,
               private readonly ref: DynamicDialogRef,

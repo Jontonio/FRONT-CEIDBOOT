@@ -20,7 +20,7 @@ import { PayloadSocket } from 'src/app/class/PayloadSocket';
 import * as moment from 'moment';
 import { InfoDateGrupo } from '../../class/EstadoGrupoEstudiante';
 import { GrupoModulo } from '../../class/GrupoModulo';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Mora } from '../../class/Mora';
 import { Matricula } from 'src/app/main/matricula/class/Matricula';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -66,7 +66,7 @@ export class EstudiantesGrupoComponent implements OnInit {
   limit:number  = 5;
   offset:number = 0;
   visibleModalFecha:boolean;
-  formFecha:FormGroup;
+  formFecha:UntypedFormGroup;
   dataEstudianteMessage:Estudiante;
 
   /** Variables pago extemporaneo */
@@ -83,7 +83,7 @@ export class EstudiantesGrupoComponent implements OnInit {
 
   constructor(private readonly dialogService: DialogService,
               private readonly _grupo:GrupoService,
-              private readonly fb:FormBuilder,
+              private readonly fb:UntypedFormBuilder,
               private readonly activeRoute:ActivatedRoute,
               private readonly _socket:SocketService,
               private readonly _unAuth:UnAuthorizedService,

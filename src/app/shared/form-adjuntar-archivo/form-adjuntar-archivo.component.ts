@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Message, MessageService } from 'primeng/api';
 import { MedioPago } from 'src/app/class/MedioDePago';
 import { GlobalService } from 'src/app/services/global.service';
@@ -11,7 +11,7 @@ import { GlobalService } from 'src/app/services/global.service';
 })
 export class FormAdjuntarArchivoComponent implements OnInit {
 
-  @Input() formFiles:FormGroup;
+  @Input() formFiles:UntypedFormGroup;
   @Input() InputUploadExtra:boolean = false;
   @Input() disableOption:boolean = false;
   @Output() emiterloadingDocument = new EventEmitter<boolean>();

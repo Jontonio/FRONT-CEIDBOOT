@@ -4,7 +4,7 @@ import { EstadoGrupo } from 'src/app/main/grupo/class/EstadoGrupo';
 import { GrupoService } from 'src/app/main/grupo/services/grupo.service';
 import { DataHorizontalBar, DataVerticalBar } from 'src/app/class/Graphics';
 import { Grupo, ResGrupo } from 'src/app/main/grupo/class/Grupo';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Modulo } from 'src/app/main/curso/class/Modulo';
 import { CategoriaPago } from 'src/app/main/grupo/class/CategoriaPago';
 import { Data, ReporteGeneral, ReporteOtrosPagos, ReportePagos } from '../../class/ReportePagos';
@@ -61,7 +61,7 @@ export class DashboardComponent implements OnInit {
 
   /** otra variables */
   grupo:Grupo;
-  formInputs:FormGroup;
+  formInputs:UntypedFormGroup;
   startPage:number = 0;
   limit:number = 5;
   offset:number = 0;
@@ -74,7 +74,7 @@ export class DashboardComponent implements OnInit {
 
   constructor(private readonly _dashboard:DashboardService,
               private readonly _grupo:GrupoService,
-              private readonly fb:FormBuilder,
+              private readonly fb:UntypedFormBuilder,
               private readonly _msg:MessageService) {
     this.createFormImputs();
     this.getEstadosGrupo();

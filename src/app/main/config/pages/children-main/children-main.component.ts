@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ConfigService } from '../../services/config.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -47,7 +47,7 @@ export class ChildrenMainComponent implements OnInit {
   listDenominacionServicios:DenominServicio[] = [];
   /** Esatdo grupo  */
   isUpdateEstadoGrupo:boolean;
-  formEstadoGrupo:FormGroup;
+  formEstadoGrupo:UntypedFormGroup;
   loadingEstadoGrupo:boolean;
   IdEstadoGrupo:number | undefined;
 
@@ -56,37 +56,37 @@ export class ChildrenMainComponent implements OnInit {
 
   /** Denominación de servicio */
   modalVisibleServicio:boolean = false;
-  formServicio:FormGroup;
+  formServicio:UntypedFormGroup;
   loadingServicio:boolean = false;
   isUpdateServicio:boolean = false;
   IdServicio:number | undefined;
 
   /** Tipo de trámite */
   modalVisibleTipoTramite:boolean = false;
-  formTipoTramite:FormGroup;
+  formTipoTramite:UntypedFormGroup;
   loadingTipoTramite:boolean = false;
   isUpdateTipoTramite:boolean = false;
   IdTipoTramite:number | undefined;
 
   /** Medios de pago */
-  formMedioPago:FormGroup;
+  formMedioPago:UntypedFormGroup;
   loadingMedioPago:boolean = false;
   isUpdateMedioPago:boolean = false;
   IdMedioPago:number | undefined;
 
   /** Categorias de pago */
-  formCategoriaPago:FormGroup;
+  formCategoriaPago:UntypedFormGroup;
   loadingCategoriaPago:boolean = false;
   isUpdateCategoriaPago:boolean = false;
   IdCategoriaPago:number | undefined;
 
   /** Time notificaions */
-  formNotifications:FormGroup;
+  formNotifications:UntypedFormGroup;
   listHoras:Tiempo[] = [];
   listMinutos:Tiempo[] = [];
   loadingNotificacion:boolean = false;
 
-  constructor(private readonly fb:FormBuilder,
+  constructor(private readonly fb:UntypedFormBuilder,
               private _msg:MessageService,
               private _unAuth:UnAuthorizedService,
               private _confService:ConfirmationService,

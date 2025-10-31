@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { RequestDocumento } from 'src/app/main/matricula/class/Estudiante';
 import { GlobalService } from 'src/app/services/global.service';
 
@@ -16,7 +16,7 @@ interface Card {
 export class FormSelectInfoPersonalComponent implements OnInit {
 
   @Output() dataDocumento = new EventEmitter<RequestDocumento>();
-  @Input()  formDocumento:FormGroup;
+  @Input()  formDocumento:UntypedFormGroup;
 
   card:Card[] = [];
   TipoDocumentoSelected:string;

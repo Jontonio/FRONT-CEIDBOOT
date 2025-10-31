@@ -8,7 +8,7 @@ import { Apoderado } from 'src/app/main/matricula/class/Apoderado';
 import { Matricula } from 'src/app/main/matricula/class/Matricula';
 import { DenominServicio } from 'src/app/denomin-servicio/class/Denomin-servicio';
 import { Subscription, switchMap } from 'rxjs';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Code } from '../../class/Code';
 import { MatriculaService } from 'src/app/main/matricula/services/matricula.service';
 import { GlobalService } from 'src/app/services/global.service';
@@ -38,8 +38,8 @@ export class InfoEstudianteComponent {
   hayErrorGetData:boolean = false;
   loadingUpdate:boolean = false;
 
-  formEstudiante:FormGroup;
-  formApoderado:FormGroup;
+  formEstudiante:UntypedFormGroup;
+  formApoderado:UntypedFormGroup;
   card:Card[] = [];
   TipoDocumentoSelected:string;
   apoderado:Apoderado;
@@ -50,11 +50,11 @@ export class InfoEstudianteComponent {
 
   /** file documento */
   loadingDocumento:boolean = false;
-  formFile:FormGroup;
+  formFile:UntypedFormGroup;
   fileURL:string;
 
   constructor(private activeRouter:ActivatedRoute,
-              private readonly fb:FormBuilder,
+              private readonly fb:UntypedFormBuilder,
               private _grupo:GrupoService,
               private _main:MainService,
               private readonly _matricula:MatriculaService,

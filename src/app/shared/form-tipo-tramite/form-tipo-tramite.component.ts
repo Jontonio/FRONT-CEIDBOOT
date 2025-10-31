@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { TipoTramite } from 'src/app/main/class/TipoTramite';
 import { GlobalService } from 'src/app/services/global.service';
 import { Subscription } from 'rxjs';
@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
 export class FormTipoTramiteComponent implements OnInit {
 
   @Output() formData = new EventEmitter<TipoTramite>();
-  @Input() formTramite:FormGroup;
+  @Input() formTramite:UntypedFormGroup;
   listTiposTramites:TipoTramite[] = [];
   listTiposTramites$:Subscription;
 

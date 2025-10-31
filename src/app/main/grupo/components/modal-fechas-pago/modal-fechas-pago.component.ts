@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { GrupoService } from '../../services/grupo.service';
 import { MessageService } from 'primeng/api';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -12,7 +12,7 @@ import { SocketService } from 'src/app/services/socket.service';
 })
 export class ModalFechasPagoComponent implements OnInit {
 
-  @Input() formFecha:FormGroup;
+  @Input() formFecha:UntypedFormGroup;
   @Input() visibleModal:boolean;
   @Output() estadoModal = new EventEmitter<boolean>();
   @Input() updateFechaInicio:boolean;

@@ -1,6 +1,6 @@
 import { CdkStepperNext } from '@angular/cdk/stepper';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
 import { Curso } from 'src/app/main/curso/class/Curso';
 import { GlobalService } from 'src/app/services/global.service';
@@ -35,9 +35,9 @@ export class PagosComponent {
   /** Variables de clase */
   card:Card[];
   TipoDocumentoSelected:string;
-  formBusqueda:FormGroup;
-  formSelectGrupoCategoria:FormGroup;
-  formFile:FormGroup;
+  formBusqueda:UntypedFormGroup;
+  formSelectGrupoCategoria:UntypedFormGroup;
+  formFile:UntypedFormGroup;
   loading:boolean;
   ListEstudianteEnGrupo:EstudianteEnGrupo[];
   selectEstudianteGrupo:EstudianteEnGrupo;
@@ -58,7 +58,7 @@ export class PagosComponent {
   setPrecio:SetPrecio;
   currentModulo:GrupoModulo | null;
 
-  constructor(private readonly fb:FormBuilder,
+  constructor(private readonly fb:UntypedFormBuilder,
               private _msg:MessageService,
               private readonly _global:GlobalService) {
     this.createFormularioBusqueda();

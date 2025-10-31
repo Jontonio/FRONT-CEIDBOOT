@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { UntypedFormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Person } from 'src/app/class/Person';
 import { Departamento, Distrito, Provincia } from 'src/app/main/class/Ubigeo';
@@ -24,7 +24,7 @@ interface Card {
 export class FormInfoPersonalComponent implements OnInit {
   // El componente puede retornar datos del formulario se va ser necesario
   @Output() formData = new EventEmitter<Estudiante>();
-  @Input() formEstudiante:FormGroup;
+  @Input() formEstudiante:UntypedFormGroup;
 
   listDepartamentos$:Subscription;
   listProvincias$:Subscription;

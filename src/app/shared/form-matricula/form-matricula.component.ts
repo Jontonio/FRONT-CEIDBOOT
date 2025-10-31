@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef} from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Message, MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import * as moment from 'moment';
@@ -63,11 +63,11 @@ export class FormMatriculaComponent implements OnInit {
   resFilePagoLibro:FileDrive;
   resFilePagoMatricula:FileDrive;
 
-  formEstudiante:FormGroup;
-  formMayorEdad:FormGroup;
-  formGrupo:FormGroup;
-  formAcademica:FormGroup;
-  formFiles:FormGroup;
+  formEstudiante:UntypedFormGroup;
+  formMayorEdad:UntypedFormGroup;
+  formGrupo:UntypedFormGroup;
+  formAcademica:UntypedFormGroup;
+  formFiles:UntypedFormGroup;
 
   optionSexo:Sexo[];
   optionEdad:Edad[];
@@ -103,7 +103,7 @@ export class FormMatriculaComponent implements OnInit {
   xampleFileURL:string;
   hayErrorGetData:boolean;
 
-  constructor(private fb:FormBuilder,
+  constructor(private fb:UntypedFormBuilder,
               private readonly _global:GlobalService,
               private readonly _msg:MessageService,
               private _socket:SocketService,
@@ -243,7 +243,7 @@ export class FormMatriculaComponent implements OnInit {
     })
   }
 
-  checkValueIsTrue(control: FormControl): { [key: string]: boolean } | null {
+  checkValueIsTrue(control: UntypedFormControl): { [key: string]: boolean } | null {
     const value = control.value;
     if (value !== true) {
       return { 'notTrue': true };

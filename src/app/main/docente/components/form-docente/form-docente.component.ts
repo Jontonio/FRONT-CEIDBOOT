@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output, Input, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Person } from 'src/app/class/Person';
@@ -27,7 +27,7 @@ export class FormDocenteComponent implements OnInit {
   @Input() loading:boolean;
 
   /** variables de clase */
-  formDocente     :FormGroup;
+  formDocente     :UntypedFormGroup;
   card            :Card[] = [];
   country:Code;
   Id?:number;
@@ -37,7 +37,7 @@ export class FormDocenteComponent implements OnInit {
   TipoDocumentoSelected:string = 'DNI';
   urlLista:string = '/system/docentes/lista-docentes';
 
-  constructor(private fb:FormBuilder,
+  constructor(private fb:UntypedFormBuilder,
               public _main:MainService,
               private _global:GlobalService,
               private _msg:MessageService,

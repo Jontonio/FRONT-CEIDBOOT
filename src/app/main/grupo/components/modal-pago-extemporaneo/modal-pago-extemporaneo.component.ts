@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { GrupoModulo } from '../../class/GrupoModulo';
 import { EstudianteEnGrupo } from '../../class/EstudianteGrupo';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -18,11 +18,11 @@ export class ModalPagoExtemporaneoComponent implements OnInit {
   listGrupoModulo:GrupoModulo[] = [];
   estudianteEnGrupo:EstudianteEnGrupo;
 
-  formMora:FormGroup;
+  formMora:UntypedFormGroup;
   selecGrupoModulo:GrupoModulo;
   loadingSave:boolean = false;
 
-  constructor(private readonly fb:FormBuilder,
+  constructor(private readonly fb:UntypedFormBuilder,
               private readonly ref: DynamicDialogRef,
               private readonly config: DynamicDialogConfig,
               private readonly _msg:MessageService,

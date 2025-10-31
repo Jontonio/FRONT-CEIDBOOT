@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Person } from 'src/app/class/Person';
@@ -30,7 +30,7 @@ export class FormUsuarioComponent {
 
   /* These are properties of the `FormUsuarioComponent` class. */
   country:Code;
-  FormUsuario:FormGroup;
+  FormUsuario:UntypedFormGroup;
   Id:number;
   isUpdate:boolean = false;
   loadGetData:boolean = false;
@@ -41,7 +41,7 @@ export class FormUsuarioComponent {
   urlLista:string;
 
   constructor(private route:Router,
-              private fb:FormBuilder,
+              private fb:UntypedFormBuilder,
               private activeRouter:ActivatedRoute,
               private _global:GlobalService,
               private _main:MainService,

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { UserLogin } from 'src/app/auth/interfaces/ResLogin';
@@ -29,14 +29,14 @@ export class PerfilComponent implements OnInit {
   /* These lines are declaring class variables for the `PerfilComponent` Angular component. */
   loadingPassword:boolean;
   loadingUsuario:boolean;
-  passwordChangeForm:FormGroup;
+  passwordChangeForm:UntypedFormGroup;
   showNewPass:boolean;
   showOldPass:boolean;
   usuario:UserLogin | undefined;
-  usuarioForm:FormGroup;
+  usuarioForm:UntypedFormGroup;
 
   constructor(public readonly _auth:AuthService,
-              private readonly fb:FormBuilder,
+              private readonly fb:UntypedFormBuilder,
               private readonly _unAuth:UnAuthorizedService,
               private readonly _msg:MessageService,
               private readonly _socket:SocketService,

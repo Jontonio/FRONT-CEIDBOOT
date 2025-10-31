@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
 import { MessageService } from 'primeng/api';
 import { Person } from 'src/app/class/Person';
@@ -18,11 +18,11 @@ export class OtrosTramitesComponent implements OnInit {
 
   @ViewChild('stepper') stepper:MatStepper;
 
-  formTramite   :FormGroup;
-  formEstudiante:FormGroup;
-  formCurso     :FormGroup;
-  formFiles     :FormGroup;
-  formDocumento :FormGroup;
+  formTramite   :UntypedFormGroup;
+  formEstudiante:UntypedFormGroup;
+  formCurso     :UntypedFormGroup;
+  formFiles     :UntypedFormGroup;
+  formDocumento :UntypedFormGroup;
 
   hayError:boolean;
   loadingGetData:boolean;
@@ -37,7 +37,7 @@ export class OtrosTramitesComponent implements OnInit {
   selectTipoTramite:TipoTramite;
   montoPago:number = 0;
 
-  constructor( private fb:FormBuilder,
+  constructor( private fb:UntypedFormBuilder,
                private readonly _global:GlobalService,
                private _msg:MessageService ) {
     this.createFormTramite();

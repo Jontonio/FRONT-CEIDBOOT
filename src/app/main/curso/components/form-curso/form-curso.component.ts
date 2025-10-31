@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input, ViewChild} from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { debounceTime, Subject } from 'rxjs';
 
 import { MainService } from '../../../services/main.service';
@@ -27,7 +27,7 @@ export class FormCursoComponent implements OnInit {
 
   /** Variables de clase */
   debouncer = new Subject();
-  formCurso:FormGroup;
+  formCurso:UntypedFormGroup;
   paisesSugeridos:Pais  [] = [];
   niveles        :Nivel [] = [];
   listModulos    :Modulo[] = [];
@@ -40,7 +40,7 @@ export class FormCursoComponent implements OnInit {
   urlLista:string;
   defaultFlag:string;
 
-  constructor(private readonly fb:FormBuilder,
+  constructor(private readonly fb:UntypedFormBuilder,
               private readonly route:Router,
               private readonly actiRouter:ActivatedRoute,
               private readonly _msg:MessageService,

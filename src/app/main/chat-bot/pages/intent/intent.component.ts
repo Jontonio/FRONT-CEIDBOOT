@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ChabotService } from '../../services/chatbot.service';
 import { Intent, Phrase } from '../../class/Intent';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Description_media, Link, Media, Message, PayloadBoot } from '../../class/PayloadBot';
 
@@ -15,15 +15,15 @@ export class IntentComponent {
 
   uuid:string;
   intent:Intent;
-  responseForm:FormGroup;
-  payloadForm:FormGroup;
+  responseForm:UntypedFormGroup;
+  payloadForm:UntypedFormGroup;
   lisText:string[] | undefined = [];
   loadingSavePhrase:boolean;
   loadingSavePayload:boolean;
   loadingData:boolean;
 
   constructor(private readonly activeRoute:ActivatedRoute,
-              private readonly fb:FormBuilder,
+              private readonly fb:UntypedFormBuilder,
               private readonly _bot:ChabotService,
               private readonly _msg:MessageService) {
     this.createFormResponse();
@@ -49,8 +49,8 @@ export class IntentComponent {
     })
   }
 
-  get text() : FormArray {
-    return this.responseForm.get("text") as FormArray
+  get text() : UntypedFormArray {
+    return this.responseForm.get("text") as UntypedFormArray
   }
   get response(){
     return this.responseForm.get("text.response");
@@ -69,7 +69,7 @@ export class IntentComponent {
     return this.payloadForm.controls['message'];
   }
 
-  imageLinkValidator(control: FormControl): { [key: string]: any } | null {
+  imageLinkValidator(control: UntypedFormControl): { [key: string]: any } | null {
     const regex: RegExp = /\.(jpg|png)$/i;
     const valid = regex.test(control.value);
     return valid ? null : { invalidImageLink: true };
@@ -132,7 +132,7 @@ export class IntentComponent {
     this.media.setValue(payload.media.stringValue);
   }
 
-  newResponse(value:string=''): FormGroup {
+  newResponse(value:string=''): UntypedFormGroup {
     return this.fb.group({
       response:[value, Validators.required]
     })

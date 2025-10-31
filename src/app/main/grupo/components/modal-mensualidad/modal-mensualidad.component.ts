@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Pago } from '../../class/Pago';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { GrupoService } from '../../services/grupo.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
@@ -27,7 +27,7 @@ export class ModalMensualidadComponent implements OnInit {
   listModulosPago:GrupoModulo[] = [];
   ValidateFile:boolean = false;
   loading:boolean = false;
-  formMensualidad:FormGroup;
+  formMensualidad:UntypedFormGroup;
   selectGrupoModulo:GrupoModulo | undefined;
   mensualidad:Pago;
   payload:PayloadSocket;
@@ -36,7 +36,7 @@ export class ModalMensualidadComponent implements OnInit {
               private readonly _socketService:SocketService,
               private readonly _grupo:GrupoService,
               private readonly _global:GlobalService,
-              private readonly fb:FormBuilder,
+              private readonly fb:UntypedFormBuilder,
               private _msg:MessageService) {
     this.createFormMensualidad();
   }

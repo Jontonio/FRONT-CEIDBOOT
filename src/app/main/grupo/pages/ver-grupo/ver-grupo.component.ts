@@ -8,7 +8,7 @@ import { UnAuthorizedService } from 'src/app/services/unauthorized.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EstadoGrupo } from '../../class/EstadoGrupo';
 import { SocketService } from 'src/app/services/socket.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-ver-grupo',
@@ -30,10 +30,10 @@ export class VerGrupoComponent implements OnInit {
   saveLoading:boolean = false;
 
   /** Formulario pago */
-  formRecodatorioPago:FormGroup;
+  formRecodatorioPago:UntypedFormGroup;
 
   constructor(private routerActive:ActivatedRoute,
-              private readonly fb:FormBuilder,
+              private readonly fb:UntypedFormBuilder,
               private readonly _grupo:GrupoService,
               private readonly _unAuth:UnAuthorizedService,
               private readonly _socket:SocketService,

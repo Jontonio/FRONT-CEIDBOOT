@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Message, MessageService } from 'primeng/api';
 import { AuthService } from 'src/app/auth/services/auth.service';
@@ -12,12 +12,12 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 })
 export class FormLoginComponent implements OnInit {
 
-  formLogin:FormGroup;
+  formLogin:UntypedFormGroup;
   loading:boolean = false;
   msg: Message[] = [];
   seePassword:boolean = false;
 
-  constructor(private fb:FormBuilder,
+  constructor(private fb:UntypedFormBuilder,
               private _auth:AuthService,
               private route:Router) {
     this.createForm();

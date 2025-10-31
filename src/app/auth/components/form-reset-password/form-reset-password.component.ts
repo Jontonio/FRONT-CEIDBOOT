@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { DataRecovery } from '../../class/global';
 
 @Component({
@@ -12,10 +12,10 @@ export class FormResetPasswordComponent implements OnInit {
   @Output() formData = new EventEmitter<DataRecovery>();
   @Input() loading:boolean;
 
-  formReset:FormGroup;
+  formReset:UntypedFormGroup;
   sendMessage:boolean;
 
-  constructor(private readonly fb:FormBuilder) {
+  constructor(private readonly fb:UntypedFormBuilder) {
     this.inicializateVariables();
   }
 

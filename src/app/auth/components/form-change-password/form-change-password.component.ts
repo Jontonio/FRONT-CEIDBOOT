@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter,Input } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChangePassword } from '../../interfaces/ChangePassword';
 
@@ -13,13 +13,13 @@ export class FormChangePasswordComponent implements OnInit {
   @Output() formData = new EventEmitter<ChangePassword>();
   @Input() loadingPassword:boolean;
 
-  formChangePassword:FormGroup;
+  formChangePassword:UntypedFormGroup;
   seePassword:boolean;
   diferentPassword:boolean;
   uui:string;
   passwordChanged:boolean;
 
-  constructor( private readonly fb:FormBuilder,
+  constructor( private readonly fb:UntypedFormBuilder,
               private router:Router,
               private readonly routerActive:ActivatedRoute) {
     this.getUUID(this.routerActive);

@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { MainRoutingModule } from './main-routing.module';
 import { MainComponent } from './pages/main/main.component';
 import { PrimengModule } from '../primeng/primeng.module';
-import { NgIdleModule } from '@ng-idle/core';
 import { MenuComponent } from './components/menu/menu.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -39,7 +38,6 @@ import { ModalInfoEstudianteComponent } from './shared/modal-info-estudiante/mod
     FormsModule,
     MaterialModule,
     SharedModule,
-    NgIdleModule.forRoot(),
     ChatBotModule
   ],
   providers: [ ConfirmationService, MessageService ],

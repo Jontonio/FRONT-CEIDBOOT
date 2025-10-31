@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CursoService } from '../../services/curso.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Libro } from '../../class/Libro';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-ver-curso',
@@ -21,11 +21,11 @@ export class VerCursoComponent implements OnInit {
   loadingSave:boolean = false;
   isUpdate:boolean = false;
   sidebarVisible:boolean = false;
-  formLibro:FormGroup;
+  formLibro:UntypedFormGroup;
   idLibro:string;
   position:string;
 
-  formExamen:FormGroup;
+  formExamen:UntypedFormGroup;
   modalCostoExamen:boolean = false;
   loadingUpdateExamen:boolean = false;
 
@@ -33,7 +33,7 @@ export class VerCursoComponent implements OnInit {
               private readonly route:Router,
               private _msg:MessageService,
               private confirService:ConfirmationService,
-              private readonly fb:FormBuilder,
+              private readonly fb:UntypedFormBuilder,
               private readonly _curso:CursoService) {
     this.getIdCurso(this.activeRoute);
     this.createFormLibro();

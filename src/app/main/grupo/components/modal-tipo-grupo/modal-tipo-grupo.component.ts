@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { SocketService } from 'src/app/services/socket.service';
 import { GrupoService } from '../../services/grupo.service';
@@ -11,11 +11,11 @@ import { GrupoService } from '../../services/grupo.service';
 })
 export class ModalTipoGrupoComponent {
 
-  FormTipoGrupo:FormGroup;
+  FormTipoGrupo:UntypedFormGroup;
   loadHorario:boolean = false;
   openModalTGrupo:boolean = false;
 
-  constructor(private fb:FormBuilder,
+  constructor(private fb:UntypedFormBuilder,
               private _grupo:GrupoService,
               private _msg:MessageService,
               private _socket:SocketService) {

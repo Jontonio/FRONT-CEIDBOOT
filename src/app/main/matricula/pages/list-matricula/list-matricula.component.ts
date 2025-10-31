@@ -1,5 +1,5 @@
 import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Dropdown } from 'primeng/dropdown';
 import { GrupoService } from 'src/app/main/grupo/services/grupo.service';
@@ -32,7 +32,7 @@ export class ListMatriculaComponent implements OnInit {
   listAddEnGrupo:any[] = [];
   loadingSave:boolean = false;
   visibleAsignarGrupo:boolean = false;
-  formSelectGrupo:FormGroup;
+  formSelectGrupo:UntypedFormGroup;
   FileMatriculaURL:string;
   openSidebarMessage:boolean = false;
   dataEstudianteMessage:Estudiante;

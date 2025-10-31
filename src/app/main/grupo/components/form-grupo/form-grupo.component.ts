@@ -1,6 +1,6 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Subscription, tap } from 'rxjs';
 
@@ -39,7 +39,7 @@ export class FormGrupoComponent implements OnInit {
   getAllEstadoGrupo$:Subscription;
 
   /** Varaibles de clase */
-  FormGrupo:FormGroup;
+  FormGrupo:UntypedFormGroup;
 
   ListDocentes:Docente[] = [];
   ListCursos:Curso[] = [];
@@ -60,7 +60,7 @@ export class FormGrupoComponent implements OnInit {
   constructor(public readonly _main:MainService,
               private readonly _msg:MessageService,
               private readonly _socket:SocketService,
-              private readonly fb: FormBuilder,
+              private readonly fb: UntypedFormBuilder,
               private readonly route:Router,
               private readonly activeRoute:ActivatedRoute,
               private readonly _grupo:GrupoService,
